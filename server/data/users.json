@@ -2,11 +2,90 @@
   {
     "name": "Jhon Doe",
     "image": "https://www.lifewire.com/thmb/O17f9c7DHWOhRVenH5D-S4f2RzI=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/find-people-on-the-web-3482688-45dd430a834b4906bdc5aa8951f260bd.png",
-    "bio": "test",
+    "bio": "this is",
     "skills": [
-      "Rust",
-      "Vue",
-      "React"
-    ]
+      "test",
+      "figure",
+      "java",
+      "apple"
+    ],
+    "id": "e07e01d9-064c-4838-95ae-2e27ac6df861",
+    "email": "test@email.com",
+    "password": "$2b$10$ePkdOFfm/s/Tm8uPm3kNie49HiV.6nT91.9PJXHILDxiPlPWVJaea",
+    "role": "user",
+    "createdAt": "2025-08-03T08:45:27.690Z"
+  },
+  {
+    "name": "Prasanth Sasikumar",
+    "image": "/uploads/3c4c2a8a-6b1b-4219-b8ae-42addc0c8c60.jpeg",
+    "bio": "Test",
+    "skills": [
+      "JavaScript",
+      "React",
+      "Python"
+    ],
+    "id": "8c5951c9-0900-4061-b272-87ab92a2d5d1",
+    "email": "test@email.com",
+    "password": "$2b$10$ePkdOFfm/s/Tm8uPm3kNie49HiV.6nT91.9PJXHILDxiPlPWVJaea",
+    "role": "user",
+    "createdAt": "2025-08-03T08:45:27.691Z"
+  },
+  {
+    "name": "asddasd",
+    "image": "/uploads/2025-08-03-22e6b37f-af4f-42c4-ac36-d19dc777b6a8.png",
+    "bio": "sdsads",
+    "skills": [
+      "JavaScript",
+      "Python",
+      "CSS"
+    ],
+    "id": "69768fb6-9919-4642-9195-c5cf13e34c22",
+    "email": "test@email.com",
+    "password": "$2b$10$ePkdOFfm/s/Tm8uPm3kNie49HiV.6nT91.9PJXHILDxiPlPWVJaea",
+    "role": "user",
+    "createdAt": "2025-08-03T08:45:27.691Z"
+  },
+  {
+    "id": "admin-user-001",
+    "name": "Administrator",
+    "email": "admin@icehub.com",
+    "password": "$2b$10$4JQKYbVY6upPMOtDYjUkqOzzjSsbjsBH1dhcZVpleHbIg4cgr3ME2",
+    "image": "https://via.placeholder.com/150x150/0d7ae4/ffffff?text=Admin",
+    "bio": "System Administrator with full access to manage users and content.",
+    "skills": [
+      "System Administration",
+      "User Management",
+      "Security"
+    ],
+    "role": "admin",
+    "createdAt": "2025-08-03T08:45:27.754Z"
+  },
+  {
+    "id": "6fcde34e-bdff-47a2-9849-921ba50e3d3d",
+    "name": "Donald Trump",
+    "email": "trump@towers.com",
+    "password": "$2b$10$ZRHwCTvE/wJfYUnT9T/yDegS3cmMi9Ctrf.azpd/hTbngOYl8.cbi",
+    "image": "https://via.placeholder.com/150x150/e5e7eb/9ca3af?text=User",
+    "bio": "MAGAAAAA",
+    "skills": [
+      "nothing"
+    ],
+    "role": "user",
+    "createdAt": "2025-08-03T09:10:50.268Z"
+  },
+  {
+    "id": "2fe67f77-765f-49fb-af59-0d1d5d04d2a8",
+    "name": "Praveen Sasikumar",
+    "email": "praveen@ahlab.org",
+    "password": "$2b$10$CC02ti3qd0IPZUGIKJqXtuDafo3ftWnogs9GqpnAGT6YDTWj1pN52",
+    "image": "https://via.placeholder.com/150x150/e5e7eb/9ca3af?text=User",
+    "bio": "Psychologist expert at NUS",
+    "skills": [
+      "User study",
+      "evaluation",
+      "Python"
+    ],
+    "role": "user",
+    "createdAt": "2025-08-03T09:31:17.988Z"
   }
 ]

@@ -1,0 +1,92 @@
+[
+  {
+    "id": "481ad823-acbf-4b04-b1f8-004e611b71dd",
+    "senderId": "e07e01d9-064c-4838-95ae-2e27ac6df861",
+    "senderName": "Jhon Doe",
+    "receiverId": "8c5951c9-0900-4061-b272-87ab92a2d5d1",
+    "receiverName": "Prasanth Sasikumar",
+    "content": "hi",
+    "timestamp": "2025-08-03T09:09:38.827Z",
+    "read": false
+  },
+  {
+    "id": "5ed2888c-e84a-421c-9e14-7332cf6911c3",
+    "senderId": "6fcde34e-bdff-47a2-9849-921ba50e3d3d",
+    "senderName": "Donald Trump",
+    "receiverId": "e07e01d9-064c-4838-95ae-2e27ac6df861",
+    "receiverName": "Jhon Doe",
+    "content": "hello",
+    "timestamp": "2025-08-03T09:11:26.976Z",
+    "read": true
+  },
+  {
+    "id": "b63802a7-d15a-4118-9b4a-c0d4628f5d04",
+    "senderId": "e07e01d9-064c-4838-95ae-2e27ac6df861",
+    "senderName": "Jhon Doe",
+    "receiverId": "6fcde34e-bdff-47a2-9849-921ba50e3d3d",
+    "receiverName": "Donald Trump",
+    "content": "hi",
+    "timestamp": "2025-08-03T09:11:42.967Z",
+    "read": true
+  },
+  {
+    "id": "67ce1353-84b8-4c4c-9cca-e63c50a25e38",
+    "senderId": "6fcde34e-bdff-47a2-9849-921ba50e3d3d",
+    "senderName": "Donald Trump",
+    "receiverId": "e07e01d9-064c-4838-95ae-2e27ac6df861",
+    "receiverName": "Jhon Doe",
+    "content": "test",
+    "timestamp": "2025-08-03T09:15:59.500Z",
+    "read": true
+  },
+  {
+    "id": "1754213172000vu5c82a4n",
+    "senderId": "e07e01d9-064c-4838-95ae-2e27ac6df861",
+    "senderName": "Jhon Doe",
+    "receiverId": "6fcde34e-bdff-47a2-9849-921ba50e3d3d",
+    "receiverName": "Donald Trump",
+    "content": "hy",
+    "timestamp": "2025-08-03T09:26:12.000Z",
+    "read": true
+  },
+  {
+    "id": "1754213511801sbsn01u0h",
+    "senderId": "2fe67f77-765f-49fb-af59-0d1d5d04d2a8",
+    "senderName": "Praveen Sasikumar",
+    "receiverId": "8c5951c9-0900-4061-b272-87ab92a2d5d1",
+    "receiverName": "Prasanth Sasikumar",
+    "content": "hey",
+    "timestamp": "2025-08-03T09:31:51.801Z",
+    "read": false
+  },
+  {
+    "id": "1754213527962b2uqhu550",
+    "senderId": "2fe67f77-765f-49fb-af59-0d1d5d04d2a8",
+    "senderName": "Praveen Sasikumar",
+    "receiverId": "e07e01d9-064c-4838-95ae-2e27ac6df861",
+    "receiverName": "Jhon Doe",
+    "content": "hell0",
+    "timestamp": "2025-08-03T09:32:07.962Z",
+    "read": true
+  },
+  {
+    "id": "b10a1e00-e9d7-4847-b43c-a6e61c794d41",
+    "senderId": "6fcde34e-bdff-47a2-9849-921ba50e3d3d",
+    "senderName": "Donald Trump",
+    "receiverId": "e07e01d9-064c-4838-95ae-2e27ac6df861",
+    "receiverName": "Jhon Doe",
+    "content": "hekl",
+    "timestamp": "2025-08-03T10:18:21.071Z",
+    "read": true
+  },
+  {
+    "id": "732da381-7041-4336-86bb-02538a88d1db",
+    "senderId": "e07e01d9-064c-4838-95ae-2e27ac6df861",
+    "senderName": "Jhon Doe",
+    "receiverId": "6fcde34e-bdff-47a2-9849-921ba50e3d3d",
+    "receiverName": "Donald Trump",
+    "content": "test",
+    "timestamp": "2025-08-03T10:19:07.529Z",
+    "read": true
+  }
+]

@@ -1,41 +1,44 @@
 import process from 'node:process';globalThis._importMeta_={url:import.meta.url,env:process.env};import { tmpdir } from 'node:os';
-import { defineEventHandler, handleCacheHeaders, splitCookiesString, createEvent, fetchWithEvent, isEvent, eventHandler, setHeaders, sendRedirect, proxyRequest, getRequestHeader, setResponseHeaders, setResponseStatus, send, getRequestHeaders, setResponseHeader, appendResponseHeader, getRequestURL, getResponseHeader, removeResponseHeader, createError, getQuery as getQuery$1, readBody, createApp, createRouter as createRouter$1, toNodeListener, lazyEventHandler, getResponseStatus, getRouterParam, getResponseStatusText } from 'file:///Users/prasanthsasikumar/Documents/GitHub/nuxt-users/node_modules/h3/dist/index.mjs';
+import { defineEventHandler, handleCacheHeaders, splitCookiesString, createEvent, fetchWithEvent, isEvent, eventHandler, setHeaders, sendRedirect, proxyRequest, getRequestHeader, setResponseHeaders, setResponseStatus, send, getRequestHeaders, setResponseHeader, appendResponseHeader, getRequestURL, getResponseHeader, removeResponseHeader, createError, getQuery as getQuery$1, readBody, createApp, createRouter as createRouter$1, toNodeListener, lazyEventHandler, getResponseStatus, getRouterParam, getCookie, getHeader, getMethod, setCookie, deleteCookie, getResponseStatusText } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/h3/dist/index.mjs';
 import { Server } from 'node:http';
-import { resolve, dirname, join } from 'node:path';
+import path, { resolve, dirname, join } from 'node:path';
 import nodeCrypto from 'node:crypto';
 import { parentPort, threadId } from 'node:worker_threads';
-import { escapeHtml } from 'file:///Users/prasanthsasikumar/Documents/GitHub/nuxt-users/node_modules/@vue/shared/dist/shared.cjs.js';
-import { readFile, writeFile } from 'node:fs/promises';
-import { createRenderer, getRequestDependencies, getPreloadLinks, getPrefetchLinks } from 'file:///Users/prasanthsasikumar/Documents/GitHub/nuxt-users/node_modules/vue-bundle-renderer/dist/runtime.mjs';
-import { parseURL, withoutBase, joinURL, getQuery, withQuery, withTrailingSlash, decodePath, withLeadingSlash, withoutTrailingSlash, joinRelativeURL } from 'file:///Users/prasanthsasikumar/Documents/GitHub/nuxt-users/node_modules/ufo/dist/index.mjs';
-import destr, { destr as destr$1 } from 'file:///Users/prasanthsasikumar/Documents/GitHub/nuxt-users/node_modules/destr/dist/index.mjs';
-import { createHooks } from 'file:///Users/prasanthsasikumar/Documents/GitHub/nuxt-users/node_modules/hookable/dist/index.mjs';
-import { createFetch, Headers as Headers$1 } from 'file:///Users/prasanthsasikumar/Documents/GitHub/nuxt-users/node_modules/ofetch/dist/node.mjs';
-import { fetchNodeRequestHandler, callNodeRequestHandler } from 'file:///Users/prasanthsasikumar/Documents/GitHub/nuxt-users/node_modules/node-mock-http/dist/index.mjs';
-import { createStorage, prefixStorage } from 'file:///Users/prasanthsasikumar/Documents/GitHub/nuxt-users/node_modules/unstorage/dist/index.mjs';
-import unstorage_47drivers_47fs from 'file:///Users/prasanthsasikumar/Documents/GitHub/nuxt-users/node_modules/unstorage/drivers/fs.mjs';
-import { digest } from 'file:///Users/prasanthsasikumar/Documents/GitHub/nuxt-users/node_modules/ohash/dist/index.mjs';
-import { klona } from 'file:///Users/prasanthsasikumar/Documents/GitHub/nuxt-users/node_modules/klona/dist/index.mjs';
-import defu, { defuFn } from 'file:///Users/prasanthsasikumar/Documents/GitHub/nuxt-users/node_modules/defu/dist/defu.mjs';
-import { snakeCase } from 'file:///Users/prasanthsasikumar/Documents/GitHub/nuxt-users/node_modules/scule/dist/index.mjs';
-import { getContext } from 'file:///Users/prasanthsasikumar/Documents/GitHub/nuxt-users/node_modules/unctx/dist/index.mjs';
-import { toRouteMatcher, createRouter } from 'file:///Users/prasanthsasikumar/Documents/GitHub/nuxt-users/node_modules/radix3/dist/index.mjs';
-import consola, { consola as consola$1 } from 'file:///Users/prasanthsasikumar/Documents/GitHub/nuxt-users/node_modules/consola/dist/index.mjs';
-import { ErrorParser } from 'file:///Users/prasanthsasikumar/Documents/GitHub/nuxt-users/node_modules/youch-core/build/index.js';
-import { Youch } from 'file:///Users/prasanthsasikumar/Documents/GitHub/nuxt-users/node_modules/nitropack/node_modules/youch/build/index.js';
-import { SourceMapConsumer } from 'file:///Users/prasanthsasikumar/Documents/GitHub/nuxt-users/node_modules/source-map/source-map.js';
+import { escapeHtml } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/@vue/shared/dist/shared.cjs.js';
+import fs, { promises } from 'node:fs';
+import { v4 } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/uuid/dist/esm/index.js';
+import { readFile, mkdir, writeFile } from 'node:fs/promises';
+import bcrypt from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/bcrypt/bcrypt.js';
+import jwt from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/jsonwebtoken/index.js';
+import { createRenderer, getRequestDependencies, getPreloadLinks, getPrefetchLinks } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/vue-bundle-renderer/dist/runtime.mjs';
+import { parseURL, withoutBase, joinURL, getQuery, withQuery, withTrailingSlash, decodePath, withLeadingSlash, withoutTrailingSlash, joinRelativeURL } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/ufo/dist/index.mjs';
+import destr, { destr as destr$1 } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/destr/dist/index.mjs';
+import { createHooks } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/hookable/dist/index.mjs';
+import { createFetch, Headers as Headers$1 } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/ofetch/dist/node.mjs';
+import { fetchNodeRequestHandler, callNodeRequestHandler } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/node-mock-http/dist/index.mjs';
+import { createStorage, prefixStorage } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/unstorage/dist/index.mjs';
+import unstorage_47drivers_47fs from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/unstorage/drivers/fs.mjs';
+import { digest } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/ohash/dist/index.mjs';
+import { klona } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/klona/dist/index.mjs';
+import defu, { defuFn } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/defu/dist/defu.mjs';
+import { snakeCase } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/scule/dist/index.mjs';
+import { getContext } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/unctx/dist/index.mjs';
+import { toRouteMatcher, createRouter } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/radix3/dist/index.mjs';
+import consola, { consola as consola$1 } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/consola/dist/index.mjs';
+import { ErrorParser } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/youch-core/build/index.js';
+import { Youch } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/nitropack/node_modules/youch/build/index.js';
+import { SourceMapConsumer } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/source-map/source-map.js';
 import { AsyncLocalStorage } from 'node:async_hooks';
-import { stringify, uneval } from 'file:///Users/prasanthsasikumar/Documents/GitHub/nuxt-users/node_modules/devalue/index.js';
-import { captureRawStackTrace, parseRawStackTrace } from 'file:///Users/prasanthsasikumar/Documents/GitHub/nuxt-users/node_modules/errx/dist/index.js';
-import { isVNode, toValue, isRef } from 'file:///Users/prasanthsasikumar/Documents/GitHub/nuxt-users/node_modules/vue/index.mjs';
-import { promises } from 'node:fs';
+import { stringify, uneval } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/devalue/index.js';
+import { captureRawStackTrace, parseRawStackTrace } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/errx/dist/index.js';
+import { isVNode, toValue, isRef } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/vue/index.mjs';
 import { fileURLToPath } from 'node:url';
-import { dirname as dirname$1, resolve as resolve$1 } from 'file:///Users/prasanthsasikumar/Documents/GitHub/nuxt-users/node_modules/pathe/dist/index.mjs';
-import { createHead as createHead$1, propsToString, renderSSRHead } from 'file:///Users/prasanthsasikumar/Documents/GitHub/nuxt-users/node_modules/unhead/dist/server.mjs';
-import { renderToString } from 'file:///Users/prasanthsasikumar/Documents/GitHub/nuxt-users/node_modules/vue/server-renderer/index.mjs';
-import { walkResolver } from 'file:///Users/prasanthsasikumar/Documents/GitHub/nuxt-users/node_modules/unhead/dist/utils.mjs';
+import { dirname as dirname$1, resolve as resolve$1 } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/pathe/dist/index.mjs';
+import { createHead as createHead$1, propsToString, renderSSRHead } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/unhead/dist/server.mjs';
+import { renderToString } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/vue/server-renderer/index.mjs';
+import { walkResolver } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/unhead/dist/utils.mjs';
 
-const serverAssets = [{"baseName":"server","dir":"/Users/prasanthsasikumar/Documents/GitHub/nuxt-users/server/assets"}];
+const serverAssets = [{"baseName":"server","dir":"/Users/prasanthsasikumar/Documents/GitHub/icehub/server/assets"}];
 
 const assets$1 = createStorage();
 
@@ -47,11 +50,11 @@ const storage = createStorage({});
 
 storage.mount('/assets', assets$1);
 
-storage.mount('root', unstorage_47drivers_47fs({"driver":"fs","readOnly":true,"base":"/Users/prasanthsasikumar/Documents/GitHub/nuxt-users","watchOptions":{"ignored":[null]}}));
-storage.mount('src', unstorage_47drivers_47fs({"driver":"fs","readOnly":true,"base":"/Users/prasanthsasikumar/Documents/GitHub/nuxt-users/server","watchOptions":{"ignored":[null]}}));
-storage.mount('build', unstorage_47drivers_47fs({"driver":"fs","readOnly":false,"base":"/Users/prasanthsasikumar/Documents/GitHub/nuxt-users/.nuxt"}));
-storage.mount('cache', unstorage_47drivers_47fs({"driver":"fs","readOnly":false,"base":"/Users/prasanthsasikumar/Documents/GitHub/nuxt-users/.nuxt/cache"}));
-storage.mount('data', unstorage_47drivers_47fs({"driver":"fs","base":"/Users/prasanthsasikumar/Documents/GitHub/nuxt-users/.data/kv"}));
+storage.mount('root', unstorage_47drivers_47fs({"driver":"fs","readOnly":true,"base":"/Users/prasanthsasikumar/Documents/GitHub/icehub","watchOptions":{"ignored":[null]}}));
+storage.mount('src', unstorage_47drivers_47fs({"driver":"fs","readOnly":true,"base":"/Users/prasanthsasikumar/Documents/GitHub/icehub/server","watchOptions":{"ignored":[null]}}));
+storage.mount('build', unstorage_47drivers_47fs({"driver":"fs","readOnly":false,"base":"/Users/prasanthsasikumar/Documents/GitHub/icehub/.nuxt"}));
+storage.mount('cache', unstorage_47drivers_47fs({"driver":"fs","readOnly":false,"base":"/Users/prasanthsasikumar/Documents/GitHub/icehub/.nuxt/cache"}));
+storage.mount('data', unstorage_47drivers_47fs({"driver":"fs","base":"/Users/prasanthsasikumar/Documents/GitHub/icehub/.data/kv"}));
 
 function useStorage(base = "") {
   return base ? prefixStorage(storage, base) : storage;
@@ -1016,13 +1019,13 @@ if (!window.__NUXT_DEVTOOLS_TIME_METRIC__) {
 window.__NUXT_DEVTOOLS_TIME_METRIC__.appInit = Date.now()
 `;
 
-const _raRPgConXvpP4i1EZSIS0VhKj4OWagH1G8HQhhPXsGk = (function(nitro) {
+const _lGPwgk_1tWcSz96bDwvTewtBNKdX6lAcUru2zxNV9VQ = (function(nitro) {
   nitro.hooks.hook("render:html", (htmlContext) => {
     htmlContext.head.push(`<script>${script}<\/script>`);
   });
 });
 
-const rootDir = "/Users/prasanthsasikumar/Documents/GitHub/nuxt-users";
+const rootDir = "/Users/prasanthsasikumar/Documents/GitHub/icehub";
 
 const appHead = {"meta":[{"name":"viewport","content":"width=device-width, initial-scale=1"},{"charset":"utf-8"}],"link":[],"style":[],"script":[],"noscript":[]};
 
@@ -1045,7 +1048,7 @@ const devReducers = {
   URL: (data) => data instanceof URL ? data.toString() : void 0
 };
 const asyncContext = getContext("nuxt-dev", { asyncContext: true, AsyncLocalStorage });
-const _bQhd6KYSAUpxGnRcw5PNtXQJi0D4FZCAS2epPWqiQ = (nitroApp) => {
+const _imlJlEtcYUErFKlIoV3o40RwAHyYMj1YM8ArfD1nFG0 = (nitroApp) => {
   const handler = nitroApp.h3App.handler;
   nitroApp.h3App.handler = (event) => {
     return asyncContext.callAsync({ logs: [], event }, () => handler(event));
@@ -1115,8 +1118,8 @@ function onConsoleLog(callback) {
 }
 
 const plugins = [
-  _raRPgConXvpP4i1EZSIS0VhKj4OWagH1G8HQhhPXsGk,
-_bQhd6KYSAUpxGnRcw5PNtXQJi0D4FZCAS2epPWqiQ
+  _lGPwgk_1tWcSz96bDwvTewtBNKdX6lAcUru2zxNV9VQ,
+_imlJlEtcYUErFKlIoV3o40RwAHyYMj1YM8ArfD1nFG0
 ];
 
 const assets = {};
@@ -1144,7 +1147,7 @@ function getAsset (id) {
 
 const METHODS = /* @__PURE__ */ new Set(["HEAD", "GET"]);
 const EncodingMap = { gzip: ".gz", br: ".br" };
-const _WUAtbU = eventHandler((event) => {
+const _8dfJm_ = eventHandler((event) => {
   if (event.method && !METHODS.has(event.method)) {
     return;
   }
@@ -1277,8 +1280,8 @@ function publicAssetsURL(...path) {
 
 const APP_ROOT_OPEN_TAG = `<${appRootTag}${propsToString(appRootAttrs)}>`;
 const APP_ROOT_CLOSE_TAG = `</${appRootTag}>`;
-const getServerEntry = () => import('file:///Users/prasanthsasikumar/Documents/GitHub/nuxt-users/.nuxt//dist/server/server.mjs').then((r) => r.default || r);
-const getClientManifest = () => import('file:///Users/prasanthsasikumar/Documents/GitHub/nuxt-users/.nuxt//dist/server/client.manifest.mjs').then((r) => r.default || r).then((r) => typeof r === "function" ? r() : r);
+const getServerEntry = () => import('file:///Users/prasanthsasikumar/Documents/GitHub/icehub/.nuxt//dist/server/server.mjs').then((r) => r.default || r);
+const getClientManifest = () => import('file:///Users/prasanthsasikumar/Documents/GitHub/icehub/.nuxt//dist/server/client.manifest.mjs').then((r) => r.default || r).then((r) => typeof r === "function" ? r() : r);
 const getSSRRenderer = lazyCachedFunction(async () => {
   const manifest = await getClientManifest();
   if (!manifest) {
@@ -1526,19 +1529,41 @@ async function getIslandContext(event) {
   return ctx;
 }
 
-const _lazy_gGkxmJ = () => Promise.resolve().then(function () { return skills$1; });
-const _lazy_UA02fJ = () => Promise.resolve().then(function () { return users_post$1; });
-const _lazy_pbvvJ7 = () => Promise.resolve().then(function () { return users$1; });
-const _lazy_Dzvr7b = () => Promise.resolve().then(function () { return renderer$1; });
+const _lazy_X46lLS = () => Promise.resolve().then(function () { return toggleRole_post$1; });
+const _lazy_XYs2hc = () => Promise.resolve().then(function () { return login_post$1; });
+const _lazy_sfy6lD = () => Promise.resolve().then(function () { return logout_post$1; });
+const _lazy_QtDuhZ = () => Promise.resolve().then(function () { return me_get$1; });
+const _lazy_Z_k7UE = () => Promise.resolve().then(function () { return register_post$1; });
+const _lazy_HItsH8 = () => Promise.resolve().then(function () { return conversations_get$1; });
+const _lazy_ttNtBU = () => Promise.resolve().then(function () { return messages_get$1; });
+const _lazy_nCeQW7 = () => Promise.resolve().then(function () { return send_post$1; });
+const _lazy_HejCb8 = () => Promise.resolve().then(function () { return skills$1; });
+const _lazy_oEw_c6 = () => Promise.resolve().then(function () { return upload_post$1; });
+const _lazy_GGJj8N = () => Promise.resolve().then(function () { return user_get$1; });
+const _lazy_oxtIvS = () => Promise.resolve().then(function () { return update_post$1; });
+const _lazy_tD17Uk = () => Promise.resolve().then(function () { return users_post$1; });
+const _lazy_VljHyK = () => Promise.resolve().then(function () { return users$1; });
+const _lazy_mqZ_dN = () => Promise.resolve().then(function () { return renderer$1; });
 
 const handlers = [
-  { route: '', handler: _WUAtbU, lazy: false, middleware: true, method: undefined },
-  { route: '/api/skills', handler: _lazy_gGkxmJ, lazy: true, middleware: false, method: undefined },
-  { route: '/api/users', handler: _lazy_UA02fJ, lazy: true, middleware: false, method: "post" },
-  { route: '/api/users', handler: _lazy_pbvvJ7, lazy: true, middleware: false, method: undefined },
-  { route: '/__nuxt_error', handler: _lazy_Dzvr7b, lazy: true, middleware: false, method: undefined },
+  { route: '', handler: _8dfJm_, lazy: false, middleware: true, method: undefined },
+  { route: '/api/admin/toggle-role', handler: _lazy_X46lLS, lazy: true, middleware: false, method: "post" },
+  { route: '/api/auth/login', handler: _lazy_XYs2hc, lazy: true, middleware: false, method: "post" },
+  { route: '/api/auth/logout', handler: _lazy_sfy6lD, lazy: true, middleware: false, method: "post" },
+  { route: '/api/auth/me', handler: _lazy_QtDuhZ, lazy: true, middleware: false, method: "get" },
+  { route: '/api/auth/register', handler: _lazy_Z_k7UE, lazy: true, middleware: false, method: "post" },
+  { route: '/api/chat/conversations', handler: _lazy_HItsH8, lazy: true, middleware: false, method: "get" },
+  { route: '/api/chat/messages', handler: _lazy_ttNtBU, lazy: true, middleware: false, method: "get" },
+  { route: '/api/chat/send', handler: _lazy_nCeQW7, lazy: true, middleware: false, method: "post" },
+  { route: '/api/skills', handler: _lazy_HejCb8, lazy: true, middleware: false, method: undefined },
+  { route: '/api/upload', handler: _lazy_oEw_c6, lazy: true, middleware: false, method: "post" },
+  { route: '/api/user', handler: _lazy_GGJj8N, lazy: true, middleware: false, method: "get" },
+  { route: '/api/user/update', handler: _lazy_oxtIvS, lazy: true, middleware: false, method: "post" },
+  { route: '/api/users', handler: _lazy_tD17Uk, lazy: true, middleware: false, method: "post" },
+  { route: '/api/users', handler: _lazy_VljHyK, lazy: true, middleware: false, method: undefined },
+  { route: '/__nuxt_error', handler: _lazy_mqZ_dN, lazy: true, middleware: false, method: undefined },
   { route: '/__nuxt_island/**', handler: _SxA8c9, lazy: false, middleware: false, method: undefined },
-  { route: '/**', handler: _lazy_Dzvr7b, lazy: true, middleware: false, method: undefined }
+  { route: '/**', handler: _lazy_mqZ_dN, lazy: true, middleware: false, method: undefined }
 ];
 
 function createNitroApp() {
@@ -1866,6 +1891,414 @@ const styles$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   default: styles
 }, Symbol.toStringTag, { value: 'Module' }));
 
+const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key-change-in-production";
+const SALT_ROUNDS = 10;
+async function hashPassword(password) {
+  return await bcrypt.hash(password, SALT_ROUNDS);
+}
+async function verifyPassword(password, hashedPassword) {
+  return await bcrypt.compare(password, hashedPassword);
+}
+function generateToken(user) {
+  return jwt.sign(
+    {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      role: user.role
+    },
+    JWT_SECRET,
+    { expiresIn: "7d" }
+  );
+}
+function verifyToken(token) {
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    return {
+      id: decoded.id,
+      name: decoded.name,
+      email: decoded.email,
+      role: decoded.role
+    };
+  } catch {
+    return null;
+  }
+}
+function getUserFromRequest(event) {
+  var _a;
+  const token = getCookie(event, "auth-token") || ((_a = getHeader(event, "authorization")) == null ? void 0 : _a.replace("Bearer ", ""));
+  if (!token) return null;
+  return verifyToken(token);
+}
+
+const toggleRole_post = defineEventHandler(async (event) => {
+  if (getMethod(event) !== "POST") {
+    throw createError({
+      statusCode: 405,
+      statusMessage: "Method not allowed"
+    });
+  }
+  const currentUser = getUserFromRequest(event);
+  if (!currentUser || currentUser.role !== "admin") {
+    throw createError({
+      statusCode: 403,
+      statusMessage: "Admin access required"
+    });
+  }
+  const { userId, newRole } = await readBody(event);
+  if (!userId || !newRole || !["user", "admin"].includes(newRole)) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Valid userId and newRole are required"
+    });
+  }
+  const usersPath = path.join(process.cwd(), "server/data/users.json");
+  const users = JSON.parse(fs.readFileSync(usersPath, "utf8"));
+  const userIndex = users.findIndex((u) => u.id === userId);
+  if (userIndex === -1) {
+    throw createError({
+      statusCode: 404,
+      statusMessage: "User not found"
+    });
+  }
+  if (users[userIndex].id === currentUser.id && newRole === "user") {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Cannot remove your own admin privileges"
+    });
+  }
+  users[userIndex].role = newRole;
+  fs.writeFileSync(usersPath, JSON.stringify(users, null, 2));
+  return {
+    message: `User role updated to ${newRole}`,
+    user: {
+      id: users[userIndex].id,
+      name: users[userIndex].name,
+      email: users[userIndex].email,
+      role: users[userIndex].role
+    }
+  };
+});
+
+const toggleRole_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: toggleRole_post
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const login_post = defineEventHandler(async (event) => {
+  if (getMethod(event) !== "POST") {
+    throw createError({
+      statusCode: 405,
+      statusMessage: "Method not allowed"
+    });
+  }
+  const { email, password } = await readBody(event);
+  if (!email || !password) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Email and password are required"
+    });
+  }
+  const usersPath = path.join(process.cwd(), "server/data/users.json");
+  const users = JSON.parse(fs.readFileSync(usersPath, "utf8"));
+  const user = users.find((u) => u.email.toLowerCase() === email.toLowerCase());
+  if (!user) {
+    throw createError({
+      statusCode: 401,
+      statusMessage: "Invalid email or password"
+    });
+  }
+  const isValidPassword = await verifyPassword(password, user.password);
+  if (!isValidPassword) {
+    throw createError({
+      statusCode: 401,
+      statusMessage: "Invalid email or password"
+    });
+  }
+  const token = generateToken({
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    role: user.role
+  });
+  setCookie(event, "auth-token", token, {
+    httpOnly: true,
+    secure: false,
+    sameSite: "lax",
+    maxAge: 60 * 60 * 24 * 7
+    // 7 days
+  });
+  return {
+    user: {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      image: user.image,
+      bio: user.bio,
+      skills: user.skills,
+      role: user.role
+    },
+    token
+  };
+});
+
+const login_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: login_post
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const logout_post = defineEventHandler(async (event) => {
+  deleteCookie(event, "auth-token");
+  return { message: "Logged out successfully" };
+});
+
+const logout_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: logout_post
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const me_get = defineEventHandler(async (event) => {
+  const user = getUserFromRequest(event);
+  if (!user) {
+    throw createError({
+      statusCode: 401,
+      statusMessage: "Not authenticated"
+    });
+  }
+  return { user };
+});
+
+const me_get$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: me_get
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const register_post = defineEventHandler(async (event) => {
+  if (getMethod(event) !== "POST") {
+    throw createError({
+      statusCode: 405,
+      statusMessage: "Method not allowed"
+    });
+  }
+  const { name, email, password, bio, skills, image } = await readBody(event);
+  if (!name || !email || !password) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Name, email, and password are required"
+    });
+  }
+  const usersPath = path.join(process.cwd(), "server/data/users.json");
+  const users = JSON.parse(fs.readFileSync(usersPath, "utf8"));
+  const existingUser = users.find((u) => u.email.toLowerCase() === email.toLowerCase());
+  if (existingUser) {
+    throw createError({
+      statusCode: 409,
+      statusMessage: "Email already registered"
+    });
+  }
+  const hashedPassword = await hashPassword(password);
+  const newUser = {
+    id: v4(),
+    name,
+    email: email.toLowerCase(),
+    password: hashedPassword,
+    image: image || "https://via.placeholder.com/150x150/e5e7eb/9ca3af?text=User",
+    bio: bio || "",
+    skills: Array.isArray(skills) ? skills : [],
+    role: "user",
+    createdAt: (/* @__PURE__ */ new Date()).toISOString()
+  };
+  users.push(newUser);
+  fs.writeFileSync(usersPath, JSON.stringify(users, null, 2));
+  const token = generateToken({
+    id: newUser.id,
+    name: newUser.name,
+    email: newUser.email,
+    role: newUser.role
+  });
+  setCookie(event, "auth-token", token, {
+    httpOnly: true,
+    secure: false,
+    sameSite: "lax",
+    maxAge: 60 * 60 * 24 * 7
+    // 7 days
+  });
+  return {
+    user: {
+      id: newUser.id,
+      name: newUser.name,
+      email: newUser.email,
+      image: newUser.image,
+      bio: newUser.bio,
+      skills: newUser.skills,
+      role: newUser.role
+    },
+    token
+  };
+});
+
+const register_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: register_post
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const conversations_get = defineEventHandler(async (event) => {
+  if (getMethod(event) !== "GET") {
+    throw createError({
+      statusCode: 405,
+      statusMessage: "Method not allowed"
+    });
+  }
+  const currentUser = getUserFromRequest(event);
+  if (!currentUser) {
+    throw createError({
+      statusCode: 401,
+      statusMessage: "Authentication required"
+    });
+  }
+  const messagesPath = path.join(process.cwd(), "server/data/messages.json");
+  const messages = JSON.parse(fs.readFileSync(messagesPath, "utf8"));
+  const usersPath = path.join(process.cwd(), "server/data/users.json");
+  const users = JSON.parse(fs.readFileSync(usersPath, "utf8"));
+  const userMessages = messages.filter(
+    (msg) => msg.senderId === currentUser.id || msg.receiverId === currentUser.id
+  );
+  const conversationsMap = /* @__PURE__ */ new Map();
+  userMessages.forEach((msg) => {
+    const partnerId = msg.senderId === currentUser.id ? msg.receiverId : msg.senderId;
+    const partnerName = msg.senderId === currentUser.id ? msg.receiverName : msg.senderName;
+    const partnerUser = users.find((u) => u.id === partnerId);
+    if (!conversationsMap.has(partnerId)) {
+      conversationsMap.set(partnerId, {
+        userId: partnerId,
+        userName: partnerName,
+        userImage: (partnerUser == null ? void 0 : partnerUser.image) || "https://via.placeholder.com/40x40/e5e7eb/9ca3af?text=User",
+        lastMessage: "",
+        lastMessageTime: "",
+        unreadCount: 0
+      });
+    }
+    const conversation = conversationsMap.get(partnerId);
+    if (!conversation.lastMessageTime || new Date(msg.timestamp) > new Date(conversation.lastMessageTime)) {
+      conversation.lastMessage = msg.content;
+      conversation.lastMessageTime = msg.timestamp;
+    }
+    if (msg.receiverId === currentUser.id && !msg.read) {
+      conversation.unreadCount++;
+    }
+  });
+  const conversations = Array.from(conversationsMap.values()).sort((a, b) => new Date(b.lastMessageTime).getTime() - new Date(a.lastMessageTime).getTime());
+  return {
+    conversations
+  };
+});
+
+const conversations_get$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: conversations_get
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const messages_get = defineEventHandler(async (event) => {
+  if (getMethod(event) !== "GET") {
+    throw createError({
+      statusCode: 405,
+      statusMessage: "Method not allowed"
+    });
+  }
+  const currentUser = getUserFromRequest(event);
+  if (!currentUser) {
+    throw createError({
+      statusCode: 401,
+      statusMessage: "Authentication required"
+    });
+  }
+  const query = getQuery$1(event);
+  const { withUserId } = query;
+  if (!withUserId) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "withUserId parameter is required"
+    });
+  }
+  const messagesPath = path.join(process.cwd(), "server/data/messages.json");
+  const messages = JSON.parse(fs.readFileSync(messagesPath, "utf8"));
+  const conversation = messages.filter(
+    (msg) => msg.senderId === currentUser.id && msg.receiverId === withUserId || msg.senderId === withUserId && msg.receiverId === currentUser.id
+  ).sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
+  const updatedMessages = messages.map((msg) => {
+    if (msg.receiverId === currentUser.id && msg.senderId === withUserId && !msg.read) {
+      return { ...msg, read: true };
+    }
+    return msg;
+  });
+  if (updatedMessages.some((msg, index) => msg.read !== messages[index].read)) {
+    fs.writeFileSync(messagesPath, JSON.stringify(updatedMessages, null, 2));
+  }
+  return {
+    messages: conversation
+  };
+});
+
+const messages_get$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: messages_get
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const send_post = defineEventHandler(async (event) => {
+  if (getMethod(event) !== "POST") {
+    throw createError({
+      statusCode: 405,
+      statusMessage: "Method not allowed"
+    });
+  }
+  const currentUser = getUserFromRequest(event);
+  if (!currentUser) {
+    throw createError({
+      statusCode: 401,
+      statusMessage: "Authentication required"
+    });
+  }
+  const { receiverId, content } = await readBody(event);
+  if (!receiverId || !content || !content.trim()) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Receiver ID and message content are required"
+    });
+  }
+  const usersPath = path.join(process.cwd(), "server/data/users.json");
+  const users = JSON.parse(fs.readFileSync(usersPath, "utf8"));
+  const receiver = users.find((u) => u.id === receiverId);
+  if (!receiver) {
+    throw createError({
+      statusCode: 404,
+      statusMessage: "Receiver not found"
+    });
+  }
+  const messagesPath = path.join(process.cwd(), "server/data/messages.json");
+  const messages = JSON.parse(fs.readFileSync(messagesPath, "utf8"));
+  const newMessage = {
+    id: v4(),
+    senderId: currentUser.id,
+    senderName: currentUser.name,
+    receiverId,
+    receiverName: receiver.name,
+    content: content.trim(),
+    timestamp: (/* @__PURE__ */ new Date()).toISOString(),
+    read: false
+  };
+  messages.push(newMessage);
+  fs.writeFileSync(messagesPath, JSON.stringify(messages, null, 2));
+  return {
+    message: "Message sent successfully",
+    data: newMessage
+  };
+});
+
+const send_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: send_post
+}, Symbol.toStringTag, { value: 'Module' }));
+
 const skills = defineEventHandler(async () => {
   const data = await readFile("server/data/skills.txt", "utf-8");
   return data.split(",").map((s) => s.trim());
@@ -1876,13 +2309,204 @@ const skills$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   default: skills
 }, Symbol.toStringTag, { value: 'Module' }));
 
+const upload_post = defineEventHandler(async (event) => {
+  if (event.node.req.method !== "POST") {
+    throw createError({
+      statusCode: 405,
+      statusMessage: "Method not allowed"
+    });
+  }
+  try {
+    const body = await readBody(event);
+    const { image, filename } = body;
+    if (!image || !image.startsWith("data:image/")) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: "Invalid image data"
+      });
+    }
+    const imageMatch = image.match(/^data:image\/([a-zA-Z]+);base64,(.+)$/);
+    if (!imageMatch) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: "Invalid image format"
+      });
+    }
+    const [, format, base64Data] = imageMatch;
+    const imageBuffer = Buffer.from(base64Data, "base64");
+    const uniqueId = v4();
+    const fileExtension = format.toLowerCase();
+    const fileName = `${uniqueId}.${fileExtension}`;
+    const uploadsDir = path.join(process.cwd(), "public", "uploads");
+    await promises.mkdir(uploadsDir, { recursive: true });
+    const filePath = path.join(uploadsDir, fileName);
+    await promises.writeFile(filePath, imageBuffer);
+    const publicUrl = `/uploads/${fileName}`;
+    return {
+      success: true,
+      url: publicUrl,
+      filename: fileName
+    };
+  } catch (error) {
+    console.error("File upload error:", error);
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Failed to upload image"
+    });
+  }
+});
+
+const upload_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: upload_post
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const user_get = defineEventHandler(async (event) => {
+  const query = getQuery$1(event);
+  const { name, id } = query;
+  if (!name && !id) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "User name or ID is required"
+    });
+  }
+  try {
+    const file = "server/data/users.json";
+    const users = JSON.parse(await readFile(file, "utf-8"));
+    let user = null;
+    if (id) {
+      user = users.find((u) => u.id === id.toString());
+    } else if (name) {
+      user = users.find(
+        (u) => u.name.toLowerCase() === decodeURIComponent(name.toString()).toLowerCase()
+      );
+    }
+    if (!user) {
+      throw createError({
+        statusCode: 404,
+        statusMessage: "User not found"
+      });
+    }
+    return user;
+  } catch (error) {
+    if (error.statusCode) {
+      throw error;
+    }
+    console.error("Error fetching user:", error);
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Failed to fetch user"
+    });
+  }
+});
+
+const user_get$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: user_get
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const update_post = defineEventHandler(async (event) => {
+  if (getMethod(event) !== "POST") {
+    throw createError({
+      statusCode: 405,
+      statusMessage: "Method not allowed"
+    });
+  }
+  const currentUser = getUserFromRequest(event);
+  if (!currentUser) {
+    throw createError({
+      statusCode: 401,
+      statusMessage: "Authentication required"
+    });
+  }
+  const { name, bio, skills } = await readBody(event);
+  if (!name) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Name is required"
+    });
+  }
+  const usersPath = path.join(process.cwd(), "server/data/users.json");
+  const users = JSON.parse(fs.readFileSync(usersPath, "utf8"));
+  const userIndex = users.findIndex((u) => u.id === currentUser.id);
+  if (userIndex === -1) {
+    throw createError({
+      statusCode: 404,
+      statusMessage: "User not found"
+    });
+  }
+  const existingUser = users.find((u) => u.name.toLowerCase() === name.toLowerCase() && u.id !== currentUser.id);
+  if (existingUser) {
+    throw createError({
+      statusCode: 409,
+      statusMessage: "Name is already taken"
+    });
+  }
+  users[userIndex] = {
+    ...users[userIndex],
+    name,
+    bio: bio || "",
+    skills: Array.isArray(skills) ? skills : []
+  };
+  fs.writeFileSync(usersPath, JSON.stringify(users, null, 2));
+  const updatedUser = users[userIndex];
+  return {
+    message: "Profile updated successfully",
+    user: {
+      id: updatedUser.id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      image: updatedUser.image,
+      bio: updatedUser.bio,
+      skills: updatedUser.skills,
+      role: updatedUser.role
+    }
+  };
+});
+
+const update_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: update_post
+}, Symbol.toStringTag, { value: 'Module' }));
+
 const users_post = defineEventHandler(async (event) => {
   const body = await readBody(event);
   const file = "server/data/users.json";
-  const users = JSON.parse(await readFile(file, "utf-8"));
-  users.push(body);
-  await writeFile(file, JSON.stringify(users, null, 2));
-  return { success: true };
+  try {
+    body.id = v4();
+    if (body.image && body.image.startsWith("data:image/")) {
+      const imageMatch = body.image.match(/^data:image\/([a-zA-Z]+);base64,(.+)$/);
+      if (imageMatch) {
+        const [, format, base64Data] = imageMatch;
+        const allowedFormats = ["jpeg", "jpg", "png", "gif", "webp"];
+        if (!allowedFormats.includes(format.toLowerCase())) {
+          return { success: false, error: "Invalid image format. Allowed: JPEG, PNG, GIF, WebP" };
+        }
+        const imageBuffer = Buffer.from(base64Data, "base64");
+        const maxSize = 5 * 1024 * 1024;
+        if (imageBuffer.length > maxSize) {
+          return { success: false, error: "Image too large. Maximum size is 5MB" };
+        }
+        const timestamp = (/* @__PURE__ */ new Date()).toISOString().split("T")[0];
+        const uniqueId = v4();
+        const fileExtension = format.toLowerCase() === "jpeg" ? "jpg" : format.toLowerCase();
+        const fileName = `${timestamp}-${uniqueId}.${fileExtension}`;
+        const uploadsDir = path.join(process.cwd(), "public", "uploads");
+        await mkdir(uploadsDir, { recursive: true });
+        const filePath = path.join(uploadsDir, fileName);
+        await writeFile(filePath, imageBuffer);
+        body.image = `/uploads/${fileName}`;
+        console.log(`\u2705 Saved profile image: ${fileName} (${(imageBuffer.length / 1024).toFixed(1)}KB)`);
+      }
+    }
+    const users = JSON.parse(await readFile(file, "utf-8"));
+    users.push(body);
+    await writeFile(file, JSON.stringify(users, null, 2));
+    return { success: true };
+  } catch (error) {
+    console.error("Error creating user:", error);
+    return { success: false, error: "Failed to create user" };
+  }
 });
 
 const users_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({

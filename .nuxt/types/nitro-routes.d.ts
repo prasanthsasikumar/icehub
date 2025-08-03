@@ -3,8 +3,41 @@ import type { Serialize, Simplify } from "nitropack/types";
 declare module "nitropack/types" {
   type Awaited<T> = T extends PromiseLike<infer U> ? Awaited<U> : T
   interface InternalApi {
+    '/api/admin/toggle-role': {
+      'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/admin/toggle-role.post').default>>>>
+    }
+    '/api/auth/login': {
+      'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/auth/login.post').default>>>>
+    }
+    '/api/auth/logout': {
+      'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/auth/logout.post').default>>>>
+    }
+    '/api/auth/me': {
+      'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/auth/me.get').default>>>>
+    }
+    '/api/auth/register': {
+      'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/auth/register.post').default>>>>
+    }
+    '/api/chat/conversations': {
+      'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/chat/conversations.get').default>>>>
+    }
+    '/api/chat/messages': {
+      'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/chat/messages.get').default>>>>
+    }
+    '/api/chat/send': {
+      'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/chat/send.post').default>>>>
+    }
     '/api/skills': {
       'default': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/skills').default>>>>
+    }
+    '/api/upload': {
+      'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/upload.post').default>>>>
+    }
+    '/api/user': {
+      'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/user.get').default>>>>
+    }
+    '/api/user/update': {
+      'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/user/update.post').default>>>>
     }
     '/api/users': {
       'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/users.post').default>>>>

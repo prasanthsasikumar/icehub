@@ -1,45 +1,85 @@
 <template>
-  <div class="devpost-page">
+  <div class="min-h-screen font-sans text-gray-700 bg-white">
     <!-- Top Navigation -->
-    <nav class="top-nav">
-      <div class="nav-container">
+    <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
+      <div class="max-w-container mx-auto px-5 flex justify-between items-center h-16">
         <div class="nav-left">
-          <h1 class="nav-logo">DevDirectory</h1>
+          <h1 class="nav-logo">ICEHub</h1>
         </div>
-        <div class="nav-right">
-          <NuxtLink to="/new" class="nav-button">
-            Join community
-          </NuxtLink>
+        <div class="nav-right flex items-center gap-4">
+          <template v-if="isLoggedIn">
+            <span class="text-sm text-gray-600">Welcome, {{ user?.name }}</span>
+            <NuxtLink to="/chat" class="nav-button nav-button-secondary">
+              Messages
+            </NuxtLink>
+            <NuxtLink 
+              v-if="user" 
+              :to="`/profile/${encodeURIComponent(user.name)}`" 
+              class="nav-button nav-button-secondary"
+            >
+              My Profile
+            </NuxtLink>
+            <NuxtLink 
+              v-if="isAdmin" 
+              to="/admin" 
+              class="nav-button nav-button-secondary"
+            >
+              Admin
+            </NuxtLink>
+            <button @click="handleLogout" class="nav-button nav-button-secondary">
+              Logout
+            </button>
+          </template>
+          <template v-else>
+            <NuxtLink to="/login" class="nav-button nav-button-secondary">
+              Sign In
+            </NuxtLink>
+            <NuxtLink to="/register" class="nav-button">
+              Join community
+            </NuxtLink>
+          </template>
         </div>
       </div>
     </nav>
 
     <!-- Hero Section -->
-    <section class="hero">
-      <div class="hero-container">
-        <h1 class="hero-title">The home for developers</h1>
-        <p class="hero-subtitle">Where organizations and developers come together to build, inspire, and innovate.</p>
+    <section class="bg-gradient-to-br from-gray-50 to-gray-200 py-20 pb-30 text-center">
+      <div class="max-w-container mx-auto px-5">
+        <h1 class="text-5xl font-bold text-gray-700 mb-6 leading-tight">The home for developers</h1>
+        <p class="text-xl text-gray-500 mb-10 max-w-2xl mx-auto">Where organizations and developers come together to build, inspire, and innovate.</p>
         
-        <div class="hero-actions">
-          <NuxtLink to="/new" class="hero-btn hero-btn-primary">Join community</NuxtLink>
-          <button class="hero-btn hero-btn-secondary">Browse developers</button>
+        <div class="flex gap-4 justify-center mb-15 flex-wrap">
+          <template v-if="isLoggedIn">
+            <NuxtLink to="/developers" class="hero-btn hero-btn-primary">Browse developers</NuxtLink>
+            <NuxtLink 
+              v-if="user" 
+              :to="`/profile/${encodeURIComponent(user.name)}`" 
+              class="hero-btn hero-btn-secondary"
+            >
+              View my profile
+            </NuxtLink>
+          </template>
+          <template v-else>
+            <NuxtLink to="/register" class="hero-btn hero-btn-primary">Join community</NuxtLink>
+            <NuxtLink to="/developers" class="hero-btn hero-btn-secondary">Browse developers</NuxtLink>
+          </template>
         </div>
 
         <!-- Stats Section -->
-        <div class="trusted-section" v-if="users && users.length > 0">
-          <p class="trusted-label">TRUSTED BY DEVELOPERS WORLDWIDE</p>
-          <div class="stats-grid">
-            <div class="stat-item">
-              <span class="stat-number">{{ users.length }}</span>
-              <span class="stat-label">Developers</span>
+        <div v-if="users && users.length > 0" class="mt-15">
+          <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-6">TRUSTED BY DEVELOPERS WORLDWIDE</p>
+          <div class="flex justify-center gap-15 flex-wrap">
+            <div class="text-center">
+              <span class="block text-3xl font-bold text-primary mb-1">{{ users.length }}</span>
+              <span class="text-sm text-gray-500 uppercase tracking-wider">Developers</span>
             </div>
-            <div class="stat-item">
-              <span class="stat-number">{{ totalSkills }}</span>
-              <span class="stat-label">Skills</span>
+            <div class="text-center">
+              <span class="block text-3xl font-bold text-primary mb-1">{{ totalSkills }}</span>
+              <span class="text-sm text-gray-500 uppercase tracking-wider">Skills</span>
             </div>
-            <div class="stat-item">
-              <span class="stat-number">50+</span>
-              <span class="stat-label">Technologies</span>
+            <div class="text-center">
+              <span class="block text-3xl font-bold text-primary mb-1">50+</span>
+              <span class="text-sm text-gray-500 uppercase tracking-wider">Technologies</span>
             </div>
           </div>
         </div>
@@ -47,44 +87,44 @@
     </section>
 
     <!-- Main Content -->
-    <main class="main-content">
-      <div class="content-container">
+    <main class="py-15">
+      <div class="max-w-container mx-auto px-5">
         <!-- Empty State -->
-        <div v-if="!users || users.length === 0" class="empty-state">
-          <div class="empty-icon">
-            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+        <div v-if="!users || users.length === 0" class="text-center py-20">
+          <div class="mb-6 text-gray-400">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" class="mx-auto">
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
               <circle cx="12" cy="7" r="4"/>
             </svg>
           </div>
-          <h2 class="empty-title">No developers yet</h2>
-          <p class="empty-description">Be the first to join our developer community and showcase your skills!</p>
-          <NuxtLink to="/new" class="empty-cta-button">Get Started</NuxtLink>
+          <h2 class="text-2xl font-semibold text-gray-700 mb-3">No developers yet</h2>
+          <p class="text-base text-gray-500 mb-8">Be the first to join our developer community and showcase your skills!</p>
+          <NuxtLink to="/new" class="bg-primary text-white px-6 py-3 rounded-lg no-underline font-semibold inline-block transition-colors hover:bg-primary-hover">Get Started</NuxtLink>
         </div>
 
         <!-- Developers Section -->
         <div v-else>
-          <section class="section">
-            <div class="section-header">
-              <h2 class="section-title">Developers for you</h2>
-              <NuxtLink to="/developers" class="section-link">View all developers</NuxtLink>
+          <section class="mb-20">
+            <div class="flex justify-between items-center mb-8 flex-wrap gap-4">
+              <h2 class="text-3xl font-bold text-gray-700 m-0">Developers for you</h2>
+              <NuxtLink to="/developers" class="text-primary no-underline font-medium text-sm hover:underline">View all developers</NuxtLink>
             </div>
 
-            <div class="developers-grid">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               <div v-for="user in users" :key="user.name" class="developer-card">
-                <div class="card-content">
-                  <div class="developer-header">
-                    <div class="developer-avatar">
-                      <img :src="user.image" :alt="`${user.name}'s avatar`" />
+                <div class="p-6">
+                  <div class="flex items-center mb-5">
+                    <div class="w-15 h-15 rounded-full overflow-hidden mr-4 flex-shrink-0">
+                      <img :src="user.image" :alt="`${user.name}'s avatar`" class="w-full h-full object-cover" />
                     </div>
-                    <div class="developer-info">
-                      <h3 class="developer-name">{{ user.name }}</h3>
-                      <p class="developer-bio">{{ user.bio }}</p>
+                    <div class="flex-1 min-w-0">
+                      <h3 class="text-lg font-semibold text-gray-700 mb-1 truncate">{{ user.name }}</h3>
+                      <p class="text-sm text-gray-500 m-0 leading-snug">{{ user.bio }}</p>
                     </div>
                   </div>
 
-                  <div class="skills-section">
-                    <div class="skills-list">
+                  <div class="mb-6">
+                    <div class="flex flex-wrap gap-2">
                       <span 
                         v-for="skill in user.skills.slice(0, 6)" 
                         :key="skill" 
@@ -92,14 +132,14 @@
                       >
                         {{ skill }}
                       </span>
-                      <span v-if="user.skills.length > 6" class="skill-more">
+                      <span v-if="user.skills.length > 6" class="text-gray-500 text-xs font-medium py-1">
                         +{{ user.skills.length - 6 }} more
                       </span>
                     </div>
                   </div>
 
-                  <div class="card-actions">
-                    <button class="action-btn action-btn-secondary">View Profile</button>
+                  <div class="flex gap-3">
+                    <NuxtLink :to="`/profile/${encodeURIComponent(user.name)}`" class="action-btn action-btn-secondary">View Profile</NuxtLink>
                     <button class="action-btn action-btn-primary">Connect</button>
                   </div>
                 </div>
@@ -108,22 +148,22 @@
           </section>
 
           <!-- Popular Skills Section -->
-          <section class="section">
-            <div class="section-header">
-              <h2 class="section-title">Top developer skills</h2>
+          <section class="mb-20">
+            <div class="flex justify-between items-center mb-8">
+              <h2 class="text-3xl font-bold text-gray-700 m-0">Top developer skills</h2>
             </div>
             
-            <div class="skills-table">
-              <div class="skills-table-header">
-                <div class="table-col">Rank</div>
-                <div class="table-col">Skill</div>
-                <div class="table-col">Developers</div>
+            <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
+              <div class="bg-gray-50 px-6 py-4 grid grid-cols-[80px_1fr_120px] gap-6 font-semibold text-sm text-gray-500 uppercase tracking-wider">
+                <div>Rank</div>
+                <div>Skill</div>
+                <div>Developers</div>
               </div>
-              <div class="skills-table-body">
-                <div v-for="(skill, index) in topSkills" :key="skill.name" class="table-row">
-                  <div class="table-col rank">{{ index + 1 }}.</div>
-                  <div class="table-col skill-name">{{ skill.name }}</div>
-                  <div class="table-col count">{{ skill.count }}</div>
+              <div>
+                <div v-for="(skill, index) in topSkills" :key="skill.name" class="px-6 py-4 grid grid-cols-[80px_1fr_120px] gap-6 border-b border-gray-100 last:border-b-0 transition-colors hover:bg-gray-50">
+                  <div class="flex items-center font-semibold text-gray-500">{{ index + 1 }}.</div>
+                  <div class="flex items-center font-medium text-gray-700">{{ skill.name }}</div>
+                  <div class="flex items-center justify-end text-gray-500">{{ skill.count }}</div>
                 </div>
               </div>
             </div>
@@ -136,6 +176,20 @@
 
 <script setup>
 const { data: users } = await useFetch('/api/users')
+
+// Authentication
+const { user, isLoggedIn, isAdmin, logout } = useAuth()
+
+// Check authentication on mount
+onMounted(async () => {
+  const { checkAuth } = useAuth()
+  await checkAuth()
+})
+
+// Handle logout
+const handleLogout = async () => {
+  await logout()
+}
 
 // Computed properties
 const totalSkills = computed(() => {
@@ -162,7 +216,7 @@ const topSkills = computed(() => {
 
 // Page meta
 useHead({
-  title: 'DevDirectory - The home for developers',
+  title: 'ICEHub - The home for developers',
   meta: [
     {
       name: 'description',
@@ -177,507 +231,68 @@ useHead({
 </script>
 
 <style scoped>
-/* Reset and Base Styles */
-* {
-  box-sizing: border-box;
+/* Custom spacing utilities not available in default Tailwind */
+.mb-15 {
+  margin-bottom: 3.75rem;
 }
 
-.devpost-page {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  line-height: 1.6;
-  color: #333;
-  background-color: #fff;
-  min-height: 100vh;
+.mt-15 {
+  margin-top: 3.75rem;
 }
 
-/* Navigation */
-.top-nav {
-  background: #fff;
-  border-bottom: 1px solid #e9ecef;
-  position: sticky;
-  top: 0;
-  z-index: 100;
+.py-15 {
+  padding-top: 3.75rem;
+  padding-bottom: 3.75rem;
 }
 
-.nav-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 64px;
+.py-20 {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
 }
 
-.nav-logo {
-  font-size: 24px;
-  font-weight: 700;
-  color: #0d7ae4;
-  margin: 0;
+.py-30 {
+  padding-bottom: 7.5rem;
 }
 
-.nav-button {
-  background: #0d7ae4;
-  color: white;
-  padding: 8px 16px;
-  border-radius: 6px;
-  text-decoration: none;
-  font-weight: 500;
-  font-size: 14px;
-  transition: background-color 0.2s;
+.gap-15 {
+  gap: 3.75rem;
 }
 
-.nav-button:hover {
-  background: #0969da;
+.w-15 {
+  width: 3.75rem;
 }
 
-/* Hero Section */
-.hero {
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-  padding: 80px 0 120px;
-  text-align: center;
+.h-15 {
+  height: 3.75rem;
 }
 
-.hero-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-
-.hero-title {
-  font-size: 52px;
-  font-weight: 700;
-  color: #333;
-  margin: 0 0 24px;
-  line-height: 1.2;
-}
-
-.hero-subtitle {
-  font-size: 20px;
-  color: #666;
-  margin: 0 0 40px;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.hero-actions {
-  display: flex;
-  gap: 16px;
-  justify-content: center;
-  margin-bottom: 60px;
-}
-
-.hero-btn {
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: 16px;
-  text-decoration: none;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.hero-btn-primary {
-  background: #0d7ae4;
-  color: white;
-}
-
-.hero-btn-primary:hover {
-  background: #0969da;
-  transform: translateY(-1px);
-}
-
-.hero-btn-secondary {
-  background: white;
-  color: #0d7ae4;
-  border: 1px solid #0d7ae4;
-}
-
-.hero-btn-secondary:hover {
-  background: #f8f9fa;
-}
-
-/* Trusted Section */
-.trusted-section {
-  margin-top: 60px;
-}
-
-.trusted-label {
-  font-size: 12px;
-  font-weight: 600;
-  color: #666;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 24px;
-}
-
-.stats-grid {
-  display: flex;
-  justify-content: center;
-  gap: 60px;
-  flex-wrap: wrap;
-}
-
-.stat-item {
-  text-align: center;
-}
-
-.stat-number {
-  display: block;
-  font-size: 32px;
-  font-weight: 700;
-  color: #0d7ae4;
-  margin-bottom: 4px;
-}
-
-.stat-label {
-  font-size: 14px;
-  color: #666;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-/* Main Content */
-.main-content {
-  padding: 60px 0;
-}
-
-.content-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-
-/* Empty State */
-.empty-state {
-  text-align: center;
-  padding: 80px 20px;
-}
-
-.empty-icon {
-  margin-bottom: 24px;
-  color: #9ca3af;
-}
-
-.empty-title {
-  font-size: 24px;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 12px;
-}
-
-.empty-description {
-  font-size: 16px;
-  color: #666;
-  margin-bottom: 32px;
-}
-
-.empty-cta-button {
-  background: #0d7ae4;
-  color: white;
-  padding: 12px 24px;
-  border-radius: 8px;
-  text-decoration: none;
-  font-weight: 600;
-  display: inline-block;
-  transition: background-color 0.2s;
-}
-
-.empty-cta-button:hover {
-  background: #0969da;
-}
-
-/* Section Styles */
-.section {
-  margin-bottom: 80px;
-}
-
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 32px;
-}
-
-.section-title {
-  font-size: 28px;
-  font-weight: 700;
-  color: #333;
-  margin: 0;
-}
-
-.section-link {
-  color: #0d7ae4;
-  text-decoration: none;
-  font-weight: 500;
-  font-size: 14px;
-}
-
-.section-link:hover {
-  text-decoration: underline;
-}
-
-/* Developers Grid */
-.developers-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 24px;
-}
-
-.developer-card {
-  background: white;
-  border: 1px solid #e9ecef;
-  border-radius: 12px;
-  overflow: hidden;
-  transition: all 0.2s;
-}
-
-.developer-card:hover {
-  border-color: #0d7ae4;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(13, 122, 228, 0.1);
-}
-
-.card-content {
-  padding: 24px;
-}
-
-.developer-header {
-  display: flex;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.developer-avatar {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  overflow: hidden;
-  margin-right: 16px;
-  flex-shrink: 0;
-}
-
-.developer-avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.developer-info {
-  flex: 1;
-}
-
-.developer-name {
-  font-size: 18px;
-  font-weight: 600;
-  color: #333;
-  margin: 0 0 4px;
-}
-
-.developer-bio {
-  font-size: 14px;
-  color: #666;
-  margin: 0;
-  line-height: 1.4;
-}
-
-/* Skills */
-.skills-section {
-  margin-bottom: 24px;
-}
-
-.skills-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.skill-tag {
-  background: #f8f9fa;
-  color: #495057;
-  padding: 4px 12px;
-  border-radius: 16px;
-  font-size: 12px;
-  font-weight: 500;
-  border: 1px solid #e9ecef;
-}
-
-.skill-more {
-  color: #666;
-  font-size: 12px;
-  font-weight: 500;
-  padding: 4px 0;
-}
-
-/* Card Actions */
-.card-actions {
-  display: flex;
-  gap: 12px;
-}
-
-.action-btn {
-  padding: 8px 16px;
-  border-radius: 6px;
-  font-weight: 500;
-  font-size: 14px;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s;
-  flex: 1;
-}
-
-.action-btn-primary {
-  background: #0d7ae4;
-  color: white;
-}
-
-.action-btn-primary:hover {
-  background: #0969da;
-}
-
-.action-btn-secondary {
-  background: white;
-  color: #666;
-  border: 1px solid #e9ecef;
-}
-
-.action-btn-secondary:hover {
-  background: #f8f9fa;
-  border-color: #dee2e6;
-}
-
-/* Skills Table */
-.skills-table {
-  background: white;
-  border: 1px solid #e9ecef;
-  border-radius: 12px;
-  overflow: hidden;
-}
-
-.skills-table-header {
-  background: #f8f9fa;
-  padding: 16px 24px;
-  display: grid;
-  grid-template-columns: 80px 1fr 120px;
-  gap: 24px;
-  font-weight: 600;
-  font-size: 14px;
-  color: #666;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.skills-table-body {
-  padding: 0;
-}
-
-.table-row {
-  padding: 16px 24px;
-  display: grid;
-  grid-template-columns: 80px 1fr 120px;
-  gap: 24px;
-  border-bottom: 1px solid #f1f3f4;
-  transition: background-color 0.2s;
-}
-
-.table-row:last-child {
-  border-bottom: none;
-}
-
-.table-row:hover {
-  background: #f8f9fa;
-}
-
-.table-col {
-  display: flex;
-  align-items: center;
-}
-
-.rank {
-  font-weight: 600;
-  color: #666;
-}
-
-.skill-name {
-  font-weight: 500;
-  color: #333;
-}
-
-.count {
-  color: #666;
-  justify-content: flex-end;
-}
-
-/* Responsive Design */
+/* Responsive adjustments */
 @media (max-width: 768px) {
-  .hero-title {
-    font-size: 36px;
+  .text-5xl {
+    font-size: 2.25rem;
   }
   
-  .hero-subtitle {
-    font-size: 18px;
+  .text-xl {
+    font-size: 1.125rem;
   }
   
-  .hero-actions {
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .stats-grid {
-    gap: 30px;
-  }
-  
-  .section-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
-  }
-  
-  .developers-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .skills-table-header,
-  .table-row {
-    grid-template-columns: 60px 1fr 80px;
-    gap: 16px;
-    padding: 12px 16px;
-  }
-  
-  .nav-container {
-    padding: 0 16px;
-  }
-  
-  .hero-container,
-  .content-container {
-    padding: 0 16px;
+  .gap-15 {
+    gap: 1.875rem;
   }
 }
 
 @media (max-width: 480px) {
-  .hero {
-    padding: 60px 0 80px;
+  .py-20 {
+    padding-top: 3.75rem;
+    padding-bottom: 5rem;
   }
   
-  .hero-title {
-    font-size: 28px;
+  .text-5xl {
+    font-size: 1.75rem;
   }
   
-  .hero-subtitle {
-    font-size: 16px;
-  }
-  
-  .card-actions {
-    flex-direction: column;
-  }
-  
-  .action-btn {
-    text-align: center;
+  .text-xl {
+    font-size: 1rem;
   }
 }
 </style>
