@@ -1123,7 +1123,22 @@ const plugins = [
 _imlJlEtcYUErFKlIoV3o40RwAHyYMj1YM8ArfD1nFG0
 ];
 
-const assets = {};
+const assets = {
+  "/index.mjs": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"1e9e0-Wsf951O2WMGmjeQGzVf1WMX4+YM\"",
+    "mtime": "2025-08-03T15:42:26.797Z",
+    "size": 125408,
+    "path": "index.mjs"
+  },
+  "/index.mjs.map": {
+    "type": "application/json",
+    "etag": "\"6e164-VjIp+l8WyoItZRjF9BPjGho4eDc\"",
+    "mtime": "2025-08-03T15:42:26.797Z",
+    "size": 450916,
+    "path": "index.mjs.map"
+  }
+};
 
 function readAsset (id) {
   const serverDir = dirname$1(fileURLToPath(globalThis._importMeta_.url));
@@ -2997,36 +3012,50 @@ const create_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.definePrope
 }, Symbol.toStringTag, { value: 'Module' }));
 
 const index_get = defineEventHandler(async (event) => {
-  const groupsPath = path.join(process.cwd(), "server/data/groups.json");
-  const groups = JSON.parse(fs.readFileSync(groupsPath, "utf8"));
-  const query = getQuery$1(event);
-  const userId = query.userId;
-  let filteredGroups = groups;
-  if (!userId) {
-    filteredGroups = groups.filter((group) => !group.isPrivate);
-  } else {
-    filteredGroups = groups.filter(
-      (group) => !group.isPrivate || group.members.some((member) => member.userId === userId) || group.mentors.some((mentor) => mentor.userId === userId)
-    );
+  try {
+    const groups = await Database.getGroups();
+    if (!groups) {
+      return [];
+    }
+    const query = getQuery$1(event);
+    const userId = query.userId;
+    let filteredGroups = groups;
+    if (!userId) {
+      filteredGroups = groups.filter((group) => !group.is_private);
+    } else {
+      filteredGroups = groups.filter(
+        (group) => !group.is_private || group.members && group.members.some((member) => member.userId === userId) || group.mentors && group.mentors.some((mentor) => mentor.userId === userId)
+      );
+    }
+    return filteredGroups.map((group) => {
+      var _a, _b;
+      const isMember = userId ? group.members && group.members.some((member) => member.userId === userId) : false;
+      const isMentor = userId ? group.mentors && group.mentors.some((mentor) => mentor.userId === userId) : false;
+      return {
+        id: group.id,
+        name: group.name,
+        description: group.description,
+        coverImage: group.cover_image,
+        // Map from Supabase field name
+        createdBy: group.created_by,
+        // Map from Supabase field name
+        createdAt: group.created_at,
+        // Map from Supabase field name
+        memberCount: (((_a = group.members) == null ? void 0 : _a.length) || 0) + (((_b = group.mentors) == null ? void 0 : _b.length) || 0),
+        isPrivate: group.is_private,
+        // Map from Supabase field name
+        // User is considered part of group if they're either member or mentor
+        isMember: isMember || isMentor,
+        userRole: isMember ? "member" : isMentor ? "mentor" : null
+      };
+    });
+  } catch (error) {
+    console.error("Error fetching groups:", error);
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Failed to fetch groups"
+    });
   }
-  return filteredGroups.map((group) => {
-    var _a;
-    const isMember = userId ? group.members.some((member) => member.userId === userId) : false;
-    const isMentor = userId ? group.mentors.some((mentor) => mentor.userId === userId) : false;
-    return {
-      id: group.id,
-      name: group.name,
-      description: group.description,
-      coverImage: group.coverImage,
-      createdBy: group.createdBy,
-      createdAt: group.createdAt,
-      memberCount: group.members.length + (((_a = group.mentors) == null ? void 0 : _a.length) || 0),
-      isPrivate: group.isPrivate,
-      // User is considered part of group if they're either member or mentor
-      isMember: isMember || isMentor,
-      userRole: isMember ? "member" : isMentor ? "mentor" : null
-    };
-  });
 });
 
 const index_get$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({

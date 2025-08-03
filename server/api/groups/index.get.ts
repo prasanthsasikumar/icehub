@@ -1,47 +1,52 @@
-import fs from 'fs'
-import path from 'path'
-import { type Group } from '../../../server/utils/groups'
+import { Database } from '../../utils/supabase'
 
 export default defineEventHandler(async (event) => {
-  // Read groups from file
-  const groupsPath = path.join(process.cwd(), 'server/data/groups.json')
-  const groups: Group[] = JSON.parse(fs.readFileSync(groupsPath, 'utf8'))
-
-  // Filter out private groups unless user is a member
-  const query = getQuery(event)
-  const userId = query.userId as string
-
-  let filteredGroups = groups
-  
-  if (!userId) {
-    // Not authenticated - only show public groups
-    filteredGroups = groups.filter(group => !group.isPrivate)
-  } else {
-    // Authenticated - show public groups + private groups user is member/mentor of
-    filteredGroups = groups.filter(group => 
-      !group.isPrivate || 
-      group.members.some(member => member.userId === userId) ||
-      group.mentors.some(mentor => mentor.userId === userId)
-    )
-  }
-
-  // Return groups with member count instead of full member list for privacy
-  return filteredGroups.map(group => {
-    const isMember = userId ? group.members.some(member => member.userId === userId) : false
-    const isMentor = userId ? group.mentors.some(mentor => mentor.userId === userId) : false
+  try {
+    // Get groups from Supabase
+    const groups = await Database.getGroups()
     
-    return {
-      id: group.id,
-      name: group.name,
-      description: group.description,
-      coverImage: group.coverImage,
-      createdBy: group.createdBy,
-      createdAt: group.createdAt,
-      memberCount: group.members.length + (group.mentors?.length || 0),
-      isPrivate: group.isPrivate,
-      // User is considered part of group if they're either member or mentor
-      isMember: isMember || isMentor,
-      userRole: isMember ? 'member' : (isMentor ? 'mentor' : null)
+    if (!groups) {
+      return []
     }
-  })
+
+    // Filter out private groups unless user is a member
+    const query = getQuery(event)
+    const userId = query.userId as string
+
+    let filteredGroups = groups
+    
+    if (!userId) {
+      // Not authenticated - only show public groups
+      filteredGroups = groups.filter((group: any) => group.isPublic)
+    } else {
+      // Authenticated - show public groups + private groups user is member of
+      filteredGroups = groups.filter((group: any) => 
+        group.isPublic || 
+        (group.members && group.members.some((member: any) => member.userId === userId))
+      )
+    }
+
+    // Return groups with member count instead of full member list for privacy
+    return filteredGroups.map((group: any) => {
+      const isMember = userId ? 
+        (group.members && group.members.some((member: any) => member.userId === userId)) : false
+      
+      return {
+        id: group.id,
+        name: group.name,
+        description: group.description,
+        coverImage: group.coverImage || '/uploads/groupCoverSamples/cover1.svg',
+        createdBy: group.creatorId,
+        createdAt: group.createdAt,
+        memberCount: (group.members?.length || 0),
+        isPrivate: !group.isPublic, // Convert isPublic to isPrivate
+        // User is considered part of group if they're a member
+        isMember: isMember,
+        userRole: isMember ? 'member' : null
+      }
+    })
+  } catch (error) {
+    console.error('Error fetching groups:', error)
+    return []
+  }
 })
