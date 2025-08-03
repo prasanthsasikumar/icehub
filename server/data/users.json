@@ -90,12 +90,21 @@
     "name": "Praveen Sasikumar",
     "email": "praveen@ahlab.org",
     "password": "$2b$10$CC02ti3qd0IPZUGIKJqXtuDafo3ftWnogs9GqpnAGT6YDTWj1pN52",
-    "image": "https://via.placeholder.com/150x150/e5e7eb/9ca3af?text=User",
+    "image": "/uploads/bd7762db-a6f7-4501-9b7d-9013037c53dc.png",
     "bio": "Psychologist expert at NUS",
     "skills": [
-      "User study",
-      "evaluation",
-      "Python"
+      {
+        "name": "User study",
+        "level": 3
+      },
+      {
+        "name": "evaluation",
+        "level": 3
+      },
+      {
+        "name": "Python",
+        "level": 4
+      }
     ],
     "role": "user",
     "createdAt": "2025-08-03T09:31:17.988Z"

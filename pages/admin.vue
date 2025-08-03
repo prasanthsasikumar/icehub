@@ -144,6 +144,13 @@
                     >
                       {{ user.role === 'admin' ? 'Make User' : 'Make Admin' }}
                     </button>
+                    <button 
+                      v-if="user.id !== currentUser?.id"
+                      @click="deleteUser(user)"
+                      class="text-red-600 hover:text-red-900"
+                    >
+                      Delete
+                    </button>
                   </td>
                 </tr>
               </tbody>
@@ -211,6 +218,32 @@ const toggleRole = async (user) => {
     await refreshUsers()
   } catch (error) {
     alert('Failed to update user role')
+  }
+}
+
+const deleteUser = async (user) => {
+  if (!confirm(`Are you sure you want to permanently delete ${user.name}? This action cannot be undone.`)) {
+    return
+  }
+
+  // Double confirmation for delete action
+  if (!confirm(`This will permanently delete ${user.name} and all their data. Are you absolutely sure?`)) {
+    return
+  }
+
+  try {
+    await $fetch('/api/admin/delete-user', {
+      method: 'DELETE',
+      body: {
+        userId: user.id
+      }
+    })
+    
+    // Refresh users data
+    await refreshUsers()
+    alert(`User ${user.name} has been deleted successfully`)
+  } catch (error) {
+    alert(`Failed to delete user: ${error.data?.message || 'Unknown error'}`)
   }
 }
 

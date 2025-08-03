@@ -73,6 +73,18 @@ export class Database {
     return data
   }
 
+  static async deleteUser(id: string) {
+    const { data, error } = await supabase
+      .from('users')
+      .delete()
+      .eq('id', id)
+      .select()
+      .single()
+    
+    if (error) throw error
+    return data
+  }
+
   // Messages
   static async getMessages() {
     const { data, error } = await supabase
