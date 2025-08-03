@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-import { getCookie, getHeader } from 'h3'
+import { getCookie, getHeader, createError } from 'h3'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production'
 const SALT_ROUNDS = 10
@@ -74,4 +74,17 @@ export function getUserFromRequest(event: any): AuthUser | null {
   if (!token) return null
   
   return verifyToken(token)
+}
+
+export async function requireAuth(event: any): Promise<AuthUser> {
+  const user = getUserFromRequest(event)
+  
+  if (!user) {
+    throw createError({
+      statusCode: 401,
+      statusMessage: 'Authentication required'
+    })
+  }
+  
+  return user
 }

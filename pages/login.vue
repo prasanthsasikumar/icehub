@@ -1,18 +1,18 @@
 <template>
-  <div class="min-h-screen font-sans text-gray-700 bg-gray-50 flex items-center justify-center">
+  <div class="min-h-screen font-sans text-gray-700 bg-gray-50 flex items-center justify-center container-padding py-8">
     <div class="w-full max-w-md">
       <!-- Logo and Header -->
-      <div class="text-center mb-8">
-        <NuxtLink to="/" class="text-3xl font-bold text-gray-700 hover:text-primary transition-colors">
+      <div class="text-center mb-6 sm:mb-8">
+        <NuxtLink to="/" class="text-2xl sm:text-3xl font-bold text-gray-700 hover:text-primary transition-colors">
           ICEHub
         </NuxtLink>
-        <h1 class="text-2xl font-semibold text-gray-700 mt-4 mb-2">Welcome back</h1>
-        <p class="text-gray-500">Sign in to your account</p>
+        <h1 class="text-xl sm:text-2xl font-semibold text-gray-700 mt-3 sm:mt-4 mb-2">Welcome back</h1>
+        <p class="text-sm sm:text-base text-gray-500">Sign in to your account</p>
       </div>
 
       <!-- Login Form -->
-      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
-        <form @submit.prevent="handleLogin" class="space-y-6">
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 card-padding">
+        <form @submit.prevent="handleLogin" class="space-y-5 sm:space-y-6">
           <!-- Email Field -->
           <div>
             <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
@@ -23,7 +23,7 @@
               v-model="form.email"
               type="email"
               required
-              class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-primary transition-colors"
+              class="form-input"
               placeholder="Enter your email"
               :disabled="loading"
             />
@@ -39,7 +39,7 @@
               v-model="form.password"
               type="password"
               required
-              class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-primary transition-colors"
+              class="form-input"
               placeholder="Enter your password"
               :disabled="loading"
             />
@@ -54,7 +54,7 @@
           <button
             type="submit"
             :disabled="loading"
-            class="w-full bg-primary text-white py-3 px-4 rounded-lg font-medium hover:bg-primary-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            class="form-button"
           >
             <span v-if="loading">Signing in...</span>
             <span v-else>Sign in</span>
@@ -62,9 +62,9 @@
         </form>
 
         <!-- Demo Credentials -->
-        <div class="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+        <div class="mt-5 sm:mt-6 p-3 sm:p-4 bg-blue-50 border border-blue-200 rounded-lg">
           <h3 class="text-sm font-medium text-blue-800 mb-2">Demo Credentials</h3>
-          <div class="text-sm text-blue-700 space-y-1">
+          <div class="text-xs sm:text-sm text-blue-700 space-y-1">
             <p><strong>Regular User:</strong></p>
             <p>Email: test@email.com</p>
             <p>Password: password</p>
@@ -75,10 +75,10 @@
         </div>
 
         <!-- Register Link -->
-        <div class="mt-6 text-center">
-          <p class="text-gray-600">
+        <div class="mt-5 sm:mt-6 text-center">
+          <p class="text-sm sm:text-base text-gray-600">
             Don't have an account?
-            <NuxtLink to="/register" class="text-primary hover:text-primary-dark font-medium">
+            <NuxtLink to="/register" class="text-primary hover:text-primary-dark font-medium block sm:inline mt-1 sm:mt-0">
               Sign up
             </NuxtLink>
           </p>

@@ -2,13 +2,13 @@
   <div class="min-h-screen font-sans text-gray-700 bg-white">
     <!-- Top Navigation -->
     <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
-      <div class="max-w-container mx-auto px-5 flex justify-between items-center h-16">
+      <div class="max-w-container mx-auto container-padding flex justify-between items-center h-14 sm:h-16">
         <div class="nav-left">
           <h1 class="nav-logo">ICEHub</h1>
         </div>
-        <div class="nav-right flex items-center gap-4">
+        <div class="nav-right hidden sm:flex items-center gap-2 sm:gap-4">
           <template v-if="isLoggedIn">
-            <span class="text-sm text-gray-600">Welcome, {{ user?.name }}</span>
+            <span class="text-xs sm:text-sm text-gray-600 hidden md:inline">Welcome, {{ user?.name }}</span>
             <NuxtLink to="/groups" class="nav-button nav-button-secondary">
               Groups
             </NuxtLink>
@@ -45,16 +45,69 @@
             </NuxtLink>
           </template>
         </div>
+        
+        <!-- Mobile menu button -->
+        <button 
+          @click="mobileMenuOpen = !mobileMenuOpen"
+          class="mobile-nav-toggle"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path v-if="!mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+            <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+        
+        <!-- Mobile menu -->
+        <div v-show="mobileMenuOpen" class="mobile-nav-menu">
+          <template v-if="isLoggedIn">
+            <NuxtLink @click="mobileMenuOpen = false" to="/groups" class="mobile-nav-item">
+              👥 Groups
+            </NuxtLink>
+            <NuxtLink @click="mobileMenuOpen = false" to="/chat" class="mobile-nav-item">
+              💬 Messages
+            </NuxtLink>
+            <NuxtLink 
+              v-if="user"
+              @click="mobileMenuOpen = false" 
+              :to="`/profile/${encodeURIComponent(user.name)}`" 
+              class="mobile-nav-item"
+            >
+              👤 My Profile
+            </NuxtLink>
+            <NuxtLink 
+              v-if="isAdmin"
+              @click="mobileMenuOpen = false" 
+              to="/admin" 
+              class="mobile-nav-item"
+            >
+              ⚙️ Admin
+            </NuxtLink>
+            <button @click="handleLogout; mobileMenuOpen = false" class="mobile-nav-item">
+              🚪 Logout
+            </button>
+          </template>
+          <template v-else>
+            <NuxtLink @click="mobileMenuOpen = false" to="/groups" class="mobile-nav-item">
+              👥 Groups
+            </NuxtLink>
+            <NuxtLink @click="mobileMenuOpen = false" to="/login" class="mobile-nav-item">
+              🔑 Sign In
+            </NuxtLink>
+            <NuxtLink @click="mobileMenuOpen = false" to="/register" class="mobile-nav-item">
+              ✨ Join Community
+            </NuxtLink>
+          </template>
+        </div>
       </div>
     </nav>
 
     <!-- Hero Section -->
-    <section class="bg-gradient-to-br from-gray-50 to-gray-200 py-20 pb-30 text-center">
-      <div class="max-w-container mx-auto px-5">
-        <h1 class="text-5xl font-bold text-gray-700 mb-6 leading-tight">The home for developers</h1>
-        <p class="text-xl text-gray-500 mb-10 max-w-2xl mx-auto">Where organizations and developers come together to build, inspire, and innovate.</p>
+    <section class="bg-gradient-to-br from-gray-50 to-gray-200 section-padding text-center">
+      <div class="max-w-container mx-auto container-padding">
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-700 mb-4 sm:mb-6 leading-tight">The home for developers</h1>
+        <p class="text-lg sm:text-xl text-gray-500 mb-8 sm:mb-10 max-w-2xl mx-auto">Where organizations and developers come together to build, inspire, and innovate.</p>
         
-        <div class="flex gap-4 justify-center mb-15 flex-wrap">
+        <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mb-8 sm:mb-15 max-w-md sm:max-w-none mx-auto">
           <template v-if="isLoggedIn">
             <NuxtLink to="/developers" class="hero-btn hero-btn-primary">Browse developers</NuxtLink>
             <NuxtLink 
@@ -72,20 +125,20 @@
         </div>
 
         <!-- Stats Section -->
-        <div v-if="users && users.length > 0" class="mt-15">
-          <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-6">TRUSTED BY DEVELOPERS WORLDWIDE</p>
-          <div class="flex justify-center gap-15 flex-wrap">
+        <div v-if="users && users.length > 0" class="mt-8 sm:mt-15">
+          <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-4 sm:mb-6">TRUSTED BY DEVELOPERS WORLDWIDE</p>
+          <div class="flex justify-center gap-8 sm:gap-15 flex-wrap">
             <div class="text-center">
-              <span class="block text-3xl font-bold text-primary mb-1">{{ users.length }}</span>
-              <span class="text-sm text-gray-500 uppercase tracking-wider">Developers</span>
+              <span class="block text-2xl sm:text-3xl font-bold text-primary mb-1">{{ users.length }}</span>
+              <span class="text-xs sm:text-sm text-gray-500 uppercase tracking-wider">Developers</span>
             </div>
             <div class="text-center">
-              <span class="block text-3xl font-bold text-primary mb-1">{{ totalSkills }}</span>
-              <span class="text-sm text-gray-500 uppercase tracking-wider">Skills</span>
+              <span class="block text-2xl sm:text-3xl font-bold text-primary mb-1">{{ totalSkills }}</span>
+              <span class="text-xs sm:text-sm text-gray-500 uppercase tracking-wider">Skills</span>
             </div>
             <div class="text-center">
-              <span class="block text-3xl font-bold text-primary mb-1">50+</span>
-              <span class="text-sm text-gray-500 uppercase tracking-wider">Technologies</span>
+              <span class="block text-2xl sm:text-3xl font-bold text-primary mb-1">50+</span>
+              <span class="text-xs sm:text-sm text-gray-500 uppercase tracking-wider">Technologies</span>
             </div>
           </div>
         </div>
@@ -93,44 +146,44 @@
     </section>
 
     <!-- Main Content -->
-    <main class="py-15">
-      <div class="max-w-container mx-auto px-5">
+    <main class="section-padding">
+      <div class="max-w-container mx-auto container-padding">
         <!-- Empty State -->
-        <div v-if="!users || users.length === 0" class="text-center py-20">
+        <div v-if="!users || users.length === 0" class="text-center py-12 sm:py-20">
           <div class="mb-6 text-gray-400">
-            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" class="mx-auto">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" class="mx-auto sm:w-16 sm:h-16">
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
               <circle cx="12" cy="7" r="4"/>
             </svg>
           </div>
-          <h2 class="text-2xl font-semibold text-gray-700 mb-3">No developers yet</h2>
-          <p class="text-base text-gray-500 mb-8">Be the first to join our developer community and showcase your skills!</p>
+          <h2 class="text-xl sm:text-2xl font-semibold text-gray-700 mb-3">No developers yet</h2>
+          <p class="text-sm sm:text-base text-gray-500 mb-6 sm:mb-8 max-w-md mx-auto">Be the first to join our developer community and showcase your skills!</p>
           <NuxtLink to="/new" class="bg-primary text-white px-6 py-3 rounded-lg no-underline font-semibold inline-block transition-colors hover:bg-primary-hover">Get Started</NuxtLink>
         </div>
 
         <!-- Developers Section -->
         <div v-else>
-          <section class="mb-20">
-            <div class="flex justify-between items-center mb-8 flex-wrap gap-4">
-              <h2 class="text-3xl font-bold text-gray-700 m-0">Developers for you</h2>
-              <NuxtLink to="/developers" class="text-primary no-underline font-medium text-sm hover:underline">View all developers</NuxtLink>
+          <section class="mb-12 sm:mb-20">
+            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 sm:mb-8 gap-4">
+              <h2 class="text-2xl sm:text-3xl font-bold text-gray-700 m-0">Developers for you</h2>
+              <NuxtLink to="/developers" class="text-primary no-underline font-medium text-sm hover:underline self-start sm:self-auto">View all developers</NuxtLink>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               <div v-for="user in users" :key="user.name" class="developer-card">
-                <div class="p-6">
-                  <div class="flex items-center mb-5">
-                    <div class="w-15 h-15 rounded-full overflow-hidden mr-4 flex-shrink-0">
+                <div class="card-padding">
+                  <div class="flex items-center mb-4 sm:mb-5">
+                    <div class="w-12 h-12 sm:w-15 sm:h-15 rounded-full overflow-hidden mr-3 sm:mr-4 flex-shrink-0">
                       <img :src="user.image" :alt="`${user.name}'s avatar`" class="w-full h-full object-cover" />
                     </div>
                     <div class="flex-1 min-w-0">
-                      <h3 class="text-lg font-semibold text-gray-700 mb-1 truncate">{{ user.name }}</h3>
-                      <p class="text-sm text-gray-500 m-0 leading-snug">{{ user.bio }}</p>
+                      <h3 class="text-base sm:text-lg font-semibold text-gray-700 mb-1 truncate">{{ user.name }}</h3>
+                      <p class="text-xs sm:text-sm text-gray-500 m-0 leading-snug line-clamp-2">{{ user.bio }}</p>
                     </div>
                   </div>
 
-                  <div class="mb-6">
-                    <div class="flex flex-wrap gap-2">
+                  <div class="mb-4 sm:mb-6">
+                    <div class="flex flex-wrap gap-1.5 sm:gap-2">
                       <span 
                         v-for="skill in getDisplaySkills(user.skills).slice(0, 6)" 
                         :key="skill" 
@@ -144,7 +197,7 @@
                     </div>
                   </div>
 
-                  <div class="flex gap-3">
+                  <div class="flex flex-col sm:flex-row gap-2 sm:gap-3">
                     <NuxtLink :to="`/profile/${encodeURIComponent(user.name)}`" class="action-btn action-btn-secondary">View Profile</NuxtLink>
                     <button class="action-btn action-btn-primary">Connect</button>
                   </div>
@@ -154,22 +207,22 @@
           </section>
 
           <!-- Popular Skills Section -->
-          <section class="mb-20">
-            <div class="flex justify-between items-center mb-8">
-              <h2 class="text-3xl font-bold text-gray-700 m-0">Top developer skills</h2>
+          <section class="mb-12 sm:mb-20">
+            <div class="flex justify-between items-center mb-6 sm:mb-8">
+              <h2 class="text-2xl sm:text-3xl font-bold text-gray-700 m-0">Top developer skills</h2>
             </div>
             
             <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
-              <div class="bg-gray-50 px-6 py-4 grid grid-cols-[80px_1fr_120px] gap-6 font-semibold text-sm text-gray-500 uppercase tracking-wider">
+              <div class="bg-gray-50 px-4 sm:px-6 py-3 sm:py-4 grid grid-cols-[60px_1fr_80px] sm:grid-cols-[80px_1fr_120px] gap-3 sm:gap-6 font-semibold text-xs sm:text-sm text-gray-500 uppercase tracking-wider">
                 <div>Rank</div>
                 <div>Skill</div>
-                <div>Developers</div>
+                <div>Devs</div>
               </div>
               <div>
-                <div v-for="(skill, index) in topSkills" :key="skill.name" class="px-6 py-4 grid grid-cols-[80px_1fr_120px] gap-6 border-b border-gray-100 last:border-b-0 transition-colors hover:bg-gray-50">
-                  <div class="flex items-center font-semibold text-gray-500">{{ index + 1 }}.</div>
-                  <div class="flex items-center font-medium text-gray-700">{{ skill.name }}</div>
-                  <div class="flex items-center justify-end text-gray-500">{{ skill.count }}</div>
+                <div v-for="(skill, index) in topSkills" :key="skill.name" class="px-4 sm:px-6 py-3 sm:py-4 grid grid-cols-[60px_1fr_80px] sm:grid-cols-[80px_1fr_120px] gap-3 sm:gap-6 border-b border-gray-100 last:border-b-0 transition-colors hover:bg-gray-50">
+                  <div class="flex items-center font-semibold text-gray-500 text-sm">{{ index + 1 }}.</div>
+                  <div class="flex items-center font-medium text-gray-700 text-sm sm:text-base truncate">{{ skill.name }}</div>
+                  <div class="flex items-center justify-end text-gray-500 text-sm">{{ skill.count }}</div>
                 </div>
               </div>
             </div>
@@ -185,6 +238,9 @@ const { data: users } = await useFetch('/api/users')
 
 // Authentication
 const { user, isLoggedIn, isAdmin, logout } = useAuth()
+
+// Mobile menu state
+const mobileMenuOpen = ref(false)
 
 // Check authentication on mount
 onMounted(async () => {
@@ -285,33 +341,42 @@ useHead({
   height: 3.75rem;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .text-5xl {
-    font-size: 2.25rem;
+/* Mobile responsive adjustments */
+@media (max-width: 640px) {
+  .mb-15 {
+    margin-bottom: 2rem;
   }
   
-  .text-xl {
-    font-size: 1.125rem;
+  .mt-15 {
+    margin-top: 2rem;
   }
   
   .gap-15 {
-    gap: 1.875rem;
+    gap: 2rem;
   }
 }
 
-@media (max-width: 480px) {
-  .py-20 {
-    padding-top: 3.75rem;
-    padding-bottom: 5rem;
+/* Line clamp utility for text truncation */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Ensure mobile menu appears above other content */
+.mobile-nav-menu {
+  z-index: 60;
+}
+
+/* Smooth transitions for mobile interactions */
+@media (hover: none) {
+  .hover\:shadow-xl:hover {
+    box-shadow: none;
   }
   
-  .text-5xl {
-    font-size: 1.75rem;
-  }
-  
-  .text-xl {
-    font-size: 1rem;
+  .hover\:-translate-y-0\.5:hover {
+    transform: none;
   }
 }
 </style>

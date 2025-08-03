@@ -2,42 +2,43 @@
   <div class="min-h-screen font-sans text-gray-700 bg-white">
     <!-- Top Navigation -->
     <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
-      <div class="max-w-container mx-auto px-5 flex justify-between items-center h-16">
+      <div class="max-w-container mx-auto container-padding flex justify-between items-center h-14 sm:h-16">
         <div class="nav-left">
           <NuxtLink to="/" class="nav-logo">ICEHub</NuxtLink>
         </div>
         <div class="nav-right">
           <NuxtLink to="/" class="nav-button nav-button-secondary">
-            Back to Home
+            <span class="hidden sm:inline">Back to Home</span>
+            <span class="sm:hidden">← Home</span>
           </NuxtLink>
         </div>
       </div>
     </nav>
 
     <!-- Main Content -->
-    <main class="py-12">
-      <div class="max-w-container mx-auto px-5">
+    <main class="section-padding">
+      <div class="max-w-container mx-auto container-padding">
         <!-- Header -->
-        <div class="text-center mb-12">
-          <h1 class="text-4xl font-bold text-gray-700 mb-4">All Developers</h1>
-          <p class="text-lg text-gray-500 max-w-2xl mx-auto">
+        <div class="text-center mb-8 sm:mb-12">
+          <h1 class="text-3xl sm:text-4xl font-bold text-gray-700 mb-3 sm:mb-4">All Developers</h1>
+          <p class="text-base sm:text-lg text-gray-500 max-w-2xl mx-auto leading-relaxed">
             Discover talented developers in our community. Connect, collaborate, and build amazing things together.
           </p>
         </div>
 
         <!-- Search and Filters -->
-        <div class="mb-8 flex flex-col md:flex-row gap-4">
+        <div class="mb-6 sm:mb-8 flex flex-col sm:flex-row gap-3 sm:gap-4">
           <div class="flex-1">
             <input
               v-model="searchQuery"
               type="text"
               placeholder="Search developers by name or skills..."
-              class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-primary"
+              class="form-input"
             />
           </div>
           <select
             v-model="skillFilter"
-            class="px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-primary"
+            class="form-input sm:w-auto"
           >
             <option value="">All Skills</option>
             <option v-for="skill in allSkills" :key="skill" :value="skill">
@@ -47,18 +48,18 @@
         </div>
 
         <!-- Results Count -->
-        <div class="mb-6">
-          <p class="text-gray-600">
+        <div class="mb-4 sm:mb-6">
+          <p class="text-sm sm:text-base text-gray-600">
             Showing {{ filteredUsers.length }} of {{ users?.length || 0 }} developers
           </p>
         </div>
 
         <!-- Developers Grid -->
-        <div v-if="filteredUsers.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div v-if="filteredUsers.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           <div v-for="user in filteredUsers" :key="user.id || user.name" class="developer-card">
-            <div class="p-6">
-              <div class="flex items-center mb-5">
-                <div class="w-16 h-16 rounded-full overflow-hidden mr-4 flex-shrink-0">
+            <div class="card-padding">
+              <div class="flex items-center mb-4 sm:mb-5">
+                <div class="w-12 h-12 sm:w-16 sm:h-16 rounded-full overflow-hidden mr-3 sm:mr-4 flex-shrink-0">
                   <img 
                     :src="user.image" 
                     :alt="`${user.name}'s avatar`" 
@@ -67,14 +68,14 @@
                   />
                 </div>
                 <div class="flex-1 min-w-0">
-                  <h3 class="text-lg font-semibold text-gray-700 mb-1 truncate">{{ user.name }}</h3>
-                  <p class="text-sm text-gray-500 leading-snug line-clamp-2">{{ user.bio }}</p>
+                  <h3 class="text-base sm:text-lg font-semibold text-gray-700 mb-1 truncate">{{ user.name }}</h3>
+                  <p class="text-xs sm:text-sm text-gray-500 leading-snug line-clamp-2">{{ user.bio }}</p>
                 </div>
               </div>
 
               <!-- Skills -->
-              <div class="mb-6">
-                <div class="flex flex-wrap gap-2">
+              <div class="mb-4 sm:mb-6">
+                <div class="flex flex-wrap gap-1.5 sm:gap-2">
                   <span 
                     v-for="skill in getDisplaySkills(user.skills).slice(0, 4)" 
                     :key="skill" 
@@ -89,10 +90,10 @@
               </div>
 
               <!-- Actions -->
-              <div class="flex gap-3">
+              <div class="flex flex-col sm:flex-row gap-2 sm:gap-3">
                 <NuxtLink 
                   :to="`/profile/${encodeURIComponent(user.name)}`" 
-                  class="action-btn action-btn-secondary flex-1 text-center"
+                  class="action-btn action-btn-secondary"
                 >
                   View Profile
                 </NuxtLink>

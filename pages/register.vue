@@ -1,18 +1,18 @@
 <template>
-  <div class="min-h-screen font-sans text-gray-700 bg-gray-50 flex items-center justify-center py-12">
+  <div class="min-h-screen font-sans text-gray-700 bg-gray-50 flex items-center justify-center container-padding py-8">
     <div class="w-full max-w-md">
       <!-- Logo and Header -->
-      <div class="text-center mb-8">
-        <NuxtLink to="/" class="text-3xl font-bold text-gray-700 hover:text-primary transition-colors">
+      <div class="text-center mb-6 sm:mb-8">
+        <NuxtLink to="/" class="text-2xl sm:text-3xl font-bold text-gray-700 hover:text-primary transition-colors">
           ICEHub
         </NuxtLink>
-        <h1 class="text-2xl font-semibold text-gray-700 mt-4 mb-2">Create your account</h1>
-        <p class="text-gray-500">Join the developer community</p>
+        <h1 class="text-xl sm:text-2xl font-semibold text-gray-700 mt-3 sm:mt-4 mb-2">Create your account</h1>
+        <p class="text-sm sm:text-base text-gray-500">Join the developer community</p>
       </div>
 
       <!-- Registration Form -->
-      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
-        <form @submit.prevent="handleRegister" class="space-y-6">
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 card-padding">
+        <form @submit.prevent="handleRegister" class="space-y-5 sm:space-y-6">
           <!-- Name Field -->
           <div>
             <label for="name" class="block text-sm font-medium text-gray-700 mb-2">
@@ -23,7 +23,7 @@
               v-model="form.name"
               type="text"
               required
-              class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-primary transition-colors"
+              class="form-input"
               placeholder="Enter your full name"
               :disabled="loading"
             />
@@ -47,7 +47,7 @@
               v-model="form.email"
               type="email"
               required
-              class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-primary transition-colors"
+              class="form-input"
               placeholder="Enter your email address"
               :disabled="loading"
             />
@@ -64,7 +64,7 @@
               type="password"
               required
               minlength="6"
-              class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-primary transition-colors"
+              class="form-input"
               placeholder="Enter your password (min 6 characters)"
               :disabled="loading"
             />
@@ -79,7 +79,7 @@
               id="bio"
               v-model="form.bio"
               rows="3"
-              class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-primary transition-colors resize-none"
+              class="form-input resize-none"
               placeholder="Tell us about yourself..."
               :disabled="loading"
             ></textarea>
@@ -91,7 +91,7 @@
               Join as
             </label>
             <div class="space-y-3">
-              <label class="flex items-start gap-3 p-4 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors" :class="{ 'border-primary bg-blue-50': form.userRole === 'developer' }">
+              <label class="flex items-start gap-3 p-3 sm:p-4 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors touch-target" :class="{ 'border-primary bg-blue-50': form.userRole === 'developer' }">
                 <input 
                   type="radio" 
                   v-model="form.userRole" 
@@ -100,15 +100,15 @@
                   :disabled="loading"
                 />
                 <div class="flex-1">
-                  <div class="font-medium text-gray-700 flex items-center gap-2">
+                  <div class="font-medium text-gray-700 flex items-center gap-2 text-sm sm:text-base">
                     <span>👨‍💻</span>
                     Developer
                   </div>
-                  <div class="text-sm text-gray-500 mt-1">I'm looking to learn, collaborate, and work on projects with others.</div>
+                  <div class="text-xs sm:text-sm text-gray-500 mt-1">I'm looking to learn, collaborate, and work on projects with others.</div>
                 </div>
               </label>
               
-              <label class="flex items-start gap-3 p-4 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors" :class="{ 'border-primary bg-blue-50': form.userRole === 'mentor' }">
+              <label class="flex items-start gap-3 p-3 sm:p-4 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors touch-target" :class="{ 'border-primary bg-blue-50': form.userRole === 'mentor' }">
                 <input 
                   type="radio" 
                   v-model="form.userRole" 
@@ -117,11 +117,11 @@
                   :disabled="loading"
                 />
                 <div class="flex-1">
-                  <div class="font-medium text-gray-700 flex items-center gap-2">
+                  <div class="font-medium text-gray-700 flex items-center gap-2 text-sm sm:text-base">
                     <span>🎯</span>
                     Mentor
                   </div>
-                  <div class="text-sm text-gray-500 mt-1">I want to guide and support other developers in their journey.</div>
+                  <div class="text-xs sm:text-sm text-gray-500 mt-1">I want to guide and support other developers in their journey.</div>
                 </div>
               </label>
             </div>
@@ -136,7 +136,7 @@
               id="skills"
               v-model="skillsInput"
               type="text"
-              class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-primary transition-colors"
+              class="form-input"
               placeholder="e.g., JavaScript, React, Python (comma-separated)"
               :disabled="loading"
             />
@@ -152,7 +152,7 @@
           <button
             type="submit"
             :disabled="loading"
-            class="w-full bg-primary text-white py-3 px-4 rounded-lg font-medium hover:bg-primary-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            class="form-button"
           >
             <span v-if="loading">Creating account...</span>
             <span v-else>Create account</span>
@@ -160,10 +160,10 @@
         </form>
 
         <!-- Login Link -->
-        <div class="mt-6 text-center">
-          <p class="text-gray-600">
+        <div class="mt-5 sm:mt-6 text-center">
+          <p class="text-sm sm:text-base text-gray-600">
             Already have an account?
-            <NuxtLink to="/login" class="text-primary hover:text-primary-dark font-medium">
+            <NuxtLink to="/login" class="text-primary hover:text-primary-dark font-medium block sm:inline mt-1 sm:mt-0">
               Sign in
             </NuxtLink>
           </p>

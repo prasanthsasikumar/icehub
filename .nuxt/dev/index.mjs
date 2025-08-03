@@ -1027,7 +1027,7 @@ const _lGPwgk_1tWcSz96bDwvTewtBNKdX6lAcUru2zxNV9VQ = (function(nitro) {
 
 const rootDir = "/Users/prasanthsasikumar/Documents/GitHub/icehub";
 
-const appHead = {"meta":[{"name":"viewport","content":"width=device-width, initial-scale=1"},{"charset":"utf-8"}],"link":[],"style":[],"script":[],"noscript":[]};
+const appHead = {"meta":[{"charset":"utf-8"},{"name":"viewport","content":"width=device-width, initial-scale=1.0, viewport-fit=cover"},{"name":"format-detection","content":"telephone=no"}],"link":[],"style":[],"script":[],"noscript":[]};
 
 const appRootTag = "div";
 
@@ -1122,22 +1122,7 @@ const plugins = [
 _imlJlEtcYUErFKlIoV3o40RwAHyYMj1YM8ArfD1nFG0
 ];
 
-const assets = {
-  "/index.mjs": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"1dce0-Dv+ddxy2pG9Z0KOrb0aIVfi2hAQ\"",
-    "mtime": "2025-08-03T12:15:30.160Z",
-    "size": 122080,
-    "path": "index.mjs"
-  },
-  "/index.mjs.map": {
-    "type": "application/json",
-    "etag": "\"6ab03-Y4rWRf2vs3VOmK2rRSNE+Fipn6Y\"",
-    "mtime": "2025-08-03T12:15:30.160Z",
-    "size": 436995,
-    "path": "index.mjs.map"
-  }
-};
+const assets = {};
 
 function readAsset (id) {
   const serverDir = dirname$1(fileURLToPath(globalThis._importMeta_.url));
@@ -1962,6 +1947,16 @@ function getUserFromRequest(event) {
   if (!token) return null;
   return verifyToken(token);
 }
+async function requireAuth(event) {
+  const user = getUserFromRequest(event);
+  if (!user) {
+    throw createError({
+      statusCode: 401,
+      statusMessage: "Authentication required"
+    });
+  }
+  return user;
+}
 
 const toggleRole_post = defineEventHandler(async (event) => {
   if (getMethod(event) !== "POST") {
@@ -2212,91 +2207,97 @@ const register_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.definePro
 }, Symbol.toStringTag, { value: 'Module' }));
 
 const conversations_get = defineEventHandler(async (event) => {
-  if (getMethod(event) !== "GET") {
-    throw createError({
-      statusCode: 405,
-      statusMessage: "Method not allowed"
-    });
-  }
-  const currentUser = getUserFromRequest(event);
-  if (!currentUser) {
-    throw createError({
-      statusCode: 401,
-      statusMessage: "Authentication required"
-    });
-  }
-  const messagesPath = path.join(process.cwd(), "server/data/messages.json");
-  const messages = JSON.parse(fs.readFileSync(messagesPath, "utf8"));
-  const usersPath = path.join(process.cwd(), "server/data/users.json");
-  const users = JSON.parse(fs.readFileSync(usersPath, "utf8"));
-  const groupChatsPath = path.join(process.cwd(), "server/data/groupChats.json");
-  const groupChats = JSON.parse(fs.readFileSync(groupChatsPath, "utf8"));
-  const groupsPath = path.join(process.cwd(), "server/data/groups.json");
-  const groups = JSON.parse(fs.readFileSync(groupsPath, "utf8"));
-  const directMessages = messages.filter(
-    (msg) => (msg.senderId === currentUser.id || msg.receiverId === currentUser.id) && (msg.chatType !== "group" || !msg.chatType)
-    // Include messages without chatType
-  );
-  const userGroupChats = groupChats.filter((chat) => chat.members.includes(currentUser.id));
-  const groupMessages = messages.filter(
-    (msg) => msg.chatType === "group" && msg.chatId && userGroupChats.some((chat) => chat.id === msg.chatId)
-  );
-  const directConversationsMap = /* @__PURE__ */ new Map();
-  directMessages.forEach((msg) => {
-    const partnerId = msg.senderId === currentUser.id ? msg.receiverId : msg.senderId;
-    const partnerName = msg.senderId === currentUser.id ? msg.receiverName : msg.senderName;
-    const partnerUser = users.find((u) => u.id === partnerId);
-    if (!directConversationsMap.has(partnerId)) {
-      directConversationsMap.set(partnerId, {
-        userId: partnerId,
-        userName: partnerName,
-        userImage: (partnerUser == null ? void 0 : partnerUser.image) || "https://via.placeholder.com/40x40/e5e7eb/9ca3af?text=User",
-        lastMessage: "",
-        lastMessageTime: "",
-        unreadCount: 0
+  try {
+    const currentUser = await requireAuth(event);
+    const messagesPath = path.join(process.cwd(), "server/data/messages.json");
+    const groupChatsPath = path.join(process.cwd(), "server/data/groupChats.json");
+    const usersPath = path.join(process.cwd(), "server/data/users.json");
+    let directConversations = [];
+    let groupConversations = [];
+    let users = [];
+    try {
+      users = JSON.parse(fs.readFileSync(usersPath, "utf8"));
+    } catch (error) {
+      console.log("No users file found or error reading it:", error);
+    }
+    try {
+      const messages = JSON.parse(fs.readFileSync(messagesPath, "utf8"));
+      const conversationMap = /* @__PURE__ */ new Map();
+      messages.forEach((message) => {
+        const participants = [message.senderId, message.receiverId].sort();
+        const conversationKey = participants.join("-");
+        if (participants.includes(currentUser.id)) {
+          if (!conversationMap.has(conversationKey)) {
+            conversationMap.set(conversationKey, {
+              id: conversationKey,
+              type: "direct",
+              participants,
+              messages: [],
+              lastMessage: null,
+              createdAt: message.timestamp,
+              updatedAt: message.timestamp
+            });
+          }
+          const conversation = conversationMap.get(conversationKey);
+          conversation.messages.push(message);
+          if (!conversation.lastMessage || new Date(message.timestamp) > new Date(conversation.lastMessage.timestamp)) {
+            conversation.lastMessage = message;
+            conversation.updatedAt = message.timestamp;
+          }
+        }
       });
+      directConversations = Array.from(conversationMap.values()).map((conversation) => {
+        var _a, _b;
+        const otherUserId = conversation.participants.find((id) => id !== currentUser.id);
+        const otherUser = users.find((u) => u.id === otherUserId);
+        return {
+          userId: otherUserId,
+          userName: (otherUser == null ? void 0 : otherUser.name) || "Unknown User",
+          userImage: (otherUser == null ? void 0 : otherUser.image) || "/uploads/default/user-avatar.svg",
+          lastMessage: ((_a = conversation.lastMessage) == null ? void 0 : _a.content) || "",
+          lastMessageTime: ((_b = conversation.lastMessage) == null ? void 0 : _b.timestamp) || conversation.createdAt,
+          unreadCount: 0,
+          // TODO: Implement unread count logic
+          type: "direct"
+        };
+      });
+    } catch (error) {
+      console.log("No messages file found or error reading it:", error);
     }
-    const conversation = directConversationsMap.get(partnerId);
-    if (!conversation.lastMessageTime || new Date(msg.timestamp) > new Date(conversation.lastMessageTime)) {
-      conversation.lastMessage = msg.content;
-      conversation.lastMessageTime = msg.timestamp;
+    try {
+      const groupChats = JSON.parse(fs.readFileSync(groupChatsPath, "utf8"));
+      groupConversations = groupChats.filter(
+        (chat) => chat.members && chat.members.includes(currentUser.id)
+      ).map((chat) => ({
+        chatId: chat.id,
+        groupId: chat.groupId || chat.id,
+        groupName: chat.groupName,
+        groupImage: chat.groupImage || "/uploads/default/user-avatar.svg",
+        lastMessage: "",
+        // TODO: Get actual last message from group messages
+        lastMessageTime: chat.lastMessageAt || chat.createdAt,
+        unreadCount: 0,
+        // TODO: Implement unread count logic
+        type: "group"
+      }));
+    } catch (error) {
+      console.log("No group chats file found or error reading it:", error);
     }
-    if (msg.receiverId === currentUser.id && !msg.read) {
-      conversation.unreadCount++;
+    return {
+      success: true,
+      directConversations,
+      groupConversations
+    };
+  } catch (error) {
+    if (error.statusCode) {
+      throw error;
     }
-  });
-  const groupConversationsMap = /* @__PURE__ */ new Map();
-  userGroupChats.forEach((groupChat) => {
-    const group = groups.find((g) => g.id === groupChat.groupId);
-    groupConversationsMap.set(groupChat.id, {
-      chatId: groupChat.id,
-      groupId: groupChat.groupId,
-      groupName: groupChat.groupName,
-      groupImage: (group == null ? void 0 : group.coverImage) || "/uploads/groupCoverSamples/cover1.svg",
-      lastMessage: "",
-      lastMessageTime: groupChat.lastMessageAt,
-      unreadCount: 0,
-      memberCount: groupChat.members.length
+    console.error("Get conversations error:", error);
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Internal server error"
     });
-  });
-  groupMessages.forEach((msg) => {
-    if (!msg.chatId) return;
-    const conversation = groupConversationsMap.get(msg.chatId);
-    if (!conversation) return;
-    if (!conversation.lastMessageTime || new Date(msg.timestamp) > new Date(conversation.lastMessageTime)) {
-      conversation.lastMessage = msg.content;
-      conversation.lastMessageTime = msg.timestamp;
-    }
-    if (msg.senderId !== currentUser.id && !msg.read) {
-      conversation.unreadCount++;
-    }
-  });
-  const directConversations = Array.from(directConversationsMap.values()).sort((a, b) => new Date(b.lastMessageTime).getTime() - new Date(a.lastMessageTime).getTime());
-  const groupConversations = Array.from(groupConversationsMap.values()).sort((a, b) => new Date(b.lastMessageTime).getTime() - new Date(a.lastMessageTime).getTime());
-  return {
-    directConversations,
-    groupConversations
-  };
+  }
 });
 
 const conversations_get$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({

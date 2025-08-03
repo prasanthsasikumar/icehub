@@ -2,13 +2,13 @@
   <div class="min-h-screen font-sans text-gray-700 bg-gray-50">
     <!-- Top Navigation -->
     <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
-      <div class="max-w-container mx-auto px-5 flex justify-between items-center h-16">
+      <div class="max-w-container mx-auto container-padding flex justify-between items-center h-14 sm:h-16">
         <div class="nav-left">
           <NuxtLink to="/" class="nav-logo">ICEHub</NuxtLink>
         </div>
-        <div class="nav-right flex items-center gap-4">
+        <div class="nav-right hidden sm:flex items-center gap-2 sm:gap-4">
           <template v-if="isLoggedIn">
-            <span class="text-sm text-gray-600">{{ user?.name }}</span>
+            <span class="text-xs sm:text-sm text-gray-600 hidden md:inline">{{ user?.name }}</span>
             <NuxtLink to="/chat" class="nav-button nav-button-secondary">
               Messages
             </NuxtLink>
@@ -25,23 +25,54 @@
             Back to Home
           </NuxtLink>
         </div>
+        
+        <!-- Mobile menu button -->
+        <button 
+          @click="mobileMenuOpen = !mobileMenuOpen"
+          class="mobile-nav-toggle"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path v-if="!mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+            <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+        
+        <!-- Mobile menu -->
+        <div v-show="mobileMenuOpen" class="mobile-nav-menu">
+          <template v-if="isLoggedIn">
+            <NuxtLink @click="mobileMenuOpen = false" to="/chat" class="mobile-nav-item">
+              💬 Messages
+            </NuxtLink>
+            <NuxtLink @click="mobileMenuOpen = false" to="/groups/create" class="mobile-nav-item">
+              ➕ Create Group
+            </NuxtLink>
+          </template>
+          <template v-else>
+            <NuxtLink @click="mobileMenuOpen = false" to="/login" class="mobile-nav-item">
+              🔑 Sign In
+            </NuxtLink>
+          </template>
+          <NuxtLink @click="mobileMenuOpen = false" to="/" class="mobile-nav-item">
+            🏠 Back to Home
+          </NuxtLink>
+        </div>
       </div>
     </nav>
 
     <!-- Main Content -->
-    <main class="py-12">
-      <div class="max-w-6xl mx-auto px-5">
-        <div class="mb-8">
-          <h1 class="text-3xl font-bold text-gray-700 mb-3">Developer Groups</h1>
-          <p class="text-gray-600">Join groups to collaborate on projects and connect with like-minded developers</p>
+    <main class="section-padding">
+      <div class="max-w-6xl mx-auto container-padding">
+        <div class="mb-6 sm:mb-8">
+          <h1 class="text-2xl sm:text-3xl font-bold text-gray-700 mb-2 sm:mb-3">Developer Groups</h1>
+          <p class="text-sm sm:text-base text-gray-600">Join groups to collaborate on projects and connect with like-minded developers</p>
         </div>
 
         <!-- Loading State -->
-        <div v-if="pending" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div v-if="pending" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           <div v-for="i in 6" :key="i" class="bg-white rounded-xl border border-gray-200 overflow-hidden animate-pulse">
-            <div class="h-48 bg-gray-200"></div>
-            <div class="p-6">
-              <div class="h-6 bg-gray-200 rounded mb-3"></div>
+            <div class="h-32 sm:h-48 bg-gray-200"></div>
+            <div class="p-4 sm:p-6">
+              <div class="h-5 sm:h-6 bg-gray-200 rounded mb-3"></div>
               <div class="h-4 bg-gray-200 rounded mb-2"></div>
               <div class="h-4 bg-gray-200 rounded w-3/4"></div>
             </div>
@@ -49,18 +80,18 @@
         </div>
 
         <!-- Groups Grid -->
-        <div v-else-if="data && data.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div v-else-if="data && data.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           <div v-for="group in data" :key="group.id" class="group-card bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow">
             <!-- Cover Image -->
-            <div class="h-48 bg-gradient-to-br from-gray-100 to-gray-200 relative overflow-hidden">
+            <div class="h-32 sm:h-48 bg-gradient-to-br from-gray-100 to-gray-200 relative overflow-hidden">
               <img 
                 :src="group.coverImage" 
                 :alt="`${group.name} cover`"
                 class="w-full h-full object-cover"
               />
-              <div v-if="group.isPrivate" class="absolute top-3 right-3">
+              <div v-if="group.isPrivate" class="absolute top-2 right-2 sm:top-3 sm:right-3">
                 <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-800 text-white">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" class="mr-1">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" class="mr-1 sm:w-3 sm:h-3">
                     <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM12 17c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
                   </svg>
                   Private
@@ -69,14 +100,14 @@
             </div>
 
             <!-- Group Info -->
-            <div class="p-6">
-              <h3 class="text-lg font-semibold text-gray-700 mb-2">{{ group.name }}</h3>
-              <p class="text-gray-600 text-sm mb-4 line-clamp-2">{{ group.description }}</p>
+            <div class="p-4 sm:p-6">
+              <h3 class="text-base sm:text-lg font-semibold text-gray-700 mb-2">{{ group.name }}</h3>
+              <p class="text-gray-600 text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-2">{{ group.description }}</p>
               
               <!-- Stats -->
-              <div class="flex items-center justify-between mb-4">
-                <div class="flex items-center text-gray-500 text-sm">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="mr-1">
+              <div class="flex items-center justify-between mb-3 sm:mb-4">
+                <div class="flex items-center text-gray-500 text-xs sm:text-sm">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" class="mr-1 sm:w-4 sm:h-4">
                     <path d="M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zm4 18v-6h2.5l-2.54-7.63c-.37-.89-1.27-1.37-2.17-1.37h-2.74c-.8 0-1.54.37-2.01.99L12 10.5l-1.04-1.5c-.47-.62-1.21-.99-2.01-.99H6.21c-.9 0-1.8.48-2.17 1.37L1.5 16H4v6h2v-6h.5l1.5-3 1.5 3H12v6h4z"/>
                   </svg>
                   {{ group.memberCount }} {{ group.memberCount === 1 ? 'member' : 'members' }}
@@ -87,10 +118,10 @@
               </div>
 
               <!-- Actions -->
-              <div class="flex gap-2">
+              <div class="flex flex-col sm:flex-row gap-2">
                 <NuxtLink 
                   :to="`/groups/${group.id}`" 
-                  class="flex-1 bg-primary text-white text-center py-2 px-4 rounded-lg hover:bg-primary-dark transition-colors text-sm font-medium"
+                  class="flex-1 bg-primary text-white text-center py-2 px-3 sm:px-4 rounded-lg hover:bg-primary-dark transition-colors text-xs sm:text-sm font-medium"
                 >
                   View Group
                 </NuxtLink>
@@ -137,6 +168,9 @@
 <script setup>
 // Authentication
 const { user, isLoggedIn, checkAuth } = useAuth()
+
+// Mobile menu state
+const mobileMenuOpen = ref(false)
 
 // State
 const joiningGroup = ref(null)

@@ -2,30 +2,34 @@
   <div class="min-h-screen font-sans text-gray-700 bg-gray-50">
     <!-- Top Navigation -->
     <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
-      <div class="max-w-container mx-auto px-5 flex justify-between items-center h-16">
+      <div class="max-w-container mx-auto container-padding flex justify-between items-center h-14 sm:h-16">
         <div class="nav-left">
-          <NuxtLink to="/" class="nav-logo">ICEHub Messages</NuxtLink>
+          <NuxtLink to="/" class="nav-logo">
+            <span class="hidden sm:inline">ICEHub Messages</span>
+            <span class="sm:hidden">Messages</span>
+          </NuxtLink>
         </div>
-        <div class="nav-right flex items-center gap-4">
-          <span class="text-sm text-gray-600">{{ user?.name }}</span>
+        <div class="nav-right flex items-center gap-2 sm:gap-4">
+          <span class="text-xs sm:text-sm text-gray-600 hidden sm:inline">{{ user?.name }}</span>
           <NuxtLink to="/" class="nav-button nav-button-secondary">
-            Back to Home
+            <span class="hidden sm:inline">Back to Home</span>
+            <span class="sm:hidden">← Home</span>
           </NuxtLink>
         </div>
       </div>
     </nav>
 
     <!-- Loading State -->
-    <div v-if="loading" class="flex justify-center items-center py-20">
-      <div class="text-lg text-gray-500">Loading messages...</div>
+    <div v-if="loading" class="flex justify-center items-center py-12 sm:py-20">
+      <div class="text-base sm:text-lg text-gray-500">Loading messages...</div>
     </div>
 
     <!-- Not Authenticated -->
-    <div v-else-if="!isLoggedIn" class="flex justify-center items-center py-20">
+    <div v-else-if="!isLoggedIn" class="flex justify-center items-center py-12 sm:py-20">
       <div class="text-center">
-        <div class="text-blue-500 text-6xl mb-4">💬</div>
-        <h1 class="text-2xl font-bold text-gray-700 mb-4">Messages</h1>
-        <p class="text-gray-500 mb-6">Please sign in to access your messages.</p>
+        <div class="text-blue-500 text-4xl sm:text-6xl mb-4">💬</div>
+        <h1 class="text-xl sm:text-2xl font-bold text-gray-700 mb-4">Messages</h1>
+        <p class="text-sm sm:text-base text-gray-500 mb-6">Please sign in to access your messages.</p>
         <NuxtLink to="/login" class="nav-button">
           Sign In
         </NuxtLink>
@@ -33,13 +37,13 @@
     </div>
 
     <!-- Chat Interface -->
-    <main v-else class="flex h-[calc(100vh-4rem)]">
+    <main v-else class="flex flex-col sm:flex-row h-[calc(100vh-3.5rem)] sm:h-[calc(100vh-4rem)]">
       <!-- Conversations Sidebar -->
-      <div class="w-1/3 bg-white border-r border-gray-200 flex flex-col">
+      <div class="w-full sm:w-1/3 bg-white border-r border-gray-200 flex flex-col" :class="{ 'hidden sm:flex': selectedUserId || selectedChatId }">
         <!-- Search and Header -->
-        <div class="p-4 border-b border-gray-200">
+        <div class="p-3 sm:p-4 border-b border-gray-200">
           <div class="flex justify-between items-center mb-3">
-            <h2 class="text-lg font-semibold text-gray-700">Messages</h2>
+            <h2 class="text-base sm:text-lg font-semibold text-gray-700">Messages</h2>
             <div class="flex items-center gap-2">
               <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
               <span class="text-xs text-gray-500">Live</span>
@@ -56,7 +60,7 @@
         <!-- Conversations List -->
         <div class="flex-1 overflow-y-auto">
           <div v-if="conversations.length === 0" class="p-4 text-center text-gray-500">
-            <div class="text-4xl mb-2">📭</div>
+            <div class="text-3xl sm:text-4xl mb-2">📭</div>
             <p class="text-sm">No conversations yet</p>
             <p class="text-xs text-gray-400 mt-1">Start chatting with other developers!</p>
           </div>
@@ -67,7 +71,7 @@
               :key="conversation.userId"
               @click="selectConversation(conversation)"
               :class="[
-                'p-4 border-b border-gray-100 cursor-pointer transition-colors hover:bg-gray-50',
+                'p-3 sm:p-4 border-b border-gray-100 cursor-pointer transition-colors hover:bg-gray-50 touch-target',
                 (selectedUserId === conversation.userId || selectedChatId === conversation.userId) ? 'bg-blue-50 border-l-4 border-l-primary' : ''
               ]"
             >
@@ -76,25 +80,25 @@
                   <img 
                     :src="conversation.userImage" 
                     :alt="conversation.userName"
-                    class="w-12 h-12 rounded-full object-cover"
+                    class="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover"
                     @error="handleImageError"
                   />
-                  <div v-if="conversation.type === 'group'" class="absolute -bottom-1 -right-1 w-4 h-4 bg-blue-500 rounded-full border-2 border-white flex items-center justify-center">
+                  <div v-if="conversation.type === 'group'" class="absolute -bottom-1 -right-1 w-3 h-3 sm:w-4 sm:h-4 bg-blue-500 rounded-full border-2 border-white flex items-center justify-center">
                     <span class="text-white text-xs">👥</span>
                   </div>
-                  <div v-else class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
+                  <div v-else class="absolute -bottom-1 -right-1 w-3 h-3 sm:w-4 sm:h-4 bg-green-500 rounded-full border-2 border-white"></div>
                 </div>
                 <div class="flex-1 min-w-0">
                   <div class="flex justify-between items-start">
                     <div class="flex items-center gap-2">
-                      <h3 class="font-medium text-gray-700 truncate">{{ conversation.userName }}</h3>
+                      <h3 class="font-medium text-gray-700 truncate text-sm sm:text-base">{{ conversation.userName }}</h3>
                       <span v-if="conversation.type === 'group'" class="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded-full">Group</span>
                     </div>
                     <span class="text-xs text-gray-500">{{ formatTime(conversation.lastMessageTime) }}</span>
                   </div>
-                  <p class="text-sm text-gray-500 truncate mt-1">{{ conversation.lastMessage }}</p>
+                  <p class="text-xs sm:text-sm text-gray-500 truncate mt-1">{{ conversation.lastMessage }}</p>
                 </div>
-                <div v-if="conversation.unreadCount > 0" class="bg-primary text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                <div v-if="conversation.unreadCount > 0" class="bg-primary text-white text-xs rounded-full w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center">
                   {{ conversation.unreadCount }}
                 </div>
               </div>

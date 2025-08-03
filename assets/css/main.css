@@ -19,11 +19,11 @@
 /* Custom component styles */
 @layer components {
   .nav-logo {
-    @apply text-2xl font-bold text-primary m-0;
+    @apply text-xl sm:text-2xl font-bold text-primary m-0;
   }
   
   .nav-button {
-    @apply bg-primary text-white px-4 py-2 rounded-md no-underline font-medium text-sm transition-colors duration-200 hover:bg-primary-hover;
+    @apply bg-primary text-white px-3 sm:px-4 py-2 rounded-md no-underline font-medium text-xs sm:text-sm transition-colors duration-200 hover:bg-primary-hover;
   }
   
   .nav-button-secondary {
@@ -31,11 +31,11 @@
   }
   
   .hero-btn {
-    @apply px-6 py-3 rounded-lg font-semibold text-base no-underline border-0 cursor-pointer transition-all duration-200 inline-flex items-center gap-2;
+    @apply px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-semibold text-sm sm:text-base no-underline border-0 cursor-pointer transition-all duration-200 inline-flex items-center gap-2 w-full sm:w-auto justify-center;
   }
   
   .hero-btn-primary {
-    @apply bg-primary text-white hover:bg-primary-hover hover:-translate-y-0.5;
+    @apply bg-primary text-white hover:bg-primary-hover sm:hover:-translate-y-0.5;
   }
   
   .hero-btn-secondary {
@@ -43,15 +43,15 @@
   }
   
   .developer-card {
-    @apply bg-white border border-gray-200 rounded-xl overflow-hidden transition-all duration-200 hover:border-primary hover:-translate-y-0.5 hover:shadow-xl;
+    @apply bg-white border border-gray-200 rounded-xl overflow-hidden transition-all duration-200 hover:border-primary sm:hover:-translate-y-0.5 hover:shadow-xl;
   }
   
   .skill-tag {
-    @apply bg-gray-50 text-gray-600 px-3 py-1 rounded-2xl text-xs font-medium border border-gray-200;
+    @apply bg-gray-50 text-gray-600 px-2 sm:px-3 py-1 rounded-2xl text-xs font-medium border border-gray-200;
   }
   
   .action-btn {
-    @apply px-4 py-2 rounded-md font-medium text-sm border-0 cursor-pointer transition-all duration-200 flex-1;
+    @apply px-3 sm:px-4 py-2 rounded-md font-medium text-xs sm:text-sm border-0 cursor-pointer transition-all duration-200 flex-1 text-center;
   }
   
   .action-btn-primary {
@@ -60,5 +60,64 @@
   
   .action-btn-secondary {
     @apply bg-white text-gray-500 border border-gray-200 hover:bg-gray-50 hover:border-gray-300;
+  }
+
+  /* Mobile-first navigation */
+  .mobile-nav-toggle {
+    @apply block sm:hidden p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary;
+  }
+
+  .mobile-nav-menu {
+    @apply absolute top-full left-0 right-0 bg-white border-t border-gray-200 shadow-lg sm:hidden;
+  }
+
+  .mobile-nav-item {
+    @apply block w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 border-b border-gray-100 last:border-b-0;
+  }
+
+  /* Mobile-friendly forms */
+  .form-input {
+    @apply w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-primary transition-colors text-base;
+  }
+
+  .form-button {
+    @apply w-full bg-primary text-white py-3 px-4 rounded-lg font-medium hover:bg-primary-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-base;
+  }
+
+  /* Mobile-optimized spacing */
+  .container-padding {
+    @apply px-4 sm:px-5;
+  }
+
+  .section-padding {
+    @apply py-8 sm:py-12 lg:py-16;
+  }
+
+  .card-padding {
+    @apply p-4 sm:p-6 lg:p-8;
+  }
+
+  /* Touch-friendly interactive elements */
+  .touch-target {
+    @apply min-h-[44px] min-w-[44px] flex items-center;
+  }
+
+  /* Mentor badge styles */
+  .mentor-badge {
+    @apply inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-purple-500 to-purple-600 text-white text-sm font-medium rounded-full shadow-lg border border-purple-400;
+    animation: subtle-glow 2s ease-in-out infinite alternate;
+  }
+
+  .mentor-badge-icon {
+    @apply w-4 h-4 text-yellow-300;
+  }
+
+  @keyframes subtle-glow {
+    from {
+      box-shadow: 0 0 5px rgba(147, 51, 234, 0.5);
+    }
+    to {
+      box-shadow: 0 0 10px rgba(147, 51, 234, 0.7);
+    }
   }
 }
