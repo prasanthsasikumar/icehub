@@ -42,11 +42,22 @@ export default defineEventHandler(async (event) => {
     // Handle image upload if provided
     let imageUrl = 'https://via.placeholder.com/150x150/e5e7eb/9ca3af?text=User'
     if (image && image.startsWith('data:image/')) {
-      // If image is provided, upload it
-      const uploadResult = await uploadImage(image)
-      if (uploadResult.success && uploadResult.url) {
-        imageUrl = uploadResult.url
+      console.log('Image provided for registration, attempting upload...')
+      try {
+        // If image is provided, upload it
+        const uploadResult = await uploadImage(image)
+        console.log('Upload result:', uploadResult)
+        if (uploadResult.success && uploadResult.url) {
+          imageUrl = uploadResult.url
+          console.log('Image uploaded successfully:', imageUrl)
+        } else {
+          console.log('Image upload failed:', uploadResult.error)
+        }
+      } catch (uploadError) {
+        console.error('Error during image upload:', uploadError)
       }
+    } else {
+      console.log('No valid image provided for registration')
     }
 
     // Create new user
