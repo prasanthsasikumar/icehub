@@ -2,8 +2,12 @@ import { createClient } from '@supabase/supabase-js'
 
 const supabaseUrl = process.env.SUPABASE_URL || ''
 const supabaseKey = process.env.SUPABASE_ANON_KEY || ''
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || ''
 
 export const supabase = createClient(supabaseUrl, supabaseKey)
+
+// Admin client with service role key for elevated permissions
+export const supabaseAdmin = createClient(supabaseUrl, supabaseServiceRoleKey)
 
 // Database interface for the app
 export class Database {
@@ -77,71 +81,146 @@ export class Database {
     // First, delete related data to avoid foreign key constraints
     
     try {
-      // Delete user's messages
-      const { error: messagesError } = await supabase
+      console.log(`Starting cascade deletion for user: ${id}`)
+      
+      // Delete user's messages (both sent and received) using admin client
+      console.log('Deleting user messages...')
+      
+      const { error: sentMessagesError } = await supabaseAdmin
         .from('messages')
         .delete()
-        .eq('userId', id)
+        .eq('senderId', id)
       
-      if (messagesError) {
-        console.warn('Error deleting user messages:', messagesError)
+      if (sentMessagesError) {
+        console.warn('Error deleting sent messages:', sentMessagesError)
       }
-      
-      // Handle groups created by this user
-      // Option 1: Delete groups created by this user
-      const { error: groupsError } = await supabase
-        .from('groups')
+
+      const { error: receivedMessagesError } = await supabaseAdmin
+        .from('messages')
         .delete()
-        .eq('creatorId', id)
+        .eq('receiverId', id)
       
-      if (groupsError) {
-        console.warn('Error deleting user groups:', groupsError)
+      if (receivedMessagesError) {
+        console.warn('Error deleting received messages:', receivedMessagesError)
       }
+      
+      console.log('Updating groups to remove user...')
       
       // Remove user from group members arrays
-      // This is more complex as members might be stored as JSON arrays
-      const { data: allGroups } = await supabase
+      const { data: allGroups } = await supabaseAdmin
         .from('groups')
         .select('id, members')
       
       if (allGroups) {
         for (const group of allGroups) {
+          let needsUpdate = false
+          let updatedMembers = group.members
+          
+          // Handle members array (includes both members and mentors with role property)
           if (group.members) {
             let members
             try {
-              members = typeof group.members === 'string' 
-                ? JSON.parse(group.members) 
-                : group.members
+              if (typeof group.members === 'string') {
+                try {
+                  members = JSON.parse(group.members)
+                } catch (jsonError) {
+                  members = []
+                }
+              } else if (Array.isArray(group.members)) {
+                members = group.members
+              } else {
+                members = []
+              }
             } catch (e) {
               members = []
             }
             
-            if (Array.isArray(members) && members.includes(id)) {
-              const updatedMembers = members.filter(memberId => memberId !== id)
-              await supabase
-                .from('groups')
-                .update({ members: JSON.stringify(updatedMembers) })
-                .eq('id', group.id)
+            if (Array.isArray(members)) {
+              // Clean up the members array - handle mixed string/object format
+              const cleanMembers = members.map((member: any) => {
+                if (typeof member === 'string') {
+                  try {
+                    return JSON.parse(member)
+                  } catch {
+                    return null
+                  }
+                }
+                return member
+              }).filter(Boolean)
+              
+              // Filter out the user
+              const filteredMembers = cleanMembers.filter((member: any) => member.userId !== id)
+              if (filteredMembers.length !== cleanMembers.length) {
+                updatedMembers = filteredMembers
+                needsUpdate = true
+              }
+            }
+          }
+          
+          if (needsUpdate) {
+            console.log(`Updating group ${group.id} to remove user ${id}`)
+            
+            const { error: updateError } = await supabaseAdmin
+              .from('groups')
+              .update({ members: updatedMembers })  // Send as array, not JSON string
+              .eq('id', group.id)
+              
+            if (updateError) {
+              console.warn(`Error updating group ${group.id}:`, updateError)
             }
           }
         }
       }
       
-      // Finally, delete the user
-      const { data, error } = await supabase
+      // First, check if the user exists
+      console.log(`Checking if user exists: ${id}`)
+      const { data: existingUser, error: checkError } = await supabase
+        .from('users')
+        .select('*')
+        .eq('id', id)
+        .single()
+      
+      if (checkError) {
+        console.log('User check error:', checkError)
+        if (checkError.code === 'PGRST116') {
+          throw new Error('User not found')
+        }
+        throw checkError
+      }
+      
+      console.log('User found:', existingUser)
+      
+      // Finally, delete the user using admin client for elevated permissions
+      console.log(`Attempting to delete user with admin client: ${id}`)
+      
+      const { data: deleteData, error: deleteError, count } = await supabaseAdmin
         .from('users')
         .delete()
         .eq('id', id)
-        .select()
       
-      if (error) throw error
+      console.log('Admin delete result:', { data: deleteData, error: deleteError, count })
       
-      // Check if any user was actually deleted
-      if (!data || data.length === 0) {
-        throw new Error('User not found or already deleted')
+      if (deleteError) {
+        console.log('Admin delete error details:', deleteError)
+        throw deleteError
       }
       
-      return data[0] // Return the first (and only) deleted user
+      // Verify the user was actually deleted
+      const { data, error } = await supabaseAdmin
+        .from('users')
+        .select('*')
+        .eq('id', id)
+        .single()
+      
+      console.log('User lookup after admin delete:', { data, error })
+      
+      // If user still exists, the delete didn't work
+      if (data && !error) {
+        throw new Error('Admin delete operation failed - user still exists')
+      }
+      
+      console.log('User successfully deleted with admin privileges')
+      return { id, message: 'User deleted successfully' }
       
     } catch (error) {
       console.error('Error in deleteUser:', error)

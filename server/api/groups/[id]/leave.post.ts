@@ -1,8 +1,5 @@
-import fs from 'fs'
-import path from 'path'
 import { getUserFromRequest } from '../../../../server/utils/auth'
-import { type Group } from '../../../../server/utils/groups'
-import { removeMemberFromGroupChat, type GroupChat } from '../../../../server/utils/chat'
+import { Database } from '../../../../server/utils/supabase'
 
 export default defineEventHandler(async (event) => {
   if (getMethod(event) !== 'POST') {
@@ -31,65 +28,82 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  // Read groups from file
-  const groupsPath = path.join(process.cwd(), 'server/data/groups.json')
-  const groups: Group[] = JSON.parse(fs.readFileSync(groupsPath, 'utf8'))
+  try {
+    // Get the group from Supabase
+    const group = await Database.getGroupById(groupId)
 
-  // Find the group
-  const groupIndex = groups.findIndex(g => g.id === groupId)
-  
-  if (groupIndex === -1) {
-    throw createError({
-      statusCode: 404,
-      statusMessage: 'Group not found'
-    })
-  }
-
-  const group = groups[groupIndex]
-
-  // Check if user is a member or mentor
-  const memberIndex = group.members.findIndex(member => member.userId === currentUser.id)
-  const mentorIndex = group.mentors.findIndex(mentor => mentor.userId === currentUser.id)
-  
-  if (memberIndex === -1 && mentorIndex === -1) {
-    throw createError({
-      statusCode: 409,
-      statusMessage: 'User is not part of this group'
-    })
-  }
-
-  // Remove user from group chat first
-  if (group.chatId) {
-    removeMemberFromGroupChat(group.chatId, currentUser.id)
-  }
-
-  // Remove user from appropriate array
-  if (memberIndex !== -1) {
-    group.members.splice(memberIndex, 1)
-  }
-  if (mentorIndex !== -1) {
-    group.mentors.splice(mentorIndex, 1)
-  }
-
-  // If group becomes empty (no members and no mentors), delete it and its chat
-  if (group.members.length === 0 && group.mentors.length === 0) {
-    groups.splice(groupIndex, 1)
+    // Parse members array (includes both members and mentors with role property)
+    let members: any[] = []
     
-    // Delete the empty group chat
-    if (group.chatId) {
-      const chatsPath = path.join(process.cwd(), 'server/data/groupChats.json')
-      const chats: GroupChat[] = JSON.parse(fs.readFileSync(chatsPath, 'utf8'))
-      const updatedChats = chats.filter(chat => chat.id !== group.chatId)
-      fs.writeFileSync(chatsPath, JSON.stringify(updatedChats, null, 2))
+    try {
+      if (group.members) {
+        if (typeof group.members === 'string') {
+          // Try to parse as JSON first
+          try {
+            members = JSON.parse(group.members)
+          } catch (jsonError) {
+            // If JSON parse fails, initialize as empty array
+            members = []
+          }
+        } else if (Array.isArray(group.members)) {
+          members = group.members
+        } else {
+          members = []
+        }
+      }
+    } catch (e) {
+      // If parsing fails, initialize as empty array
+      members = []
     }
-  } else {
-    groups[groupIndex] = group
-  }
 
-  // Save to file
-  fs.writeFileSync(groupsPath, JSON.stringify(groups, null, 2))
+    // Ensure all members have the expected structure
+    members = members.map((member: any) => {
+      if (typeof member === 'string') {
+        try {
+          return JSON.parse(member)
+        } catch {
+          return null
+        }
+      }
+      return member
+    }).filter(Boolean) // Remove null entries
 
-  return {
-    message: (group.members.length === 0 && group.mentors.length === 0) ? 'Left group and group was deleted (no members left)' : 'Successfully left the group'
+    // Check if user is in the group
+    const memberIndex = members.findIndex((member: any) => member.userId === currentUser.id)
+    
+    if (memberIndex === -1) {
+      throw createError({
+        statusCode: 409,
+        statusMessage: 'User is not part of this group'
+      })
+    }
+
+    // Remove user from members array
+    members.splice(memberIndex, 1)
+
+    // If group becomes empty, delete it
+    if (members.length === 0) {
+      await Database.deleteGroup(groupId)
+      
+      return {
+        message: 'Left group and group was deleted (no members left)'
+      }
+    } else {
+      // Update the group with new members array (send as array, not JSON string)
+      await Database.updateGroup(groupId, {
+        members: members  // Send as array, let Supabase handle JSONB conversion
+      })
+      
+      return {
+        message: 'Successfully left the group'
+      }
+    }
+    
+  } catch (error) {
+    console.error('Error leaving group:', error)
+    throw createError({
+      statusCode: 500,
+      statusMessage: 'Failed to leave group'
+    })
   }
 })

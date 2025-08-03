@@ -128,6 +128,7 @@ declare global {
   const skillsToStringArray: typeof import('../../server/utils/skills')['skillsToStringArray']
   const splitCookiesString: typeof import('../../node_modules/h3')['splitCookiesString']
   const supabase: typeof import('../../server/utils/supabase')['supabase']
+  const supabaseAdmin: typeof import('../../server/utils/supabase')['supabaseAdmin']
   const toEventHandler: typeof import('../../node_modules/h3')['toEventHandler']
   const toNodeListener: typeof import('../../node_modules/h3')['toNodeListener']
   const toPlainHandler: typeof import('../../node_modules/h3')['toPlainHandler']
@@ -182,4 +183,4 @@ export { createMessageId, createGroupChat, addMemberToGroupChat, removeMemberFro
 export { getRandomGroupCover, createGroupId, createChatId } from '/Users/prasanthsasikumar/Documents/GitHub/icehub/server/utils/groups';
 export { getDefaultUserImage, ensureUserImage, uploadImage } from '/Users/prasanthsasikumar/Documents/GitHub/icehub/server/utils/image';
 export { normalizeSkills, getDefaultSkillLevel, skillsToStringArray, getSkillLevel } from '/Users/prasanthsasikumar/Documents/GitHub/icehub/server/utils/skills';
-export { supabase, Database } from '/Users/prasanthsasikumar/Documents/GitHub/icehub/server/utils/supabase';
+export { supabase, supabaseAdmin, Database } from '/Users/prasanthsasikumar/Documents/GitHub/icehub/server/utils/supabase';

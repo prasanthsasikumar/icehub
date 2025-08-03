@@ -1127,16 +1127,16 @@ _imlJlEtcYUErFKlIoV3o40RwAHyYMj1YM8ArfD1nFG0
 const assets = {
   "/index.mjs": {
     "type": "text/javascript; charset=utf-8",
-    "etag": "\"204ed-1PDNN9ypZUDt/c5amFUYPZgf3qc\"",
-    "mtime": "2025-08-03T16:56:05.101Z",
-    "size": 132333,
+    "etag": "\"21439-GiA0WFu4F642qhbNHBG2mFO8URM\"",
+    "mtime": "2025-08-03T17:36:04.658Z",
+    "size": 136249,
     "path": "index.mjs"
   },
   "/index.mjs.map": {
     "type": "application/json",
-    "etag": "\"74e82-YLVSnixvJVCBSYLZzcODOTs4pxs\"",
-    "mtime": "2025-08-03T16:56:05.101Z",
-    "size": 478850,
+    "etag": "\"78392-Bl1mIvCjPFA8n9wKCpih9Ww8srA\"",
+    "mtime": "2025-08-03T17:36:04.658Z",
+    "size": 492434,
     "path": "index.mjs.map"
   }
 };
@@ -1959,7 +1959,9 @@ async function requireAuth(event) {
 
 const supabaseUrl = process.env.SUPABASE_URL || "";
 const supabaseKey = process.env.SUPABASE_ANON_KEY || "";
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
 const supabase = createClient(supabaseUrl, supabaseKey);
+const supabaseAdmin = createClient(supabaseUrl, supabaseServiceRoleKey);
 class Database {
   // Users
   static async getUsers() {
@@ -1994,37 +1996,90 @@ class Database {
   }
   static async deleteUser(id) {
     try {
-      const { error: messagesError } = await supabase.from("messages").delete().eq("userId", id);
-      if (messagesError) {
-        console.warn("Error deleting user messages:", messagesError);
+      console.log(`Starting cascade deletion for user: ${id}`);
+      console.log("Deleting user messages...");
+      const { error: sentMessagesError } = await supabaseAdmin.from("messages").delete().eq("senderId", id);
+      if (sentMessagesError) {
+        console.warn("Error deleting sent messages:", sentMessagesError);
       }
-      const { error: groupsError } = await supabase.from("groups").delete().eq("creatorId", id);
-      if (groupsError) {
-        console.warn("Error deleting user groups:", groupsError);
+      const { error: receivedMessagesError } = await supabaseAdmin.from("messages").delete().eq("receiverId", id);
+      if (receivedMessagesError) {
+        console.warn("Error deleting received messages:", receivedMessagesError);
       }
-      const { data: allGroups } = await supabase.from("groups").select("id, members");
+      console.log("Updating groups to remove user...");
+      const { data: allGroups } = await supabaseAdmin.from("groups").select("id, members");
       if (allGroups) {
         for (const group of allGroups) {
+          let needsUpdate = false;
+          let updatedMembers = group.members;
           if (group.members) {
             let members;
             try {
-              members = typeof group.members === "string" ? JSON.parse(group.members) : group.members;
+              if (typeof group.members === "string") {
+                try {
+                  members = JSON.parse(group.members);
+                } catch (jsonError) {
+                  members = [];
+                }
+              } else if (Array.isArray(group.members)) {
+                members = group.members;
+              } else {
+                members = [];
+              }
             } catch (e) {
               members = [];
             }
-            if (Array.isArray(members) && members.includes(id)) {
-              const updatedMembers = members.filter((memberId) => memberId !== id);
-              await supabase.from("groups").update({ members: JSON.stringify(updatedMembers) }).eq("id", group.id);
+            if (Array.isArray(members)) {
+              const cleanMembers = members.map((member) => {
+                if (typeof member === "string") {
+                  try {
+                    return JSON.parse(member);
+                  } catch {
+                    return null;
+                  }
+                }
+                return member;
+              }).filter(Boolean);
+              const filteredMembers = cleanMembers.filter((member) => member.userId !== id);
+              if (filteredMembers.length !== cleanMembers.length) {
+                updatedMembers = filteredMembers;
+                needsUpdate = true;
+              }
+            }
+          }
+          if (needsUpdate) {
+            console.log(`Updating group ${group.id} to remove user ${id}`);
+            const { error: updateError } = await supabaseAdmin.from("groups").update({ members: updatedMembers }).eq("id", group.id);
+            if (updateError) {
+              console.warn(`Error updating group ${group.id}:`, updateError);
             }
           }
         }
       }
-      const { data, error } = await supabase.from("users").delete().eq("id", id).select();
-      if (error) throw error;
-      if (!data || data.length === 0) {
-        throw new Error("User not found or already deleted");
+      console.log(`Checking if user exists: ${id}`);
+      const { data: existingUser, error: checkError } = await supabase.from("users").select("*").eq("id", id).single();
+      if (checkError) {
+        console.log("User check error:", checkError);
+        if (checkError.code === "PGRST116") {
+          throw new Error("User not found");
+        }
+        throw checkError;
       }
-      return data[0];
+      console.log("User found:", existingUser);
+      console.log(`Attempting to delete user with admin client: ${id}`);
+      const { data: deleteData, error: deleteError, count } = await supabaseAdmin.from("users").delete().eq("id", id);
+      console.log("Admin delete result:", { data: deleteData, error: deleteError, count });
+      if (deleteError) {
+        console.log("Admin delete error details:", deleteError);
+        throw deleteError;
+      }
+      const { data, error } = await supabaseAdmin.from("users").select("*").eq("id", id).single();
+      console.log("User lookup after admin delete:", { data, error });
+      if (data && !error) {
+        throw new Error("Admin delete operation failed - user still exists");
+      }
+      console.log("User successfully deleted with admin privileges");
+      return { id, message: "User deleted successfully" };
     } catch (error) {
       console.error("Error in deleteUser:", error);
       throw error;
@@ -2261,7 +2316,10 @@ const login_post = defineEventHandler(async (event) => {
       {
         id: user.id,
         email: user.email,
-        role: user.role
+        name: user.name,
+        role: user.role,
+        userRole: user.userRole || "developer"
+        // Default to developer if not set
       },
       JWT_SECRET$1,
       { expiresIn: "24h" }
@@ -2463,7 +2521,10 @@ const register_post = defineEventHandler(async (event) => {
       {
         id: createdUser.id,
         email: createdUser.email,
-        role: createdUser.role
+        name: createdUser.name,
+        role: createdUser.role,
+        userRole: createdUser.userRole || "developer"
+        // Default to developer if not set
       },
       JWT_SECRET,
       { expiresIn: "24h" }
@@ -2689,24 +2750,6 @@ function createGroupChat(groupId, groupName, memberIds) {
     createdAt: (/* @__PURE__ */ new Date()).toISOString(),
     lastMessageAt: (/* @__PURE__ */ new Date()).toISOString()
   };
-}
-function addMemberToGroupChat(chatId, userId) {
-  const chatsPath = path.join(process.cwd(), "server/data/groupChats.json");
-  const chats = JSON.parse(fs.readFileSync(chatsPath, "utf8"));
-  const chatIndex = chats.findIndex((chat) => chat.id === chatId);
-  if (chatIndex !== -1 && !chats[chatIndex].members.includes(userId)) {
-    chats[chatIndex].members.push(userId);
-    fs.writeFileSync(chatsPath, JSON.stringify(chats, null, 2));
-  }
-}
-function removeMemberFromGroupChat(chatId, userId) {
-  const chatsPath = path.join(process.cwd(), "server/data/groupChats.json");
-  const chats = JSON.parse(fs.readFileSync(chatsPath, "utf8"));
-  const chatIndex = chats.findIndex((chat) => chat.id === chatId);
-  if (chatIndex !== -1) {
-    chats[chatIndex].members = chats[chatIndex].members.filter((id) => id !== userId);
-    fs.writeFileSync(chatsPath, JSON.stringify(chats, null, 2));
-  }
 }
 function updateGroupChatName(chatId, newGroupName) {
   const chatsPath = path.join(process.cwd(), "server/data/groupChats.json");
@@ -2954,47 +2997,75 @@ const join_post = defineEventHandler(async (event) => {
       statusMessage: "Authentication required"
     });
   }
-  const groupsPath = path.join(process.cwd(), "server/data/groups.json");
-  const groups = JSON.parse(fs.readFileSync(groupsPath, "utf8"));
-  const groupIndex = groups.findIndex((g) => g.id === groupId);
-  if (groupIndex === -1) {
-    throw createError({
-      statusCode: 404,
-      statusMessage: "Group not found"
-    });
-  }
-  const group = groups[groupIndex];
-  const joinAsRole = currentUser.userRole === "mentor" ? "mentor" : "member";
-  const isAlreadyMember = group.members.some((member) => member.userId === currentUser.id);
-  const isAlreadyMentor = group.mentors.some((mentor) => mentor.userId === currentUser.id);
-  if (isAlreadyMember || isAlreadyMentor) {
-    throw createError({
-      statusCode: 409,
-      statusMessage: "User is already part of this group"
-    });
-  }
-  if (joinAsRole === "mentor") {
-    group.mentors.push({
+  console.log("Current user for group join:", currentUser);
+  try {
+    const group = await Database.getGroupById(groupId);
+    const joinAsRole = currentUser.userRole === "mentor" ? "mentor" : "member";
+    let members = [];
+    try {
+      if (group.members) {
+        if (typeof group.members === "string") {
+          try {
+            members = JSON.parse(group.members);
+          } catch (jsonError) {
+            members = [];
+          }
+        } else if (Array.isArray(group.members)) {
+          members = group.members;
+        } else {
+          members = [];
+        }
+      }
+    } catch (e) {
+      members = [];
+    }
+    members = members.map((member) => {
+      if (typeof member === "string") {
+        try {
+          return JSON.parse(member);
+        } catch {
+          return null;
+        }
+      }
+      return member;
+    }).filter(Boolean);
+    const isAlreadyMember = members.some((member) => member.userId === currentUser.id);
+    if (isAlreadyMember) {
+      throw createError({
+        statusCode: 409,
+        statusMessage: "User is already part of this group"
+      });
+    }
+    const newMember = {
       userId: currentUser.id,
-      userName: currentUser.name,
+      userName: currentUser.name || "Unknown User",
+      // Add fallback for missing name
+      role: joinAsRole,
       joinedAt: (/* @__PURE__ */ new Date()).toISOString()
+    };
+    console.log("Adding new member:", newMember);
+    if (!currentUser.name) {
+      console.warn("Warning: currentUser.name is missing. CurrentUser:", currentUser);
+    }
+    members.push(newMember);
+    console.log("Updated members array:", members);
+    console.log("Sending to database:", { members });
+    const updatedGroup = await Database.updateGroup(groupId, {
+      members
+      // Send as array, let Supabase handle JSONB conversion
     });
-  } else {
-    group.members.push({
-      userId: currentUser.id,
-      userName: currentUser.name,
-      joinedAt: (/* @__PURE__ */ new Date()).toISOString()
+    console.log("Database update result:", updatedGroup);
+    return {
+      message: "Successfully joined the group",
+      group: updatedGroup
+    };
+  } catch (error) {
+    console.error("Error joining group:", error);
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Failed to join group"
     });
   }
-  groups[groupIndex] = group;
-  fs.writeFileSync(groupsPath, JSON.stringify(groups, null, 2));
-  if (group.chatId) {
-    addMemberToGroupChat(group.chatId, currentUser.id);
-  }
-  return {
-    message: "Successfully joined the group",
-    group
-  };
 });
 
 const join_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
@@ -3023,48 +3094,65 @@ const leave_post = defineEventHandler(async (event) => {
       statusMessage: "Authentication required"
     });
   }
-  const groupsPath = path.join(process.cwd(), "server/data/groups.json");
-  const groups = JSON.parse(fs.readFileSync(groupsPath, "utf8"));
-  const groupIndex = groups.findIndex((g) => g.id === groupId);
-  if (groupIndex === -1) {
-    throw createError({
-      statusCode: 404,
-      statusMessage: "Group not found"
-    });
-  }
-  const group = groups[groupIndex];
-  const memberIndex = group.members.findIndex((member) => member.userId === currentUser.id);
-  const mentorIndex = group.mentors.findIndex((mentor) => mentor.userId === currentUser.id);
-  if (memberIndex === -1 && mentorIndex === -1) {
-    throw createError({
-      statusCode: 409,
-      statusMessage: "User is not part of this group"
-    });
-  }
-  if (group.chatId) {
-    removeMemberFromGroupChat(group.chatId, currentUser.id);
-  }
-  if (memberIndex !== -1) {
-    group.members.splice(memberIndex, 1);
-  }
-  if (mentorIndex !== -1) {
-    group.mentors.splice(mentorIndex, 1);
-  }
-  if (group.members.length === 0 && group.mentors.length === 0) {
-    groups.splice(groupIndex, 1);
-    if (group.chatId) {
-      const chatsPath = path.join(process.cwd(), "server/data/groupChats.json");
-      const chats = JSON.parse(fs.readFileSync(chatsPath, "utf8"));
-      const updatedChats = chats.filter((chat) => chat.id !== group.chatId);
-      fs.writeFileSync(chatsPath, JSON.stringify(updatedChats, null, 2));
+  try {
+    const group = await Database.getGroupById(groupId);
+    let members = [];
+    try {
+      if (group.members) {
+        if (typeof group.members === "string") {
+          try {
+            members = JSON.parse(group.members);
+          } catch (jsonError) {
+            members = [];
+          }
+        } else if (Array.isArray(group.members)) {
+          members = group.members;
+        } else {
+          members = [];
+        }
+      }
+    } catch (e) {
+      members = [];
     }
-  } else {
-    groups[groupIndex] = group;
+    members = members.map((member) => {
+      if (typeof member === "string") {
+        try {
+          return JSON.parse(member);
+        } catch {
+          return null;
+        }
+      }
+      return member;
+    }).filter(Boolean);
+    const memberIndex = members.findIndex((member) => member.userId === currentUser.id);
+    if (memberIndex === -1) {
+      throw createError({
+        statusCode: 409,
+        statusMessage: "User is not part of this group"
+      });
+    }
+    members.splice(memberIndex, 1);
+    if (members.length === 0) {
+      await Database.deleteGroup(groupId);
+      return {
+        message: "Left group and group was deleted (no members left)"
+      };
+    } else {
+      await Database.updateGroup(groupId, {
+        members
+        // Send as array, let Supabase handle JSONB conversion
+      });
+      return {
+        message: "Successfully left the group"
+      };
+    }
+  } catch (error) {
+    console.error("Error leaving group:", error);
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Failed to leave group"
+    });
   }
-  fs.writeFileSync(groupsPath, JSON.stringify(groups, null, 2));
-  return {
-    message: group.members.length === 0 && group.mentors.length === 0 ? "Left group and group was deleted (no members left)" : "Successfully left the group"
-  };
 });
 
 const leave_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
@@ -3226,29 +3314,60 @@ const index_get = defineEventHandler(async (event) => {
     const query = getQuery$1(event);
     const userId = query.userId;
     let filteredGroups = groups;
+    const processedGroups = filteredGroups.map((group) => {
+      let members = [];
+      try {
+        if (group.members) {
+          if (typeof group.members === "string") {
+            members = JSON.parse(group.members);
+          } else if (Array.isArray(group.members)) {
+            members = group.members;
+          }
+        }
+      } catch (e) {
+        members = [];
+      }
+      members = members.map((member) => {
+        if (typeof member === "string") {
+          try {
+            return JSON.parse(member);
+          } catch {
+            return null;
+          }
+        }
+        return member;
+      }).filter(Boolean);
+      return {
+        ...group,
+        parsedMembers: members
+      };
+    });
     if (!userId) {
-      filteredGroups = groups.filter((group) => group.isPublic);
+      filteredGroups = processedGroups.filter((group) => !group.isPrivate);
     } else {
-      filteredGroups = groups.filter(
-        (group) => group.isPublic || group.members && group.members.some((member) => member.userId === userId)
+      filteredGroups = processedGroups.filter(
+        (group) => !group.isPrivate || group.parsedMembers && group.parsedMembers.some((member) => member.userId === userId)
       );
     }
     return filteredGroups.map((group) => {
       var _a;
-      const isMember = userId ? group.members && group.members.some((member) => member.userId === userId) : false;
+      const isMember = userId ? group.parsedMembers && group.parsedMembers.some((member) => member.userId === userId) : false;
+      let userRole = null;
+      if (isMember && group.parsedMembers) {
+        const userMember = group.parsedMembers.find((member) => member.userId === userId);
+        userRole = (userMember == null ? void 0 : userMember.role) || "member";
+      }
       return {
         id: group.id,
         name: group.name,
         description: group.description,
         coverImage: group.coverImage || "/uploads/groupCoverSamples/cover1.svg",
-        createdBy: group.creatorId,
+        createdBy: group.createdBy,
         createdAt: group.createdAt,
-        memberCount: ((_a = group.members) == null ? void 0 : _a.length) || 0,
-        isPrivate: !group.isPublic,
-        // Convert isPublic to isPrivate
-        // User is considered part of group if they're a member
+        memberCount: ((_a = group.parsedMembers) == null ? void 0 : _a.length) || 0,
+        isPrivate: group.isPrivate,
         isMember,
-        userRole: isMember ? "member" : null
+        userRole
       };
     });
   } catch (error) {

@@ -1,8 +1,5 @@
-import fs from 'fs'
-import path from 'path'
 import { getUserFromRequest } from '../../../../server/utils/auth'
-import { type Group } from '../../../../server/utils/groups'
-import { addMemberToGroupChat } from '../../../../server/utils/chat'
+import { Database } from '../../../../server/utils/supabase'
 
 export default defineEventHandler(async (event) => {
   if (getMethod(event) !== 'POST') {
@@ -31,64 +28,100 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  // Read groups from file
-  const groupsPath = path.join(process.cwd(), 'server/data/groups.json')
-  const groups: Group[] = JSON.parse(fs.readFileSync(groupsPath, 'utf8'))
+  console.log('Current user for group join:', currentUser)
 
-  // Find the group
-  const groupIndex = groups.findIndex(g => g.id === groupId)
-  
-  if (groupIndex === -1) {
-    throw createError({
-      statusCode: 404,
-      statusMessage: 'Group not found'
-    })
-  }
+  try {
+    // Get the group from Supabase
+    const group = await Database.getGroupById(groupId)
 
-  const group = groups[groupIndex]
+    // Use the user's userRole to determine how they join
+    const joinAsRole = currentUser.userRole === 'mentor' ? 'mentor' : 'member'
 
-  // Use the user's userRole to determine how they join
-  const joinAsRole = currentUser.userRole === 'mentor' ? 'mentor' : 'member'
+    // Parse members array (mentors are stored within members with role property)
+    let members: any[] = []
+    
+    try {
+      if (group.members) {
+        if (typeof group.members === 'string') {
+          // Try to parse as JSON first
+          try {
+            members = JSON.parse(group.members)
+          } catch (jsonError) {
+            // If JSON parse fails, it might be a PostgreSQL array string
+            // Initialize as empty array and let the update handle it
+            members = []
+          }
+        } else if (Array.isArray(group.members)) {
+          members = group.members
+        } else {
+          members = []
+        }
+      }
+    } catch (e) {
+      // If parsing fails, initialize as empty array
+      members = []
+    }
 
-  // Check if user is already a member or mentor
-  const isAlreadyMember = group.members.some(member => member.userId === currentUser.id)
-  const isAlreadyMentor = group.mentors.some(mentor => mentor.userId === currentUser.id)
-  
-  if (isAlreadyMember || isAlreadyMentor) {
-    throw createError({
-      statusCode: 409,
-      statusMessage: 'User is already part of this group'
-    })
-  }
+    // Ensure all members have the expected structure
+    members = members.map((member: any) => {
+      if (typeof member === 'string') {
+        try {
+          return JSON.parse(member)
+        } catch {
+          return null
+        }
+      }
+      return member
+    }).filter(Boolean) // Remove null entries
 
-  // Add user to appropriate array
-  if (joinAsRole === 'mentor') {
-    group.mentors.push({
+    // Check if user is already a member (including mentors)
+    const isAlreadyMember = members.some((member: any) => member.userId === currentUser.id)
+    
+    if (isAlreadyMember) {
+      throw createError({
+        statusCode: 409,
+        statusMessage: 'User is already part of this group'
+      })
+    }
+
+    // Add user to members array with appropriate role
+    const newMember = {
       userId: currentUser.id,
-      userName: currentUser.name,
+      userName: currentUser.name || 'Unknown User',  // Add fallback for missing name
+      role: joinAsRole,
       joinedAt: new Date().toISOString()
+    }
+
+    console.log('Adding new member:', newMember)
+    
+    // Verify the userName is not undefined
+    if (!currentUser.name) {
+      console.warn('Warning: currentUser.name is missing. CurrentUser:', currentUser)
+    }
+
+    members.push(newMember)
+
+    console.log('Updated members array:', members)
+
+    // Update the group in Supabase (store as JSONB, not as string)
+    console.log('Sending to database:', { members })
+    
+    const updatedGroup = await Database.updateGroup(groupId, {
+      members: members  // Send as array, let Supabase handle JSONB conversion
     })
-  } else {
-    group.members.push({
-      userId: currentUser.id,
-      userName: currentUser.name,
-      joinedAt: new Date().toISOString()
+
+    console.log('Database update result:', updatedGroup)
+
+    return {
+      message: 'Successfully joined the group',
+      group: updatedGroup
+    }
+    
+  } catch (error) {
+    console.error('Error joining group:', error)
+    throw createError({
+      statusCode: 500,
+      statusMessage: 'Failed to join group'
     })
-  }
-
-  // Update the group in the array
-  groups[groupIndex] = group
-
-  // Save to file
-  fs.writeFileSync(groupsPath, JSON.stringify(groups, null, 2))
-
-  // Add user to group chat
-  if (group.chatId) {
-    addMemberToGroupChat(group.chatId, currentUser.id)
-  }
-
-  return {
-    message: 'Successfully joined the group',
-    group: group
   }
 })

@@ -16,6 +16,10 @@
         "userId": "6fcde34e-bdff-47a2-9849-921ba50e3d3d",
         "userName": "Donald Trump",
         "joinedAt": "2025-08-03T11:01:14.468Z"
+      },
+      {
+        "userId": "95431762-211d-4a27-9321-cd20d1f15d24",
+        "joinedAt": "2025-08-03T17:12:31.309Z"
       }
     ],
     "mentors": [
@@ -50,6 +54,10 @@
         "userId": "2fe67f77-765f-49fb-af59-0d1d5d04d2a8",
         "userName": "Praveen Sasikumar",
         "joinedAt": "2025-08-03T12:16:26.714Z"
+      },
+      {
+        "userId": "95431762-211d-4a27-9321-cd20d1f15d24",
+        "joinedAt": "2025-08-03T17:13:34.219Z"
       }
     ],
     "mentors": [

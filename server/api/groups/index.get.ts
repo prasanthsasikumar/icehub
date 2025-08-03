@@ -15,34 +15,75 @@ export default defineEventHandler(async (event) => {
 
     let filteredGroups = groups
     
+    // Parse members arrays and determine user membership
+    const processedGroups = filteredGroups.map((group: any) => {
+      let members: any[] = []
+      
+      // Parse members array (could be string or array)
+      try {
+        if (group.members) {
+          if (typeof group.members === 'string') {
+            members = JSON.parse(group.members)
+          } else if (Array.isArray(group.members)) {
+            members = group.members
+          }
+        }
+      } catch (e) {
+        members = []
+      }
+      
+      // Clean up members array (handle mixed string/object format)
+      members = members.map((member: any) => {
+        if (typeof member === 'string') {
+          try {
+            return JSON.parse(member)
+          } catch {
+            return null
+          }
+        }
+        return member
+      }).filter(Boolean)
+      
+      return {
+        ...group,
+        parsedMembers: members
+      }
+    })
+
     if (!userId) {
       // Not authenticated - only show public groups
-      filteredGroups = groups.filter((group: any) => group.isPublic)
+      filteredGroups = processedGroups.filter((group: any) => !group.isPrivate)
     } else {
       // Authenticated - show public groups + private groups user is member of
-      filteredGroups = groups.filter((group: any) => 
-        group.isPublic || 
-        (group.members && group.members.some((member: any) => member.userId === userId))
+      filteredGroups = processedGroups.filter((group: any) => 
+        !group.isPrivate || 
+        (group.parsedMembers && group.parsedMembers.some((member: any) => member.userId === userId))
       )
     }
 
     // Return groups with member count instead of full member list for privacy
     return filteredGroups.map((group: any) => {
       const isMember = userId ? 
-        (group.members && group.members.some((member: any) => member.userId === userId)) : false
+        (group.parsedMembers && group.parsedMembers.some((member: any) => member.userId === userId)) : false
+      
+      // Find user's role if they're a member
+      let userRole = null
+      if (isMember && group.parsedMembers) {
+        const userMember = group.parsedMembers.find((member: any) => member.userId === userId)
+        userRole = userMember?.role || 'member'
+      }
       
       return {
         id: group.id,
         name: group.name,
         description: group.description,
         coverImage: group.coverImage || '/uploads/groupCoverSamples/cover1.svg',
-        createdBy: group.creatorId,
+        createdBy: group.createdBy,
         createdAt: group.createdAt,
-        memberCount: (group.members?.length || 0),
-        isPrivate: !group.isPublic, // Convert isPublic to isPrivate
-        // User is considered part of group if they're a member
+        memberCount: (group.parsedMembers?.length || 0),
+        isPrivate: group.isPrivate,
         isMember: isMember,
-        userRole: isMember ? 'member' : null
+        userRole: userRole
       }
     })
   } catch (error) {
