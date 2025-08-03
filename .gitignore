@@ -1,16 +1,5 @@
 node_modules
 
-# User uploaded files
-/public/uploads/*.jpg
-/public/uploads/*.jpeg
-/public/uploads/*.png
-/public/uploads/*.gif
-/public/uploads/*.webp
-/public/uploads/*.bmp
-
-# Keep the uploads directory but ignore image files
-!/public/uploads/.gitkeep
-
 # Development logs
 .nitro
 .nuxt

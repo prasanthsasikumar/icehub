@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid'
+import { put } from '@vercel/blob'
 import { promises as fs } from 'fs'
 import path from 'path'
 
@@ -38,21 +39,37 @@ export default defineEventHandler(async (event) => {
     const fileExtension = format.toLowerCase()
     const fileName = `${uniqueId}.${fileExtension}`
     
-    // Ensure uploads directory exists
-    const uploadsDir = path.join(process.cwd(), 'public', 'uploads')
-    await fs.mkdir(uploadsDir, { recursive: true })
+    // Check if we're in production (Vercel)
+    const isProduction = process.env.NODE_ENV === 'production' || process.env.VERCEL
     
-    // Save file
-    const filePath = path.join(uploadsDir, fileName)
-    await fs.writeFile(filePath, imageBuffer)
+    if (isProduction && process.env.BLOB_READ_WRITE_TOKEN) {
+      // Use Vercel Blob in production
+      const blob = await put(fileName, imageBuffer, {
+        access: 'public',
+        contentType: `image/${format}`,
+        token: process.env.BLOB_READ_WRITE_TOKEN
+      })
 
-    // Return the public URL
-    const publicUrl = `/uploads/${fileName}`
-    
-    return {
-      success: true,
-      url: publicUrl,
-      filename: fileName
+      return {
+        success: true,
+        url: blob.url,
+        filename: fileName
+      }
+    } else {
+      // Use local storage in development
+      const uploadsDir = path.join(process.cwd(), 'public', 'uploads')
+      await fs.mkdir(uploadsDir, { recursive: true })
+      
+      const filePath = path.join(uploadsDir, fileName)
+      await fs.writeFile(filePath, imageBuffer)
+
+      const publicUrl = `/uploads/${fileName}`
+      
+      return {
+        success: true,
+        url: publicUrl,
+        filename: fileName
+      }
     }
 
   } catch (error) {
