@@ -53,22 +53,41 @@ export default defineEventHandler(async (event) => {
       })
     }
 
+    console.log('Attempting to delete user:', userToDelete.name, userToDelete.id)
+
     // Delete the user
     await Database.deleteUser(userId)
+
+    console.log('User deleted successfully:', userToDelete.name)
 
     return {
       success: true,
       message: `User ${userToDelete.name} has been deleted successfully`
     }
   } catch (error: any) {
+    console.error('User deletion error details:', {
+      message: error.message,
+      code: error.code,
+      details: error.details,
+      hint: error.hint,
+      statusCode: error.statusCode
+    })
+    
     if (error.statusCode) {
       throw error
     }
     
-    console.error('User deletion error:', error)
+    // Provide more specific error message based on the error
+    let errorMessage = 'Internal server error'
+    if (error.code === '23503') {
+      errorMessage = 'Cannot delete user due to existing data dependencies'
+    } else if (error.message) {
+      errorMessage = error.message
+    }
+    
     throw createError({
       statusCode: 500,
-      statusMessage: 'Internal server error'
+      statusMessage: errorMessage
     })
   }
 })

@@ -3,6 +3,9 @@ import type { Serialize, Simplify } from "nitropack/types";
 declare module "nitropack/types" {
   type Awaited<T> = T extends PromiseLike<infer U> ? Awaited<U> : T
   interface InternalApi {
+    '/api/admin/delete-user': {
+      'delete': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/admin/delete-user.delete').default>>>>
+    }
     '/api/admin/toggle-role': {
       'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/admin/toggle-role.post').default>>>>
     }

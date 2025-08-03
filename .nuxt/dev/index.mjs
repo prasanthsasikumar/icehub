@@ -1124,7 +1124,22 @@ const plugins = [
 _imlJlEtcYUErFKlIoV3o40RwAHyYMj1YM8ArfD1nFG0
 ];
 
-const assets = {};
+const assets = {
+  "/index.mjs": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"1eca6-1C0KDXiOtotvdV+xW6n/A5WA1LU\"",
+    "mtime": "2025-08-03T16:11:26.819Z",
+    "size": 126118,
+    "path": "index.mjs"
+  },
+  "/index.mjs.map": {
+    "type": "application/json",
+    "etag": "\"6f307-zpWWcEuLKOklXy0p/7AAn1r6ub0\"",
+    "mtime": "2025-08-03T16:11:26.819Z",
+    "size": 455431,
+    "path": "index.mjs.map"
+  }
+};
 
 function readAsset (id) {
   const serverDir = dirname$1(fileURLToPath(globalThis._importMeta_.url));
@@ -1531,6 +1546,7 @@ async function getIslandContext(event) {
   return ctx;
 }
 
+const _lazy_6ilHbl = () => Promise.resolve().then(function () { return deleteUser_delete$1; });
 const _lazy_X46lLS = () => Promise.resolve().then(function () { return toggleRole_post$1; });
 const _lazy_XYs2hc = () => Promise.resolve().then(function () { return login_post$1; });
 const _lazy_sfy6lD = () => Promise.resolve().then(function () { return logout_post$1; });
@@ -1556,6 +1572,7 @@ const _lazy_mqZ_dN = () => Promise.resolve().then(function () { return renderer$
 
 const handlers = [
   { route: '', handler: _8dfJm_, lazy: false, middleware: true, method: undefined },
+  { route: '/api/admin/delete-user', handler: _lazy_6ilHbl, lazy: true, middleware: false, method: "delete" },
   { route: '/api/admin/toggle-role', handler: _lazy_X46lLS, lazy: true, middleware: false, method: "post" },
   { route: '/api/auth/login', handler: _lazy_XYs2hc, lazy: true, middleware: false, method: "post" },
   { route: '/api/auth/logout', handler: _lazy_sfy6lD, lazy: true, middleware: false, method: "post" },
@@ -1940,60 +1957,6 @@ async function requireAuth(event) {
   return user;
 }
 
-const toggleRole_post = defineEventHandler(async (event) => {
-  if (getMethod(event) !== "POST") {
-    throw createError({
-      statusCode: 405,
-      statusMessage: "Method not allowed"
-    });
-  }
-  const currentUser = getUserFromRequest(event);
-  if (!currentUser || currentUser.role !== "admin") {
-    throw createError({
-      statusCode: 403,
-      statusMessage: "Admin access required"
-    });
-  }
-  const { userId, newRole } = await readBody(event);
-  if (!userId || !newRole || !["user", "admin"].includes(newRole)) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: "Valid userId and newRole are required"
-    });
-  }
-  const usersPath = path.join(process.cwd(), "server/data/users.json");
-  const users = JSON.parse(fs.readFileSync(usersPath, "utf8"));
-  const userIndex = users.findIndex((u) => u.id === userId);
-  if (userIndex === -1) {
-    throw createError({
-      statusCode: 404,
-      statusMessage: "User not found"
-    });
-  }
-  if (users[userIndex].id === currentUser.id && newRole === "user") {
-    throw createError({
-      statusCode: 400,
-      statusMessage: "Cannot remove your own admin privileges"
-    });
-  }
-  users[userIndex].role = newRole;
-  fs.writeFileSync(usersPath, JSON.stringify(users, null, 2));
-  return {
-    message: `User role updated to ${newRole}`,
-    user: {
-      id: users[userIndex].id,
-      name: users[userIndex].name,
-      email: users[userIndex].email,
-      role: users[userIndex].role
-    }
-  };
-});
-
-const toggleRole_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
-  __proto__: null,
-  default: toggleRole_post
-}, Symbol.toStringTag, { value: 'Module' }));
-
 const supabaseUrl = process.env.SUPABASE_URL || "";
 const supabaseKey = process.env.SUPABASE_ANON_KEY || "";
 const supabase = createClient(supabaseUrl, supabaseKey);
@@ -2026,6 +1989,11 @@ class Database {
   }
   static async updateUser(id, updates) {
     const { data, error } = await supabase.from("users").update(updates).eq("id", id).select().single();
+    if (error) throw error;
+    return data;
+  }
+  static async deleteUser(id) {
+    const { data, error } = await supabase.from("users").delete().eq("id", id).select().single();
     if (error) throw error;
     return data;
   }
@@ -2093,6 +2061,123 @@ class Database {
     return data;
   }
 }
+
+const deleteUser_delete = defineEventHandler(async (event) => {
+  if (getMethod(event) !== "DELETE") {
+    throw createError({
+      statusCode: 405,
+      statusMessage: "Method not allowed"
+    });
+  }
+  const currentUser = getUserFromRequest(event);
+  if (!currentUser) {
+    throw createError({
+      statusCode: 401,
+      statusMessage: "Authentication required"
+    });
+  }
+  if (currentUser.role !== "admin") {
+    throw createError({
+      statusCode: 403,
+      statusMessage: "Admin access required"
+    });
+  }
+  const { userId } = await readBody(event);
+  if (!userId) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "User ID is required"
+    });
+  }
+  if (userId === currentUser.id) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Cannot delete your own account"
+    });
+  }
+  try {
+    const userToDelete = await Database.getUserById(userId);
+    if (!userToDelete) {
+      throw createError({
+        statusCode: 404,
+        statusMessage: "User not found"
+      });
+    }
+    await Database.deleteUser(userId);
+    return {
+      success: true,
+      message: `User ${userToDelete.name} has been deleted successfully`
+    };
+  } catch (error) {
+    if (error.statusCode) {
+      throw error;
+    }
+    console.error("User deletion error:", error);
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Internal server error"
+    });
+  }
+});
+
+const deleteUser_delete$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: deleteUser_delete
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const toggleRole_post = defineEventHandler(async (event) => {
+  if (getMethod(event) !== "POST") {
+    throw createError({
+      statusCode: 405,
+      statusMessage: "Method not allowed"
+    });
+  }
+  const currentUser = getUserFromRequest(event);
+  if (!currentUser || currentUser.role !== "admin") {
+    throw createError({
+      statusCode: 403,
+      statusMessage: "Admin access required"
+    });
+  }
+  const { userId, newRole } = await readBody(event);
+  if (!userId || !newRole || !["user", "admin"].includes(newRole)) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Valid userId and newRole are required"
+    });
+  }
+  const usersPath = path.join(process.cwd(), "server/data/users.json");
+  const users = JSON.parse(fs.readFileSync(usersPath, "utf8"));
+  const userIndex = users.findIndex((u) => u.id === userId);
+  if (userIndex === -1) {
+    throw createError({
+      statusCode: 404,
+      statusMessage: "User not found"
+    });
+  }
+  if (users[userIndex].id === currentUser.id && newRole === "user") {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Cannot remove your own admin privileges"
+    });
+  }
+  users[userIndex].role = newRole;
+  fs.writeFileSync(usersPath, JSON.stringify(users, null, 2));
+  return {
+    message: `User role updated to ${newRole}`,
+    user: {
+      id: users[userIndex].id,
+      name: users[userIndex].name,
+      email: users[userIndex].email,
+      role: users[userIndex].role
+    }
+  };
+});
+
+const toggleRole_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: toggleRole_post
+}, Symbol.toStringTag, { value: 'Module' }));
 
 const JWT_SECRET$1 = process.env.JWT_SECRET || "your-secret-key";
 const login_post = defineEventHandler(async (event) => {
@@ -2183,6 +2268,58 @@ const ensureUserImage = (userImage) => {
   }
   return userImage;
 };
+const uploadImage = async (imageData, filename) => {
+  try {
+    if (!imageData || !imageData.startsWith("data:image/")) {
+      return {
+        success: false,
+        error: "Invalid image data"
+      };
+    }
+    const imageMatch = imageData.match(/^data:image\/([a-zA-Z]+);base64,(.+)$/);
+    if (!imageMatch) {
+      return {
+        success: false,
+        error: "Invalid image format"
+      };
+    }
+    const [, format, base64Data] = imageMatch;
+    const imageBuffer = Buffer.from(base64Data, "base64");
+    const uniqueId = v4();
+    const fileExtension = format.toLowerCase();
+    const fileName = filename || `${uniqueId}.${fileExtension}`;
+    const isProduction = process.env.VERCEL;
+    if (isProduction && process.env.BLOB_READ_WRITE_TOKEN) {
+      const blob = await put(fileName, imageBuffer, {
+        access: "public",
+        contentType: `image/${format}`,
+        token: process.env.BLOB_READ_WRITE_TOKEN
+      });
+      return {
+        success: true,
+        url: blob.url,
+        filename: fileName
+      };
+    } else {
+      const uploadsDir = path.join(process.cwd(), "public", "uploads");
+      await promises.mkdir(uploadsDir, { recursive: true });
+      const filePath = path.join(uploadsDir, fileName);
+      await promises.writeFile(filePath, imageBuffer);
+      const publicUrl = `/uploads/${fileName}`;
+      return {
+        success: true,
+        url: publicUrl,
+        filename: fileName
+      };
+    }
+  } catch (error) {
+    console.error("Image upload error:", error);
+    return {
+      success: false,
+      error: "Failed to upload image"
+    };
+  }
+};
 
 const me_get = defineEventHandler(async (event) => {
   const authUser = getUserFromRequest(event);
@@ -2236,7 +2373,7 @@ const register_post = defineEventHandler(async (event) => {
     });
   }
   const body = await readBody(event);
-  const { name, email, password, bio, skills } = body;
+  const { name, email, password, bio, skills, image } = body;
   if (!name || !email || !password) {
     throw createError({
       statusCode: 400,
@@ -2252,12 +2389,23 @@ const register_post = defineEventHandler(async (event) => {
       });
     }
     const hashedPassword = await bcrypt.hash(password, 10);
+    let imageUrl = "https://via.placeholder.com/150x150/e5e7eb/9ca3af?text=User";
+    if (image && image.startsWith("data:image/")) {
+      try {
+        const uploadResult = await uploadImage(image);
+        if (uploadResult.success && uploadResult.url) {
+          imageUrl = uploadResult.url;
+        }
+      } catch (uploadError) {
+        console.error("Error during image upload:", uploadError);
+      }
+    }
     const newUser = {
       id: v4(),
       name,
       email,
       password: hashedPassword,
-      image: "https://via.placeholder.com/150x150/e5e7eb/9ca3af?text=User",
+      image: imageUrl,
       bio: bio || "",
       skills: skills || [],
       role: "user",
@@ -3205,56 +3353,74 @@ const update_post = defineEventHandler(async (event) => {
       statusMessage: "Name is required"
     });
   }
-  const usersPath = path.join(process.cwd(), "server/data/users.json");
-  const users = JSON.parse(fs.readFileSync(usersPath, "utf8"));
-  const userIndex = users.findIndex((u) => u.id === currentUser.id);
-  if (userIndex === -1) {
-    throw createError({
-      statusCode: 404,
-      statusMessage: "User not found"
-    });
-  }
-  const existingUser = users.find((u) => u.name.toLowerCase() === name.toLowerCase() && u.id !== currentUser.id);
-  if (existingUser) {
-    throw createError({
-      statusCode: 409,
-      statusMessage: "Name is already taken"
-    });
-  }
-  let processedSkills = [];
-  if (Array.isArray(skills)) {
-    if (skills.length > 0) {
-      if (typeof skills[0] === "object" && "name" in skills[0] && "level" in skills[0]) {
-        processedSkills = skills.filter(
-          (skill) => skill.name && typeof skill.name === "string" && skill.level && typeof skill.level === "number" && skill.level >= 1 && skill.level <= 5
-        );
-      } else {
-        processedSkills = skills.filter((skill) => typeof skill === "string" && skill.trim().length > 0);
+  try {
+    const existingUser = await Database.getUserById(currentUser.id);
+    if (!existingUser) {
+      throw createError({
+        statusCode: 404,
+        statusMessage: "User not found"
+      });
+    }
+    const userWithSameName = await Database.getUserByName(name);
+    if (userWithSameName && userWithSameName.id !== currentUser.id) {
+      throw createError({
+        statusCode: 409,
+        statusMessage: "Name is already taken"
+      });
+    }
+    let imageUrl = existingUser.image;
+    if (image && image.startsWith("data:image/")) {
+      try {
+        const uploadResult = await uploadImage(image);
+        if (uploadResult.success && uploadResult.url) {
+          imageUrl = uploadResult.url;
+        }
+      } catch (uploadError) {
+        console.error("Error during image upload:", uploadError);
+      }
+    } else if (image && !image.startsWith("data:image/")) {
+      imageUrl = image;
+    }
+    let processedSkills = [];
+    if (Array.isArray(skills)) {
+      if (skills.length > 0) {
+        if (typeof skills[0] === "object" && "name" in skills[0] && "level" in skills[0]) {
+          processedSkills = skills.filter(
+            (skill) => skill.name && typeof skill.name === "string" && skill.level && typeof skill.level === "number" && skill.level >= 1 && skill.level <= 5
+          ).map((skill) => skill.name);
+        } else {
+          processedSkills = skills.filter((skill) => typeof skill === "string" && skill.trim().length > 0);
+        }
       }
     }
-  }
-  users[userIndex] = {
-    ...users[userIndex],
-    name,
-    bio: bio || "",
-    image: image || users[userIndex].image,
-    // Keep existing image if not provided
-    skills: processedSkills
-  };
-  fs.writeFileSync(usersPath, JSON.stringify(users, null, 2));
-  const updatedUser = users[userIndex];
-  return {
-    message: "Profile updated successfully",
-    user: {
-      id: updatedUser.id,
-      name: updatedUser.name,
-      email: updatedUser.email,
-      image: updatedUser.image,
-      bio: updatedUser.bio,
-      skills: updatedUser.skills,
-      role: updatedUser.role
+    const updatedUser = await Database.updateUser(currentUser.id, {
+      name,
+      bio: bio || "",
+      image: imageUrl,
+      skills: processedSkills
+    });
+    return {
+      message: "Profile updated successfully",
+      user: {
+        id: updatedUser.id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        image: updatedUser.image,
+        bio: updatedUser.bio,
+        skills: updatedUser.skills,
+        role: updatedUser.role
+      }
+    };
+  } catch (error) {
+    if (error.statusCode) {
+      throw error;
     }
-  };
+    console.error("User update error:", error);
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Internal server error"
+    });
+  }
 });
 
 const update_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({

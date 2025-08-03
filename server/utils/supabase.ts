@@ -74,15 +74,74 @@ export class Database {
   }
 
   static async deleteUser(id: string) {
-    const { data, error } = await supabase
-      .from('users')
-      .delete()
-      .eq('id', id)
-      .select()
-      .single()
+    // First, delete related data to avoid foreign key constraints
     
-    if (error) throw error
-    return data
+    try {
+      // Delete user's messages
+      const { error: messagesError } = await supabase
+        .from('messages')
+        .delete()
+        .eq('userId', id)
+      
+      if (messagesError) {
+        console.warn('Error deleting user messages:', messagesError)
+      }
+      
+      // Handle groups created by this user
+      // Option 1: Delete groups created by this user
+      const { error: groupsError } = await supabase
+        .from('groups')
+        .delete()
+        .eq('creatorId', id)
+      
+      if (groupsError) {
+        console.warn('Error deleting user groups:', groupsError)
+      }
+      
+      // Remove user from group members arrays
+      // This is more complex as members might be stored as JSON arrays
+      const { data: allGroups } = await supabase
+        .from('groups')
+        .select('id, members')
+      
+      if (allGroups) {
+        for (const group of allGroups) {
+          if (group.members) {
+            let members
+            try {
+              members = typeof group.members === 'string' 
+                ? JSON.parse(group.members) 
+                : group.members
+            } catch (e) {
+              members = []
+            }
+            
+            if (Array.isArray(members) && members.includes(id)) {
+              const updatedMembers = members.filter(memberId => memberId !== id)
+              await supabase
+                .from('groups')
+                .update({ members: JSON.stringify(updatedMembers) })
+                .eq('id', group.id)
+            }
+          }
+        }
+      }
+      
+      // Finally, delete the user
+      const { data, error } = await supabase
+        .from('users')
+        .delete()
+        .eq('id', id)
+        .select()
+        .single()
+      
+      if (error) throw error
+      return data
+      
+    } catch (error) {
+      console.error('Error in deleteUser:', error)
+      throw error
+    }
   }
 
   // Messages
