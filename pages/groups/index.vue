@@ -105,9 +105,10 @@
                 </button>
                 <span 
                   v-else-if="group.isMember"
-                  class="flex-1 bg-green-100 text-green-700 text-center py-2 px-4 rounded-lg text-sm font-medium"
+                  class="flex-1 text-center py-2 px-4 rounded-lg text-sm font-medium"
+                  :class="group.userRole === 'mentor' ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'"
                 >
-                  Member
+                  {{ group.userRole === 'mentor' ? '🎯 Mentor' : '👥 Member' }}
                 </span>
               </div>
             </div>

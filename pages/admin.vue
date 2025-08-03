@@ -108,10 +108,13 @@
                     <div class="flex flex-wrap gap-1 max-w-xs">
                       <span 
                         v-for="skill in user.skills.slice(0, 3)" 
-                        :key="skill"
+                        :key="typeof skill === 'string' ? skill : skill.name"
                         class="inline-block bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded"
                       >
-                        {{ skill }}
+                        {{ typeof skill === 'string' ? skill : skill.name }}
+                        <span v-if="typeof skill === 'object' && skill.level" class="ml-1 text-xs opacity-75">
+                          ({{ skill.level }})
+                        </span>
                       </span>
                       <span v-if="user.skills.length > 3" class="text-xs text-gray-400">
                         +{{ user.skills.length - 3 }}

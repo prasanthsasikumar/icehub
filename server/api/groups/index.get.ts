@@ -17,23 +17,31 @@ export default defineEventHandler(async (event) => {
     // Not authenticated - only show public groups
     filteredGroups = groups.filter(group => !group.isPrivate)
   } else {
-    // Authenticated - show public groups + private groups user is member of
+    // Authenticated - show public groups + private groups user is member/mentor of
     filteredGroups = groups.filter(group => 
-      !group.isPrivate || group.members.some(member => member.userId === userId)
+      !group.isPrivate || 
+      group.members.some(member => member.userId === userId) ||
+      group.mentors.some(mentor => mentor.userId === userId)
     )
   }
 
   // Return groups with member count instead of full member list for privacy
-  return filteredGroups.map(group => ({
-    id: group.id,
-    name: group.name,
-    description: group.description,
-    coverImage: group.coverImage,
-    createdBy: group.createdBy,
-    createdAt: group.createdAt,
-    memberCount: group.members.length,
-    isPrivate: group.isPrivate,
-    // Only show if user is member for member list
-    isMember: userId ? group.members.some(member => member.userId === userId) : false
-  }))
+  return filteredGroups.map(group => {
+    const isMember = userId ? group.members.some(member => member.userId === userId) : false
+    const isMentor = userId ? group.mentors.some(mentor => mentor.userId === userId) : false
+    
+    return {
+      id: group.id,
+      name: group.name,
+      description: group.description,
+      coverImage: group.coverImage,
+      createdBy: group.createdBy,
+      createdAt: group.createdAt,
+      memberCount: group.members.length + (group.mentors?.length || 0),
+      isPrivate: group.isPrivate,
+      // User is considered part of group if they're either member or mentor
+      isMember: isMember || isMentor,
+      userRole: isMember ? 'member' : (isMentor ? 'mentor' : null)
+    }
+  })
 })

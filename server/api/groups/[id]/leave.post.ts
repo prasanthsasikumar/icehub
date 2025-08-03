@@ -2,6 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import { getUserFromRequest } from '../../../../server/utils/auth'
 import { type Group } from '../../../../server/utils/groups'
+import { removeMemberFromGroupChat, type GroupChat } from '../../../../server/utils/chat'
 
 export default defineEventHandler(async (event) => {
   if (getMethod(event) !== 'POST') {
@@ -46,22 +47,41 @@ export default defineEventHandler(async (event) => {
 
   const group = groups[groupIndex]
 
-  // Check if user is a member
+  // Check if user is a member or mentor
   const memberIndex = group.members.findIndex(member => member.userId === currentUser.id)
+  const mentorIndex = group.mentors.findIndex(mentor => mentor.userId === currentUser.id)
   
-  if (memberIndex === -1) {
+  if (memberIndex === -1 && mentorIndex === -1) {
     throw createError({
       statusCode: 409,
-      statusMessage: 'User is not a member of this group'
+      statusMessage: 'User is not part of this group'
     })
   }
 
-  // Remove user from group
-  group.members.splice(memberIndex, 1)
+  // Remove user from group chat first
+  if (group.chatId) {
+    removeMemberFromGroupChat(group.chatId, currentUser.id)
+  }
 
-  // If group becomes empty, delete it
-  if (group.members.length === 0) {
+  // Remove user from appropriate array
+  if (memberIndex !== -1) {
+    group.members.splice(memberIndex, 1)
+  }
+  if (mentorIndex !== -1) {
+    group.mentors.splice(mentorIndex, 1)
+  }
+
+  // If group becomes empty (no members and no mentors), delete it and its chat
+  if (group.members.length === 0 && group.mentors.length === 0) {
     groups.splice(groupIndex, 1)
+    
+    // Delete the empty group chat
+    if (group.chatId) {
+      const chatsPath = path.join(process.cwd(), 'server/data/groupChats.json')
+      const chats: GroupChat[] = JSON.parse(fs.readFileSync(chatsPath, 'utf8'))
+      const updatedChats = chats.filter(chat => chat.id !== group.chatId)
+      fs.writeFileSync(chatsPath, JSON.stringify(updatedChats, null, 2))
+    }
   } else {
     groups[groupIndex] = group
   }
@@ -70,6 +90,6 @@ export default defineEventHandler(async (event) => {
   fs.writeFileSync(groupsPath, JSON.stringify(groups, null, 2))
 
   return {
-    message: group.members.length === 0 ? 'Left group and group was deleted (no members left)' : 'Successfully left the group'
+    message: (group.members.length === 0 && group.mentors.length === 0) ? 'Left group and group was deleted (no members left)' : 'Successfully left the group'
   }
 })

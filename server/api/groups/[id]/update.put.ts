@@ -2,6 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import { getUserFromRequest } from '../../../../server/utils/auth'
 import { type Group } from '../../../../server/utils/groups'
+import { updateGroupChatName } from '../../../../server/utils/chat'
 
 export default defineEventHandler(async (event) => {
   if (getMethod(event) !== 'PUT') {
@@ -55,13 +56,14 @@ export default defineEventHandler(async (event) => {
 
   const group = groups[groupIndex]
 
-  // Check if user is a member of the group
+  // Check if user is a member or mentor of the group
   const isMember = group.members.some(member => member.userId === currentUser.id)
+  const isMentor = group.mentors.some(mentor => mentor.userId === currentUser.id)
   
-  if (!isMember) {
+  if (!isMember && !isMentor) {
     throw createError({
       statusCode: 403,
-      statusMessage: 'Only group members can manage this group'
+      statusMessage: 'Only group members and mentors can manage this group'
     })
   }
 
@@ -74,6 +76,9 @@ export default defineEventHandler(async (event) => {
     })
   }
 
+  // Check if group name is changing and update chat name
+  const nameChanged = group.name !== name.trim()
+
   // Update group data
   groups[groupIndex] = {
     ...group,
@@ -85,6 +90,11 @@ export default defineEventHandler(async (event) => {
 
   // Save to file
   fs.writeFileSync(groupsPath, JSON.stringify(groups, null, 2))
+
+  // Update group chat name if changed
+  if (nameChanged && group.chatId) {
+    updateGroupChatName(group.chatId, name.trim())
+  }
 
   return {
     message: 'Group updated successfully',

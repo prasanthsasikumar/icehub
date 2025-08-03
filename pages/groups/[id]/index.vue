@@ -103,8 +103,14 @@
               <div class="flex flex-col gap-3 min-w-[200px]">
                 <template v-if="data.isMember">
                   <span class="bg-green-100 text-green-700 text-center py-2 px-4 rounded-lg font-medium">
-                    ✓ You're a member
+                    ✓ You're a {{ data.userRole || 'member' }}
                   </span>
+                  <NuxtLink 
+                    :to="`/chat?chatId=${data.chatId}&type=group`"
+                    class="bg-primary text-white text-center py-2 px-4 rounded-lg hover:bg-primary-dark transition-colors font-medium"
+                  >
+                    💬 Group Chat
+                  </NuxtLink>
                   <NuxtLink 
                     :to="`/groups/${groupId}/manage`"
                     class="bg-gray-100 text-gray-700 text-center py-2 px-4 rounded-lg hover:bg-gray-200 transition-colors font-medium"
@@ -184,6 +190,28 @@
               </div>
             </div>
 
+            <!-- Mentors -->
+            <div v-if="data.mentors && data.mentors.length > 0" class="bg-white rounded-xl border border-gray-200 p-6">
+              <h3 class="text-lg font-semibold text-gray-700 mb-4 flex items-center gap-2">
+                <span>🎯</span>
+                Mentors ({{ data.mentors.length }})
+              </h3>
+              <div class="space-y-3">
+                <div v-for="mentor in data.mentors.slice(0, 5)" :key="mentor.userId" class="flex items-center gap-3">
+                  <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                    <span class="text-xs font-medium text-blue-600">{{ mentor.userName.charAt(0).toUpperCase() }}</span>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <span class="text-sm font-medium text-gray-700 truncate">{{ mentor.userName }}</span>
+                    <div class="text-xs text-blue-600">Mentor</div>
+                  </div>
+                </div>
+                <div v-if="data.mentors.length > 5" class="text-xs text-gray-500 text-center pt-2">
+                  +{{ data.mentors.length - 5 }} more mentors
+                </div>
+              </div>
+            </div>
+
             <!-- Group Info -->
             <div class="bg-white rounded-xl border border-gray-200 p-6">
               <h3 class="text-lg font-semibold text-gray-700 mb-4">Group Info</h3>
@@ -199,6 +227,10 @@
                 <div class="flex justify-between">
                   <span class="text-gray-500">Members</span>
                   <span class="font-medium">{{ data.members.length }}</span>
+                </div>
+                <div v-if="data.mentors && data.mentors.length > 0" class="flex justify-between">
+                  <span class="text-gray-500">Mentors</span>
+                  <span class="font-medium">{{ data.mentors.length }}</span>
                 </div>
               </div>
             </div>

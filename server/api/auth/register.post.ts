@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const { name, email, password, bio, skills, image } = await readBody(event)
+  const { name, email, password, bio, skills, image, userRole } = await readBody(event)
 
   if (!name || !email || !password) {
     throw createError({
@@ -46,6 +46,7 @@ export default defineEventHandler(async (event) => {
     bio: bio || '',
     skills: Array.isArray(skills) ? skills : [],
     role: 'user',
+    userRole: userRole || 'developer', // Default to developer if not provided
     createdAt: new Date().toISOString()
   }
 
@@ -60,7 +61,8 @@ export default defineEventHandler(async (event) => {
     id: newUser.id,
     name: newUser.name,
     email: newUser.email,
-    role: newUser.role
+    role: newUser.role,
+    userRole: newUser.userRole
   })
 
   // Set cookie
@@ -80,7 +82,8 @@ export default defineEventHandler(async (event) => {
       image: newUser.image,
       bio: newUser.bio,
       skills: newUser.skills,
-      role: newUser.role
+      role: newUser.role,
+      userRole: newUser.userRole
     },
     token
   }

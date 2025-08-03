@@ -1122,7 +1122,22 @@ const plugins = [
 _imlJlEtcYUErFKlIoV3o40RwAHyYMj1YM8ArfD1nFG0
 ];
 
-const assets = {};
+const assets = {
+  "/index.mjs": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"1dce0-Dv+ddxy2pG9Z0KOrb0aIVfi2hAQ\"",
+    "mtime": "2025-08-03T12:15:30.160Z",
+    "size": 122080,
+    "path": "index.mjs"
+  },
+  "/index.mjs.map": {
+    "type": "application/json",
+    "etag": "\"6ab03-Y4rWRf2vs3VOmK2rRSNE+Fipn6Y\"",
+    "mtime": "2025-08-03T12:15:30.160Z",
+    "size": 436995,
+    "path": "index.mjs.map"
+  }
+};
 
 function readAsset (id) {
   const serverDir = dirname$1(fileURLToPath(globalThis._importMeta_.url));
@@ -1919,7 +1934,8 @@ function generateToken(user) {
       id: user.id,
       email: user.email,
       name: user.name,
-      role: user.role
+      role: user.role,
+      userRole: user.userRole
     },
     JWT_SECRET,
     { expiresIn: "7d" }
@@ -1932,7 +1948,9 @@ function verifyToken(token) {
       id: decoded.id,
       name: decoded.name,
       email: decoded.email,
-      role: decoded.role
+      role: decoded.role,
+      userRole: decoded.userRole || "developer"
+      // Default to developer for existing users
     };
   } catch {
     return null;
@@ -2033,7 +2051,9 @@ const login_post = defineEventHandler(async (event) => {
     id: user.id,
     name: user.name,
     email: user.email,
-    role: user.role
+    role: user.role,
+    userRole: user.userRole || "developer"
+    // Default to developer for existing users
   });
   setCookie(event, "auth-token", token, {
     httpOnly: true,
@@ -2050,7 +2070,8 @@ const login_post = defineEventHandler(async (event) => {
       image: user.image,
       bio: user.bio,
       skills: user.skills,
-      role: user.role
+      role: user.role,
+      userRole: user.userRole || "developer"
     },
     token
   };
@@ -2124,7 +2145,7 @@ const register_post = defineEventHandler(async (event) => {
       statusMessage: "Method not allowed"
     });
   }
-  const { name, email, password, bio, skills, image } = await readBody(event);
+  const { name, email, password, bio, skills, image, userRole } = await readBody(event);
   if (!name || !email || !password) {
     throw createError({
       statusCode: 400,
@@ -2150,6 +2171,8 @@ const register_post = defineEventHandler(async (event) => {
     bio: bio || "",
     skills: Array.isArray(skills) ? skills : [],
     role: "user",
+    userRole: userRole || "developer",
+    // Default to developer if not provided
     createdAt: (/* @__PURE__ */ new Date()).toISOString()
   };
   users.push(newUser);
@@ -2158,7 +2181,8 @@ const register_post = defineEventHandler(async (event) => {
     id: newUser.id,
     name: newUser.name,
     email: newUser.email,
-    role: newUser.role
+    role: newUser.role,
+    userRole: newUser.userRole
   });
   setCookie(event, "auth-token", token, {
     httpOnly: true,
@@ -2175,7 +2199,8 @@ const register_post = defineEventHandler(async (event) => {
       image: newUser.image,
       bio: newUser.bio,
       skills: newUser.skills,
-      role: newUser.role
+      role: newUser.role,
+      userRole: newUser.userRole
     },
     token
   };
@@ -2204,16 +2229,25 @@ const conversations_get = defineEventHandler(async (event) => {
   const messages = JSON.parse(fs.readFileSync(messagesPath, "utf8"));
   const usersPath = path.join(process.cwd(), "server/data/users.json");
   const users = JSON.parse(fs.readFileSync(usersPath, "utf8"));
-  const userMessages = messages.filter(
-    (msg) => msg.senderId === currentUser.id || msg.receiverId === currentUser.id
+  const groupChatsPath = path.join(process.cwd(), "server/data/groupChats.json");
+  const groupChats = JSON.parse(fs.readFileSync(groupChatsPath, "utf8"));
+  const groupsPath = path.join(process.cwd(), "server/data/groups.json");
+  const groups = JSON.parse(fs.readFileSync(groupsPath, "utf8"));
+  const directMessages = messages.filter(
+    (msg) => (msg.senderId === currentUser.id || msg.receiverId === currentUser.id) && (msg.chatType !== "group" || !msg.chatType)
+    // Include messages without chatType
   );
-  const conversationsMap = /* @__PURE__ */ new Map();
-  userMessages.forEach((msg) => {
+  const userGroupChats = groupChats.filter((chat) => chat.members.includes(currentUser.id));
+  const groupMessages = messages.filter(
+    (msg) => msg.chatType === "group" && msg.chatId && userGroupChats.some((chat) => chat.id === msg.chatId)
+  );
+  const directConversationsMap = /* @__PURE__ */ new Map();
+  directMessages.forEach((msg) => {
     const partnerId = msg.senderId === currentUser.id ? msg.receiverId : msg.senderId;
     const partnerName = msg.senderId === currentUser.id ? msg.receiverName : msg.senderName;
     const partnerUser = users.find((u) => u.id === partnerId);
-    if (!conversationsMap.has(partnerId)) {
-      conversationsMap.set(partnerId, {
+    if (!directConversationsMap.has(partnerId)) {
+      directConversationsMap.set(partnerId, {
         userId: partnerId,
         userName: partnerName,
         userImage: (partnerUser == null ? void 0 : partnerUser.image) || "https://via.placeholder.com/40x40/e5e7eb/9ca3af?text=User",
@@ -2222,7 +2256,7 @@ const conversations_get = defineEventHandler(async (event) => {
         unreadCount: 0
       });
     }
-    const conversation = conversationsMap.get(partnerId);
+    const conversation = directConversationsMap.get(partnerId);
     if (!conversation.lastMessageTime || new Date(msg.timestamp) > new Date(conversation.lastMessageTime)) {
       conversation.lastMessage = msg.content;
       conversation.lastMessageTime = msg.timestamp;
@@ -2231,9 +2265,37 @@ const conversations_get = defineEventHandler(async (event) => {
       conversation.unreadCount++;
     }
   });
-  const conversations = Array.from(conversationsMap.values()).sort((a, b) => new Date(b.lastMessageTime).getTime() - new Date(a.lastMessageTime).getTime());
+  const groupConversationsMap = /* @__PURE__ */ new Map();
+  userGroupChats.forEach((groupChat) => {
+    const group = groups.find((g) => g.id === groupChat.groupId);
+    groupConversationsMap.set(groupChat.id, {
+      chatId: groupChat.id,
+      groupId: groupChat.groupId,
+      groupName: groupChat.groupName,
+      groupImage: (group == null ? void 0 : group.coverImage) || "/uploads/groupCoverSamples/cover1.svg",
+      lastMessage: "",
+      lastMessageTime: groupChat.lastMessageAt,
+      unreadCount: 0,
+      memberCount: groupChat.members.length
+    });
+  });
+  groupMessages.forEach((msg) => {
+    if (!msg.chatId) return;
+    const conversation = groupConversationsMap.get(msg.chatId);
+    if (!conversation) return;
+    if (!conversation.lastMessageTime || new Date(msg.timestamp) > new Date(conversation.lastMessageTime)) {
+      conversation.lastMessage = msg.content;
+      conversation.lastMessageTime = msg.timestamp;
+    }
+    if (msg.senderId !== currentUser.id && !msg.read) {
+      conversation.unreadCount++;
+    }
+  });
+  const directConversations = Array.from(directConversationsMap.values()).sort((a, b) => new Date(b.lastMessageTime).getTime() - new Date(a.lastMessageTime).getTime());
+  const groupConversations = Array.from(groupConversationsMap.values()).sort((a, b) => new Date(b.lastMessageTime).getTime() - new Date(a.lastMessageTime).getTime());
   return {
-    conversations
+    directConversations,
+    groupConversations
   };
 });
 
@@ -2257,26 +2319,51 @@ const messages_get = defineEventHandler(async (event) => {
     });
   }
   const query = getQuery$1(event);
-  const { withUserId } = query;
-  if (!withUserId) {
+  const { withUserId, chatId } = query;
+  if (!withUserId && !chatId) {
     throw createError({
       statusCode: 400,
-      statusMessage: "withUserId parameter is required"
+      statusMessage: "Either withUserId or chatId parameter is required"
     });
   }
   const messagesPath = path.join(process.cwd(), "server/data/messages.json");
   const messages = JSON.parse(fs.readFileSync(messagesPath, "utf8"));
-  const conversation = messages.filter(
-    (msg) => msg.senderId === currentUser.id && msg.receiverId === withUserId || msg.senderId === withUserId && msg.receiverId === currentUser.id
-  ).sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
-  const updatedMessages = messages.map((msg) => {
-    if (msg.receiverId === currentUser.id && msg.senderId === withUserId && !msg.read) {
-      return { ...msg, read: true };
+  let conversation = [];
+  if (chatId) {
+    const groupChatsPath = path.join(process.cwd(), "server/data/groupChats.json");
+    const groupChats = JSON.parse(fs.readFileSync(groupChatsPath, "utf8"));
+    const groupChat = groupChats.find((chat) => chat.id === chatId);
+    if (!groupChat || !groupChat.members.includes(currentUser.id)) {
+      throw createError({
+        statusCode: 403,
+        statusMessage: "Access denied to this group chat"
+      });
     }
-    return msg;
-  });
-  if (updatedMessages.some((msg, index) => msg.read !== messages[index].read)) {
-    fs.writeFileSync(messagesPath, JSON.stringify(updatedMessages, null, 2));
+    conversation = messages.filter(
+      (msg) => msg.chatType === "group" && msg.chatId === chatId
+    ).sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
+    const updatedMessages = messages.map((msg) => {
+      if (msg.chatType === "group" && msg.chatId === chatId && msg.senderId !== currentUser.id && !msg.read) {
+        return { ...msg, read: true };
+      }
+      return msg;
+    });
+    if (updatedMessages.some((msg, index) => msg.read !== messages[index].read)) {
+      fs.writeFileSync(messagesPath, JSON.stringify(updatedMessages, null, 2));
+    }
+  } else if (withUserId) {
+    conversation = messages.filter(
+      (msg) => msg.chatType !== "group" && (msg.senderId === currentUser.id && msg.receiverId === withUserId || msg.senderId === withUserId && msg.receiverId === currentUser.id)
+    ).sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
+    const updatedMessages = messages.map((msg) => {
+      if (msg.receiverId === currentUser.id && msg.senderId === withUserId && !msg.read) {
+        return { ...msg, read: true };
+      }
+      return msg;
+    });
+    if (updatedMessages.some((msg, index) => msg.read !== messages[index].read)) {
+      fs.writeFileSync(messagesPath, JSON.stringify(updatedMessages, null, 2));
+    }
   }
   return {
     messages: conversation
@@ -2287,6 +2374,64 @@ const messages_get$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProp
   __proto__: null,
   default: messages_get
 }, Symbol.toStringTag, { value: 'Module' }));
+
+function getRandomGroupCover() {
+  const covers = [
+    "/uploads/groupCoverSamples/cover1.svg",
+    "/uploads/groupCoverSamples/cover2.svg",
+    "/uploads/groupCoverSamples/cover3.svg",
+    "/uploads/groupCoverSamples/cover4.svg",
+    "/uploads/groupCoverSamples/cover5.svg"
+  ];
+  return covers[Math.floor(Math.random() * covers.length)];
+}
+function createGroupId() {
+  return "group_" + Math.random().toString(36).substr(2, 9);
+}
+function createChatId() {
+  return "chat_" + Math.random().toString(36).substr(2, 9);
+}
+
+function createMessageId() {
+  return Date.now().toString() + Math.random().toString(36).substr(2, 9);
+}
+function createGroupChat(groupId, groupName, memberIds) {
+  return {
+    id: createChatId(),
+    groupId,
+    groupName,
+    members: memberIds,
+    createdAt: (/* @__PURE__ */ new Date()).toISOString(),
+    lastMessageAt: (/* @__PURE__ */ new Date()).toISOString()
+  };
+}
+function addMemberToGroupChat(chatId, userId) {
+  const chatsPath = path.join(process.cwd(), "server/data/groupChats.json");
+  const chats = JSON.parse(fs.readFileSync(chatsPath, "utf8"));
+  const chatIndex = chats.findIndex((chat) => chat.id === chatId);
+  if (chatIndex !== -1 && !chats[chatIndex].members.includes(userId)) {
+    chats[chatIndex].members.push(userId);
+    fs.writeFileSync(chatsPath, JSON.stringify(chats, null, 2));
+  }
+}
+function removeMemberFromGroupChat(chatId, userId) {
+  const chatsPath = path.join(process.cwd(), "server/data/groupChats.json");
+  const chats = JSON.parse(fs.readFileSync(chatsPath, "utf8"));
+  const chatIndex = chats.findIndex((chat) => chat.id === chatId);
+  if (chatIndex !== -1) {
+    chats[chatIndex].members = chats[chatIndex].members.filter((id) => id !== userId);
+    fs.writeFileSync(chatsPath, JSON.stringify(chats, null, 2));
+  }
+}
+function updateGroupChatName(chatId, newGroupName) {
+  const chatsPath = path.join(process.cwd(), "server/data/groupChats.json");
+  const chats = JSON.parse(fs.readFileSync(chatsPath, "utf8"));
+  const chatIndex = chats.findIndex((chat) => chat.id === chatId);
+  if (chatIndex !== -1) {
+    chats[chatIndex].groupName = newGroupName;
+    fs.writeFileSync(chatsPath, JSON.stringify(chats, null, 2));
+  }
+}
 
 const send_post = defineEventHandler(async (event) => {
   if (getMethod(event) !== "POST") {
@@ -2302,34 +2447,80 @@ const send_post = defineEventHandler(async (event) => {
       statusMessage: "Authentication required"
     });
   }
-  const { receiverId, content } = await readBody(event);
-  if (!receiverId || !content || !content.trim()) {
+  const { receiverId, content, chatId, chatType } = await readBody(event);
+  if (!content || !content.trim()) {
     throw createError({
       statusCode: 400,
-      statusMessage: "Receiver ID and message content are required"
+      statusMessage: "Message content is required"
     });
   }
-  const usersPath = path.join(process.cwd(), "server/data/users.json");
-  const users = JSON.parse(fs.readFileSync(usersPath, "utf8"));
-  const receiver = users.find((u) => u.id === receiverId);
-  if (!receiver) {
+  if (!receiverId && !chatId) {
     throw createError({
-      statusCode: 404,
-      statusMessage: "Receiver not found"
+      statusCode: 400,
+      statusMessage: "Either receiverId or chatId is required"
     });
   }
   const messagesPath = path.join(process.cwd(), "server/data/messages.json");
   const messages = JSON.parse(fs.readFileSync(messagesPath, "utf8"));
-  const newMessage = {
-    id: v4(),
-    senderId: currentUser.id,
-    senderName: currentUser.name,
-    receiverId,
-    receiverName: receiver.name,
-    content: content.trim(),
-    timestamp: (/* @__PURE__ */ new Date()).toISOString(),
-    read: false
-  };
+  let newMessage;
+  if (chatId && chatType === "group") {
+    const groupChatsPath = path.join(process.cwd(), "server/data/groupChats.json");
+    const groupChats = JSON.parse(fs.readFileSync(groupChatsPath, "utf8"));
+    const groupChat = groupChats.find((chat) => chat.id === chatId);
+    if (!groupChat) {
+      throw createError({
+        statusCode: 404,
+        statusMessage: "Group chat not found"
+      });
+    }
+    if (!groupChat.members.includes(currentUser.id)) {
+      throw createError({
+        statusCode: 403,
+        statusMessage: "You are not a member of this group chat"
+      });
+    }
+    newMessage = {
+      id: createMessageId(),
+      senderId: currentUser.id,
+      senderName: currentUser.name,
+      content: content.trim(),
+      timestamp: (/* @__PURE__ */ new Date()).toISOString(),
+      read: false,
+      chatId,
+      chatType: "group"
+    };
+    const chatIndex = groupChats.findIndex((chat) => chat.id === chatId);
+    if (chatIndex !== -1) {
+      groupChats[chatIndex].lastMessageAt = newMessage.timestamp;
+      fs.writeFileSync(groupChatsPath, JSON.stringify(groupChats, null, 2));
+    }
+  } else if (receiverId) {
+    const usersPath = path.join(process.cwd(), "server/data/users.json");
+    const users = JSON.parse(fs.readFileSync(usersPath, "utf8"));
+    const receiver = users.find((u) => u.id === receiverId);
+    if (!receiver) {
+      throw createError({
+        statusCode: 404,
+        statusMessage: "Receiver not found"
+      });
+    }
+    newMessage = {
+      id: v4(),
+      senderId: currentUser.id,
+      senderName: currentUser.name,
+      receiverId,
+      receiverName: receiver.name,
+      content: content.trim(),
+      timestamp: (/* @__PURE__ */ new Date()).toISOString(),
+      read: false,
+      chatType: "direct"
+    };
+  } else {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Invalid message parameters"
+    });
+  }
   messages.push(newMessage);
   fs.writeFileSync(messagesPath, JSON.stringify(messages, null, 2));
   return {
@@ -2412,7 +2603,9 @@ const index_get$2 = defineEventHandler(async (event) => {
     });
   }
   const isMember = currentUser ? group.members.some((member) => member.userId === currentUser.id) : false;
-  if (group.isPrivate && !isMember) {
+  const isMentor = currentUser ? group.mentors.some((mentor) => mentor.userId === currentUser.id) : false;
+  const isGroupMember = isMember || isMentor;
+  if (group.isPrivate && !isGroupMember) {
     throw createError({
       statusCode: 403,
       statusMessage: "Access denied to private group"
@@ -2420,7 +2613,8 @@ const index_get$2 = defineEventHandler(async (event) => {
   }
   return {
     ...group,
-    isMember: currentUser ? group.members.some((member) => member.userId === currentUser.id) : false
+    isMember: isGroupMember,
+    userRole: isMember ? "member" : isMentor ? "mentor" : null
   };
 });
 
@@ -2460,20 +2654,33 @@ const join_post = defineEventHandler(async (event) => {
     });
   }
   const group = groups[groupIndex];
+  const joinAsRole = currentUser.userRole === "mentor" ? "mentor" : "member";
   const isAlreadyMember = group.members.some((member) => member.userId === currentUser.id);
-  if (isAlreadyMember) {
+  const isAlreadyMentor = group.mentors.some((mentor) => mentor.userId === currentUser.id);
+  if (isAlreadyMember || isAlreadyMentor) {
     throw createError({
       statusCode: 409,
-      statusMessage: "User is already a member of this group"
+      statusMessage: "User is already part of this group"
     });
   }
-  group.members.push({
-    userId: currentUser.id,
-    userName: currentUser.name,
-    joinedAt: (/* @__PURE__ */ new Date()).toISOString()
-  });
+  if (joinAsRole === "mentor") {
+    group.mentors.push({
+      userId: currentUser.id,
+      userName: currentUser.name,
+      joinedAt: (/* @__PURE__ */ new Date()).toISOString()
+    });
+  } else {
+    group.members.push({
+      userId: currentUser.id,
+      userName: currentUser.name,
+      joinedAt: (/* @__PURE__ */ new Date()).toISOString()
+    });
+  }
   groups[groupIndex] = group;
   fs.writeFileSync(groupsPath, JSON.stringify(groups, null, 2));
+  if (group.chatId) {
+    addMemberToGroupChat(group.chatId, currentUser.id);
+  }
   return {
     message: "Successfully joined the group",
     group
@@ -2517,21 +2724,36 @@ const leave_post = defineEventHandler(async (event) => {
   }
   const group = groups[groupIndex];
   const memberIndex = group.members.findIndex((member) => member.userId === currentUser.id);
-  if (memberIndex === -1) {
+  const mentorIndex = group.mentors.findIndex((mentor) => mentor.userId === currentUser.id);
+  if (memberIndex === -1 && mentorIndex === -1) {
     throw createError({
       statusCode: 409,
-      statusMessage: "User is not a member of this group"
+      statusMessage: "User is not part of this group"
     });
   }
-  group.members.splice(memberIndex, 1);
-  if (group.members.length === 0) {
+  if (group.chatId) {
+    removeMemberFromGroupChat(group.chatId, currentUser.id);
+  }
+  if (memberIndex !== -1) {
+    group.members.splice(memberIndex, 1);
+  }
+  if (mentorIndex !== -1) {
+    group.mentors.splice(mentorIndex, 1);
+  }
+  if (group.members.length === 0 && group.mentors.length === 0) {
     groups.splice(groupIndex, 1);
+    if (group.chatId) {
+      const chatsPath = path.join(process.cwd(), "server/data/groupChats.json");
+      const chats = JSON.parse(fs.readFileSync(chatsPath, "utf8"));
+      const updatedChats = chats.filter((chat) => chat.id !== group.chatId);
+      fs.writeFileSync(chatsPath, JSON.stringify(updatedChats, null, 2));
+    }
   } else {
     groups[groupIndex] = group;
   }
   fs.writeFileSync(groupsPath, JSON.stringify(groups, null, 2));
   return {
-    message: group.members.length === 0 ? "Left group and group was deleted (no members left)" : "Successfully left the group"
+    message: group.members.length === 0 && group.mentors.length === 0 ? "Left group and group was deleted (no members left)" : "Successfully left the group"
   };
 });
 
@@ -2579,10 +2801,11 @@ const update_put = defineEventHandler(async (event) => {
   }
   const group = groups[groupIndex];
   const isMember = group.members.some((member) => member.userId === currentUser.id);
-  if (!isMember) {
+  const isMentor = group.mentors.some((mentor) => mentor.userId === currentUser.id);
+  if (!isMember && !isMentor) {
     throw createError({
       statusCode: 403,
-      statusMessage: "Only group members can manage this group"
+      statusMessage: "Only group members and mentors can manage this group"
     });
   }
   const existingGroup = groups.find((g) => g.name.toLowerCase() === name.toLowerCase() && g.id !== groupId);
@@ -2592,6 +2815,7 @@ const update_put = defineEventHandler(async (event) => {
       statusMessage: "Group name already exists"
     });
   }
+  const nameChanged = group.name !== name.trim();
   groups[groupIndex] = {
     ...group,
     name: name.trim(),
@@ -2601,6 +2825,9 @@ const update_put = defineEventHandler(async (event) => {
     isPrivate: isPrivate !== void 0 ? isPrivate : group.isPrivate
   };
   fs.writeFileSync(groupsPath, JSON.stringify(groups, null, 2));
+  if (nameChanged && group.chatId) {
+    updateGroupChatName(group.chatId, name.trim());
+  }
   return {
     message: "Group updated successfully",
     group: groups[groupIndex]
@@ -2611,20 +2838,6 @@ const update_put$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProper
   __proto__: null,
   default: update_put
 }, Symbol.toStringTag, { value: 'Module' }));
-
-function getRandomGroupCover() {
-  const covers = [
-    "/uploads/groupCoverSamples/cover1.svg",
-    "/uploads/groupCoverSamples/cover2.svg",
-    "/uploads/groupCoverSamples/cover3.svg",
-    "/uploads/groupCoverSamples/cover4.svg",
-    "/uploads/groupCoverSamples/cover5.svg"
-  ];
-  return covers[Math.floor(Math.random() * covers.length)];
-}
-function createGroupId() {
-  return "group_" + Math.random().toString(36).substr(2, 9);
-}
 
 const create_post = defineEventHandler(async (event) => {
   if (getMethod(event) !== "POST") {
@@ -2656,6 +2869,7 @@ const create_post = defineEventHandler(async (event) => {
       statusMessage: "Group name already exists"
     });
   }
+  const chatId = createChatId();
   const newGroup = {
     id: createGroupId(),
     name: name.trim(),
@@ -2670,10 +2884,18 @@ const create_post = defineEventHandler(async (event) => {
         joinedAt: (/* @__PURE__ */ new Date()).toISOString()
       }
     ],
-    isPrivate: isPrivate || false
+    mentors: [],
+    isPrivate: isPrivate || false,
+    chatId
   };
+  const groupChat = createGroupChat(newGroup.id, newGroup.name, [currentUser.id]);
+  groupChat.id = chatId;
   groups.push(newGroup);
   fs.writeFileSync(groupsPath, JSON.stringify(groups, null, 2));
+  const chatsPath = path.join(process.cwd(), "server/data/groupChats.json");
+  const chats = JSON.parse(fs.readFileSync(chatsPath, "utf8"));
+  chats.push(groupChat);
+  fs.writeFileSync(chatsPath, JSON.stringify(chats, null, 2));
   return {
     message: "Group created successfully",
     group: newGroup
@@ -2695,21 +2917,27 @@ const index_get = defineEventHandler(async (event) => {
     filteredGroups = groups.filter((group) => !group.isPrivate);
   } else {
     filteredGroups = groups.filter(
-      (group) => !group.isPrivate || group.members.some((member) => member.userId === userId)
+      (group) => !group.isPrivate || group.members.some((member) => member.userId === userId) || group.mentors.some((mentor) => mentor.userId === userId)
     );
   }
-  return filteredGroups.map((group) => ({
-    id: group.id,
-    name: group.name,
-    description: group.description,
-    coverImage: group.coverImage,
-    createdBy: group.createdBy,
-    createdAt: group.createdAt,
-    memberCount: group.members.length,
-    isPrivate: group.isPrivate,
-    // Only show if user is member for member list
-    isMember: userId ? group.members.some((member) => member.userId === userId) : false
-  }));
+  return filteredGroups.map((group) => {
+    var _a;
+    const isMember = userId ? group.members.some((member) => member.userId === userId) : false;
+    const isMentor = userId ? group.mentors.some((mentor) => mentor.userId === userId) : false;
+    return {
+      id: group.id,
+      name: group.name,
+      description: group.description,
+      coverImage: group.coverImage,
+      createdBy: group.createdBy,
+      createdAt: group.createdAt,
+      memberCount: group.members.length + (((_a = group.mentors) == null ? void 0 : _a.length) || 0),
+      isPrivate: group.isPrivate,
+      // User is considered part of group if they're either member or mentor
+      isMember: isMember || isMentor,
+      userRole: isMember ? "member" : isMentor ? "mentor" : null
+    };
+  });
 });
 
 const index_get$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({

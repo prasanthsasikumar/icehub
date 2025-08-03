@@ -1,7 +1,8 @@
 import fs from 'fs'
 import path from 'path'
 import { getUserFromRequest } from '../../../server/utils/auth'
-import { type Group, createGroupId, getRandomGroupCover } from '../../../server/utils/groups'
+import { type Group, createGroupId, getRandomGroupCover, createChatId } from '../../../server/utils/groups'
+import { createGroupChat, type GroupChat } from '../../../server/utils/chat'
 
 export default defineEventHandler(async (event) => {
   if (getMethod(event) !== 'POST') {
@@ -43,6 +44,9 @@ export default defineEventHandler(async (event) => {
     })
   }
 
+  // Create chat ID for the group
+  const chatId = createChatId()
+
   // Create new group
   const newGroup: Group = {
     id: createGroupId(),
@@ -58,14 +62,24 @@ export default defineEventHandler(async (event) => {
         joinedAt: new Date().toISOString()
       }
     ],
-    isPrivate: isPrivate || false
+    mentors: [],
+    isPrivate: isPrivate || false,
+    chatId: chatId
   }
 
-  // Add to groups array
-  groups.push(newGroup)
+  // Create group chat
+  const groupChat = createGroupChat(newGroup.id, newGroup.name, [currentUser.id])
+  groupChat.id = chatId // Use the same chat ID
 
-  // Save to file
+  // Save group
+  groups.push(newGroup)
   fs.writeFileSync(groupsPath, JSON.stringify(groups, null, 2))
+
+  // Save group chat
+  const chatsPath = path.join(process.cwd(), 'server/data/groupChats.json')
+  const chats: GroupChat[] = JSON.parse(fs.readFileSync(chatsPath, 'utf8'))
+  chats.push(groupChat)
+  fs.writeFileSync(chatsPath, JSON.stringify(chats, null, 2))
 
   return {
     message: 'Group created successfully',

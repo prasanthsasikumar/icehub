@@ -48,7 +48,8 @@ export default defineEventHandler(async (event) => {
     id: user.id,
     name: user.name,
     email: user.email,
-    role: user.role
+    role: user.role,
+    userRole: user.userRole || 'developer' // Default to developer for existing users
   })
 
   // Set cookie
@@ -68,7 +69,8 @@ export default defineEventHandler(async (event) => {
       image: user.image,
       bio: user.bio,
       skills: user.skills,
-      role: user.role
+      role: user.role,
+      userRole: user.userRole || 'developer'
     },
     token
   }

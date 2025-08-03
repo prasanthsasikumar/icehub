@@ -76,14 +76,14 @@
               <div class="mb-6">
                 <div class="flex flex-wrap gap-2">
                   <span 
-                    v-for="skill in user.skills.slice(0, 4)" 
+                    v-for="skill in getDisplaySkills(user.skills).slice(0, 4)" 
                     :key="skill" 
                     class="skill-tag"
                   >
                     {{ skill }}
                   </span>
-                  <span v-if="user.skills.length > 4" class="text-gray-500 text-xs font-medium py-1">
-                    +{{ user.skills.length - 4 }} more
+                  <span v-if="getDisplaySkills(user.skills).length > 4" class="text-gray-500 text-xs font-medium py-1">
+                    +{{ getDisplaySkills(user.skills).length - 4 }} more
                   </span>
                 </div>
               </div>
@@ -158,6 +158,19 @@ onMounted(async () => {
   await checkAuth()
 })
 
+// Helper function to get skill names from both formats
+const getDisplaySkills = (skills) => {
+  if (!skills || !Array.isArray(skills)) return []
+  
+  // Check if it's the new format with objects
+  if (skills.length > 0 && typeof skills[0] === 'object' && 'name' in skills[0]) {
+    return skills.map(skill => skill.name)
+  }
+  
+  // Old format - already strings
+  return skills
+}
+
 // Reactive filters
 const searchQuery = ref('')
 const skillFilter = ref('')
@@ -167,7 +180,7 @@ const allSkills = computed(() => {
   if (!users.value) return []
   const skills = new Set()
   users.value.forEach(user => {
-    user.skills.forEach(skill => skills.add(skill))
+    getDisplaySkills(user.skills).forEach(skill => skills.add(skill))
   })
   return Array.from(skills).sort()
 })
@@ -176,17 +189,19 @@ const filteredUsers = computed(() => {
   if (!users.value) return []
   
   return users.value.filter(user => {
+    const userSkills = getDisplaySkills(user.skills)
+    
     // Search by name or skills
     const matchesSearch = !searchQuery.value || 
       user.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      user.skills.some(skill => 
+      userSkills.some(skill => 
         skill.toLowerCase().includes(searchQuery.value.toLowerCase())
       ) ||
       user.bio.toLowerCase().includes(searchQuery.value.toLowerCase())
     
     // Filter by skill
     const matchesSkill = !skillFilter.value || 
-      user.skills.includes(skillFilter.value)
+      userSkills.includes(skillFilter.value)
     
     return matchesSearch && matchesSkill
   })

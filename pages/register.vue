@@ -85,6 +85,48 @@
             ></textarea>
           </div>
 
+          <!-- User Role Selection -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-3">
+              Join as
+            </label>
+            <div class="space-y-3">
+              <label class="flex items-start gap-3 p-4 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors" :class="{ 'border-primary bg-blue-50': form.userRole === 'developer' }">
+                <input 
+                  type="radio" 
+                  v-model="form.userRole" 
+                  value="developer" 
+                  class="mt-1"
+                  :disabled="loading"
+                />
+                <div class="flex-1">
+                  <div class="font-medium text-gray-700 flex items-center gap-2">
+                    <span>👨‍💻</span>
+                    Developer
+                  </div>
+                  <div class="text-sm text-gray-500 mt-1">I'm looking to learn, collaborate, and work on projects with others.</div>
+                </div>
+              </label>
+              
+              <label class="flex items-start gap-3 p-4 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors" :class="{ 'border-primary bg-blue-50': form.userRole === 'mentor' }">
+                <input 
+                  type="radio" 
+                  v-model="form.userRole" 
+                  value="mentor" 
+                  class="mt-1"
+                  :disabled="loading"
+                />
+                <div class="flex-1">
+                  <div class="font-medium text-gray-700 flex items-center gap-2">
+                    <span>🎯</span>
+                    Mentor
+                  </div>
+                  <div class="text-sm text-gray-500 mt-1">I want to guide and support other developers in their journey.</div>
+                </div>
+              </label>
+            </div>
+          </div>
+
           <!-- Skills Field -->
           <div>
             <label for="skills" class="block text-sm font-medium text-gray-700 mb-2">
@@ -138,7 +180,8 @@ const form = reactive({
   email: '',
   password: '',
   bio: '',
-  image: ''
+  image: '',
+  userRole: 'developer' // Default to developer
 })
 
 const skillsInput = ref('')
@@ -167,6 +210,7 @@ const handleRegister = async () => {
         password: form.password,
         bio: form.bio,
         image: form.image,
+        userRole: form.userRole,
         skills
       }
     })

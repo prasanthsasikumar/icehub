@@ -303,7 +303,7 @@ const startConversation = () => {
 }
 
 const calculateExperience = (skills) => {
-  const skillsArray = getSkillsArray(skills)
+  const skillsArray = getSkillsStringArray(skills)
   if (skillsArray.length <= 2) return 'Beginner'
   if (skillsArray.length <= 4) return 'Intermediate'
   if (skillsArray.length <= 6) return 'Advanced'
@@ -312,7 +312,14 @@ const calculateExperience = (skills) => {
 
 const getSkillsArray = (skills) => {
   if (!skills || !Array.isArray(skills)) return []
-  return skills
+  
+  // Check if it's the new format with objects
+  if (skills.length > 0 && typeof skills[0] === 'object' && 'name' in skills[0]) {
+    return skills  // Return the full objects for level display
+  }
+  
+  // Old format - convert strings to objects with default level
+  return skills.map(skill => ({ name: skill, level: 3 }))
 }
 
 const getSkillName = (skill) => {
@@ -329,7 +336,7 @@ const getProfileScore = (user) => {
   if (user.name) score += 25
   if (user.image) score += 25
   if (user.bio && user.bio.length > 10) score += 25
-  if (user.skills && user.skills.length > 0) score += 25
+  if (getSkillsStringArray(user.skills).length > 0) score += 25
   return score
 }
 

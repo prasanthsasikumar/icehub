@@ -88,5 +88,57 @@
     "content": "test",
     "timestamp": "2025-08-03T10:19:07.529Z",
     "read": true
+  },
+  {
+    "id": "07c21bdc-e2ee-44aa-99f0-9182315c9f83",
+    "senderId": "e07e01d9-064c-4838-95ae-2e27ac6df861",
+    "senderName": "Jhon Doe",
+    "receiverId": "2fe67f77-765f-49fb-af59-0d1d5d04d2a8",
+    "receiverName": "Praveen Sasikumar",
+    "content": "hi",
+    "timestamp": "2025-08-03T11:31:45.353Z",
+    "read": false,
+    "chatType": "direct"
+  },
+  {
+    "id": "22538272-21d2-41ed-ae98-9e633e5f7c8a",
+    "senderId": "6fcde34e-bdff-47a2-9849-921ba50e3d3d",
+    "senderName": "Donald Trump",
+    "receiverId": "2fe67f77-765f-49fb-af59-0d1d5d04d2a8",
+    "receiverName": "Praveen Sasikumar",
+    "content": "hy",
+    "timestamp": "2025-08-03T11:37:22.791Z",
+    "read": false,
+    "chatType": "direct"
+  },
+  {
+    "id": "17542211505415icu2ku24",
+    "senderId": "e07e01d9-064c-4838-95ae-2e27ac6df861",
+    "senderName": "Jhon Doe",
+    "content": "hi",
+    "timestamp": "2025-08-03T11:39:10.541Z",
+    "read": true,
+    "chatId": "chat_group1_508mw2us9",
+    "chatType": "group"
+  },
+  {
+    "id": "17542211864939fnyw5xd0",
+    "senderId": "2fe67f77-765f-49fb-af59-0d1d5d04d2a8",
+    "senderName": "Praveen Sasikumar",
+    "content": "check",
+    "timestamp": "2025-08-03T11:39:46.493Z",
+    "read": true,
+    "chatId": "chat_group1_508mw2us9",
+    "chatType": "group"
+  },
+  {
+    "id": "1754221203756v1307t41p",
+    "senderId": "6fcde34e-bdff-47a2-9849-921ba50e3d3d",
+    "senderName": "Donald Trump",
+    "content": "check2",
+    "timestamp": "2025-08-03T11:40:03.756Z",
+    "read": true,
+    "chatId": "chat_group1_508mw2us9",
+    "chatType": "group"
   }
 ]

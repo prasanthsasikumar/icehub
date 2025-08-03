@@ -37,7 +37,7 @@
       "Python"
     ],
     "id": "8c5951c9-0900-4061-b272-87ab92a2d5d1",
-    "email": "test@email.com",
+    "email": "psk@ahlab.org",
     "password": "$2b$10$ePkdOFfm/s/Tm8uPm3kNie49HiV.6nT91.9PJXHILDxiPlPWVJaea",
     "role": "user",
     "createdAt": "2025-08-03T08:45:27.691Z"
@@ -99,5 +99,19 @@
     ],
     "role": "user",
     "createdAt": "2025-08-03T09:31:17.988Z"
+  },
+  {
+    "id": "6420bcc4-5f5a-4a10-974b-144304aab155",
+    "name": "Modi Ji",
+    "email": "modi@ahlab.org",
+    "password": "$2b$10$HtDosO6YdhlGCX5Z16gGCObMGMypmvEkmzFj1Pa5suKSF4yom9Koi",
+    "image": "/uploads/a29de1d9-a436-4c16-be87-be10dff32010.jpeg",
+    "bio": "Bharat mata kiiii",
+    "skills": [
+      "travelling"
+    ],
+    "role": "user",
+    "userRole": "mentor",
+    "createdAt": "2025-08-03T12:13:07.882Z"
   }
 ]

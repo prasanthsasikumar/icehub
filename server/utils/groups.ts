@@ -4,6 +4,12 @@ export interface GroupMember {
   joinedAt: string
 }
 
+export interface GroupMentor {
+  userId: string
+  userName: string
+  joinedAt: string
+}
+
 export interface Group {
   id: string
   name: string
@@ -12,7 +18,9 @@ export interface Group {
   createdBy: string
   createdAt: string
   members: GroupMember[]
+  mentors: GroupMentor[]
   isPrivate: boolean
+  chatId: string
 }
 
 export function getRandomGroupCover(): string {
@@ -29,4 +37,8 @@ export function getRandomGroupCover(): string {
 
 export function createGroupId(): string {
   return 'group_' + Math.random().toString(36).substr(2, 9)
+}
+
+export function createChatId(): string {
+  return 'chat_' + Math.random().toString(36).substr(2, 9)
 }

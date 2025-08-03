@@ -8,6 +8,13 @@
         </div>
         <div class="nav-right flex items-center gap-4">
           <span v-if="user" class="text-sm text-gray-600">{{ user.name }}</span>
+          <NuxtLink 
+            v-if="groupData?.chatId" 
+            :to="`/chat?chatId=${groupData.chatId}&type=group`" 
+            class="nav-button nav-button-secondary"
+          >
+            💬 Group Chat
+          </NuxtLink>
           <NuxtLink :to="`/groups/${groupId}`" class="nav-button nav-button-secondary">
             Back to Group
           </NuxtLink>

@@ -19,6 +19,7 @@ export interface User {
   bio: string
   skills: string[] | SkillWithLevel[] // Support both formats for backward compatibility
   role: 'user' | 'admin'
+  userRole: 'developer' | 'mentor' // User's role in community
   createdAt: string
 }
 
@@ -27,6 +28,7 @@ export interface AuthUser {
   name: string
   email: string
   role: 'user' | 'admin'
+  userRole: 'developer' | 'mentor'
 }
 
 export async function hashPassword(password: string): Promise<string> {
@@ -43,7 +45,8 @@ export function generateToken(user: AuthUser): string {
       id: user.id, 
       email: user.email, 
       name: user.name,
-      role: user.role 
+      role: user.role,
+      userRole: user.userRole
     },
     JWT_SECRET,
     { expiresIn: '7d' }
@@ -57,7 +60,8 @@ export function verifyToken(token: string): AuthUser | null {
       id: decoded.id,
       name: decoded.name,
       email: decoded.email,
-      role: decoded.role
+      role: decoded.role,
+      userRole: decoded.userRole || 'developer' // Default to developer for existing users
     }
   } catch {
     return null

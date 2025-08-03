@@ -32,8 +32,10 @@ export default defineEventHandler(async (event) => {
 
   // Check if user can view this group
   const isMember = currentUser ? group.members.some(member => member.userId === currentUser.id) : false
+  const isMentor = currentUser ? group.mentors.some(mentor => mentor.userId === currentUser.id) : false
+  const isGroupMember = isMember || isMentor
   
-  if (group.isPrivate && !isMember) {
+  if (group.isPrivate && !isGroupMember) {
     throw createError({
       statusCode: 403,
       statusMessage: 'Access denied to private group'
@@ -43,6 +45,7 @@ export default defineEventHandler(async (event) => {
   // Return full group details
   return {
     ...group,
-    isMember: currentUser ? group.members.some(member => member.userId === currentUser.id) : false
+    isMember: isGroupMember,
+    userRole: isMember ? 'member' : (isMentor ? 'mentor' : null)
   }
 })
