@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt'
 import { v4 as uuidv4 } from 'uuid'
 import jwt from 'jsonwebtoken'
 import { Database } from '../../utils/supabase'
+import { uploadImage } from '../../utils/image'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key'
 
@@ -16,7 +17,7 @@ export default defineEventHandler(async (event) => {
   }
 
   const body = await readBody(event)
-  const { name, email, password, bio, skills } = body
+  const { name, email, password, bio, skills, image } = body
 
   if (!name || !email || !password) {
     throw createError({
@@ -38,13 +39,23 @@ export default defineEventHandler(async (event) => {
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10)
 
+    // Handle image upload if provided
+    let imageUrl = 'https://via.placeholder.com/150x150/e5e7eb/9ca3af?text=User'
+    if (image && image.startsWith('data:image/')) {
+      // If image is provided, upload it
+      const uploadResult = await uploadImage(image)
+      if (uploadResult.success && uploadResult.url) {
+        imageUrl = uploadResult.url
+      }
+    }
+
     // Create new user
     const newUser = {
       id: uuidv4(),
       name,
       email,
       password: hashedPassword,
-      image: 'https://via.placeholder.com/150x150/e5e7eb/9ca3af?text=User',
+      image: imageUrl,
       bio: bio || '',
       skills: skills || [],
       role: 'user',
