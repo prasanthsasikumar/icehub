@@ -1123,22 +1123,7 @@ const plugins = [
 _imlJlEtcYUErFKlIoV3o40RwAHyYMj1YM8ArfD1nFG0
 ];
 
-const assets = {
-  "/index.mjs": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"1e9e0-Wsf951O2WMGmjeQGzVf1WMX4+YM\"",
-    "mtime": "2025-08-03T15:42:26.797Z",
-    "size": 125408,
-    "path": "index.mjs"
-  },
-  "/index.mjs.map": {
-    "type": "application/json",
-    "etag": "\"6e164-VjIp+l8WyoItZRjF9BPjGho4eDc\"",
-    "mtime": "2025-08-03T15:42:26.797Z",
-    "size": 450916,
-    "path": "index.mjs.map"
-  }
-};
+const assets = {};
 
 function readAsset (id) {
   const serverDir = dirname$1(fileURLToPath(globalThis._importMeta_.url));
@@ -2696,30 +2681,48 @@ const index_get$2 = defineEventHandler(async (event) => {
       statusMessage: "Group ID is required"
     });
   }
-  const currentUser = getUserFromRequest(event);
-  const groupsPath = path.join(process.cwd(), "server/data/groups.json");
-  const groups = JSON.parse(fs.readFileSync(groupsPath, "utf8"));
-  const group = groups.find((g) => g.id === groupId);
-  if (!group) {
+  try {
+    const currentUser = getUserFromRequest(event);
+    const group = await Database.getGroupById(groupId);
+    console.log("Group from Supabase:", JSON.stringify(group, null, 2));
+    if (!group) {
+      throw createError({
+        statusCode: 404,
+        statusMessage: "Group not found"
+      });
+    }
+    const isMember = currentUser ? group.members && group.members.some((member) => member.userId === currentUser.id) : false;
+    if (!group.isPublic && !isMember) {
+      throw createError({
+        statusCode: 403,
+        statusMessage: "Access denied to private group"
+      });
+    }
+    return {
+      id: group.id,
+      name: group.name,
+      description: group.description,
+      coverImage: group.coverImage || "/uploads/groupCoverSamples/cover1.svg",
+      createdBy: group.creatorId,
+      createdAt: group.createdAt,
+      isPrivate: !group.isPublic,
+      // Convert isPublic to isPrivate
+      members: group.members || [],
+      mentors: [],
+      // No mentors field in current schema
+      isMember,
+      userRole: isMember ? "member" : null
+    };
+  } catch (error) {
+    if (error.statusCode) {
+      throw error;
+    }
+    console.error("Error fetching group:", error);
     throw createError({
-      statusCode: 404,
-      statusMessage: "Group not found"
+      statusCode: 500,
+      statusMessage: "Internal server error"
     });
   }
-  const isMember = currentUser ? group.members.some((member) => member.userId === currentUser.id) : false;
-  const isMentor = currentUser ? group.mentors.some((mentor) => mentor.userId === currentUser.id) : false;
-  const isGroupMember = isMember || isMentor;
-  if (group.isPrivate && !isGroupMember) {
-    throw createError({
-      statusCode: 403,
-      statusMessage: "Access denied to private group"
-    });
-  }
-  return {
-    ...group,
-    isMember: isGroupMember,
-    userRole: isMember ? "member" : isMentor ? "mentor" : null
-  };
 });
 
 const index_get$3 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
@@ -3021,40 +3024,33 @@ const index_get = defineEventHandler(async (event) => {
     const userId = query.userId;
     let filteredGroups = groups;
     if (!userId) {
-      filteredGroups = groups.filter((group) => !group.is_private);
+      filteredGroups = groups.filter((group) => group.isPublic);
     } else {
       filteredGroups = groups.filter(
-        (group) => !group.is_private || group.members && group.members.some((member) => member.userId === userId) || group.mentors && group.mentors.some((mentor) => mentor.userId === userId)
+        (group) => group.isPublic || group.members && group.members.some((member) => member.userId === userId)
       );
     }
     return filteredGroups.map((group) => {
-      var _a, _b;
+      var _a;
       const isMember = userId ? group.members && group.members.some((member) => member.userId === userId) : false;
-      const isMentor = userId ? group.mentors && group.mentors.some((mentor) => mentor.userId === userId) : false;
       return {
         id: group.id,
         name: group.name,
         description: group.description,
-        coverImage: group.cover_image,
-        // Map from Supabase field name
-        createdBy: group.created_by,
-        // Map from Supabase field name
-        createdAt: group.created_at,
-        // Map from Supabase field name
-        memberCount: (((_a = group.members) == null ? void 0 : _a.length) || 0) + (((_b = group.mentors) == null ? void 0 : _b.length) || 0),
-        isPrivate: group.is_private,
-        // Map from Supabase field name
-        // User is considered part of group if they're either member or mentor
-        isMember: isMember || isMentor,
-        userRole: isMember ? "member" : isMentor ? "mentor" : null
+        coverImage: group.coverImage || "/uploads/groupCoverSamples/cover1.svg",
+        createdBy: group.creatorId,
+        createdAt: group.createdAt,
+        memberCount: ((_a = group.members) == null ? void 0 : _a.length) || 0,
+        isPrivate: !group.isPublic,
+        // Convert isPublic to isPrivate
+        // User is considered part of group if they're a member
+        isMember,
+        userRole: isMember ? "member" : null
       };
     });
   } catch (error) {
     console.error("Error fetching groups:", error);
-    throw createError({
-      statusCode: 500,
-      statusMessage: "Failed to fetch groups"
-    });
+    return [];
   }
 });
 
