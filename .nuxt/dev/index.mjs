@@ -1127,16 +1127,16 @@ _imlJlEtcYUErFKlIoV3o40RwAHyYMj1YM8ArfD1nFG0
 const assets = {
   "/index.mjs": {
     "type": "text/javascript; charset=utf-8",
-    "etag": "\"1eca6-1C0KDXiOtotvdV+xW6n/A5WA1LU\"",
-    "mtime": "2025-08-03T16:11:26.819Z",
-    "size": 126118,
+    "etag": "\"204ed-1PDNN9ypZUDt/c5amFUYPZgf3qc\"",
+    "mtime": "2025-08-03T16:51:59.507Z",
+    "size": 132333,
     "path": "index.mjs"
   },
   "/index.mjs.map": {
     "type": "application/json",
-    "etag": "\"6f307-zpWWcEuLKOklXy0p/7AAn1r6ub0\"",
-    "mtime": "2025-08-03T16:11:26.819Z",
-    "size": 455431,
+    "etag": "\"74e82-YLVSnixvJVCBSYLZzcODOTs4pxs\"",
+    "mtime": "2025-08-03T16:51:59.507Z",
+    "size": 478850,
     "path": "index.mjs.map"
   }
 };
@@ -1993,9 +1993,39 @@ class Database {
     return data;
   }
   static async deleteUser(id) {
-    const { data, error } = await supabase.from("users").delete().eq("id", id).select().single();
-    if (error) throw error;
-    return data;
+    try {
+      const { error: messagesError } = await supabase.from("messages").delete().eq("userId", id);
+      if (messagesError) {
+        console.warn("Error deleting user messages:", messagesError);
+      }
+      const { error: groupsError } = await supabase.from("groups").delete().eq("creatorId", id);
+      if (groupsError) {
+        console.warn("Error deleting user groups:", groupsError);
+      }
+      const { data: allGroups } = await supabase.from("groups").select("id, members");
+      if (allGroups) {
+        for (const group of allGroups) {
+          if (group.members) {
+            let members;
+            try {
+              members = typeof group.members === "string" ? JSON.parse(group.members) : group.members;
+            } catch (e) {
+              members = [];
+            }
+            if (Array.isArray(members) && members.includes(id)) {
+              const updatedMembers = members.filter((memberId) => memberId !== id);
+              await supabase.from("groups").update({ members: JSON.stringify(updatedMembers) }).eq("id", group.id);
+            }
+          }
+        }
+      }
+      const { data, error } = await supabase.from("users").delete().eq("id", id).select().single();
+      if (error) throw error;
+      return data;
+    } catch (error) {
+      console.error("Error in deleteUser:", error);
+      throw error;
+    }
   }
   // Messages
   static async getMessages() {
@@ -2103,19 +2133,33 @@ const deleteUser_delete = defineEventHandler(async (event) => {
         statusMessage: "User not found"
       });
     }
+    console.log("Attempting to delete user:", userToDelete.name, userToDelete.id);
     await Database.deleteUser(userId);
+    console.log("User deleted successfully:", userToDelete.name);
     return {
       success: true,
       message: `User ${userToDelete.name} has been deleted successfully`
     };
   } catch (error) {
+    console.error("User deletion error details:", {
+      message: error.message,
+      code: error.code,
+      details: error.details,
+      hint: error.hint,
+      statusCode: error.statusCode
+    });
     if (error.statusCode) {
       throw error;
     }
-    console.error("User deletion error:", error);
+    let errorMessage = "Internal server error";
+    if (error.code === "23503") {
+      errorMessage = "Cannot delete user due to existing data dependencies";
+    } else if (error.message) {
+      errorMessage = error.message;
+    }
     throw createError({
       statusCode: 500,
-      statusMessage: "Internal server error"
+      statusMessage: errorMessage
     });
   }
 });
@@ -2263,7 +2307,7 @@ const getDefaultUserImage = () => {
   return "/uploads/default/user-avatar.svg";
 };
 const ensureUserImage = (userImage) => {
-  if (!userImage || userImage.includes("via.placeholder.com")) {
+  if (!userImage || userImage.includes("via.placeholder.com") || userImage.includes("placeholder")) {
     return getDefaultUserImage();
   }
   return userImage;
@@ -2389,7 +2433,7 @@ const register_post = defineEventHandler(async (event) => {
       });
     }
     const hashedPassword = await bcrypt.hash(password, 10);
-    let imageUrl = "https://via.placeholder.com/150x150/e5e7eb/9ca3af?text=User";
+    let imageUrl = getDefaultUserImage();
     if (image && image.startsWith("data:image/")) {
       try {
         const uploadResult = await uploadImage(image);

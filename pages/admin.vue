@@ -187,7 +187,7 @@ const regularCount = computed(() => {
 
 // Methods
 const handleImageError = (event) => {
-  event.target.src = 'https://via.placeholder.com/40x40/e5e7eb/9ca3af?text=User'
+  event.target.src = '/uploads/default/user-avatar.svg'
 }
 
 const formatDate = (dateString) => {

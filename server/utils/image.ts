@@ -10,7 +10,7 @@ export const getDefaultUserImage = () => {
 
 // Function to ensure user has a valid image
 export const ensureUserImage = (userImage: string | null | undefined) => {
-  if (!userImage || userImage.includes('via.placeholder.com')) {
+  if (!userImage || userImage.includes('via.placeholder.com') || userImage.includes('placeholder')) {
     return getDefaultUserImage()
   }
   return userImage

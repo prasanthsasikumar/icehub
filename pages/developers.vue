@@ -210,7 +210,7 @@ const filteredUsers = computed(() => {
 
 // Methods
 const handleImageError = (event) => {
-  event.target.src = 'https://via.placeholder.com/64x64/e5e7eb/9ca3af?text=Dev'
+  event.target.src = '/uploads/default/user-avatar.svg'
 }
 
 const clearFilters = () => {

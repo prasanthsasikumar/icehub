@@ -169,7 +169,7 @@ const removeImage = () => {
 
 const handleImageError = (event) => {
   // Fallback to placeholder if image fails to load
-  event.target.src = 'https://via.placeholder.com/80x80/e5e7eb/9ca3af?text=User'
+  event.target.src = '/uploads/default/user-avatar.svg'
 }
 
 // Helper function to convert file to base64

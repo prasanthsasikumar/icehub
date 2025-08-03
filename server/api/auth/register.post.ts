@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt'
 import { v4 as uuidv4 } from 'uuid'
 import jwt from 'jsonwebtoken'
 import { Database } from '../../utils/supabase'
-import { uploadImage } from '../../utils/image'
+import { uploadImage, getDefaultUserImage } from '../../utils/image'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key'
 
@@ -40,7 +40,7 @@ export default defineEventHandler(async (event) => {
     const hashedPassword = await bcrypt.hash(password, 10)
 
     // Handle image upload if provided
-    let imageUrl = 'https://via.placeholder.com/150x150/e5e7eb/9ca3af?text=User'
+    let imageUrl = getDefaultUserImage()
     if (image && image.startsWith('data:image/')) {
       try {
         // If image is provided, upload it

@@ -512,7 +512,7 @@ onMounted(async () => {
             startNewConversation({
               id: route.query.user,
               name: route.query.name,
-              image: 'https://via.placeholder.com/40x40/e5e7eb/9ca3af?text=User'
+              image: '/uploads/default/user-avatar.svg'
             })
           }
         })
@@ -758,7 +758,7 @@ const startNewConversation = (selectedUser) => {
 }
 
 const handleImageError = (event) => {
-  event.target.src = 'https://via.placeholder.com/40x40/e5e7eb/9ca3af?text=User'
+  event.target.src = '/uploads/default/user-avatar.svg'
 }
 
 const formatTime = (timestamp) => {

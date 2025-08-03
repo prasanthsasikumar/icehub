@@ -313,7 +313,7 @@ const { data, pending, error } = await useFetch('/api/user', {
 
 // Helper functions
 const handleImageError = (event) => {
-  event.target.src = 'https://via.placeholder.com/128x128/e5e7eb/9ca3af?text=Profile'
+  event.target.src = '/uploads/default/user-avatar.svg'
 }
 
 const isMentor = (user) => {
