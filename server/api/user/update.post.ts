@@ -1,6 +1,6 @@
 import fs from 'fs'
 import path from 'path'
-import { getUserFromRequest, type User } from '../../../server/utils/auth'
+import { getUserFromRequest, type User, type SkillWithLevel } from '../../../server/utils/auth'
 
 export default defineEventHandler(async (event) => {
   if (getMethod(event) !== 'POST') {
@@ -52,13 +52,36 @@ export default defineEventHandler(async (event) => {
     })
   }
 
+  // Process skills - support both old format (string[]) and new format (SkillWithLevel[])
+  let processedSkills: string[] | SkillWithLevel[] = []
+  
+  if (Array.isArray(skills)) {
+    if (skills.length > 0) {
+      // Check if it's the new format with levels
+      if (typeof skills[0] === 'object' && 'name' in skills[0] && 'level' in skills[0]) {
+        // Validate the skill objects
+        processedSkills = skills.filter((skill: any) => 
+          skill.name && 
+          typeof skill.name === 'string' && 
+          skill.level && 
+          typeof skill.level === 'number' && 
+          skill.level >= 1 && 
+          skill.level <= 5
+        )
+      } else {
+        // Old format - just string array
+        processedSkills = skills.filter((skill: any) => typeof skill === 'string' && skill.trim().length > 0)
+      }
+    }
+  }
+
   // Update user data
   users[userIndex] = {
     ...users[userIndex],
     name: name,
     bio: bio || '',
     image: image || users[userIndex].image, // Keep existing image if not provided
-    skills: Array.isArray(skills) ? skills : []
+    skills: processedSkills
   }
 
   // Save to file

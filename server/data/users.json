@@ -4,10 +4,22 @@
     "image": "/uploads/default/user-avatar.svg",
     "bio": "this is",
     "skills": [
-      "test",
-      "figure",
-      "java",
-      "apple"
+      {
+        "name": "test",
+        "level": 4
+      },
+      {
+        "name": "figure",
+        "level": 3
+      },
+      {
+        "name": "java",
+        "level": 4
+      },
+      {
+        "name": "apple",
+        "level": 4
+      }
     ],
     "id": "e07e01d9-064c-4838-95ae-2e27ac6df861",
     "email": "test@email.com",

@@ -70,7 +70,7 @@
                 <!-- Quick Stats -->
                 <div class="flex flex-wrap gap-6 justify-center md:justify-start">
                   <div class="text-center">
-                    <div class="text-2xl font-bold text-primary">{{ data.skills.length }}</div>
+                    <div class="text-2xl font-bold text-primary">{{ getSkillsArray(data.skills).length }}</div>
                     <div class="text-sm text-gray-500 uppercase tracking-wide">Skills</div>
                   </div>
                   <div class="text-center">
@@ -137,23 +137,23 @@
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <div 
-                v-for="skill in data.skills" 
-                :key="skill"
+                v-for="skill in getSkillsArray(data.skills)" 
+                :key="getSkillName(skill)"
                 class="skill-card"
               >
                 <div class="flex items-center justify-between">
-                  <span class="font-medium">{{ skill }}</span>
+                  <span class="font-medium">{{ getSkillName(skill) }}</span>
                   <div class="flex items-center gap-1">
-                    <svg v-for="i in getSkillLevel(skill)" :key="i" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" class="text-yellow-400">
+                    <svg v-for="i in getSkillLevel(getSkillName(skill))" :key="i" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" class="text-yellow-400">
                       <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
                     </svg>
-                    <svg v-for="i in (5 - getSkillLevel(skill))" :key="`empty-${i}`" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="text-gray-300">
+                    <svg v-for="i in (5 - getSkillLevel(getSkillName(skill)))" :key="`empty-${i}`" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="text-gray-300">
                       <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
                     </svg>
                   </div>
                 </div>
                 <div class="mt-2 text-sm text-gray-500">
-                  {{ getSkillDescription(skill) }}
+                  {{ getSkillDescription(getSkillName(skill)) }}
                 </div>
               </div>
             </div>
@@ -303,10 +303,25 @@ const startConversation = () => {
 }
 
 const calculateExperience = (skills) => {
-  if (skills.length <= 2) return 'Beginner'
-  if (skills.length <= 4) return 'Intermediate'
-  if (skills.length <= 6) return 'Advanced'
+  const skillsArray = getSkillsArray(skills)
+  if (skillsArray.length <= 2) return 'Beginner'
+  if (skillsArray.length <= 4) return 'Intermediate'
+  if (skillsArray.length <= 6) return 'Advanced'
   return 'Expert'
+}
+
+const getSkillsArray = (skills) => {
+  if (!skills || !Array.isArray(skills)) return []
+  return skills
+}
+
+const getSkillName = (skill) => {
+  return typeof skill === 'string' ? skill : skill.name
+}
+
+const getSkillsStringArray = (skills) => {
+  if (!skills || !Array.isArray(skills)) return []
+  return skills.map(skill => getSkillName(skill))
 }
 
 const getProfileScore = (user) => {
@@ -319,7 +334,19 @@ const getProfileScore = (user) => {
 }
 
 const getSkillLevel = (skill) => {
-  // Simulate skill levels based on common technologies
+  if (!data.value || !data.value.skills) return 3
+  
+  // Check if skills are in the new format with levels
+  if (Array.isArray(data.value.skills) && data.value.skills.length > 0) {
+    const firstSkill = data.value.skills[0]
+    if (typeof firstSkill === 'object' && 'name' in firstSkill && 'level' in firstSkill) {
+      // New format - find the skill and return its level
+      const skillObj = data.value.skills.find(s => s.name === skill)
+      return skillObj ? skillObj.level : 3
+    }
+  }
+  
+  // Old format or fallback - use the existing calculation
   const advanced = ['JavaScript', 'React', 'Vue', 'Python', 'Node.js']
   const intermediate = ['TypeScript', 'Angular', 'PHP', 'Java', 'C#']
   
@@ -343,13 +370,14 @@ const getSkillDescription = (skill) => {
 }
 
 const getPrimarySpecialization = (skills) => {
+  const skillsArray = getSkillsStringArray(skills)
   const frontend = ['React', 'Vue', 'Angular', 'JavaScript', 'TypeScript']
   const backend = ['Node.js', 'Python', 'PHP', 'Java', 'C#', 'Rust']
   const mobile = ['React Native', 'Flutter', 'Swift', 'Kotlin']
   
-  const frontendCount = skills.filter(s => frontend.includes(s)).length
-  const backendCount = skills.filter(s => backend.includes(s)).length
-  const mobileCount = skills.filter(s => mobile.includes(s)).length
+  const frontendCount = skillsArray.filter(s => frontend.includes(s)).length
+  const backendCount = skillsArray.filter(s => backend.includes(s)).length
+  const mobileCount = skillsArray.filter(s => mobile.includes(s)).length
   
   if (frontendCount > backendCount && frontendCount > mobileCount) return 'Frontend Development'
   if (backendCount > frontendCount && backendCount > mobileCount) return 'Backend Development'
@@ -358,14 +386,16 @@ const getPrimarySpecialization = (skills) => {
 }
 
 const getSkillDiversity = (skills) => {
-  if (skills.length <= 2) return 'Specialized'
-  if (skills.length <= 4) return 'Diverse'
+  const skillsArray = getSkillsArray(skills)
+  if (skillsArray.length <= 2) return 'Specialized'
+  if (skillsArray.length <= 4) return 'Diverse'
   return 'Polyglot'
 }
 
 const getTechStack = (skills) => {
+  const skillsArray = getSkillsStringArray(skills)
   const webTech = ['JavaScript', 'React', 'Vue', 'Angular', 'Node.js', 'TypeScript']
-  const hasWeb = skills.some(s => webTech.includes(s))
+  const hasWeb = skillsArray.some(s => webTech.includes(s))
   
   if (hasWeb) return 'Web Technologies'
   return 'Mixed Technologies'

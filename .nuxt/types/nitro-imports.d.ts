@@ -46,6 +46,7 @@ declare global {
   const fromWebHandler: typeof import('../../node_modules/h3')['fromWebHandler']
   const generateToken: typeof import('../../server/utils/auth')['generateToken']
   const getCookie: typeof import('../../node_modules/h3')['getCookie']
+  const getDefaultSkillLevel: typeof import('../../server/utils/skills')['getDefaultSkillLevel']
   const getDefaultUserImage: typeof import('../../server/utils/image')['getDefaultUserImage']
   const getHeader: typeof import('../../node_modules/h3')['getHeader']
   const getHeaders: typeof import('../../node_modules/h3')['getHeaders']
@@ -69,6 +70,7 @@ declare global {
   const getRouterParam: typeof import('../../node_modules/h3')['getRouterParam']
   const getRouterParams: typeof import('../../node_modules/h3')['getRouterParams']
   const getSession: typeof import('../../node_modules/h3')['getSession']
+  const getSkillLevel: typeof import('../../server/utils/skills')['getSkillLevel']
   const getUserFromRequest: typeof import('../../server/utils/auth')['getUserFromRequest']
   const getValidatedQuery: typeof import('../../node_modules/h3')['getValidatedQuery']
   const getValidatedRouterParams: typeof import('../../node_modules/h3')['getValidatedRouterParams']
@@ -85,6 +87,7 @@ declare global {
   const isWebResponse: typeof import('../../node_modules/h3')['isWebResponse']
   const lazyEventHandler: typeof import('../../node_modules/h3')['lazyEventHandler']
   const nitroPlugin: typeof import('../../node_modules/nitropack/dist/runtime/internal/plugin')['nitroPlugin']
+  const normalizeSkills: typeof import('../../server/utils/skills')['normalizeSkills']
   const parseCookies: typeof import('../../node_modules/h3')['parseCookies']
   const promisifyNodeListener: typeof import('../../node_modules/h3')['promisifyNodeListener']
   const proxyRequest: typeof import('../../node_modules/h3')['proxyRequest']
@@ -113,6 +116,7 @@ declare global {
   const setResponseHeader: typeof import('../../node_modules/h3')['setResponseHeader']
   const setResponseHeaders: typeof import('../../node_modules/h3')['setResponseHeaders']
   const setResponseStatus: typeof import('../../node_modules/h3')['setResponseStatus']
+  const skillsToStringArray: typeof import('../../server/utils/skills')['skillsToStringArray']
   const splitCookiesString: typeof import('../../node_modules/h3')['splitCookiesString']
   const toEventHandler: typeof import('../../node_modules/h3')['toEventHandler']
   const toNodeListener: typeof import('../../node_modules/h3')['toNodeListener']
@@ -135,7 +139,7 @@ declare global {
 // for type re-export
 declare global {
   // @ts-ignore
-  export type { User, AuthUser } from '../../server/utils/auth'
+  export type { SkillWithLevel, User, AuthUser } from '../../server/utils/auth'
   import('../../server/utils/auth')
 }
 export { useNitroApp } from 'nitropack/runtime/internal/app';
@@ -154,3 +158,4 @@ export { buildAssetsURL as __buildAssetsURL, publicAssetsURL as __publicAssetsUR
 export { defineAppConfig } from '/Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/nuxt/dist/core/runtime/nitro/utils/config';
 export { hashPassword, verifyPassword, generateToken, verifyToken, getUserFromRequest } from '/Users/prasanthsasikumar/Documents/GitHub/icehub/server/utils/auth';
 export { getDefaultUserImage, ensureUserImage } from '/Users/prasanthsasikumar/Documents/GitHub/icehub/server/utils/image';
+export { normalizeSkills, getDefaultSkillLevel, skillsToStringArray, getSkillLevel } from '/Users/prasanthsasikumar/Documents/GitHub/icehub/server/utils/skills';

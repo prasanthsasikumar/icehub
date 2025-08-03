@@ -126,14 +126,14 @@
                   <div class="mb-6">
                     <div class="flex flex-wrap gap-2">
                       <span 
-                        v-for="skill in user.skills.slice(0, 6)" 
+                        v-for="skill in getDisplaySkills(user.skills).slice(0, 6)" 
                         :key="skill" 
                         class="skill-tag"
                       >
                         {{ skill }}
                       </span>
-                      <span v-if="user.skills.length > 6" class="text-gray-500 text-xs font-medium py-1">
-                        +{{ user.skills.length - 6 }} more
+                      <span v-if="getDisplaySkills(user.skills).length > 6" class="text-gray-500 text-xs font-medium py-1">
+                        +{{ getDisplaySkills(user.skills).length - 6 }} more
                       </span>
                     </div>
                   </div>
@@ -191,10 +191,23 @@ const handleLogout = async () => {
   await logout()
 }
 
+// Helper function to get skill names from both formats
+const getDisplaySkills = (skills) => {
+  if (!skills || !Array.isArray(skills)) return []
+  
+  // Check if it's the new format with objects
+  if (skills.length > 0 && typeof skills[0] === 'object' && 'name' in skills[0]) {
+    return skills.map(skill => skill.name)
+  }
+  
+  // Old format - already strings
+  return skills
+}
+
 // Computed properties
 const totalSkills = computed(() => {
   if (!users.value) return 0
-  const allSkills = users.value.flatMap(user => user.skills)
+  const allSkills = users.value.flatMap(user => getDisplaySkills(user.skills))
   return new Set(allSkills).size
 })
 
@@ -203,7 +216,7 @@ const topSkills = computed(() => {
   
   const skillCounts = {}
   users.value.forEach(user => {
-    user.skills.forEach(skill => {
+    getDisplaySkills(user.skills).forEach(skill => {
       skillCounts[skill] = (skillCounts[skill] || 0) + 1
     })
   })

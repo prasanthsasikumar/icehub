@@ -5,6 +5,11 @@ import { getCookie, getHeader } from 'h3'
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production'
 const SALT_ROUNDS = 10
 
+export interface SkillWithLevel {
+  name: string
+  level: number // 1-5 stars
+}
+
 export interface User {
   id: string
   name: string
@@ -12,7 +17,7 @@ export interface User {
   password: string
   image: string
   bio: string
-  skills: string[]
+  skills: string[] | SkillWithLevel[] // Support both formats for backward compatibility
   role: 'user' | 'admin'
   createdAt: string
 }

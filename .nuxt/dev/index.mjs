@@ -1122,7 +1122,22 @@ const plugins = [
 _imlJlEtcYUErFKlIoV3o40RwAHyYMj1YM8ArfD1nFG0
 ];
 
-const assets = {};
+const assets = {
+  "/index.mjs": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"1858d-eITA2q2BP0/erW1MxPAKFLpq3XM\"",
+    "mtime": "2025-08-03T10:48:06.657Z",
+    "size": 99725,
+    "path": "index.mjs"
+  },
+  "/index.mjs.map": {
+    "type": "application/json",
+    "etag": "\"58527-pfd/7gEs2vifndZxNlvfWAH58sc\"",
+    "mtime": "2025-08-03T10:48:06.657Z",
+    "size": 361767,
+    "path": "index.mjs.map"
+  }
+};
 
 function readAsset (id) {
   const serverDir = dirname$1(fileURLToPath(globalThis._importMeta_.url));
@@ -2472,13 +2487,25 @@ const update_post = defineEventHandler(async (event) => {
       statusMessage: "Name is already taken"
     });
   }
+  let processedSkills = [];
+  if (Array.isArray(skills)) {
+    if (skills.length > 0) {
+      if (typeof skills[0] === "object" && "name" in skills[0] && "level" in skills[0]) {
+        processedSkills = skills.filter(
+          (skill) => skill.name && typeof skill.name === "string" && skill.level && typeof skill.level === "number" && skill.level >= 1 && skill.level <= 5
+        );
+      } else {
+        processedSkills = skills.filter((skill) => typeof skill === "string" && skill.trim().length > 0);
+      }
+    }
+  }
   users[userIndex] = {
     ...users[userIndex],
     name,
     bio: bio || "",
     image: image || users[userIndex].image,
     // Keep existing image if not provided
-    skills: Array.isArray(skills) ? skills : []
+    skills: processedSkills
   };
   fs.writeFileSync(usersPath, JSON.stringify(users, null, 2));
   const updatedUser = users[userIndex];

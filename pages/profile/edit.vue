@@ -79,14 +79,98 @@
               <!-- Skills Input -->
               <div class="flex flex-col gap-2">
                 <label for="skills" class="font-semibold text-gray-700 text-sm mb-1">Skills</label>
-                <input 
-                  id="skills"
-                  v-model="skillsInput" 
-                  type="text"
-                  placeholder="e.g., JavaScript, React, Python (comma-separated)" 
-                  class="px-4 py-3 border border-gray-200 rounded-lg text-base transition-all duration-200 bg-white text-gray-700 focus:outline-none focus:border-primary focus:shadow-lg focus:shadow-primary/10"
-                />
-                <p class="text-xs text-gray-500">Separate skills with commas</p>
+                
+                <!-- Skills List -->
+                <div v-if="skillsList.length > 0" class="space-y-3 mb-4">
+                  <div 
+                    v-for="(skill, index) in skillsList" 
+                    :key="index"
+                    class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200"
+                  >
+                    <input 
+                      v-model="skill.name"
+                      type="text"
+                      placeholder="Skill name"
+                      class="flex-1 px-3 py-2 border border-gray-200 rounded-md text-sm focus:outline-none focus:border-primary"
+                    />
+                    <div class="flex items-center gap-2">
+                      <span class="text-sm text-gray-600">Level:</span>
+                      <div class="flex items-center gap-1">
+                        <button
+                          v-for="level in 5"
+                          :key="level"
+                          type="button"
+                          @click="setSkillLevel(index, level)"
+                          class="w-6 h-6 focus:outline-none"
+                        >
+                          <svg 
+                            width="20" 
+                            height="20" 
+                            viewBox="0 0 24 24" 
+                            :fill="level <= skill.level ? '#fbbf24' : 'none'"
+                            :stroke="level <= skill.level ? '#fbbf24' : '#d1d5db'"
+                            stroke-width="1"
+                            class="transition-colors duration-150"
+                          >
+                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                          </svg>
+                        </button>
+                      </div>
+                      <span class="text-xs text-gray-500 min-w-[60px]">{{ getSkillLevelText(skill.level) }}</span>
+                    </div>
+                    <button
+                      type="button"
+                      @click="removeSkill(index)"
+                      class="text-red-500 hover:text-red-700 p-1"
+                    >
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Add New Skill -->
+                <div class="flex gap-2">
+                  <input 
+                    v-model="newSkillName"
+                    type="text"
+                    placeholder="Add a new skill..." 
+                    class="flex-1 px-4 py-3 border border-gray-200 rounded-lg text-base transition-all duration-200 bg-white text-gray-700 focus:outline-none focus:border-primary focus:shadow-lg focus:shadow-primary/10"
+                    @keyup.enter="addSkill"
+                  />
+                  <button
+                    type="button"
+                    @click="addSkill"
+                    :disabled="!newSkillName.trim()"
+                    class="px-4 py-3 bg-primary text-white rounded-lg hover:bg-primary-dark disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+                  >
+                    Add
+                  </button>
+                </div>
+                
+                <!-- Legacy Import -->
+                <div v-if="legacySkillsInput" class="mt-3">
+                  <div class="flex items-center gap-2">
+                    <input 
+                      v-model="legacySkillsInput"
+                      type="text"
+                      placeholder="Or add comma-separated skills (e.g., JavaScript, React, Python)" 
+                      class="flex-1 px-4 py-3 border border-gray-200 rounded-lg text-base transition-all duration-200 bg-white text-gray-700 focus:outline-none focus:border-primary focus:shadow-lg focus:shadow-primary/10"
+                    />
+                    <button
+                      type="button"
+                      @click="importLegacySkills"
+                      :disabled="!legacySkillsInput.trim()"
+                      class="px-4 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+                    >
+                      Import
+                    </button>
+                  </div>
+                  <p class="text-xs text-gray-500 mt-1">Skills imported this way will get default levels that you can adjust above</p>
+                </div>
+                
+                <p class="text-xs text-gray-500">Add your technical skills and rate your proficiency level</p>
               </div>
 
               <!-- Error/Success Messages -->
@@ -127,10 +211,80 @@ const form = reactive({
   image: ''
 })
 
-const skillsInput = ref('')
+// Skills management
+const skillsList = ref([])
+const newSkillName = ref('')
+const legacySkillsInput = ref('')
+
 const submitting = ref(false)
 const error = ref('')
 const success = ref('')
+
+// Skill level helpers
+const getSkillLevelText = (level) => {
+  const texts = {
+    1: 'Beginner',
+    2: 'Novice', 
+    3: 'Intermediate',
+    4: 'Advanced',
+    5: 'Expert'
+  }
+  return texts[level] || 'Beginner'
+}
+
+const getDefaultSkillLevel = (skill) => {
+  const advanced = ['JavaScript', 'React', 'Vue', 'Python', 'Node.js']
+  const intermediate = ['TypeScript', 'Angular', 'PHP', 'Java', 'C#']
+  
+  if (advanced.includes(skill)) return 4
+  if (intermediate.includes(skill)) return 3
+  return Math.floor(Math.random() * 3) + 2 // Random 2-4
+}
+
+// Skills management functions
+const addSkill = () => {
+  const skillName = newSkillName.value.trim()
+  if (!skillName) return
+  
+  // Check if skill already exists
+  if (skillsList.value.some(skill => skill.name.toLowerCase() === skillName.toLowerCase())) {
+    return
+  }
+  
+  skillsList.value.push({
+    name: skillName,
+    level: getDefaultSkillLevel(skillName)
+  })
+  
+  newSkillName.value = ''
+}
+
+const removeSkill = (index) => {
+  skillsList.value.splice(index, 1)
+}
+
+const setSkillLevel = (index, level) => {
+  skillsList.value[index].level = level
+}
+
+const importLegacySkills = () => {
+  const skills = legacySkillsInput.value
+    .split(',')
+    .map(skill => skill.trim())
+    .filter(skill => skill.length > 0)
+  
+  skills.forEach(skillName => {
+    // Check if skill already exists
+    if (!skillsList.value.some(skill => skill.name.toLowerCase() === skillName.toLowerCase())) {
+      skillsList.value.push({
+        name: skillName,
+        level: getDefaultSkillLevel(skillName)
+      })
+    }
+  })
+  
+  legacySkillsInput.value = ''
+}
 
 // Initialize form with current user data
 const initializeForm = () => {
@@ -138,7 +292,22 @@ const initializeForm = () => {
     form.name = user.value.name || ''
     form.bio = user.value.bio || ''
     form.image = user.value.image || ''
-    skillsInput.value = user.value.skills ? user.value.skills.join(', ') : ''
+    
+    // Handle skills - support both old and new formats
+    if (user.value.skills) {
+      if (Array.isArray(user.value.skills) && user.value.skills.length > 0) {
+        // Check if it's the new format (objects with name and level)
+        if (typeof user.value.skills[0] === 'object' && 'name' in user.value.skills[0]) {
+          skillsList.value = [...user.value.skills]
+        } else {
+          // Old format (string array) - convert to new format
+          skillsList.value = user.value.skills.map(skill => ({
+            name: skill,
+            level: getDefaultSkillLevel(skill)
+          }))
+        }
+      }
+    }
   }
 }
 
@@ -165,19 +334,13 @@ const updateProfile = async () => {
   success.value = ''
 
   try {
-    // Parse skills
-    const skills = skillsInput.value
-      .split(',')
-      .map(skill => skill.trim())
-      .filter(skill => skill.length > 0)
-
     await $fetch('/api/user/update', {
       method: 'POST',
       body: {
         name: form.name,
         bio: form.bio,
         image: form.image,
-        skills
+        skills: skillsList.value // Send skills with levels
       }
     })
 
