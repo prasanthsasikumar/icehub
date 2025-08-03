@@ -1,0 +1,12 @@
+{
+  "name": "nuxt-users",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "start": "nuxt start"
+  },
+  "dependencies": {
+    "nuxt": "latest"
+  }
+}

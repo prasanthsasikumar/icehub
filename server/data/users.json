@@ -1,0 +1,12 @@
+[
+  {
+    "name": "Jhon Doe",
+    "image": "https://www.lifewire.com/thmb/O17f9c7DHWOhRVenH5D-S4f2RzI=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/find-people-on-the-web-3482688-45dd430a834b4906bdc5aa8951f260bd.png",
+    "bio": "test",
+    "skills": [
+      "Rust",
+      "Vue",
+      "React"
+    ]
+  }
+]
