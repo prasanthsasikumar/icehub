@@ -156,9 +156,6 @@ declare global {
   export type { Message, GroupChat, DirectConversation, GroupConversation } from '../../server/utils/chat'
   import('../../server/utils/chat')
   // @ts-ignore
-  export type { Database } from '../../server/utils/database'
-  import('../../server/utils/database')
-  // @ts-ignore
   export type { GroupMember, GroupMentor, Group } from '../../server/utils/groups'
   import('../../server/utils/groups')
   // @ts-ignore

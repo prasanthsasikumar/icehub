@@ -1,7 +1,6 @@
-import fs from 'fs'
-import path from 'path'
 import { getUserFromRequest, type User } from '../../../server/utils/auth'
 import { ensureUserImage } from '../../../server/utils/image'
+import { Database } from '../../utils/supabase'
 
 export default defineEventHandler(async (event) => {
   const authUser = getUserFromRequest(event)
@@ -13,31 +12,36 @@ export default defineEventHandler(async (event) => {
     })
   }
   
-  // Read users from file to get complete user data
-  const usersPath = path.join(process.cwd(), 'server/data/users.json')
-  const users: User[] = JSON.parse(fs.readFileSync(usersPath, 'utf8'))
-  
-  // Find the complete user data
-  const fullUser = users.find(u => u.id === authUser.id)
-  
-  if (!fullUser) {
-    throw createError({
-      statusCode: 404,
-      statusMessage: 'User not found'
-    })
-  }
-  
-  // Return complete user data (without password) with ensured image
-  return { 
-    user: {
-      id: fullUser.id,
-      name: fullUser.name,
-      email: fullUser.email,
-      image: ensureUserImage(fullUser.image),
-      bio: fullUser.bio,
-      skills: fullUser.skills,
-      role: fullUser.role,
-      createdAt: fullUser.createdAt
+  try {
+    // Get complete user data from Supabase
+    const fullUser = await Database.getUserById(authUser.id)
+    
+    if (!fullUser) {
+      throw createError({
+        statusCode: 404,
+        statusMessage: 'User not found'
+      })
     }
+    
+    // Return complete user data (without password) with ensured image
+    return { 
+      user: {
+        id: fullUser.id,
+        name: fullUser.name,
+        email: fullUser.email,
+        image: ensureUserImage(fullUser.image),
+        bio: fullUser.bio,
+        skills: fullUser.skills,
+        role: fullUser.role,
+        userRole: fullUser.userRole,
+        createdAt: fullUser.createdAt
+      }
+    }
+  } catch (error) {
+    console.error('Error fetching user data:', error)
+    throw createError({
+      statusCode: 500,
+      statusMessage: 'Failed to fetch user data'
+    })
   }
 })

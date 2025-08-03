@@ -2191,27 +2191,34 @@ const me_get = defineEventHandler(async (event) => {
       statusMessage: "Not authenticated"
     });
   }
-  const usersPath = path.join(process.cwd(), "server/data/users.json");
-  const users = JSON.parse(fs.readFileSync(usersPath, "utf8"));
-  const fullUser = users.find((u) => u.id === authUser.id);
-  if (!fullUser) {
+  try {
+    const fullUser = await Database.getUserById(authUser.id);
+    if (!fullUser) {
+      throw createError({
+        statusCode: 404,
+        statusMessage: "User not found"
+      });
+    }
+    return {
+      user: {
+        id: fullUser.id,
+        name: fullUser.name,
+        email: fullUser.email,
+        image: ensureUserImage(fullUser.image),
+        bio: fullUser.bio,
+        skills: fullUser.skills,
+        role: fullUser.role,
+        userRole: fullUser.userRole,
+        createdAt: fullUser.createdAt
+      }
+    };
+  } catch (error) {
+    console.error("Error fetching user data:", error);
     throw createError({
-      statusCode: 404,
-      statusMessage: "User not found"
+      statusCode: 500,
+      statusMessage: "Failed to fetch user data"
     });
   }
-  return {
-    user: {
-      id: fullUser.id,
-      name: fullUser.name,
-      email: fullUser.email,
-      image: ensureUserImage(fullUser.image),
-      bio: fullUser.bio,
-      skills: fullUser.skills,
-      role: fullUser.role,
-      createdAt: fullUser.createdAt
-    }
-  };
 });
 
 const me_get$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({

@@ -237,14 +237,16 @@
 const { data: users } = await useFetch('/api/users')
 
 // Authentication
-const { user, isLoggedIn, isAdmin, logout } = useAuth()
+const { user, isLoggedIn, isAdmin, logout, checkAuth } = useAuth()
 
 // Mobile menu state
 const mobileMenuOpen = ref(false)
 
-// Check authentication on mount
+// Check authentication on both server and client
+await checkAuth()
+
+// Also check on mount for client-side navigation
 onMounted(async () => {
-  const { checkAuth } = useAuth()
   await checkAuth()
 })
 
