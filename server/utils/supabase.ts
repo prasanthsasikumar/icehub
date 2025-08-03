@@ -133,10 +133,15 @@ export class Database {
         .delete()
         .eq('id', id)
         .select()
-        .single()
       
       if (error) throw error
-      return data
+      
+      // Check if any user was actually deleted
+      if (!data || data.length === 0) {
+        throw new Error('User not found or already deleted')
+      }
+      
+      return data[0] // Return the first (and only) deleted user
       
     } catch (error) {
       console.error('Error in deleteUser:', error)

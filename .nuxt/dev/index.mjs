@@ -1127,16 +1127,16 @@ _imlJlEtcYUErFKlIoV3o40RwAHyYMj1YM8ArfD1nFG0
 const assets = {
   "/index.mjs": {
     "type": "text/javascript; charset=utf-8",
-    "etag": "\"20685-QbvDYJj9EGW0B6L5gy6viA2A63s\"",
-    "mtime": "2025-08-03T16:55:07.174Z",
-    "size": 132741,
+    "etag": "\"204ed-1PDNN9ypZUDt/c5amFUYPZgf3qc\"",
+    "mtime": "2025-08-03T16:56:05.101Z",
+    "size": 132333,
     "path": "index.mjs"
   },
   "/index.mjs.map": {
     "type": "application/json",
-    "etag": "\"74e91-rNgH4oRnd1yy4kjiPNu5cQ0JF+Y\"",
-    "mtime": "2025-08-03T16:55:07.174Z",
-    "size": 478865,
+    "etag": "\"74e82-YLVSnixvJVCBSYLZzcODOTs4pxs\"",
+    "mtime": "2025-08-03T16:56:05.101Z",
+    "size": 478850,
     "path": "index.mjs.map"
   }
 };
@@ -2019,9 +2019,12 @@ class Database {
           }
         }
       }
-      const { data, error } = await supabase.from("users").delete().eq("id", id).select().single();
+      const { data, error } = await supabase.from("users").delete().eq("id", id).select();
       if (error) throw error;
-      return data;
+      if (!data || data.length === 0) {
+        throw new Error("User not found or already deleted");
+      }
+      return data[0];
     } catch (error) {
       console.error("Error in deleteUser:", error);
       throw error;
