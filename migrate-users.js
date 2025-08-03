@@ -28,7 +28,7 @@ async function migrateUsers() {
     name: 'Administrator',
     email: 'admin@icehub.com',
     password: adminPassword,
-    image: 'https://via.placeholder.com/150x150/0d7ae4/ffffff?text=Admin',
+    image: '/uploads/default/user-avatar.svg',
     bio: 'System Administrator with full access to manage users and content.',
     skills: ['System Administration', 'User Management', 'Security'],
     role: 'admin',
