@@ -38,6 +38,7 @@ declare global {
   const defineWebSocketHandler: typeof import('../../node_modules/h3')['defineWebSocketHandler']
   const deleteCookie: typeof import('../../node_modules/h3')['deleteCookie']
   const dynamicEventHandler: typeof import('../../node_modules/h3')['dynamicEventHandler']
+  const ensureUserImage: typeof import('../../server/utils/image')['ensureUserImage']
   const eventHandler: typeof import('../../node_modules/h3')['eventHandler']
   const fetchWithEvent: typeof import('../../node_modules/h3')['fetchWithEvent']
   const fromNodeMiddleware: typeof import('../../node_modules/h3')['fromNodeMiddleware']
@@ -45,6 +46,7 @@ declare global {
   const fromWebHandler: typeof import('../../node_modules/h3')['fromWebHandler']
   const generateToken: typeof import('../../server/utils/auth')['generateToken']
   const getCookie: typeof import('../../node_modules/h3')['getCookie']
+  const getDefaultUserImage: typeof import('../../server/utils/image')['getDefaultUserImage']
   const getHeader: typeof import('../../node_modules/h3')['getHeader']
   const getHeaders: typeof import('../../node_modules/h3')['getHeaders']
   const getMethod: typeof import('../../node_modules/h3')['getMethod']
@@ -151,3 +153,4 @@ export { appendCorsHeaders, appendCorsPreflightHeaders, appendHeader, appendHead
 export { buildAssetsURL as __buildAssetsURL, publicAssetsURL as __publicAssetsURL } from '/Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/nuxt/dist/core/runtime/nitro/utils/paths';
 export { defineAppConfig } from '/Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/nuxt/dist/core/runtime/nitro/utils/config';
 export { hashPassword, verifyPassword, generateToken, verifyToken, getUserFromRequest } from '/Users/prasanthsasikumar/Documents/GitHub/icehub/server/utils/auth';
+export { getDefaultUserImage, ensureUserImage } from '/Users/prasanthsasikumar/Documents/GitHub/icehub/server/utils/image';

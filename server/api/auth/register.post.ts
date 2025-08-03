@@ -42,7 +42,7 @@ export default defineEventHandler(async (event) => {
     name,
     email: email.toLowerCase(),
     password: hashedPassword,
-    image: image || 'https://via.placeholder.com/150x150/e5e7eb/9ca3af?text=User',
+    image: image || '/uploads/default/user-avatar.svg',
     bio: bio || '',
     skills: Array.isArray(skills) ? skills : [],
     role: 'user',

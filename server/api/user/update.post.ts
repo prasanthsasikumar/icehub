@@ -20,7 +20,7 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const { name, bio, skills } = await readBody(event)
+  const { name, bio, skills, image } = await readBody(event)
 
   if (!name) {
     throw createError({
@@ -57,6 +57,7 @@ export default defineEventHandler(async (event) => {
     ...users[userIndex],
     name: name,
     bio: bio || '',
+    image: image || users[userIndex].image, // Keep existing image if not provided
     skills: Array.isArray(skills) ? skills : []
   }
 

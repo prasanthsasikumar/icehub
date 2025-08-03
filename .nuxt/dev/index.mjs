@@ -2057,15 +2057,45 @@ const logout_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.definePrope
   default: logout_post
 }, Symbol.toStringTag, { value: 'Module' }));
 
+const getDefaultUserImage = () => {
+  return "/uploads/default/user-avatar.svg";
+};
+const ensureUserImage = (userImage) => {
+  if (!userImage || userImage.includes("via.placeholder.com")) {
+    return getDefaultUserImage();
+  }
+  return userImage;
+};
+
 const me_get = defineEventHandler(async (event) => {
-  const user = getUserFromRequest(event);
-  if (!user) {
+  const authUser = getUserFromRequest(event);
+  if (!authUser) {
     throw createError({
       statusCode: 401,
       statusMessage: "Not authenticated"
     });
   }
-  return { user };
+  const usersPath = path.join(process.cwd(), "server/data/users.json");
+  const users = JSON.parse(fs.readFileSync(usersPath, "utf8"));
+  const fullUser = users.find((u) => u.id === authUser.id);
+  if (!fullUser) {
+    throw createError({
+      statusCode: 404,
+      statusMessage: "User not found"
+    });
+  }
+  return {
+    user: {
+      id: fullUser.id,
+      name: fullUser.name,
+      email: fullUser.email,
+      image: ensureUserImage(fullUser.image),
+      bio: fullUser.bio,
+      skills: fullUser.skills,
+      role: fullUser.role,
+      createdAt: fullUser.createdAt
+    }
+  };
 });
 
 const me_get$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
@@ -2102,7 +2132,7 @@ const register_post = defineEventHandler(async (event) => {
     name,
     email: email.toLowerCase(),
     password: hashedPassword,
-    image: image || "https://via.placeholder.com/150x150/e5e7eb/9ca3af?text=User",
+    image: image || "/uploads/default/user-avatar.svg",
     bio: bio || "",
     skills: Array.isArray(skills) ? skills : [],
     role: "user",
@@ -2419,7 +2449,7 @@ const update_post = defineEventHandler(async (event) => {
       statusMessage: "Authentication required"
     });
   }
-  const { name, bio, skills } = await readBody(event);
+  const { name, bio, skills, image } = await readBody(event);
   if (!name) {
     throw createError({
       statusCode: 400,
@@ -2446,6 +2476,8 @@ const update_post = defineEventHandler(async (event) => {
     ...users[userIndex],
     name,
     bio: bio || "",
+    image: image || users[userIndex].image,
+    // Keep existing image if not provided
     skills: Array.isArray(skills) ? skills : []
   };
   fs.writeFileSync(usersPath, JSON.stringify(users, null, 2));
@@ -2516,7 +2548,11 @@ const users_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProper
 
 const users = defineEventHandler(async () => {
   const data = await readFile("server/data/users.json", "utf-8");
-  return JSON.parse(data);
+  const users = JSON.parse(data);
+  return users.map((user) => ({
+    ...user,
+    image: ensureUserImage(user.image)
+  }));
 });
 
 const users$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({

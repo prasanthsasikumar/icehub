@@ -29,6 +29,14 @@
             />
           </div>
 
+          <!-- Profile Picture Upload -->
+          <div>
+            <ImageUpload 
+              v-model="form.image"
+              alt-text="Profile picture"
+            />
+          </div>
+
           <!-- Email Field -->
           <div>
             <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
@@ -129,7 +137,8 @@ const form = reactive({
   name: '',
   email: '',
   password: '',
-  bio: ''
+  bio: '',
+  image: ''
 })
 
 const skillsInput = ref('')
@@ -157,6 +166,7 @@ const handleRegister = async () => {
         email: form.email,
         password: form.password,
         bio: form.bio,
+        image: form.image,
         skills
       }
     })

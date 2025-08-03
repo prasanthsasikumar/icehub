@@ -1,7 +1,7 @@
 [
   {
     "name": "Jhon Doe",
-    "image": "https://www.lifewire.com/thmb/O17f9c7DHWOhRVenH5D-S4f2RzI=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/find-people-on-the-web-3482688-45dd430a834b4906bdc5aa8951f260bd.png",
+    "image": "/uploads/default/user-avatar.svg",
     "bio": "this is",
     "skills": [
       "test",
@@ -65,7 +65,7 @@
     "name": "Donald Trump",
     "email": "trump@towers.com",
     "password": "$2b$10$ZRHwCTvE/wJfYUnT9T/yDegS3cmMi9Ctrf.azpd/hTbngOYl8.cbi",
-    "image": "https://via.placeholder.com/150x150/e5e7eb/9ca3af?text=User",
+    "image": "/uploads/b9c60aed-401f-4821-9bbc-99ee16a3575b.webp",
     "bio": "MAGAAAAA",
     "skills": [
       "nothing"

@@ -43,6 +43,14 @@
           
           <div class="bg-white border border-gray-200 rounded-xl p-10 shadow-sm">
             <form @submit.prevent="updateProfile" class="flex flex-col gap-6">
+              <!-- Profile Picture Upload -->
+              <div class="flex flex-col gap-2">
+                <ImageUpload 
+                  v-model="form.image"
+                  alt-text="Profile picture"
+                />
+              </div>
+
               <!-- Name Input -->
               <div class="flex flex-col gap-2">
                 <label for="name" class="font-semibold text-gray-700 text-sm mb-1">Full Name</label>
@@ -115,7 +123,8 @@ const loading = ref(true)
 // Form state
 const form = reactive({
   name: '',
-  bio: ''
+  bio: '',
+  image: ''
 })
 
 const skillsInput = ref('')
@@ -128,6 +137,7 @@ const initializeForm = () => {
   if (user.value) {
     form.name = user.value.name || ''
     form.bio = user.value.bio || ''
+    form.image = user.value.image || ''
     skillsInput.value = user.value.skills ? user.value.skills.join(', ') : ''
   }
 }
@@ -139,12 +149,12 @@ onMounted(async () => {
   loading.value = false
 })
 
-// Watch for user changes
+// Watch for user changes and re-initialize form
 watch(user, (newUser) => {
   if (newUser) {
     initializeForm()
   }
-})
+}, { immediate: true })
 
 // Update profile
 const updateProfile = async () => {
@@ -166,6 +176,7 @@ const updateProfile = async () => {
       body: {
         name: form.name,
         bio: form.bio,
+        image: form.image,
         skills
       }
     })
