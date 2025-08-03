@@ -1,6 +1,8 @@
-import fs from 'fs'
-import path from 'path'
-import { verifyPassword, generateToken, type User } from '../../../server/utils/auth'
+import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
+import { Database } from '../../utils/supabase'
+
+const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key'
 
 export default defineEventHandler(async (event) => {
   if (getMethod(event) !== 'POST') {
@@ -10,7 +12,8 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const { email, password } = await readBody(event)
+  const body = await readBody(event)
+  const { email, password } = body
 
   if (!email || !password) {
     throw createError({
@@ -19,59 +22,60 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  // Read users from file
-  const usersPath = path.join(process.cwd(), 'server/data/users.json')
-  const users: User[] = JSON.parse(fs.readFileSync(usersPath, 'utf8'))
+  try {
+    // Find user by email
+    const user = await Database.getUserByEmail(email)
+    if (!user) {
+      throw createError({
+        statusCode: 401,
+        statusMessage: 'Invalid credentials'
+      })
+    }
 
-  // Find user by email
-  const user = users.find(u => u.email.toLowerCase() === email.toLowerCase())
+    // Check password
+    const passwordMatch = await bcrypt.compare(password, user.password)
+    if (!passwordMatch) {
+      throw createError({
+        statusCode: 401,
+        statusMessage: 'Invalid credentials'
+      })
+    }
 
-  if (!user) {
-    throw createError({
-      statusCode: 401,
-      statusMessage: 'Invalid email or password'
+    // Generate JWT token
+    const token = jwt.sign(
+      { 
+        id: user.id, 
+        email: user.email, 
+        role: user.role 
+      },
+      JWT_SECRET,
+      { expiresIn: '24h' }
+    )
+
+    // Set HTTP-only cookie
+    setCookie(event, 'auth-token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 24 // 24 hours
     })
-  }
 
-  // Verify password
-  const isValidPassword = await verifyPassword(password, user.password)
-
-  if (!isValidPassword) {
+    // Return user without password
+    const { password: _, ...userWithoutPassword } = user
+    return {
+      success: true,
+      user: userWithoutPassword,
+      token
+    }
+  } catch (error: any) {
+    if (error.statusCode) {
+      throw error
+    }
+    
+    console.error('Login error:', error)
     throw createError({
-      statusCode: 401,
-      statusMessage: 'Invalid email or password'
+      statusCode: 500,
+      statusMessage: 'Internal server error'
     })
-  }
-
-  // Generate token
-  const token = generateToken({
-    id: user.id,
-    name: user.name,
-    email: user.email,
-    role: user.role,
-    userRole: user.userRole || 'developer' // Default to developer for existing users
-  })
-
-  // Set cookie
-  setCookie(event, 'auth-token', token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-    maxAge: 60 * 60 * 24 * 7 // 7 days
-  })
-
-  // Return user data (without password)
-  return {
-    user: {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      image: user.image,
-      bio: user.bio,
-      skills: user.skills,
-      role: user.role,
-      userRole: user.userRole || 'developer'
-    },
-    token
   }
 })

@@ -1,4 +1,5 @@
 declare global {
+  const Database: typeof import('../../server/utils/supabase')['Database']
   const __buildAssetsURL: typeof import('../../node_modules/nuxt/dist/core/runtime/nitro/utils/paths')['buildAssetsURL']
   const __publicAssetsURL: typeof import('../../node_modules/nuxt/dist/core/runtime/nitro/utils/paths')['publicAssetsURL']
   const addMemberToGroupChat: typeof import('../../server/utils/chat')['addMemberToGroupChat']
@@ -126,6 +127,7 @@ declare global {
   const setResponseStatus: typeof import('../../node_modules/h3')['setResponseStatus']
   const skillsToStringArray: typeof import('../../server/utils/skills')['skillsToStringArray']
   const splitCookiesString: typeof import('../../node_modules/h3')['splitCookiesString']
+  const supabase: typeof import('../../server/utils/supabase')['supabase']
   const toEventHandler: typeof import('../../node_modules/h3')['toEventHandler']
   const toNodeListener: typeof import('../../node_modules/h3')['toNodeListener']
   const toPlainHandler: typeof import('../../node_modules/h3')['toPlainHandler']
@@ -154,8 +156,14 @@ declare global {
   export type { Message, GroupChat, DirectConversation, GroupConversation } from '../../server/utils/chat'
   import('../../server/utils/chat')
   // @ts-ignore
+  export type { Database } from '../../server/utils/database'
+  import('../../server/utils/database')
+  // @ts-ignore
   export type { GroupMember, GroupMentor, Group } from '../../server/utils/groups'
   import('../../server/utils/groups')
+  // @ts-ignore
+  export type { Database } from '../../server/utils/supabase'
+  import('../../server/utils/supabase')
 }
 export { useNitroApp } from 'nitropack/runtime/internal/app';
 export { useRuntimeConfig, useAppConfig } from 'nitropack/runtime/internal/config';
@@ -176,3 +184,4 @@ export { createMessageId, createGroupChat, addMemberToGroupChat, removeMemberFro
 export { getRandomGroupCover, createGroupId, createChatId } from '/Users/prasanthsasikumar/Documents/GitHub/icehub/server/utils/groups';
 export { getDefaultUserImage, ensureUserImage } from '/Users/prasanthsasikumar/Documents/GitHub/icehub/server/utils/image';
 export { normalizeSkills, getDefaultSkillLevel, skillsToStringArray, getSkillLevel } from '/Users/prasanthsasikumar/Documents/GitHub/icehub/server/utils/skills';
+export { supabase, Database } from '/Users/prasanthsasikumar/Documents/GitHub/icehub/server/utils/supabase';

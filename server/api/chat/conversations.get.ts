@@ -4,34 +4,22 @@
  */
 
 import { requireAuth } from '../../utils/auth'
-import { GroupRepository } from '../../utils/data'
-import fs from 'fs'
-import path from 'path'
+import { Database } from '../../utils/supabase'
 
 export default defineEventHandler(async (event) => {
   try {
     // Check authentication
     const currentUser = await requireAuth(event)
 
-    // Read direct messages to create conversations
-    const messagesPath = path.join(process.cwd(), 'server/data/messages.json')
-    const groupChatsPath = path.join(process.cwd(), 'server/data/groupChats.json')
-    const usersPath = path.join(process.cwd(), 'server/data/users.json')
-    
     let directConversations: any[] = []
     let groupConversations: any[] = []
 
-    // Load users data for user information
-    let users: any[] = []
-    try {
-      users = JSON.parse(fs.readFileSync(usersPath, 'utf8'))
-    } catch (error) {
-      console.log('No users file found or error reading it:', error)
-    }
+    // Get all users for user information
+    const users = await Database.getUsers()
 
     // Get direct message conversations
     try {
-      const messages = JSON.parse(fs.readFileSync(messagesPath, 'utf8'))
+      const messages = await Database.getMessages()
       
       // Group messages by conversation (sender-receiver pairs)
       const conversationMap = new Map()
@@ -83,12 +71,12 @@ export default defineEventHandler(async (event) => {
         }
       })
     } catch (error) {
-      console.log('No messages file found or error reading it:', error)
+      console.log('No messages found or error reading them:', error)
     }
 
     // Get group conversations
     try {
-      const groupChats = JSON.parse(fs.readFileSync(groupChatsPath, 'utf8'))
+      const groupChats = await Database.getGroupChats()
       
       // Filter to only groups where user is a member and convert to expected format
       groupConversations = groupChats.filter((chat: any) => 
@@ -104,7 +92,7 @@ export default defineEventHandler(async (event) => {
         type: 'group'
       }))
     } catch (error) {
-      console.log('No group chats file found or error reading it:', error)
+      console.log('No group chats found or error reading them:', error)
     }
 
     return {

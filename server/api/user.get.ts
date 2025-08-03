@@ -1,4 +1,4 @@
-import { readFile } from 'fs/promises'
+import { Database } from '../utils/supabase'
 
 export default defineEventHandler(async (event) => {
   const query = getQuery(event)
@@ -12,18 +12,13 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    const file = 'server/data/users.json'
-    const users = JSON.parse(await readFile(file, 'utf-8'))
-    
     let user = null
     
     // Find user by ID first (more reliable), then by name
     if (id) {
-      user = users.find(u => u.id === id.toString())
+      user = await Database.getUserById(id.toString())
     } else if (name) {
-      user = users.find(u => 
-        u.name.toLowerCase() === decodeURIComponent(name.toString()).toLowerCase()
-      )
+      user = await Database.getUserByName(decodeURIComponent(name.toString()))
     }
     
     if (!user) {
@@ -33,7 +28,9 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    return user
+    // Remove password from response
+    const { password, ...userWithoutPassword } = user
+    return userWithoutPassword
   } catch (error) {
     if (error.statusCode) {
       throw error

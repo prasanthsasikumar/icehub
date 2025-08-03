@@ -6,10 +6,11 @@ import nodeCrypto from 'node:crypto';
 import { parentPort, threadId } from 'node:worker_threads';
 import { escapeHtml } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/@vue/shared/dist/shared.cjs.js';
 import fs, { promises } from 'node:fs';
-import { v4 } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/uuid/dist/esm/index.js';
-import { readFile, mkdir, writeFile } from 'node:fs/promises';
 import bcrypt from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/bcrypt/bcrypt.js';
 import jwt from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/jsonwebtoken/index.js';
+import { v4 } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/uuid/dist/esm/index.js';
+import { readFile, mkdir, writeFile } from 'node:fs/promises';
+import { createClient } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/@supabase/supabase-js/dist/main/index.js';
 import { createRenderer, getRequestDependencies, getPreloadLinks, getPrefetchLinks } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/vue-bundle-renderer/dist/runtime.mjs';
 import { parseURL, withoutBase, joinURL, getQuery, withQuery, withTrailingSlash, decodePath, withLeadingSlash, withoutTrailingSlash, joinRelativeURL } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/ufo/dist/index.mjs';
 import destr, { destr as destr$1 } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/destr/dist/index.mjs';
@@ -1905,30 +1906,10 @@ const styles$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   default: styles
 }, Symbol.toStringTag, { value: 'Module' }));
 
-const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key-change-in-production";
-const SALT_ROUNDS = 10;
-async function hashPassword(password) {
-  return await bcrypt.hash(password, SALT_ROUNDS);
-}
-async function verifyPassword(password, hashedPassword) {
-  return await bcrypt.compare(password, hashedPassword);
-}
-function generateToken(user) {
-  return jwt.sign(
-    {
-      id: user.id,
-      email: user.email,
-      name: user.name,
-      role: user.role,
-      userRole: user.userRole
-    },
-    JWT_SECRET,
-    { expiresIn: "7d" }
-  );
-}
+const JWT_SECRET$2 = process.env.JWT_SECRET || "your-secret-key-change-in-production";
 function verifyToken(token) {
   try {
-    const decoded = jwt.verify(token, JWT_SECRET);
+    const decoded = jwt.verify(token, JWT_SECRET$2);
     return {
       id: decoded.id,
       name: decoded.name,
@@ -2012,6 +1993,107 @@ const toggleRole_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineP
   default: toggleRole_post
 }, Symbol.toStringTag, { value: 'Module' }));
 
+const supabaseUrl = process.env.SUPABASE_URL || "";
+const supabaseKey = process.env.SUPABASE_ANON_KEY || "";
+const supabase = createClient(supabaseUrl, supabaseKey);
+class Database {
+  // Users
+  static async getUsers() {
+    const { data, error } = await supabase.from("users").select("*");
+    if (error) throw error;
+    return data || [];
+  }
+  static async getUserById(id) {
+    const { data, error } = await supabase.from("users").select("*").eq("id", id).single();
+    if (error) throw error;
+    return data;
+  }
+  static async getUserByEmail(email) {
+    const { data, error } = await supabase.from("users").select("*").eq("email", email).single();
+    if (error && error.code !== "PGRST116") throw error;
+    return data;
+  }
+  static async getUserByName(name) {
+    const { data, error } = await supabase.from("users").select("*").eq("name", name).single();
+    if (error && error.code !== "PGRST116") throw error;
+    return data;
+  }
+  static async createUser(user) {
+    const { data, error } = await supabase.from("users").insert([user]).select().single();
+    if (error) throw error;
+    return data;
+  }
+  static async updateUser(id, updates) {
+    const { data, error } = await supabase.from("users").update(updates).eq("id", id).select().single();
+    if (error) throw error;
+    return data;
+  }
+  // Messages
+  static async getMessages() {
+    const { data, error } = await supabase.from("messages").select("*").order("timestamp", { ascending: true });
+    if (error) throw error;
+    return data || [];
+  }
+  static async getMessagesBetweenUsers(userId1, userId2) {
+    const { data, error } = await supabase.from("messages").select("*").or(`and(senderId.eq.${userId1},receiverId.eq.${userId2}),and(senderId.eq.${userId2},receiverId.eq.${userId1})`).order("timestamp", { ascending: true });
+    if (error) throw error;
+    return data || [];
+  }
+  static async createMessage(message) {
+    const { data, error } = await supabase.from("messages").insert([message]).select().single();
+    if (error) throw error;
+    return data;
+  }
+  // Groups
+  static async getGroups() {
+    const { data, error } = await supabase.from("groups").select("*");
+    if (error) throw error;
+    return data || [];
+  }
+  static async getGroupById(id) {
+    const { data, error } = await supabase.from("groups").select("*").eq("id", id).single();
+    if (error) throw error;
+    return data;
+  }
+  static async createGroup(group) {
+    const { data, error } = await supabase.from("groups").insert([group]).select().single();
+    if (error) throw error;
+    return data;
+  }
+  static async updateGroup(id, updates) {
+    const { data, error } = await supabase.from("groups").update(updates).eq("id", id).select().single();
+    if (error) throw error;
+    return data;
+  }
+  static async deleteGroup(id) {
+    const { data, error } = await supabase.from("groups").delete().eq("id", id);
+    if (error) throw error;
+    return data;
+  }
+  // Group Chats
+  static async getGroupChats() {
+    const { data, error } = await supabase.from("group_chats").select("*");
+    if (error) throw error;
+    return data || [];
+  }
+  static async getGroupChatById(id) {
+    const { data, error } = await supabase.from("group_chats").select("*").eq("id", id).single();
+    if (error) throw error;
+    return data;
+  }
+  static async createGroupChat(groupChat) {
+    const { data, error } = await supabase.from("group_chats").insert([groupChat]).select().single();
+    if (error) throw error;
+    return data;
+  }
+  static async updateGroupChat(id, updates) {
+    const { data, error } = await supabase.from("group_chats").update(updates).eq("id", id).select().single();
+    if (error) throw error;
+    return data;
+  }
+}
+
+const JWT_SECRET$1 = process.env.JWT_SECRET || "your-secret-key";
 const login_post = defineEventHandler(async (event) => {
   if (getMethod(event) !== "POST") {
     throw createError({
@@ -2019,57 +2101,61 @@ const login_post = defineEventHandler(async (event) => {
       statusMessage: "Method not allowed"
     });
   }
-  const { email, password } = await readBody(event);
+  const body = await readBody(event);
+  const { email, password } = body;
   if (!email || !password) {
     throw createError({
       statusCode: 400,
       statusMessage: "Email and password are required"
     });
   }
-  const usersPath = path.join(process.cwd(), "server/data/users.json");
-  const users = JSON.parse(fs.readFileSync(usersPath, "utf8"));
-  const user = users.find((u) => u.email.toLowerCase() === email.toLowerCase());
-  if (!user) {
+  try {
+    const user = await Database.getUserByEmail(email);
+    if (!user) {
+      throw createError({
+        statusCode: 401,
+        statusMessage: "Invalid credentials"
+      });
+    }
+    const passwordMatch = await bcrypt.compare(password, user.password);
+    if (!passwordMatch) {
+      throw createError({
+        statusCode: 401,
+        statusMessage: "Invalid credentials"
+      });
+    }
+    const token = jwt.sign(
+      {
+        id: user.id,
+        email: user.email,
+        role: user.role
+      },
+      JWT_SECRET$1,
+      { expiresIn: "24h" }
+    );
+    setCookie(event, "auth-token", token, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "lax",
+      maxAge: 60 * 60 * 24
+      // 24 hours
+    });
+    const { password: _, ...userWithoutPassword } = user;
+    return {
+      success: true,
+      user: userWithoutPassword,
+      token
+    };
+  } catch (error) {
+    if (error.statusCode) {
+      throw error;
+    }
+    console.error("Login error:", error);
     throw createError({
-      statusCode: 401,
-      statusMessage: "Invalid email or password"
+      statusCode: 500,
+      statusMessage: "Internal server error"
     });
   }
-  const isValidPassword = await verifyPassword(password, user.password);
-  if (!isValidPassword) {
-    throw createError({
-      statusCode: 401,
-      statusMessage: "Invalid email or password"
-    });
-  }
-  const token = generateToken({
-    id: user.id,
-    name: user.name,
-    email: user.email,
-    role: user.role,
-    userRole: user.userRole || "developer"
-    // Default to developer for existing users
-  });
-  setCookie(event, "auth-token", token, {
-    httpOnly: true,
-    secure: false,
-    sameSite: "lax",
-    maxAge: 60 * 60 * 24 * 7
-    // 7 days
-  });
-  return {
-    user: {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      image: user.image,
-      bio: user.bio,
-      skills: user.skills,
-      role: user.role,
-      userRole: user.userRole || "developer"
-    },
-    token
-  };
 });
 
 const login_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
@@ -2133,6 +2219,7 @@ const me_get$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   default: me_get
 }, Symbol.toStringTag, { value: 'Module' }));
 
+const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 const register_post = defineEventHandler(async (event) => {
   if (getMethod(event) !== "POST") {
     throw createError({
@@ -2140,65 +2227,67 @@ const register_post = defineEventHandler(async (event) => {
       statusMessage: "Method not allowed"
     });
   }
-  const { name, email, password, bio, skills, image, userRole } = await readBody(event);
+  const body = await readBody(event);
+  const { name, email, password, bio, skills } = body;
   if (!name || !email || !password) {
     throw createError({
       statusCode: 400,
       statusMessage: "Name, email, and password are required"
     });
   }
-  const usersPath = path.join(process.cwd(), "server/data/users.json");
-  const users = JSON.parse(fs.readFileSync(usersPath, "utf8"));
-  const existingUser = users.find((u) => u.email.toLowerCase() === email.toLowerCase());
-  if (existingUser) {
+  try {
+    const existingUser = await Database.getUserByEmail(email);
+    if (existingUser) {
+      throw createError({
+        statusCode: 409,
+        statusMessage: "User with this email already exists"
+      });
+    }
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = {
+      id: v4(),
+      name,
+      email,
+      password: hashedPassword,
+      image: "https://via.placeholder.com/150x150/e5e7eb/9ca3af?text=User",
+      bio: bio || "",
+      skills: skills || [],
+      role: "user",
+      createdAt: (/* @__PURE__ */ new Date()).toISOString()
+    };
+    const createdUser = await Database.createUser(newUser);
+    const token = jwt.sign(
+      {
+        id: createdUser.id,
+        email: createdUser.email,
+        role: createdUser.role
+      },
+      JWT_SECRET,
+      { expiresIn: "24h" }
+    );
+    setCookie(event, "auth-token", token, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "lax",
+      maxAge: 60 * 60 * 24
+      // 24 hours
+    });
+    const { password: _, ...userWithoutPassword } = createdUser;
+    return {
+      success: true,
+      user: userWithoutPassword,
+      token
+    };
+  } catch (error) {
+    if (error.statusCode) {
+      throw error;
+    }
+    console.error("Registration error:", error);
     throw createError({
-      statusCode: 409,
-      statusMessage: "Email already registered"
+      statusCode: 500,
+      statusMessage: "Internal server error"
     });
   }
-  const hashedPassword = await hashPassword(password);
-  const newUser = {
-    id: v4(),
-    name,
-    email: email.toLowerCase(),
-    password: hashedPassword,
-    image: image || "/uploads/default/user-avatar.svg",
-    bio: bio || "",
-    skills: Array.isArray(skills) ? skills : [],
-    role: "user",
-    userRole: userRole || "developer",
-    // Default to developer if not provided
-    createdAt: (/* @__PURE__ */ new Date()).toISOString()
-  };
-  users.push(newUser);
-  fs.writeFileSync(usersPath, JSON.stringify(users, null, 2));
-  const token = generateToken({
-    id: newUser.id,
-    name: newUser.name,
-    email: newUser.email,
-    role: newUser.role,
-    userRole: newUser.userRole
-  });
-  setCookie(event, "auth-token", token, {
-    httpOnly: true,
-    secure: false,
-    sameSite: "lax",
-    maxAge: 60 * 60 * 24 * 7
-    // 7 days
-  });
-  return {
-    user: {
-      id: newUser.id,
-      name: newUser.name,
-      email: newUser.email,
-      image: newUser.image,
-      bio: newUser.bio,
-      skills: newUser.skills,
-      role: newUser.role,
-      userRole: newUser.userRole
-    },
-    token
-  };
 });
 
 const register_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
@@ -2209,19 +2298,11 @@ const register_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.definePro
 const conversations_get = defineEventHandler(async (event) => {
   try {
     const currentUser = await requireAuth(event);
-    const messagesPath = path.join(process.cwd(), "server/data/messages.json");
-    const groupChatsPath = path.join(process.cwd(), "server/data/groupChats.json");
-    const usersPath = path.join(process.cwd(), "server/data/users.json");
     let directConversations = [];
     let groupConversations = [];
-    let users = [];
+    const users = await Database.getUsers();
     try {
-      users = JSON.parse(fs.readFileSync(usersPath, "utf8"));
-    } catch (error) {
-      console.log("No users file found or error reading it:", error);
-    }
-    try {
-      const messages = JSON.parse(fs.readFileSync(messagesPath, "utf8"));
+      const messages = await Database.getMessages();
       const conversationMap = /* @__PURE__ */ new Map();
       messages.forEach((message) => {
         const participants = [message.senderId, message.receiverId].sort();
@@ -2262,10 +2343,10 @@ const conversations_get = defineEventHandler(async (event) => {
         };
       });
     } catch (error) {
-      console.log("No messages file found or error reading it:", error);
+      console.log("No messages found or error reading them:", error);
     }
     try {
-      const groupChats = JSON.parse(fs.readFileSync(groupChatsPath, "utf8"));
+      const groupChats = await Database.getGroupChats();
       groupConversations = groupChats.filter(
         (chat) => chat.members && chat.members.includes(currentUser.id)
       ).map((chat) => ({
@@ -2281,7 +2362,7 @@ const conversations_get = defineEventHandler(async (event) => {
         type: "group"
       }));
     } catch (error) {
-      console.log("No group chats file found or error reading it:", error);
+      console.log("No group chats found or error reading them:", error);
     }
     return {
       success: true,
@@ -3018,15 +3099,11 @@ const user_get = defineEventHandler(async (event) => {
     });
   }
   try {
-    const file = "server/data/users.json";
-    const users = JSON.parse(await readFile(file, "utf-8"));
     let user = null;
     if (id) {
-      user = users.find((u) => u.id === id.toString());
+      user = await Database.getUserById(id.toString());
     } else if (name) {
-      user = users.find(
-        (u) => u.name.toLowerCase() === decodeURIComponent(name.toString()).toLowerCase()
-      );
+      user = await Database.getUserByName(decodeURIComponent(name.toString()));
     }
     if (!user) {
       throw createError({
@@ -3034,7 +3111,8 @@ const user_get = defineEventHandler(async (event) => {
         statusMessage: "User not found"
       });
     }
-    return user;
+    const { password, ...userWithoutPassword } = user;
+    return userWithoutPassword;
   } catch (error) {
     if (error.statusCode) {
       throw error;
@@ -3175,13 +3253,21 @@ const users_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProper
   default: users_post
 }, Symbol.toStringTag, { value: 'Module' }));
 
-const users = defineEventHandler(async () => {
-  const data = await readFile("server/data/users.json", "utf-8");
-  const users = JSON.parse(data);
-  return users.map((user) => ({
-    ...user,
-    image: ensureUserImage(user.image)
-  }));
+const users = defineEventHandler(async (event) => {
+  try {
+    const users = await Database.getUsers();
+    const usersWithoutPasswords = users.map((user) => {
+      const { password, ...userWithoutPassword } = user;
+      return userWithoutPassword;
+    });
+    return usersWithoutPasswords;
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Failed to fetch users"
+    });
+  }
 });
 
 const users$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({

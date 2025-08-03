@@ -1,7 +1,11 @@
 import fs from 'fs'
 import path from 'path'
+import bcrypt from 'bcrypt'
 import { v4 as uuidv4 } from 'uuid'
-import { hashPassword, generateToken, type User } from '../../../server/utils/auth'
+import jwt from 'jsonwebtoken'
+import { Database } from '../../utils/supabase'
+
+const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key'
 
 export default defineEventHandler(async (event) => {
   if (getMethod(event) !== 'POST') {
@@ -11,7 +15,8 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const { name, email, password, bio, skills, image, userRole } = await readBody(event)
+  const body = await readBody(event)
+  const { name, email, password, bio, skills } = body
 
   if (!name || !email || !password) {
     throw createError({
@@ -20,71 +25,69 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  // Read existing users
-  const usersPath = path.join(process.cwd(), 'server/data/users.json')
-  const users: User[] = JSON.parse(fs.readFileSync(usersPath, 'utf8'))
+  try {
+    // Check if user already exists
+    const existingUser = await Database.getUserByEmail(email)
+    if (existingUser) {
+      throw createError({
+        statusCode: 409,
+        statusMessage: 'User with this email already exists'
+      })
+    }
 
-  // Check if email already exists
-  const existingUser = users.find(u => u.email.toLowerCase() === email.toLowerCase())
-  if (existingUser) {
-    throw createError({
-      statusCode: 409,
-      statusMessage: 'Email already registered'
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10)
+
+    // Create new user
+    const newUser = {
+      id: uuidv4(),
+      name,
+      email,
+      password: hashedPassword,
+      image: 'https://via.placeholder.com/150x150/e5e7eb/9ca3af?text=User',
+      bio: bio || '',
+      skills: skills || [],
+      role: 'user',
+      createdAt: new Date().toISOString()
+    }
+
+    const createdUser = await Database.createUser(newUser)
+
+    // Generate JWT token
+    const token = jwt.sign(
+      { 
+        id: createdUser.id, 
+        email: createdUser.email, 
+        role: createdUser.role 
+      },
+      JWT_SECRET,
+      { expiresIn: '24h' }
+    )
+
+    // Set HTTP-only cookie
+    setCookie(event, 'auth-token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 24 // 24 hours
     })
-  }
 
-  // Hash password
-  const hashedPassword = await hashPassword(password)
-
-  // Create new user
-  const newUser: User = {
-    id: uuidv4(),
-    name,
-    email: email.toLowerCase(),
-    password: hashedPassword,
-    image: image || '/uploads/default/user-avatar.svg',
-    bio: bio || '',
-    skills: Array.isArray(skills) ? skills : [],
-    role: 'user',
-    userRole: userRole || 'developer', // Default to developer if not provided
-    createdAt: new Date().toISOString()
-  }
-
-  // Add to users array
-  users.push(newUser)
-
-  // Save to file
-  fs.writeFileSync(usersPath, JSON.stringify(users, null, 2))
-
-  // Generate token
-  const token = generateToken({
-    id: newUser.id,
-    name: newUser.name,
-    email: newUser.email,
-    role: newUser.role,
-    userRole: newUser.userRole
-  })
-
-  // Set cookie
-  setCookie(event, 'auth-token', token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-    maxAge: 60 * 60 * 24 * 7 // 7 days
-  })
-
-  // Return user data (without password)
-  return {
-    user: {
-      id: newUser.id,
-      name: newUser.name,
-      email: newUser.email,
-      image: newUser.image,
-      bio: newUser.bio,
-      skills: newUser.skills,
-      role: newUser.role,
-      userRole: newUser.userRole
-    },
-    token
+    // Return user without password
+    const { password: _, ...userWithoutPassword } = createdUser
+    return {
+      success: true,
+      user: userWithoutPassword,
+      token
+    }
+  } catch (error: any) {
+    if (error.statusCode) {
+      throw error
+    }
+    
+    console.error('Registration error:', error)
+    throw createError({
+      statusCode: 500,
+      statusMessage: 'Internal server error'
+    })
   }
 })
