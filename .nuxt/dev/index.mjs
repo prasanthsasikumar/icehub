@@ -10,6 +10,7 @@ import bcrypt from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node
 import jwt from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/jsonwebtoken/index.js';
 import { v4 } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/uuid/dist/esm/index.js';
 import { readFile, mkdir, writeFile } from 'node:fs/promises';
+import { put } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/@vercel/blob/dist/index.js';
 import { createClient } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/@supabase/supabase-js/dist/main/index.js';
 import { createRenderer, getRequestDependencies, getPreloadLinks, getPrefetchLinks } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/vue-bundle-renderer/dist/runtime.mjs';
 import { parseURL, withoutBase, joinURL, getQuery, withQuery, withTrailingSlash, decodePath, withLeadingSlash, withoutTrailingSlash, joinRelativeURL } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/ufo/dist/index.mjs';
@@ -2684,14 +2685,21 @@ const index_get$2 = defineEventHandler(async (event) => {
   try {
     const currentUser = getUserFromRequest(event);
     const group = await Database.getGroupById(groupId);
-    console.log("Group from Supabase:", JSON.stringify(group, null, 2));
     if (!group) {
       throw createError({
         statusCode: 404,
         statusMessage: "Group not found"
       });
     }
-    const isMember = currentUser ? group.members && group.members.some((member) => member.userId === currentUser.id) : false;
+    const parsedMembers = group.members ? group.members.map((member) => {
+      try {
+        return typeof member === "string" ? JSON.parse(member) : member;
+      } catch (e) {
+        console.error("Error parsing member:", member, e);
+        return member;
+      }
+    }) : [];
+    const isMember = currentUser ? parsedMembers.some((member) => member.userId === currentUser.id) : false;
     if (!group.isPublic && !isMember) {
       throw createError({
         statusCode: 403,
@@ -2707,7 +2715,7 @@ const index_get$2 = defineEventHandler(async (event) => {
       createdAt: group.createdAt,
       isPrivate: !group.isPublic,
       // Convert isPublic to isPrivate
-      members: group.members || [],
+      members: parsedMembers,
       mentors: [],
       // No mentors field in current schema
       isMember,
@@ -3097,16 +3105,30 @@ const upload_post = defineEventHandler(async (event) => {
     const uniqueId = v4();
     const fileExtension = format.toLowerCase();
     const fileName = `${uniqueId}.${fileExtension}`;
-    const uploadsDir = path.join(process.cwd(), "public", "uploads");
-    await promises.mkdir(uploadsDir, { recursive: true });
-    const filePath = path.join(uploadsDir, fileName);
-    await promises.writeFile(filePath, imageBuffer);
-    const publicUrl = `/uploads/${fileName}`;
-    return {
-      success: true,
-      url: publicUrl,
-      filename: fileName
-    };
+    const isProduction = process.env.VERCEL;
+    if (isProduction && process.env.BLOB_READ_WRITE_TOKEN) {
+      const blob = await put(fileName, imageBuffer, {
+        access: "public",
+        contentType: `image/${format}`,
+        token: process.env.BLOB_READ_WRITE_TOKEN
+      });
+      return {
+        success: true,
+        url: blob.url,
+        filename: fileName
+      };
+    } else {
+      const uploadsDir = path.join(process.cwd(), "public", "uploads");
+      await promises.mkdir(uploadsDir, { recursive: true });
+      const filePath = path.join(uploadsDir, fileName);
+      await promises.writeFile(filePath, imageBuffer);
+      const publicUrl = `/uploads/${fileName}`;
+      return {
+        success: true,
+        url: publicUrl,
+        filename: fileName
+      };
+    }
   } catch (error) {
     console.error("File upload error:", error);
     throw createError({
