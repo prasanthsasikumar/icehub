@@ -9,6 +9,9 @@
         <div class="nav-right flex items-center gap-4">
           <template v-if="isLoggedIn">
             <span class="text-sm text-gray-600">Welcome, {{ user?.name }}</span>
+            <NuxtLink to="/groups" class="nav-button nav-button-secondary">
+              Groups
+            </NuxtLink>
             <NuxtLink to="/chat" class="nav-button nav-button-secondary">
               Messages
             </NuxtLink>
@@ -31,6 +34,9 @@
             </button>
           </template>
           <template v-else>
+            <NuxtLink to="/groups" class="nav-button nav-button-secondary">
+              Groups
+            </NuxtLink>
             <NuxtLink to="/login" class="nav-button nav-button-secondary">
               Sign In
             </NuxtLink>

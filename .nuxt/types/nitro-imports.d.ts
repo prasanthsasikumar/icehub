@@ -18,6 +18,7 @@ declare global {
   const createError: typeof import('../../node_modules/h3')['createError']
   const createEvent: typeof import('../../node_modules/h3')['createEvent']
   const createEventStream: typeof import('../../node_modules/h3')['createEventStream']
+  const createGroupId: typeof import('../../server/utils/groups')['createGroupId']
   const createRouter: typeof import('../../node_modules/h3')['createRouter']
   const defaultContentType: typeof import('../../node_modules/h3')['defaultContentType']
   const defineAppConfig: typeof import('../../node_modules/nuxt/dist/core/runtime/nitro/utils/config')['defineAppConfig']
@@ -53,6 +54,7 @@ declare global {
   const getMethod: typeof import('../../node_modules/h3')['getMethod']
   const getProxyRequestHeaders: typeof import('../../node_modules/h3')['getProxyRequestHeaders']
   const getQuery: typeof import('../../node_modules/h3')['getQuery']
+  const getRandomGroupCover: typeof import('../../server/utils/groups')['getRandomGroupCover']
   const getRequestFingerprint: typeof import('../../node_modules/h3')['getRequestFingerprint']
   const getRequestHeader: typeof import('../../node_modules/h3')['getRequestHeader']
   const getRequestHeaders: typeof import('../../node_modules/h3')['getRequestHeaders']
@@ -141,6 +143,9 @@ declare global {
   // @ts-ignore
   export type { SkillWithLevel, User, AuthUser } from '../../server/utils/auth'
   import('../../server/utils/auth')
+  // @ts-ignore
+  export type { GroupMember, Group } from '../../server/utils/groups'
+  import('../../server/utils/groups')
 }
 export { useNitroApp } from 'nitropack/runtime/internal/app';
 export { useRuntimeConfig, useAppConfig } from 'nitropack/runtime/internal/config';
@@ -157,5 +162,6 @@ export { appendCorsHeaders, appendCorsPreflightHeaders, appendHeader, appendHead
 export { buildAssetsURL as __buildAssetsURL, publicAssetsURL as __publicAssetsURL } from '/Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/nuxt/dist/core/runtime/nitro/utils/paths';
 export { defineAppConfig } from '/Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/nuxt/dist/core/runtime/nitro/utils/config';
 export { hashPassword, verifyPassword, generateToken, verifyToken, getUserFromRequest } from '/Users/prasanthsasikumar/Documents/GitHub/icehub/server/utils/auth';
+export { getRandomGroupCover, createGroupId } from '/Users/prasanthsasikumar/Documents/GitHub/icehub/server/utils/groups';
 export { getDefaultUserImage, ensureUserImage } from '/Users/prasanthsasikumar/Documents/GitHub/icehub/server/utils/image';
 export { normalizeSkills, getDefaultSkillLevel, skillsToStringArray, getSkillLevel } from '/Users/prasanthsasikumar/Documents/GitHub/icehub/server/utils/skills';

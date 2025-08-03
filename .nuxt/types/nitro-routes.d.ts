@@ -27,6 +27,27 @@ declare module "nitropack/types" {
     '/api/chat/send': {
       'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/chat/send.post').default>>>>
     }
+    '/api/groups/:id/delete': {
+      'delete': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/groups/[id]/delete.delete').default>>>>
+    }
+    '/api/groups/:id': {
+      'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/groups/[id]/index.get').default>>>>
+    }
+    '/api/groups/:id/join': {
+      'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/groups/[id]/join.post').default>>>>
+    }
+    '/api/groups/:id/leave': {
+      'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/groups/[id]/leave.post').default>>>>
+    }
+    '/api/groups/:id/update': {
+      'put': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/groups/[id]/update.put').default>>>>
+    }
+    '/api/groups/create': {
+      'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/groups/create.post').default>>>>
+    }
+    '/api/groups': {
+      'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/groups/index.get').default>>>>
+    }
     '/api/skills': {
       'default': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/skills').default>>>>
     }

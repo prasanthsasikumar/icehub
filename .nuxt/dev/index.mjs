@@ -1122,22 +1122,7 @@ const plugins = [
 _imlJlEtcYUErFKlIoV3o40RwAHyYMj1YM8ArfD1nFG0
 ];
 
-const assets = {
-  "/index.mjs": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"1858d-eITA2q2BP0/erW1MxPAKFLpq3XM\"",
-    "mtime": "2025-08-03T10:48:06.657Z",
-    "size": 99725,
-    "path": "index.mjs"
-  },
-  "/index.mjs.map": {
-    "type": "application/json",
-    "etag": "\"58527-pfd/7gEs2vifndZxNlvfWAH58sc\"",
-    "mtime": "2025-08-03T10:48:06.657Z",
-    "size": 361767,
-    "path": "index.mjs.map"
-  }
-};
+const assets = {};
 
 function readAsset (id) {
   const serverDir = dirname$1(fileURLToPath(globalThis._importMeta_.url));
@@ -1552,6 +1537,13 @@ const _lazy_Z_k7UE = () => Promise.resolve().then(function () { return register_
 const _lazy_HItsH8 = () => Promise.resolve().then(function () { return conversations_get$1; });
 const _lazy_ttNtBU = () => Promise.resolve().then(function () { return messages_get$1; });
 const _lazy_nCeQW7 = () => Promise.resolve().then(function () { return send_post$1; });
+const _lazy_ue7UuQ = () => Promise.resolve().then(function () { return delete_delete$1; });
+const _lazy_5f9wml = () => Promise.resolve().then(function () { return index_get$3; });
+const _lazy_RFjUl8 = () => Promise.resolve().then(function () { return join_post$1; });
+const _lazy_8VldZt = () => Promise.resolve().then(function () { return leave_post$1; });
+const _lazy_l0he2L = () => Promise.resolve().then(function () { return update_put$1; });
+const _lazy_RjL2E9 = () => Promise.resolve().then(function () { return create_post$1; });
+const _lazy_pdoIG1 = () => Promise.resolve().then(function () { return index_get$1; });
 const _lazy_HejCb8 = () => Promise.resolve().then(function () { return skills$1; });
 const _lazy_oEw_c6 = () => Promise.resolve().then(function () { return upload_post$1; });
 const _lazy_GGJj8N = () => Promise.resolve().then(function () { return user_get$1; });
@@ -1570,6 +1562,13 @@ const handlers = [
   { route: '/api/chat/conversations', handler: _lazy_HItsH8, lazy: true, middleware: false, method: "get" },
   { route: '/api/chat/messages', handler: _lazy_ttNtBU, lazy: true, middleware: false, method: "get" },
   { route: '/api/chat/send', handler: _lazy_nCeQW7, lazy: true, middleware: false, method: "post" },
+  { route: '/api/groups/:id/delete', handler: _lazy_ue7UuQ, lazy: true, middleware: false, method: "delete" },
+  { route: '/api/groups/:id', handler: _lazy_5f9wml, lazy: true, middleware: false, method: "get" },
+  { route: '/api/groups/:id/join', handler: _lazy_RFjUl8, lazy: true, middleware: false, method: "post" },
+  { route: '/api/groups/:id/leave', handler: _lazy_8VldZt, lazy: true, middleware: false, method: "post" },
+  { route: '/api/groups/:id/update', handler: _lazy_l0he2L, lazy: true, middleware: false, method: "put" },
+  { route: '/api/groups/create', handler: _lazy_RjL2E9, lazy: true, middleware: false, method: "post" },
+  { route: '/api/groups', handler: _lazy_pdoIG1, lazy: true, middleware: false, method: "get" },
   { route: '/api/skills', handler: _lazy_HejCb8, lazy: true, middleware: false, method: undefined },
   { route: '/api/upload', handler: _lazy_oEw_c6, lazy: true, middleware: false, method: "post" },
   { route: '/api/user', handler: _lazy_GGJj8N, lazy: true, middleware: false, method: "get" },
@@ -2342,6 +2341,380 @@ const send_post = defineEventHandler(async (event) => {
 const send_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: send_post
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const delete_delete = defineEventHandler(async (event) => {
+  if (getMethod(event) !== "DELETE") {
+    throw createError({
+      statusCode: 405,
+      statusMessage: "Method not allowed"
+    });
+  }
+  const groupId = getRouterParam(event, "id");
+  if (!groupId) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Group ID is required"
+    });
+  }
+  const currentUser = getUserFromRequest(event);
+  if (!currentUser) {
+    throw createError({
+      statusCode: 401,
+      statusMessage: "Authentication required"
+    });
+  }
+  const groupsPath = path.join(process.cwd(), "server/data/groups.json");
+  const groups = JSON.parse(fs.readFileSync(groupsPath, "utf8"));
+  const groupIndex = groups.findIndex((g) => g.id === groupId);
+  if (groupIndex === -1) {
+    throw createError({
+      statusCode: 404,
+      statusMessage: "Group not found"
+    });
+  }
+  const group = groups[groupIndex];
+  const isMember = group.members.some((member) => member.userId === currentUser.id);
+  if (!isMember) {
+    throw createError({
+      statusCode: 403,
+      statusMessage: "Only group members can delete this group"
+    });
+  }
+  groups.splice(groupIndex, 1);
+  fs.writeFileSync(groupsPath, JSON.stringify(groups, null, 2));
+  return {
+    message: "Group deleted successfully"
+  };
+});
+
+const delete_delete$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: delete_delete
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const index_get$2 = defineEventHandler(async (event) => {
+  const groupId = getRouterParam(event, "id");
+  if (!groupId) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Group ID is required"
+    });
+  }
+  const currentUser = getUserFromRequest(event);
+  const groupsPath = path.join(process.cwd(), "server/data/groups.json");
+  const groups = JSON.parse(fs.readFileSync(groupsPath, "utf8"));
+  const group = groups.find((g) => g.id === groupId);
+  if (!group) {
+    throw createError({
+      statusCode: 404,
+      statusMessage: "Group not found"
+    });
+  }
+  const isMember = currentUser ? group.members.some((member) => member.userId === currentUser.id) : false;
+  if (group.isPrivate && !isMember) {
+    throw createError({
+      statusCode: 403,
+      statusMessage: "Access denied to private group"
+    });
+  }
+  return {
+    ...group,
+    isMember: currentUser ? group.members.some((member) => member.userId === currentUser.id) : false
+  };
+});
+
+const index_get$3 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: index_get$2
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const join_post = defineEventHandler(async (event) => {
+  if (getMethod(event) !== "POST") {
+    throw createError({
+      statusCode: 405,
+      statusMessage: "Method not allowed"
+    });
+  }
+  const groupId = getRouterParam(event, "id");
+  if (!groupId) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Group ID is required"
+    });
+  }
+  const currentUser = getUserFromRequest(event);
+  if (!currentUser) {
+    throw createError({
+      statusCode: 401,
+      statusMessage: "Authentication required"
+    });
+  }
+  const groupsPath = path.join(process.cwd(), "server/data/groups.json");
+  const groups = JSON.parse(fs.readFileSync(groupsPath, "utf8"));
+  const groupIndex = groups.findIndex((g) => g.id === groupId);
+  if (groupIndex === -1) {
+    throw createError({
+      statusCode: 404,
+      statusMessage: "Group not found"
+    });
+  }
+  const group = groups[groupIndex];
+  const isAlreadyMember = group.members.some((member) => member.userId === currentUser.id);
+  if (isAlreadyMember) {
+    throw createError({
+      statusCode: 409,
+      statusMessage: "User is already a member of this group"
+    });
+  }
+  group.members.push({
+    userId: currentUser.id,
+    userName: currentUser.name,
+    joinedAt: (/* @__PURE__ */ new Date()).toISOString()
+  });
+  groups[groupIndex] = group;
+  fs.writeFileSync(groupsPath, JSON.stringify(groups, null, 2));
+  return {
+    message: "Successfully joined the group",
+    group
+  };
+});
+
+const join_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: join_post
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const leave_post = defineEventHandler(async (event) => {
+  if (getMethod(event) !== "POST") {
+    throw createError({
+      statusCode: 405,
+      statusMessage: "Method not allowed"
+    });
+  }
+  const groupId = getRouterParam(event, "id");
+  if (!groupId) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Group ID is required"
+    });
+  }
+  const currentUser = getUserFromRequest(event);
+  if (!currentUser) {
+    throw createError({
+      statusCode: 401,
+      statusMessage: "Authentication required"
+    });
+  }
+  const groupsPath = path.join(process.cwd(), "server/data/groups.json");
+  const groups = JSON.parse(fs.readFileSync(groupsPath, "utf8"));
+  const groupIndex = groups.findIndex((g) => g.id === groupId);
+  if (groupIndex === -1) {
+    throw createError({
+      statusCode: 404,
+      statusMessage: "Group not found"
+    });
+  }
+  const group = groups[groupIndex];
+  const memberIndex = group.members.findIndex((member) => member.userId === currentUser.id);
+  if (memberIndex === -1) {
+    throw createError({
+      statusCode: 409,
+      statusMessage: "User is not a member of this group"
+    });
+  }
+  group.members.splice(memberIndex, 1);
+  if (group.members.length === 0) {
+    groups.splice(groupIndex, 1);
+  } else {
+    groups[groupIndex] = group;
+  }
+  fs.writeFileSync(groupsPath, JSON.stringify(groups, null, 2));
+  return {
+    message: group.members.length === 0 ? "Left group and group was deleted (no members left)" : "Successfully left the group"
+  };
+});
+
+const leave_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: leave_post
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const update_put = defineEventHandler(async (event) => {
+  if (getMethod(event) !== "PUT") {
+    throw createError({
+      statusCode: 405,
+      statusMessage: "Method not allowed"
+    });
+  }
+  const groupId = getRouterParam(event, "id");
+  if (!groupId) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Group ID is required"
+    });
+  }
+  const currentUser = getUserFromRequest(event);
+  if (!currentUser) {
+    throw createError({
+      statusCode: 401,
+      statusMessage: "Authentication required"
+    });
+  }
+  const { name, description, coverImage, isPrivate } = await readBody(event);
+  if (!name || !description) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Name and description are required"
+    });
+  }
+  const groupsPath = path.join(process.cwd(), "server/data/groups.json");
+  const groups = JSON.parse(fs.readFileSync(groupsPath, "utf8"));
+  const groupIndex = groups.findIndex((g) => g.id === groupId);
+  if (groupIndex === -1) {
+    throw createError({
+      statusCode: 404,
+      statusMessage: "Group not found"
+    });
+  }
+  const group = groups[groupIndex];
+  const isMember = group.members.some((member) => member.userId === currentUser.id);
+  if (!isMember) {
+    throw createError({
+      statusCode: 403,
+      statusMessage: "Only group members can manage this group"
+    });
+  }
+  const existingGroup = groups.find((g) => g.name.toLowerCase() === name.toLowerCase() && g.id !== groupId);
+  if (existingGroup) {
+    throw createError({
+      statusCode: 409,
+      statusMessage: "Group name already exists"
+    });
+  }
+  groups[groupIndex] = {
+    ...group,
+    name: name.trim(),
+    description: description.trim(),
+    coverImage: coverImage || group.coverImage,
+    // Keep existing if not provided
+    isPrivate: isPrivate !== void 0 ? isPrivate : group.isPrivate
+  };
+  fs.writeFileSync(groupsPath, JSON.stringify(groups, null, 2));
+  return {
+    message: "Group updated successfully",
+    group: groups[groupIndex]
+  };
+});
+
+const update_put$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: update_put
+}, Symbol.toStringTag, { value: 'Module' }));
+
+function getRandomGroupCover() {
+  const covers = [
+    "/uploads/groupCoverSamples/cover1.svg",
+    "/uploads/groupCoverSamples/cover2.svg",
+    "/uploads/groupCoverSamples/cover3.svg",
+    "/uploads/groupCoverSamples/cover4.svg",
+    "/uploads/groupCoverSamples/cover5.svg"
+  ];
+  return covers[Math.floor(Math.random() * covers.length)];
+}
+function createGroupId() {
+  return "group_" + Math.random().toString(36).substr(2, 9);
+}
+
+const create_post = defineEventHandler(async (event) => {
+  if (getMethod(event) !== "POST") {
+    throw createError({
+      statusCode: 405,
+      statusMessage: "Method not allowed"
+    });
+  }
+  const currentUser = getUserFromRequest(event);
+  if (!currentUser) {
+    throw createError({
+      statusCode: 401,
+      statusMessage: "Authentication required"
+    });
+  }
+  const { name, description, coverImage, isPrivate } = await readBody(event);
+  if (!name || !description) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Name and description are required"
+    });
+  }
+  const groupsPath = path.join(process.cwd(), "server/data/groups.json");
+  const groups = JSON.parse(fs.readFileSync(groupsPath, "utf8"));
+  const existingGroup = groups.find((g) => g.name.toLowerCase() === name.toLowerCase());
+  if (existingGroup) {
+    throw createError({
+      statusCode: 409,
+      statusMessage: "Group name already exists"
+    });
+  }
+  const newGroup = {
+    id: createGroupId(),
+    name: name.trim(),
+    description: description.trim(),
+    coverImage: coverImage || getRandomGroupCover(),
+    createdBy: currentUser.id,
+    createdAt: (/* @__PURE__ */ new Date()).toISOString(),
+    members: [
+      {
+        userId: currentUser.id,
+        userName: currentUser.name,
+        joinedAt: (/* @__PURE__ */ new Date()).toISOString()
+      }
+    ],
+    isPrivate: isPrivate || false
+  };
+  groups.push(newGroup);
+  fs.writeFileSync(groupsPath, JSON.stringify(groups, null, 2));
+  return {
+    message: "Group created successfully",
+    group: newGroup
+  };
+});
+
+const create_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: create_post
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const index_get = defineEventHandler(async (event) => {
+  const groupsPath = path.join(process.cwd(), "server/data/groups.json");
+  const groups = JSON.parse(fs.readFileSync(groupsPath, "utf8"));
+  const query = getQuery$1(event);
+  const userId = query.userId;
+  let filteredGroups = groups;
+  if (!userId) {
+    filteredGroups = groups.filter((group) => !group.isPrivate);
+  } else {
+    filteredGroups = groups.filter(
+      (group) => !group.isPrivate || group.members.some((member) => member.userId === userId)
+    );
+  }
+  return filteredGroups.map((group) => ({
+    id: group.id,
+    name: group.name,
+    description: group.description,
+    coverImage: group.coverImage,
+    createdBy: group.createdBy,
+    createdAt: group.createdAt,
+    memberCount: group.members.length,
+    isPrivate: group.isPrivate,
+    // Only show if user is member for member list
+    isMember: userId ? group.members.some((member) => member.userId === userId) : false
+  }));
+});
+
+const index_get$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: index_get
 }, Symbol.toStringTag, { value: 'Module' }));
 
 const skills = defineEventHandler(async () => {

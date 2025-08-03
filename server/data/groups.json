@@ -1,0 +1,39 @@
+[
+  {
+    "id": "group_508mw2us9",
+    "name": "Group 1",
+    "description": "This is the group 1",
+    "coverImage": "/uploads/groupCoverSamples/cover5.svg",
+    "createdBy": "e07e01d9-064c-4838-95ae-2e27ac6df861",
+    "createdAt": "2025-08-03T11:00:33.429Z",
+    "members": [
+      {
+        "userId": "e07e01d9-064c-4838-95ae-2e27ac6df861",
+        "userName": "Jhon Doe",
+        "joinedAt": "2025-08-03T11:00:33.429Z"
+      },
+      {
+        "userId": "6fcde34e-bdff-47a2-9849-921ba50e3d3d",
+        "userName": "Donald Trump",
+        "joinedAt": "2025-08-03T11:01:14.468Z"
+      }
+    ],
+    "isPrivate": false
+  },
+  {
+    "id": "group_e3wvkjtf3",
+    "name": "Group2",
+    "description": "this is group 2",
+    "coverImage": "/uploads/groupCoverSamples/cover1.svg",
+    "createdBy": "e07e01d9-064c-4838-95ae-2e27ac6df861",
+    "createdAt": "2025-08-03T11:02:41.683Z",
+    "members": [
+      {
+        "userId": "e07e01d9-064c-4838-95ae-2e27ac6df861",
+        "userName": "Jhon Doe",
+        "joinedAt": "2025-08-03T11:02:41.683Z"
+      }
+    ],
+    "isPrivate": false
+  }
+]
