@@ -19,16 +19,7 @@ export const ensureUserImage = (userImage: string | null | undefined) => {
 // Function to upload image from Buffer data (for multipart form uploads)
 export const uploadImageBuffer = async (imageBuffer: Buffer, filename: string, contentType: string) => {
   try {
-    console.log('Upload function called with:', {
-      bufferLength: imageBuffer?.length,
-      filename,
-      contentType,
-      isProduction: process.env.NODE_ENV === 'production' || process.env.VERCEL,
-      hasBlobToken: !!process.env.BLOB_READ_WRITE_TOKEN
-    })
-    
     if (!imageBuffer || imageBuffer.length === 0) {
-      console.log('Invalid image buffer')
       return {
         success: false,
         error: 'Invalid image data'
@@ -58,16 +49,13 @@ export const uploadImageBuffer = async (imageBuffer: Buffer, filename: string, c
       }
     } else {
       // Use local storage in development
-      console.log('Using local storage for image upload')
       const uploadsDir = path.join(process.cwd(), 'public', 'uploads')
       await fs.mkdir(uploadsDir, { recursive: true })
       
       const filePath = path.join(uploadsDir, uniqueFilename)
-      console.log('Writing file to:', filePath)
       await fs.writeFile(filePath, imageBuffer)
 
       const publicUrl = `/uploads/${uniqueFilename}`
-      console.log('Image uploaded successfully:', publicUrl)
       
       return {
         success: true,

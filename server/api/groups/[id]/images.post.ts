@@ -83,8 +83,6 @@ export default defineEventHandler(async (event) => {
       imageFile.type || 'image/jpeg'
     )
     
-    console.log('Upload result:', uploadResult)
-    
     if (!uploadResult || !uploadResult.success || !uploadResult.url) {
       throw createError({
         statusCode: 500,
@@ -100,9 +98,7 @@ export default defineEventHandler(async (event) => {
       filename: uploadResult.filename
     }
 
-    console.log('Creating image record:', newImage)
     const createdImage = await Database.createGroupImage(newImage)
-    console.log('Created image record:', createdImage)
     
     return createdImage
   } catch (error: any) {

@@ -1127,16 +1127,16 @@ _imlJlEtcYUErFKlIoV3o40RwAHyYMj1YM8ArfD1nFG0
 const assets = {
   "/index.mjs": {
     "type": "text/javascript; charset=utf-8",
-    "etag": "\"24e2c-oddJBIRar4g33mHzw1Ud9S7OnQc\"",
-    "mtime": "2025-08-04T08:14:48.514Z",
-    "size": 151084,
+    "etag": "\"24be8-6byfNkx5jlqMvxEr6OyHuuw4hik\"",
+    "mtime": "2025-08-04T08:30:29.210Z",
+    "size": 150504,
     "path": "index.mjs"
   },
   "/index.mjs.map": {
     "type": "application/json",
-    "etag": "\"833e9-cUYtbGnObx5VlkGCxQkjjisPpwU\"",
-    "mtime": "2025-08-04T08:14:48.516Z",
-    "size": 537577,
+    "etag": "\"80000-f8VvLTKtBxc8e5Zm783zAIQSNOs\"",
+    "mtime": "2025-08-04T08:30:29.243Z",
+    "size": 535645,
     "path": "index.mjs.map"
   }
 };
@@ -2518,15 +2518,7 @@ const ensureUserImage = (userImage) => {
 };
 const uploadImageBuffer = async (imageBuffer, filename, contentType) => {
   try {
-    console.log("Upload function called with:", {
-      bufferLength: imageBuffer == null ? void 0 : imageBuffer.length,
-      filename,
-      contentType,
-      isProduction: process.env.VERCEL,
-      hasBlobToken: !!process.env.BLOB_READ_WRITE_TOKEN
-    });
     if (!imageBuffer || imageBuffer.length === 0) {
-      console.log("Invalid image buffer");
       return {
         success: false,
         error: "Invalid image data"
@@ -2548,14 +2540,11 @@ const uploadImageBuffer = async (imageBuffer, filename, contentType) => {
         filename: uniqueFilename
       };
     } else {
-      console.log("Using local storage for image upload");
       const uploadsDir = path.join(process.cwd(), "public", "uploads");
       await promises.mkdir(uploadsDir, { recursive: true });
       const filePath = path.join(uploadsDir, uniqueFilename);
-      console.log("Writing file to:", filePath);
       await promises.writeFile(filePath, imageBuffer);
       const publicUrl = `/uploads/${uniqueFilename}`;
-      console.log("Image uploaded successfully:", publicUrl);
       return {
         success: true,
         url: publicUrl,
@@ -3156,7 +3145,6 @@ const images_post = defineEventHandler(async (event) => {
       imageFile.filename || "group-image.jpg",
       imageFile.type || "image/jpeg"
     );
-    console.log("Upload result:", uploadResult);
     if (!uploadResult || !uploadResult.success || !uploadResult.url) {
       throw createError({
         statusCode: 500,
@@ -3169,9 +3157,7 @@ const images_post = defineEventHandler(async (event) => {
       image_url: uploadResult.url,
       filename: uploadResult.filename
     };
-    console.log("Creating image record:", newImage);
     const createdImage = await Database.createGroupImage(newImage);
-    console.log("Created image record:", createdImage);
     return createdImage;
   } catch (error) {
     if (error.statusCode) {
@@ -4102,7 +4088,7 @@ const update_post = defineEventHandler(async (event) => {
       statusMessage: "Authentication required"
     });
   }
-  const { name, bio, skills, image } = await readBody(event);
+  const { name, bio, skills, image, userRole } = await readBody(event);
   if (!name) {
     throw createError({
       statusCode: 400,
@@ -4153,6 +4139,7 @@ const update_post = defineEventHandler(async (event) => {
       name,
       bio: bio || "",
       image: imageUrl,
+      userRole: userRole || "developer",
       skills: processedSkills
     });
     return {

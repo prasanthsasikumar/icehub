@@ -76,6 +76,22 @@
                 ></textarea>
               </div>
 
+              <!-- User Role Input -->
+              <div class="flex flex-col gap-2">
+                <label for="userRole" class="font-semibold text-gray-700 text-sm mb-1">Community Role</label>
+                <select 
+                  id="userRole"
+                  v-model="form.userRole" 
+                  class="px-4 py-3 border border-gray-200 rounded-lg text-base transition-all duration-200 bg-white text-gray-700 focus:outline-none focus:border-primary focus:shadow-lg focus:shadow-primary/10"
+                >
+                  <option value="developer">Developer</option>
+                  <option value="mentor">Mentor</option>
+                </select>
+                <p class="text-xs text-gray-500">
+                  Choose your primary role in the community. Mentors can guide other developers and have special privileges in groups.
+                </p>
+              </div>
+
               <!-- Skills Input -->
               <div class="flex flex-col gap-2">
                 <label for="skills" class="font-semibold text-gray-700 text-sm mb-1">Skills</label>
@@ -263,7 +279,8 @@ const loading = ref(true)
 const form = reactive({
   name: '',
   bio: '',
-  image: ''
+  image: '',
+  userRole: 'developer'
 })
 
 // Skills management
@@ -364,6 +381,7 @@ const initializeForm = () => {
     form.name = user.value.name || ''
     form.bio = user.value.bio || ''
     form.image = user.value.image || ''
+    form.userRole = user.value.userRole || 'developer'
     
     // Handle skills - support both old and new formats
     if (user.value.skills) {
@@ -412,6 +430,7 @@ const updateProfile = async () => {
         name: form.name,
         bio: form.bio,
         image: form.image,
+        userRole: form.userRole,
         skills: skillsList.value // Send skills with levels
       }
     })
