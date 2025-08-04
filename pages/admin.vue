@@ -98,7 +98,7 @@
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap">
                     <span 
-                      :class="user.role === 'admin' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'"
+                      :class="getRoleStyle(user.role)"
                       class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
                     >
                       {{ user.role }}
@@ -142,7 +142,7 @@
                       @click="toggleRole(user)"
                       class="text-purple-600 hover:text-purple-900"
                     >
-                      {{ user.role === 'admin' ? 'Make User' : 'Make Admin' }}
+                      {{ getRoleToggleText(user.role) }}
                     </button>
                     <button 
                       v-if="user.id !== currentUser?.id"
@@ -201,23 +201,54 @@ const editUser = (user) => {
 }
 
 const toggleRole = async (user) => {
-  if (!confirm(`Are you sure you want to change ${user.name}'s role to ${user.role === 'admin' ? 'user' : 'admin'}?`)) {
+  const newRole = user.role === 'admin' ? 'user' : 'admin'
+  const action = newRole === 'admin' ? 'promote to admin' : 'demote to regular user'
+  
+  if (!confirm(`Are you sure you want to ${action} ${user.name}?`)) {
     return
   }
 
   try {
-    await $fetch('/api/admin/toggle-role', {
+    const response = await $fetch('/api/admin/toggle-role', {
       method: 'POST',
       body: {
         userId: user.id,
-        newRole: user.role === 'admin' ? 'user' : 'admin'
+        newRole: newRole
       }
     })
     
     // Refresh users data
     await refreshUsers()
+    
+    // Show success message
+    alert(`Successfully ${action} ${user.name}`)
   } catch (error) {
-    alert('Failed to update user role')
+    console.error('Error updating user role:', error)
+    const errorMessage = error.data?.message || error.message || 'Unknown error'
+    alert(`Failed to update user role: ${errorMessage}`)
+  }
+}
+
+const getRoleToggleText = (currentRole) => {
+  switch (currentRole) {
+    case 'admin':
+      return 'Remove Admin'
+    case 'user':
+    case 'mentor':
+    default:
+      return 'Make Admin'
+  }
+}
+
+const getRoleStyle = (role) => {
+  switch (role) {
+    case 'admin':
+      return 'bg-red-100 text-red-800'
+    case 'mentor':
+      return 'bg-blue-100 text-blue-800'
+    case 'user':
+    default:
+      return 'bg-green-100 text-green-800'
   }
 }
 

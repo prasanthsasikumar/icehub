@@ -1127,16 +1127,16 @@ _imlJlEtcYUErFKlIoV3o40RwAHyYMj1YM8ArfD1nFG0
 const assets = {
   "/index.mjs": {
     "type": "text/javascript; charset=utf-8",
-    "etag": "\"1f017-N8Kah6zEpJGM8y5h2EaskX6clNo\"",
-    "mtime": "2025-08-04T03:42:35.770Z",
-    "size": 126999,
+    "etag": "\"1f0ed-n8UaAM5ULET4jIUdtkNFf90+UC0\"",
+    "mtime": "2025-08-04T03:50:37.829Z",
+    "size": 127213,
     "path": "index.mjs"
   },
   "/index.mjs.map": {
     "type": "application/json",
-    "etag": "\"6f9fa-8F4sWlgKxOz275FaUGK4yigS8Ik\"",
-    "mtime": "2025-08-04T03:42:35.769Z",
-    "size": 457210,
+    "etag": "\"6fc77-T0obV3/tdrDqcrFremq3v5joGF4\"",
+    "mtime": "2025-08-04T03:50:37.829Z",
+    "size": 457847,
     "path": "index.mjs.map"
   }
 };
@@ -2888,10 +2888,15 @@ const join_post = defineEventHandler(async (event) => {
         statusMessage: "User is already part of this group"
       });
     }
+    let userName = currentUser.name;
+    if (!userName) {
+      console.warn("Name missing from JWT token, fetching from database...");
+      const fullUser = await Database.getUserById(currentUser.id);
+      userName = (fullUser == null ? void 0 : fullUser.name) || "Unknown User";
+    }
     const newMember = {
       userId: currentUser.id,
-      userName: currentUser.name || "Unknown User",
-      // Add fallback for missing name
+      userName,
       role: joinAsRole,
       joinedAt: (/* @__PURE__ */ new Date()).toISOString()
     };

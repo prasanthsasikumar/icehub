@@ -85,9 +85,18 @@ export default defineEventHandler(async (event) => {
     }
 
     // Add user to members array with appropriate role
+    let userName = currentUser.name
+    
+    // If name is missing from JWT (old token), fetch from database
+    if (!userName) {
+      console.warn('Name missing from JWT token, fetching from database...')
+      const fullUser = await Database.getUserById(currentUser.id)
+      userName = fullUser?.name || 'Unknown User'
+    }
+    
     const newMember = {
       userId: currentUser.id,
-      userName: currentUser.name || 'Unknown User',  // Add fallback for missing name
+      userName: userName,
       role: joinAsRole,
       joinedAt: new Date().toISOString()
     }
