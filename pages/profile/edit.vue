@@ -76,6 +76,37 @@
                 ></textarea>
               </div>
 
+              <!-- Affiliation Input -->
+              <div class="flex flex-col gap-2">
+                <label for="affiliation" class="font-semibold text-gray-700 text-sm mb-1">Affiliation</label>
+                <input 
+                  id="affiliation"
+                  v-model="form.affiliation" 
+                  type="text"
+                  placeholder="e.g., University of Colombo, Google, Freelancer" 
+                  class="px-4 py-3 border border-gray-200 rounded-lg text-base transition-all duration-200 bg-white text-gray-700 focus:outline-none focus:border-primary focus:shadow-lg focus:shadow-primary/10"
+                />
+                <p class="text-xs text-gray-500">
+                  Your current organization, university, or professional status
+                </p>
+              </div>
+
+              <!-- Gender Input -->
+              <div class="flex flex-col gap-2">
+                <label for="gender" class="font-semibold text-gray-700 text-sm mb-1">Gender (Optional)</label>
+                <select 
+                  id="gender"
+                  v-model="form.gender" 
+                  class="px-4 py-3 border border-gray-200 rounded-lg text-base transition-all duration-200 bg-white text-gray-700 focus:outline-none focus:border-primary focus:shadow-lg focus:shadow-primary/10"
+                >
+                  <option value="">Prefer not to say</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="non-binary">Non-binary</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+
               <!-- User Role Input -->
               <div class="flex flex-col gap-2">
                 <label for="userRole" class="font-semibold text-gray-700 text-sm mb-1">Community Role</label>
@@ -280,7 +311,9 @@ const form = reactive({
   name: '',
   bio: '',
   image: '',
-  userRole: 'developer'
+  userRole: 'developer',
+  affiliation: '',
+  gender: ''
 })
 
 // Skills management
@@ -378,10 +411,18 @@ const importLegacySkills = () => {
 // Initialize form with current user data
 const initializeForm = () => {
   if (user.value) {
+    console.log('Initializing form with user data:', user.value)
     form.name = user.value.name || ''
     form.bio = user.value.bio || ''
     form.image = user.value.image || ''
     form.userRole = user.value.userRole || 'developer'
+    form.affiliation = user.value.affiliation || ''
+    form.gender = user.value.gender || ''
+    
+    console.log('Form after initialization:', {
+      affiliation: form.affiliation,
+      gender: form.gender
+    })
     
     // Handle skills - support both old and new formats
     if (user.value.skills) {
@@ -431,6 +472,8 @@ const updateProfile = async () => {
         bio: form.bio,
         image: form.image,
         userRole: form.userRole,
+        affiliation: form.affiliation,
+        gender: form.gender,
         skills: skillsList.value // Send skills with levels
       }
     })

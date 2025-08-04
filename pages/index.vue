@@ -219,7 +219,7 @@
           <!-- Popular Skills Section -->
           <section class="mb-12 sm:mb-20">
             <div class="flex justify-between items-center mb-6 sm:mb-8">
-              <h2 class="text-2xl sm:text-3xl font-bold text-gray-700 m-0">Top AI skills in the workshop</h2>
+              <h2 class="text-2xl sm:text-3xl font-bold text-gray-700 m-0">Top skills in the workshop</h2>
             </div>
             
             <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">

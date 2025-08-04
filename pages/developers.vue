@@ -32,7 +32,7 @@
             <input
               v-model="searchQuery"
               type="text"
-              placeholder="Search developers by name or skills..."
+              placeholder="Search by name, skills, or affiliation..."
               class="form-input"
             />
           </div>
@@ -43,6 +43,15 @@
             <option value="">All Skills</option>
             <option v-for="skill in allSkills" :key="skill" :value="skill">
               {{ skill }}
+            </option>
+          </select>
+          <select
+            v-model="affiliationFilter"
+            class="form-input sm:w-auto"
+          >
+            <option value="">All Affiliations</option>
+            <option v-for="affiliation in allAffiliations" :key="affiliation" :value="affiliation">
+              {{ affiliation }}
             </option>
           </select>
         </div>
@@ -69,6 +78,7 @@
                 </div>
                 <div class="flex-1 min-w-0">
                   <h3 class="text-base sm:text-lg font-semibold text-gray-700 mb-1 truncate">{{ user.name }}</h3>
+                  <p v-if="user.affiliation" class="text-xs sm:text-sm text-primary font-medium mb-1 truncate">{{ user.affiliation }}</p>
                   <p class="text-xs sm:text-sm text-gray-500 leading-snug line-clamp-2">{{ user.bio }}</p>
                 </div>
               </div>
@@ -175,6 +185,7 @@ const getDisplaySkills = (skills) => {
 // Reactive filters
 const searchQuery = ref('')
 const skillFilter = ref('')
+const affiliationFilter = ref('')
 
 // Computed properties
 const allSkills = computed(() => {
@@ -186,6 +197,17 @@ const allSkills = computed(() => {
   return Array.from(skills).sort()
 })
 
+const allAffiliations = computed(() => {
+  if (!users.value) return []
+  const affiliations = new Set()
+  users.value.forEach(user => {
+    if (user.affiliation && user.affiliation.trim()) {
+      affiliations.add(user.affiliation.trim())
+    }
+  })
+  return Array.from(affiliations).sort()
+})
+
 const filteredUsers = computed(() => {
   if (!users.value) return []
   
@@ -195,16 +217,19 @@ const filteredUsers = computed(() => {
     // Search by name or skills
     const matchesSearch = !searchQuery.value || 
       user.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      userSkills.some(skill => 
+      userSkills.some(skill =>
         skill.toLowerCase().includes(searchQuery.value.toLowerCase())
       ) ||
-      user.bio.toLowerCase().includes(searchQuery.value.toLowerCase())
-    
-    // Filter by skill
+      user.bio.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      (user.affiliation && user.affiliation.toLowerCase().includes(searchQuery.value.toLowerCase()))    // Filter by skill
     const matchesSkill = !skillFilter.value || 
       userSkills.includes(skillFilter.value)
     
-    return matchesSearch && matchesSkill
+    // Filter by affiliation
+    const matchesAffiliation = !affiliationFilter.value || 
+      (user.affiliation && user.affiliation.trim() === affiliationFilter.value)
+    
+    return matchesSearch && matchesSkill && matchesAffiliation
   })
 })
 
@@ -216,6 +241,7 @@ const handleImageError = (event) => {
 const clearFilters = () => {
   searchQuery.value = ''
   skillFilter.value = ''
+  affiliationFilter.value = ''
 }
 
 // Page meta

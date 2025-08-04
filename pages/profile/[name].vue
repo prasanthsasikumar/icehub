@@ -58,8 +58,28 @@
                   class="w-24 h-24 sm:w-32 sm:h-32 rounded-full object-cover border-4 border-gray-100 shadow-lg"
                   @error="handleImageError"
                 />
-                <div class="absolute -bottom-1 -right-1 sm:-bottom-2 sm:-right-2 bg-green-500 w-6 h-6 sm:w-8 sm:h-8 rounded-full border-4 border-white flex items-center justify-center">
-                  <svg width="8" height="8" viewBox="0 0 24 24" fill="white" class="sm:w-3 sm:h-3">
+                <!-- Gender-based status indicator -->
+                <div class="absolute -bottom-1 -right-1 sm:-bottom-2 sm:-right-2 w-6 h-6 sm:w-8 sm:h-8 rounded-full border-4 border-white flex items-center justify-center"
+                     :class="{
+                       'bg-blue-500': data.gender === 'male',
+                       'bg-pink-500': data.gender === 'female', 
+                       'bg-purple-500': data.gender === 'non-binary' || data.gender === 'other',
+                       'bg-green-500': !data.gender || data.gender === ''
+                     }">
+                  <!-- Male symbol -->
+                  <svg v-if="data.gender === 'male'" width="12" height="12" viewBox="0 0 24 24" fill="white" class="sm:w-4 sm:h-4">
+                    <path d="M9 9c0-1.7 1.3-3 3-3s3 1.3 3 3-1.3 3-3 3-3-1.3-3-3zm3-1c-.6 0-1 .4-1 1s.4 1 1 1 1-.4 1-1-.4-1-1-1zm7-7h-5c-.6 0-1 .4-1 1s.4 1 1 1h2.6l-3.3 3.3c-.9-.6-2-.6-2.9 0-1.4 1.4-1.4 3.6 0 5s3.6 1.4 5 0c.6-.6.9-1.3.9-2.1s-.3-1.5-.9-2.1L18.6 4H19c.6 0 1-.4 1-1s-.4-1-1-1z"/>
+                  </svg>
+                  <!-- Female symbol -->
+                  <svg v-else-if="data.gender === 'female'" width="12" height="12" viewBox="0 0 24 24" fill="white" class="sm:w-4 sm:h-4">
+                    <path d="M12 2c-2.8 0-5 2.2-5 5s2.2 5 5 5 5-2.2 5-5-2.2-5-5-5zm0 8c-1.7 0-3-1.3-3-3s1.3-3 3-3 3 1.3 3 3-1.3 3-3 3zm1 2h-2v3h-2v2h2v3h2v-3h2v-2h-2v-3z"/>
+                  </svg>
+                  <!-- Non-binary/other symbol -->
+                  <svg v-else-if="data.gender === 'non-binary' || data.gender === 'other'" width="12" height="12" viewBox="0 0 24 24" fill="white" class="sm:w-4 sm:h-4">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm1-13h-2v6h2V7zm0 8h-2v2h2v-2z"/>
+                  </svg>
+                  <!-- Default checkmark for verified status when no gender specified -->
+                  <svg v-else width="8" height="8" viewBox="0 0 24 24" fill="white" class="sm:w-3 sm:h-3">
                     <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
                   </svg>
                 </div>
@@ -78,6 +98,16 @@
                   </div>
                 </div>
                 <p class="text-base sm:text-lg text-gray-600 mb-3 sm:mb-4 leading-relaxed">{{ data.bio }}</p>
+                
+                <!-- Affiliation -->
+                <div v-if="data.affiliation" class="mb-3 sm:mb-4">
+                  <p class="text-sm text-gray-500 flex items-center gap-2">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="text-gray-400">
+                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                    </svg>
+                    {{ data.affiliation }}
+                  </p>
+                </div>
                 
                 <!-- Quick Stats -->
                 <div class="flex flex-wrap gap-4 sm:gap-6 justify-center md:justify-start">
@@ -214,9 +244,9 @@
                       <svg class="mentor-badge-icon" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                       </svg>
-                      Verified Mentor
+                      Mentor
                     </div>
-                    <span class="text-gray-500 text-sm">available for guidance</span>
+                    <span class="text-gray-500 text-sm">contact for guidance.</span>
                   </div>
                 </div>
               </div>
@@ -255,18 +285,6 @@
                   <span class="font-medium">{{ getTechStack(data.skills) }}</span>
                 </div>
                 
-                <div class="pt-4 border-t border-gray-100">
-                  <div class="grid grid-cols-2 gap-4 text-center">
-                    <div>
-                      <div class="text-2xl font-bold text-green-500">✓</div>
-                      <div class="text-sm text-gray-500">Verified</div>
-                    </div>
-                    <div>
-                      <div class="text-2xl font-bold text-blue-500">{{ new Date().getFullYear() }}</div>
-                      <div class="text-sm text-gray-500">Member Since</div>
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
           </div>

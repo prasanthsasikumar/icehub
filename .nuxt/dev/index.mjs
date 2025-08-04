@@ -1124,7 +1124,22 @@ const plugins = [
 _imlJlEtcYUErFKlIoV3o40RwAHyYMj1YM8ArfD1nFG0
 ];
 
-const assets = {};
+const assets = {
+  "/index.mjs": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"24cff-I/ZZs+CA5Yb+NJ8eLIa+D2TNhIA\"",
+    "mtime": "2025-08-04T08:55:46.287Z",
+    "size": 150783,
+    "path": "index.mjs"
+  },
+  "/index.mjs.map": {
+    "type": "application/json",
+    "etag": "\"83194-MjZRtArhNbLzj2F5ZX1nx+z5sfE\"",
+    "mtime": "2025-08-04T08:55:46.291Z",
+    "size": 536980,
+    "path": "index.mjs.map"
+  }
+};
 
 function readAsset (id) {
   const serverDir = dirname$1(fileURLToPath(globalThis._importMeta_.url));
@@ -2623,6 +2638,8 @@ const me_get = defineEventHandler(async (event) => {
         skills: fullUser.skills,
         role: fullUser.role,
         userRole: fullUser.userRole,
+        affiliation: fullUser.affiliation,
+        gender: fullUser.gender,
         createdAt: fullUser.createdAt
       }
     };
@@ -2650,13 +2667,15 @@ const register_post = defineEventHandler(async (event) => {
     });
   }
   const body = await readBody(event);
-  const { name, email, password, bio, skills, image, userRole } = body;
+  const { name, email, password, bio, skills, image, userRole, affiliation, gender } = body;
   console.log("Registration request received:", {
     name,
     email,
     hasImage: !!image,
     imageUrl: image,
     userRole,
+    affiliation,
+    gender,
     bio: (bio == null ? void 0 : bio.substring(0, 50)) + ((bio == null ? void 0 : bio.length) > 50 ? "..." : ""),
     skillsCount: (skills == null ? void 0 : skills.length) || 0
   });
@@ -2706,6 +2725,8 @@ const register_post = defineEventHandler(async (event) => {
       skills: skills || [],
       role: "user",
       userRole: userRole || "developer",
+      affiliation: affiliation || "",
+      gender: gender || "",
       createdAt: (/* @__PURE__ */ new Date()).toISOString()
     };
     const createdUser = await Database.createUser(newUser);
@@ -4073,7 +4094,7 @@ const update_post = defineEventHandler(async (event) => {
       statusMessage: "Authentication required"
     });
   }
-  const { name, bio, skills, image, userRole } = await readBody(event);
+  const { name, bio, skills, image, userRole, affiliation, gender } = await readBody(event);
   if (!name) {
     throw createError({
       statusCode: 400,
@@ -4125,6 +4146,8 @@ const update_post = defineEventHandler(async (event) => {
       bio: bio || "",
       image: imageUrl,
       userRole: userRole || "developer",
+      affiliation: affiliation || "",
+      gender: gender || "",
       skills: processedSkills
     });
     return {

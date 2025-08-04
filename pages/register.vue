@@ -86,6 +86,41 @@
             ></textarea>
           </div>
 
+          <!-- Affiliation Field -->
+          <div>
+            <label for="affiliation" class="block text-sm font-medium text-gray-700 mb-2">
+              Affiliation
+            </label>
+            <input
+              id="affiliation"
+              v-model="form.affiliation"
+              type="text"
+              class="form-input"
+              placeholder="e.g., University of Colombo, Google, Freelancer"
+              :disabled="loading"
+            />
+            <p class="text-xs text-gray-500 mt-1">Your current organization, university, or professional status</p>
+          </div>
+
+          <!-- Gender Field -->
+          <div>
+            <label for="gender" class="block text-sm font-medium text-gray-700 mb-2">
+              Gender (Optional)
+            </label>
+            <select
+              id="gender"
+              v-model="form.gender"
+              class="form-input"
+              :disabled="loading"
+            >
+              <option value="">Prefer not to say</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+              <option value="non-binary">Non-binary</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+
           <!-- User Role Selection -->
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-3">
@@ -183,7 +218,9 @@ const form = reactive({
   password: '',
   bio: '',
   image: '',
-  userRole: 'developer' // Default to developer
+  userRole: 'developer', // Default to developer
+  affiliation: '',
+  gender: ''
 })
 
 const skillsInput = ref('')
@@ -212,6 +249,8 @@ const handleRegister = async () => {
       hasImage: !!form.image,
       imageUrl: form.image,
       userRole: form.userRole,
+      affiliation: form.affiliation,
+      gender: form.gender,
       skillsCount: skills.length
     })
 
@@ -224,6 +263,8 @@ const handleRegister = async () => {
         bio: form.bio,
         image: form.image,
         userRole: form.userRole,
+        affiliation: form.affiliation,
+        gender: form.gender,
         skills
       }
     })

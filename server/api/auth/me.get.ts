@@ -34,6 +34,8 @@ export default defineEventHandler(async (event) => {
         skills: fullUser.skills,
         role: fullUser.role,
         userRole: fullUser.userRole,
+        affiliation: fullUser.affiliation,
+        gender: fullUser.gender,
         createdAt: fullUser.createdAt
       }
     }
