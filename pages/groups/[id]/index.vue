@@ -106,12 +106,6 @@
                     ✓ You're a {{ data.userRole || 'member' }}
                   </span>
                   <NuxtLink 
-                    :to="`/chat?chatId=${data.chatId}&type=group`"
-                    class="bg-primary text-white text-center py-2 px-4 rounded-lg hover:bg-primary-dark transition-colors font-medium"
-                  >
-                    💬 Group Chat
-                  </NuxtLink>
-                  <NuxtLink 
                     :to="`/groups/${groupId}/manage`"
                     class="bg-gray-100 text-gray-700 text-center py-2 px-4 rounded-lg hover:bg-gray-200 transition-colors font-medium"
                   >

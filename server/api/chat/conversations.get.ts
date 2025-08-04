@@ -12,7 +12,6 @@ export default defineEventHandler(async (event) => {
     const currentUser = await requireAuth(event)
 
     let directConversations: any[] = []
-    let groupConversations: any[] = []
 
     // Get all users for user information
     const users = await Database.getUsers()
@@ -74,31 +73,10 @@ export default defineEventHandler(async (event) => {
       console.log('No messages found or error reading them:', error)
     }
 
-    // Get group conversations
-    try {
-      const groupChats = await Database.getGroupChats()
-      
-      // Filter to only groups where user is a member and convert to expected format
-      groupConversations = groupChats.filter((chat: any) => 
-        chat.members && chat.members.includes(currentUser.id)
-      ).map((chat: any) => ({
-        chatId: chat.id,
-        groupId: chat.groupId || chat.id,
-        groupName: chat.groupName,
-        groupImage: chat.groupImage || '/uploads/default/user-avatar.svg',
-        lastMessage: '', // TODO: Get actual last message from group messages
-        lastMessageTime: chat.lastMessageAt || chat.createdAt,
-        unreadCount: 0, // TODO: Implement unread count logic
-        type: 'group'
-      }))
-    } catch (error) {
-      console.log('No group chats found or error reading them:', error)
-    }
-
     return {
       success: true,
       directConversations,
-      groupConversations
+      groupConversations: [] // Empty array since we removed group chat
     }
   } catch (error: any) {
     if (error.statusCode) {

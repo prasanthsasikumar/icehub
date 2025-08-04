@@ -72,7 +72,7 @@
               @click="selectConversation(conversation)"
               :class="[
                 'p-3 sm:p-4 border-b border-gray-100 cursor-pointer transition-colors hover:bg-gray-50 touch-target',
-                (selectedUserId === conversation.userId || selectedChatId === conversation.userId) ? 'bg-blue-50 border-l-4 border-l-primary' : ''
+                selectedUserId === conversation.userId ? 'bg-blue-50 border-l-4 border-l-primary' : ''
               ]"
             >
               <div class="flex items-center gap-3">
@@ -83,16 +83,12 @@
                     class="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover"
                     @error="handleImageError"
                   />
-                  <div v-if="conversation.type === 'group'" class="absolute -bottom-1 -right-1 w-3 h-3 sm:w-4 sm:h-4 bg-blue-500 rounded-full border-2 border-white flex items-center justify-center">
-                    <span class="text-white text-xs">👥</span>
-                  </div>
-                  <div v-else class="absolute -bottom-1 -right-1 w-3 h-3 sm:w-4 sm:h-4 bg-green-500 rounded-full border-2 border-white"></div>
+                  <div class="absolute -bottom-1 -right-1 w-3 h-3 sm:w-4 sm:h-4 bg-green-500 rounded-full border-2 border-white"></div>
                 </div>
                 <div class="flex-1 min-w-0">
                   <div class="flex justify-between items-start">
                     <div class="flex items-center gap-2">
                       <h3 class="font-medium text-gray-700 truncate text-sm sm:text-base">{{ conversation.userName }}</h3>
-                      <span v-if="conversation.type === 'group'" class="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded-full">Group</span>
                     </div>
                     <span class="text-xs text-gray-500">{{ formatTime(conversation.lastMessageTime) }}</span>
                   </div>
@@ -141,29 +137,17 @@
             <div class="flex-1">
               <h3 class="font-medium text-gray-700">{{ selectedUserName }}</h3>
               <p class="text-sm text-gray-500">
-                <span v-if="conversationType === 'group'" class="flex items-center gap-1">
-                  <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
-                  Group Chat
-                </span>
-                <span v-else class="flex items-center gap-1">
+                <span class="flex items-center gap-1">
                   <div class="w-2 h-2 bg-green-500 rounded-full"></div>
                   Online
                 </span>
               </p>
             </div>
             <NuxtLink 
-              v-if="conversationType === 'direct'"
               :to="`/profile/${encodeURIComponent(selectedUserName)}`"
               class="text-primary hover:text-primary-dark text-sm font-medium"
             >
               View Profile
-            </NuxtLink>
-            <NuxtLink 
-              v-else-if="conversationType === 'group' && selectedChatId"
-              :to="`/groups/${groupConversations.find(g => g.chatId === selectedChatId)?.groupId}`"
-              class="text-primary hover:text-primary-dark text-sm font-medium"
-            >
-              View Group
             </NuxtLink>
           </div>
 
@@ -298,16 +282,11 @@ const { user, isLoggedIn, checkAuth } = useAuth()
 const loading = ref(true)
 
 // Chat state
-// State
 const conversations = ref([])
-const groupConversations = ref([])
-const directConversations = ref([])
 const messages = ref([])
 const selectedUserId = ref('')
 const selectedUserName = ref('')
 const selectedUserImage = ref('')
-const selectedChatId = ref(null)
-const conversationType = ref('direct')
 const newMessage = ref('')
 const sending = ref(false)
 const searchQuery = ref('')
@@ -479,25 +458,8 @@ onMounted(async () => {
     // Check for query parameters to start a conversation
     const route = useRoute()
     
-    // Handle group chat URL parameters
-    if (route.query.chatId && route.query.type === 'group') {
-      // Find the group chat in loaded conversations
-      nextTick(async () => {
-        await loadConversations()
-        const groupChat = groupConversations.value.find(chat => chat.chatId === route.query.chatId)
-        if (groupChat) {
-          selectConversation({
-            ...groupChat,
-            type: 'group',
-            userId: groupChat.chatId,
-            userName: groupChat.groupName,
-            userImage: groupChat.groupImage
-          })
-        }
-      })
-    } 
     // Handle direct message URL parameters
-    else if (route.query.user && route.query.name) {
+    if (route.query.user && route.query.name) {
       const user = allUsers.value.find(u => u.id === route.query.user)
       if (user) {
         startNewConversation(user)
@@ -550,23 +512,12 @@ const filteredUsers = computed(() => {
 const loadConversations = async () => {
   try {
     const response = await $fetch('/api/chat/conversations')
-    directConversations.value = response.directConversations || []
-    groupConversations.value = response.groupConversations || []
+    const directConversations = response.directConversations || []
     
-    // Combine both types for the main conversations list
-    conversations.value = [
-      ...groupConversations.value.map(conv => ({
-        ...conv,
-        type: 'group',
-        userId: conv.chatId,
-        userName: conv.groupName,
-        userImage: conv.groupImage
-      })),
-      ...directConversations.value.map(conv => ({
-        ...conv,
-        type: 'direct'
-      }))
-    ].sort((a, b) => new Date(b.lastMessageTime).getTime() - new Date(a.lastMessageTime).getTime())
+    // Use only direct conversations
+    conversations.value = directConversations.sort((a, b) => 
+      new Date(b.lastMessageTime).getTime() - new Date(a.lastMessageTime).getTime()
+    )
   } catch (error) {
     console.error('Failed to load conversations:', error)
   }
@@ -669,30 +620,16 @@ const selectConversation = async (conversation) => {
   selectedUserName.value = conversation.userName
   selectedUserImage.value = conversation.userImage
   
-  // Store conversation type and chatId for group chats
-  conversationType.value = conversation.type || 'direct'
-  if (conversation.type === 'group') {
-    selectedChatId.value = conversation.chatId
-  } else {
-    selectedChatId.value = null
-  }
-  
   await loadMessages(true) // true = scroll to bottom
 }
 
 const loadMessages = async (shouldScroll = true) => {
-  if (!selectedUserId.value && !selectedChatId.value) return
+  if (!selectedUserId.value) return
   
   try {
-    let query = {}
-    
-    if (conversationType.value === 'group' && selectedChatId.value) {
-      query.chatId = selectedChatId.value
-    } else if (selectedUserId.value) {
-      query.withUserId = selectedUserId.value
-    }
-    
-    const response = await $fetch('/api/chat/messages', { query })
+    const response = await $fetch('/api/chat/messages', { 
+      query: { withUserId: selectedUserId.value }
+    })
     messages.value = response.messages || []
     
     // Scroll to bottom if requested
@@ -710,27 +647,18 @@ const loadMessages = async (shouldScroll = true) => {
 }
 
 const sendMessage = async () => {
-  if (!newMessage.value.trim() || sending.value || (!selectedUserId.value && !selectedChatId.value)) return
+  if (!newMessage.value.trim() || sending.value || !selectedUserId.value) return
 
   sending.value = true
   
   try {
-    let body = {
-      content: newMessage.value.trim()
-    }
-    
-    if (conversationType.value === 'group' && selectedChatId.value) {
-      body.chatId = selectedChatId.value
-      body.chatType = 'group'
-    } else if (selectedUserId.value) {
-      body.receiverId = selectedUserId.value
-      body.chatType = 'direct'
-    }
-    
-    // Use API endpoint since WebSocket is disabled temporarily
     await $fetch('/api/chat/send', {
       method: 'POST',
-      body
+      body: {
+        content: newMessage.value.trim(),
+        receiverId: selectedUserId.value,
+        chatType: 'direct'
+      }
     })
     
     newMessage.value = ''

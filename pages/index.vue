@@ -126,7 +126,7 @@
 
         <!-- Stats Section -->
         <div v-if="users && users.length > 0" class="mt-8 sm:mt-15">
-          <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-4 sm:mb-6">ICE WORKSHOP POWERED BY NUS</p>
+          <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-4 sm:mb-6">ICE WORKSHOP BY SURANGA NANAYAKKARA</p>
           <div class="flex justify-center gap-8 sm:gap-15 flex-wrap">
             <div class="text-center">
               <span class="block text-2xl sm:text-3xl font-bold text-primary mb-1">{{ users.length }}</span>

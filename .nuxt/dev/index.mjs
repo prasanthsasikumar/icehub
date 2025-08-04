@@ -1127,16 +1127,16 @@ _imlJlEtcYUErFKlIoV3o40RwAHyYMj1YM8ArfD1nFG0
 const assets = {
   "/index.mjs": {
     "type": "text/javascript; charset=utf-8",
-    "etag": "\"1f886-Gs1GM50JecVbHq0wd4vQ7Try52o\"",
-    "mtime": "2025-08-04T05:57:37.991Z",
-    "size": 129158,
+    "etag": "\"1ffb2-ezP/BMzN3d3qw9now0ATuVEgq8g\"",
+    "mtime": "2025-08-04T07:00:57.711Z",
+    "size": 130994,
     "path": "index.mjs"
   },
   "/index.mjs.map": {
     "type": "application/json",
-    "etag": "\"711ae-YqsMMKkLzjgtW6y/H9NDc+zXDhs\"",
-    "mtime": "2025-08-04T05:57:37.991Z",
-    "size": 463278,
+    "etag": "\"72d4d-LCCitMczv1HwoGYG4YYLsIu/HXQ\"",
+    "mtime": "2025-08-04T07:00:57.711Z",
+    "size": 470349,
     "path": "index.mjs.map"
   }
 };
@@ -1553,8 +1553,8 @@ const _lazy_sfy6lD = () => Promise.resolve().then(function () { return logout_po
 const _lazy_QtDuhZ = () => Promise.resolve().then(function () { return me_get$1; });
 const _lazy_Z_k7UE = () => Promise.resolve().then(function () { return register_post$1; });
 const _lazy_HItsH8 = () => Promise.resolve().then(function () { return conversations_get$1; });
-const _lazy_ttNtBU = () => Promise.resolve().then(function () { return messages_get; });
-const _lazy_nCeQW7 = () => Promise.resolve().then(function () { return send_post; });
+const _lazy_ttNtBU = () => Promise.resolve().then(function () { return messages_get$1; });
+const _lazy_nCeQW7 = () => Promise.resolve().then(function () { return send_post$1; });
 const _lazy_0X8xDp = () => Promise.resolve().then(function () { return status_get$1; });
 const _lazy_Cn2ye5 = () => Promise.resolve().then(function () { return testUpload_post$1; });
 const _lazy_ue7UuQ = () => Promise.resolve().then(function () { return delete_delete$1; });
@@ -2603,7 +2603,6 @@ const conversations_get = defineEventHandler(async (event) => {
   try {
     const currentUser = await requireAuth(event);
     let directConversations = [];
-    let groupConversations = [];
     const users = await Database.getUsers();
     try {
       const messages = await Database.getMessages();
@@ -2649,29 +2648,11 @@ const conversations_get = defineEventHandler(async (event) => {
     } catch (error) {
       console.log("No messages found or error reading them:", error);
     }
-    try {
-      const groupChats = await Database.getGroupChats();
-      groupConversations = groupChats.filter(
-        (chat) => chat.members && chat.members.includes(currentUser.id)
-      ).map((chat) => ({
-        chatId: chat.id,
-        groupId: chat.groupId || chat.id,
-        groupName: chat.groupName,
-        groupImage: chat.groupImage || "/uploads/default/user-avatar.svg",
-        lastMessage: "",
-        // TODO: Get actual last message from group messages
-        lastMessageTime: chat.lastMessageAt || chat.createdAt,
-        unreadCount: 0,
-        // TODO: Implement unread count logic
-        type: "group"
-      }));
-    } catch (error) {
-      console.log("No group chats found or error reading them:", error);
-    }
     return {
       success: true,
       directConversations,
-      groupConversations
+      groupConversations: []
+      // Empty array since we removed group chat
     };
   } catch (error) {
     if (error.statusCode) {
@@ -2690,12 +2671,103 @@ const conversations_get$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defin
   default: conversations_get
 }, Symbol.toStringTag, { value: 'Module' }));
 
-const messages_get = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
-  __proto__: null
+const messages_get = defineEventHandler(async (event) => {
+  try {
+    const currentUser = await requireAuth(event);
+    const query = getQuery$1(event);
+    const { withUserId } = query;
+    if (!withUserId) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: "withUserId parameter is required"
+      });
+    }
+    const allMessages = await Database.getMessages();
+    const messages = allMessages.filter(
+      (message) => message.senderId === currentUser.id && message.receiverId === withUserId || message.senderId === withUserId && message.receiverId === currentUser.id
+    ).sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
+    return {
+      success: true,
+      messages
+    };
+  } catch (error) {
+    if (error.statusCode) {
+      throw error;
+    }
+    console.error("Get messages error:", error);
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Internal server error"
+    });
+  }
+});
+
+const messages_get$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: messages_get
 }, Symbol.toStringTag, { value: 'Module' }));
 
-const send_post = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
-  __proto__: null
+const send_post = defineEventHandler(async (event) => {
+  try {
+    const currentUser = await requireAuth(event);
+    const body = await readBody(event);
+    const { content, receiverId, chatType } = body;
+    if (!content || !content.trim()) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: "Message content is required"
+      });
+    }
+    if (chatType !== "direct") {
+      throw createError({
+        statusCode: 400,
+        statusMessage: "Only direct messages are supported"
+      });
+    }
+    if (!receiverId) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: "receiverId is required for direct messages"
+      });
+    }
+    const receiver = await Database.getUserById(receiverId);
+    if (!receiver) {
+      throw createError({
+        statusCode: 404,
+        statusMessage: "Receiver not found"
+      });
+    }
+    const newMessage = {
+      id: v4(),
+      senderId: currentUser.id,
+      senderName: currentUser.name,
+      receiverId,
+      receiverName: receiver.name,
+      // Add receiver name
+      content: content.trim(),
+      timestamp: (/* @__PURE__ */ new Date()).toISOString(),
+      read: false
+    };
+    await Database.createMessage(newMessage);
+    return {
+      success: true,
+      message: newMessage
+    };
+  } catch (error) {
+    if (error.statusCode) {
+      throw error;
+    }
+    console.error("Send message error:", error);
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Internal server error"
+    });
+  }
+});
+
+const send_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: send_post
 }, Symbol.toStringTag, { value: 'Module' }));
 
 const status_get = defineEventHandler(async (event) => {
