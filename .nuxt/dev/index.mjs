@@ -1127,16 +1127,16 @@ _imlJlEtcYUErFKlIoV3o40RwAHyYMj1YM8ArfD1nFG0
 const assets = {
   "/index.mjs": {
     "type": "text/javascript; charset=utf-8",
-    "etag": "\"24cff-I/ZZs+CA5Yb+NJ8eLIa+D2TNhIA\"",
-    "mtime": "2025-08-04T08:55:46.287Z",
-    "size": 150783,
+    "etag": "\"2605a-Jv29XJ7KSmQap4VjzhjEU+Jdklw\"",
+    "mtime": "2025-08-04T09:13:10.133Z",
+    "size": 155738,
     "path": "index.mjs"
   },
   "/index.mjs.map": {
     "type": "application/json",
-    "etag": "\"83194-MjZRtArhNbLzj2F5ZX1nx+z5sfE\"",
-    "mtime": "2025-08-04T08:55:46.291Z",
-    "size": 536980,
+    "etag": "\"878d0-n7Tlco+ncUDuxAF6a2rghfVzAUw\"",
+    "mtime": "2025-08-04T09:13:10.135Z",
+    "size": 555216,
     "path": "index.mjs.map"
   }
 };
@@ -1546,6 +1546,7 @@ async function getIslandContext(event) {
   return ctx;
 }
 
+const _lazy_040HMg = () => Promise.resolve().then(function () { return addUserToGroup_post$1; });
 const _lazy_hiK3Zm = () => Promise.resolve().then(function () { return bulkCreateUsers_post$1; });
 const _lazy_6ilHbl = () => Promise.resolve().then(function () { return deleteUser_delete$1; });
 const _lazy_X46lLS = () => Promise.resolve().then(function () { return toggleRole_post$1; });
@@ -1581,6 +1582,7 @@ const _lazy_mqZ_dN = () => Promise.resolve().then(function () { return renderer$
 
 const handlers = [
   { route: '', handler: _8dfJm_, lazy: false, middleware: true, method: undefined },
+  { route: '/api/admin/add-user-to-group', handler: _lazy_040HMg, lazy: true, middleware: false, method: "post" },
   { route: '/api/admin/bulk-create-users', handler: _lazy_hiK3Zm, lazy: true, middleware: false, method: "post" },
   { route: '/api/admin/delete-user', handler: _lazy_6ilHbl, lazy: true, middleware: false, method: "delete" },
   { route: '/api/admin/toggle-role', handler: _lazy_X46lLS, lazy: true, middleware: false, method: "post" },
@@ -2205,6 +2207,159 @@ const supabase$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty
   Database: Database,
   supabase: supabase,
   supabaseAdmin: supabaseAdmin
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const addUserToGroup_post = defineEventHandler(async (event) => {
+  if (getMethod(event) !== "POST") {
+    throw createError({
+      statusCode: 405,
+      statusMessage: "Method not allowed"
+    });
+  }
+  const currentUser = getUserFromRequest(event);
+  if (!currentUser) {
+    throw createError({
+      statusCode: 401,
+      statusMessage: "Authentication required"
+    });
+  }
+  if (currentUser.role !== "admin") {
+    throw createError({
+      statusCode: 403,
+      statusMessage: "Admin access required"
+    });
+  }
+  const { userId, groupId, role } = await readBody(event);
+  if (!userId || !groupId) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "User ID and Group ID are required"
+    });
+  }
+  console.log("Admin adding user to group:", { userId, groupId, role, adminId: currentUser.id });
+  try {
+    const group = await Database.getGroupById(groupId);
+    if (!group) {
+      throw createError({
+        statusCode: 404,
+        statusMessage: "Group not found"
+      });
+    }
+    const userToAdd = await Database.getUserById(userId);
+    if (!userToAdd) {
+      throw createError({
+        statusCode: 404,
+        statusMessage: "User not found"
+      });
+    }
+    let members = [];
+    try {
+      if (group.members) {
+        if (typeof group.members === "string") {
+          try {
+            members = JSON.parse(group.members);
+          } catch (jsonError) {
+            console.log("Failed to parse as JSON, attempting manual parsing...");
+            members = [];
+          }
+        } else if (Array.isArray(group.members)) {
+          members = group.members;
+        }
+      }
+    } catch (e) {
+      console.error("Error parsing members:", e);
+      members = [];
+    }
+    const cleanMembers = [];
+    for (const member of members) {
+      try {
+        let cleanMember = null;
+        if (typeof member === "string") {
+          try {
+            cleanMember = JSON.parse(member);
+          } catch {
+            console.warn("Skipping unparseable member string:", member);
+            continue;
+          }
+        } else if (typeof member === "object" && member !== null) {
+          cleanMember = member;
+        }
+        if (cleanMember && (cleanMember.id || cleanMember.userId)) {
+          const normalizedMember = {
+            id: cleanMember.id || cleanMember.userId,
+            userId: cleanMember.userId || cleanMember.id,
+            name: cleanMember.name || cleanMember.userName,
+            userName: cleanMember.userName || cleanMember.name,
+            email: cleanMember.email,
+            image: cleanMember.image,
+            role: cleanMember.role || "member",
+            joinedAt: cleanMember.joinedAt || (/* @__PURE__ */ new Date()).toISOString()
+          };
+          cleanMembers.push(normalizedMember);
+        }
+      } catch (error) {
+        console.warn("Error processing member:", member, error);
+        continue;
+      }
+    }
+    members = cleanMembers;
+    console.log("Cleaned members array:", members.length, "valid members");
+    const existingMember = members.find(
+      (member) => member && (member.id === userId || member.userId === userId)
+    );
+    if (existingMember) {
+      throw createError({
+        statusCode: 409,
+        statusMessage: "User is already a member of this group"
+      });
+    }
+    const memberRole = role || (userToAdd.userRole === "mentor" ? "mentor" : "member");
+    const newMember = {
+      id: userToAdd.id,
+      userId: userToAdd.id,
+      // Include both for compatibility
+      name: userToAdd.name,
+      userName: userToAdd.name,
+      // Include both for compatibility
+      email: userToAdd.email,
+      image: userToAdd.image,
+      role: memberRole,
+      joinedAt: (/* @__PURE__ */ new Date()).toISOString(),
+      addedBy: currentUser.id
+      // Track who added this user
+    };
+    members.push(newMember);
+    const updatedGroup = await Database.updateGroup(groupId, {
+      members
+      // Pass as an array, not JSON string
+    });
+    console.log("Successfully added user to group:", {
+      groupId,
+      userId,
+      role: memberRole,
+      totalMembers: members.length
+    });
+    return {
+      success: true,
+      message: `${userToAdd.name} has been added to ${group.name} as ${memberRole}`,
+      group: updatedGroup,
+      newMember
+    };
+  } catch (error) {
+    if (error.statusCode) {
+      throw error;
+    }
+    console.error("Error adding user to group:", error);
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Failed to add user to group"
+    });
+  }
+});
+
+const addUserToGroup_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: addUserToGroup_post
 }, Symbol.toStringTag, { value: 'Module' }));
 
 const bulkCreateUsers_post = defineEventHandler(async (event) => {

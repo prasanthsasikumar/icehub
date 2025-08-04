@@ -238,6 +238,64 @@
             </table>
           </div>
         </div>
+
+        <!-- Group Management Section -->
+        <div class="bg-white rounded-lg border border-gray-200 overflow-hidden mt-8">
+          <div class="p-6 border-b border-gray-200">
+            <h2 class="text-xl font-semibold text-gray-700 mb-4">Group Management</h2>
+            <p class="text-sm text-gray-500 mb-6">Add users to groups directly without requiring them to join manually.</p>
+            
+            <!-- Add User to Group Form -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Select User</label>
+                <select v-model="selectedUserForGroup" class="form-select w-full px-3 py-2 border border-gray-300 rounded-md text-sm">
+                  <option value="">Choose a user...</option>
+                  <option v-for="user in users" :key="user.id" :value="user.id">
+                    {{ user.name }} ({{ user.email }})
+                  </option>
+                </select>
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Select Group</label>
+                <select v-model="selectedGroupForUser" class="form-select w-full px-3 py-2 border border-gray-300 rounded-md text-sm">
+                  <option value="">Choose a group...</option>
+                  <option v-for="group in groups" :key="group.id" :value="group.id">
+                    {{ group.name }}
+                  </option>
+                </select>
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Role in Group</label>
+                <select v-model="selectedRoleForUser" class="form-select w-full px-3 py-2 border border-gray-300 rounded-md text-sm">
+                  <option value="member">Member</option>
+                  <option value="mentor">Mentor</option>
+                </select>
+              </div>
+              
+              <div class="flex items-end">
+                <button 
+                  @click="addUserToGroup"
+                  :disabled="!selectedUserForGroup || !selectedGroupForUser || addingToGroup"
+                  class="w-full px-4 py-2 bg-primary text-white rounded-md text-sm hover:bg-primary-dark disabled:bg-gray-300 disabled:cursor-not-allowed"
+                >
+                  <span v-if="addingToGroup">Adding...</span>
+                  <span v-else>Add to Group</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Status Messages -->
+            <div v-if="groupManagementError" class="mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
+              <p class="text-red-600 text-sm">{{ groupManagementError }}</p>
+            </div>
+            <div v-if="groupManagementSuccess" class="mb-4 p-3 bg-green-50 border border-green-200 rounded-md">
+              <p class="text-green-600 text-sm">{{ groupManagementSuccess }}</p>
+            </div>
+          </div>
+        </div>
       </div>
     </main>
   </div>
@@ -250,6 +308,17 @@ const loading = ref(true)
 
 // Fetch users data
 const { data: users, refresh: refreshUsers } = await useFetch('/api/users')
+
+// Fetch groups data
+const { data: groups, refresh: refreshGroups } = await useFetch('/api/groups')
+
+// Group management state
+const selectedUserForGroup = ref('')
+const selectedGroupForUser = ref('')
+const selectedRoleForUser = ref('member')
+const addingToGroup = ref(false)
+const groupManagementError = ref('')
+const groupManagementSuccess = ref('')
 
 // Check authentication on mount
 onMounted(async () => {
@@ -513,6 +582,45 @@ const deleteUser = async (user) => {
     alert(`User ${user.name} has been deleted successfully`)
   } catch (error) {
     alert(`Failed to delete user: ${error.data?.message || 'Unknown error'}`)
+  }
+}
+
+// Add user to group function
+const addUserToGroup = async () => {
+  if (!selectedUserForGroup.value || !selectedGroupForUser.value) {
+    return
+  }
+
+  addingToGroup.value = true
+  groupManagementError.value = ''
+  groupManagementSuccess.value = ''
+
+  try {
+    const response = await $fetch('/api/admin/add-user-to-group', {
+      method: 'POST',
+      body: {
+        userId: selectedUserForGroup.value,
+        groupId: selectedGroupForUser.value,
+        role: selectedRoleForUser.value
+      }
+    })
+
+    groupManagementSuccess.value = response.message
+    
+    // Clear form
+    selectedUserForGroup.value = ''
+    selectedGroupForUser.value = ''
+    selectedRoleForUser.value = 'member'
+    
+    // Auto-clear success message after 5 seconds
+    setTimeout(() => {
+      groupManagementSuccess.value = ''
+    }, 5000)
+
+  } catch (error) {
+    groupManagementError.value = error.data?.message || 'Failed to add user to group'
+  } finally {
+    addingToGroup.value = false
   }
 }
 
