@@ -1127,15 +1127,15 @@ _imlJlEtcYUErFKlIoV3o40RwAHyYMj1YM8ArfD1nFG0
 const assets = {
   "/index.mjs": {
     "type": "text/javascript; charset=utf-8",
-    "etag": "\"212c8-ZL1EwpDSbWcwB+e6mlz8DDrOLKk\"",
-    "mtime": "2025-08-04T07:23:25.767Z",
+    "etag": "\"212c8-EnI9prXFNOMkoLascfNz8KvBAaw\"",
+    "mtime": "2025-08-04T07:23:41.359Z",
     "size": 135880,
     "path": "index.mjs"
   },
   "/index.mjs.map": {
     "type": "application/json",
     "etag": "\"76ca0-cADpoSKFBtow3012HjxBXNK3oWk\"",
-    "mtime": "2025-08-04T07:23:25.767Z",
+    "mtime": "2025-08-04T07:23:41.359Z",
     "size": 486560,
     "path": "index.mjs.map"
   }
@@ -2996,6 +2996,8 @@ const index_get$2 = defineEventHandler(async (event) => {
         return member;
       }
     }) : [];
+    const regularMembers = parsedMembers.filter((member) => member.role !== "mentor");
+    const mentors = parsedMembers.filter((member) => member.role === "mentor");
     const isMember = currentUser ? parsedMembers.some((member) => member.userId === currentUser.id) : false;
     if (!group.isPublic && !isMember) {
       throw createError({
@@ -3012,9 +3014,8 @@ const index_get$2 = defineEventHandler(async (event) => {
       createdAt: group.createdAt,
       isPrivate: !group.isPublic,
       // Convert isPublic to isPrivate
-      members: parsedMembers,
-      mentors: [],
-      // No mentors field in current schema
+      members: regularMembers,
+      mentors,
       isMember,
       userRole: isMember ? "member" : null
     };

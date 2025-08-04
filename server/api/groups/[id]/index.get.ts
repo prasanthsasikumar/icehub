@@ -36,6 +36,10 @@ export default defineEventHandler(async (event) => {
         }
       }) : []
     
+    // Separate members and mentors based on role
+    const regularMembers = parsedMembers.filter((member: any) => member.role !== 'mentor')
+    const mentors = parsedMembers.filter((member: any) => member.role === 'mentor')
+    
     const isMember = currentUser ? 
       parsedMembers.some((member: any) => member.userId === currentUser.id) : false
     
@@ -55,8 +59,8 @@ export default defineEventHandler(async (event) => {
       createdBy: group.creatorId,
       createdAt: group.createdAt,
       isPrivate: !group.isPublic, // Convert isPublic to isPrivate
-      members: parsedMembers,
-      mentors: [], // No mentors field in current schema
+      members: regularMembers,
+      mentors: mentors,
       isMember: isMember,
       userRole: isMember ? 'member' : null
     }
