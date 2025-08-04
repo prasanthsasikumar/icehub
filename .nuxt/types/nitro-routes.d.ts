@@ -30,6 +30,9 @@ declare module "nitropack/types" {
     '/api/chat/send': {
       'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/chat/send.post').default>>>>
     }
+    '/api/debug/status': {
+      'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/debug/status.get').default>>>>
+    }
     '/api/groups/:id/delete': {
       'delete': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/groups/[id]/delete.delete').default>>>>
     }

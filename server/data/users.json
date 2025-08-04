@@ -62,7 +62,7 @@
     "name": "Administrator",
     "email": "admin@icehub.com",
     "password": "$2b$10$4JQKYbVY6upPMOtDYjUkqOzzjSsbjsBH1dhcZVpleHbIg4cgr3ME2",
-    "image": "https://via.placeholder.com/150x150/0d7ae4/ffffff?text=Admin",
+    "image": "/uploads/default/user-avatar.svg",
     "bio": "System Administrator with full access to manage users and content.",
     "skills": [
       "System Administration",
@@ -90,21 +90,12 @@
     "name": "Praveen Sasikumar",
     "email": "praveen@ahlab.org",
     "password": "$2b$10$CC02ti3qd0IPZUGIKJqXtuDafo3ftWnogs9GqpnAGT6YDTWj1pN52",
-    "image": "/uploads/bd7762db-a6f7-4501-9b7d-9013037c53dc.png",
+    "image": "/uploads/default/user-avatar.svg",
     "bio": "Psychologist expert at NUS",
     "skills": [
-      {
-        "name": "User study",
-        "level": 3
-      },
-      {
-        "name": "evaluation",
-        "level": 3
-      },
-      {
-        "name": "Python",
-        "level": 4
-      }
+      "User study",
+      "evaluation",
+      "Python"
     ],
     "role": "user",
     "createdAt": "2025-08-03T09:31:17.988Z"

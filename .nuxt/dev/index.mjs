@@ -1124,22 +1124,7 @@ const plugins = [
 _imlJlEtcYUErFKlIoV3o40RwAHyYMj1YM8ArfD1nFG0
 ];
 
-const assets = {
-  "/index.mjs": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"21439-GiA0WFu4F642qhbNHBG2mFO8URM\"",
-    "mtime": "2025-08-03T17:36:04.658Z",
-    "size": 136249,
-    "path": "index.mjs"
-  },
-  "/index.mjs.map": {
-    "type": "application/json",
-    "etag": "\"78392-Bl1mIvCjPFA8n9wKCpih9Ww8srA\"",
-    "mtime": "2025-08-03T17:36:04.658Z",
-    "size": 492434,
-    "path": "index.mjs.map"
-  }
-};
+const assets = {};
 
 function readAsset (id) {
   const serverDir = dirname$1(fileURLToPath(globalThis._importMeta_.url));
@@ -1555,6 +1540,7 @@ const _lazy_Z_k7UE = () => Promise.resolve().then(function () { return register_
 const _lazy_HItsH8 = () => Promise.resolve().then(function () { return conversations_get$1; });
 const _lazy_ttNtBU = () => Promise.resolve().then(function () { return messages_get$1; });
 const _lazy_nCeQW7 = () => Promise.resolve().then(function () { return send_post$1; });
+const _lazy_0X8xDp = () => Promise.resolve().then(function () { return status_get$1; });
 const _lazy_ue7UuQ = () => Promise.resolve().then(function () { return delete_delete$1; });
 const _lazy_5f9wml = () => Promise.resolve().then(function () { return index_get$3; });
 const _lazy_RFjUl8 = () => Promise.resolve().then(function () { return join_post$1; });
@@ -1581,6 +1567,7 @@ const handlers = [
   { route: '/api/chat/conversations', handler: _lazy_HItsH8, lazy: true, middleware: false, method: "get" },
   { route: '/api/chat/messages', handler: _lazy_ttNtBU, lazy: true, middleware: false, method: "get" },
   { route: '/api/chat/send', handler: _lazy_nCeQW7, lazy: true, middleware: false, method: "post" },
+  { route: '/api/debug/status', handler: _lazy_0X8xDp, lazy: true, middleware: false, method: "get" },
   { route: '/api/groups/:id/delete', handler: _lazy_ue7UuQ, lazy: true, middleware: false, method: "delete" },
   { route: '/api/groups/:id', handler: _lazy_5f9wml, lazy: true, middleware: false, method: "get" },
   { route: '/api/groups/:id/join', handler: _lazy_RFjUl8, lazy: true, middleware: false, method: "post" },
@@ -2149,6 +2136,13 @@ class Database {
     return data;
   }
 }
+
+const supabase$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  Database: Database,
+  supabase: supabase,
+  supabaseAdmin: supabaseAdmin
+}, Symbol.toStringTag, { value: 'Module' }));
 
 const deleteUser_delete = defineEventHandler(async (event) => {
   if (getMethod(event) !== "DELETE") {
@@ -2860,6 +2854,44 @@ const send_post = defineEventHandler(async (event) => {
 const send_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: send_post
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const status_get = defineEventHandler(async (event) => {
+  try {
+    const envStatus = {
+      SUPABASE_URL: !!process.env.SUPABASE_URL,
+      SUPABASE_ANON_KEY: !!process.env.SUPABASE_ANON_KEY,
+      SUPABASE_SERVICE_ROLE_KEY: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
+      JWT_SECRET: !!process.env.JWT_SECRET,
+      BLOB_READ_WRITE_TOKEN: !!process.env.BLOB_READ_WRITE_TOKEN,
+      NODE_ENV: "development",
+      VERCEL: !!process.env.VERCEL
+    };
+    let supabaseStatus = "unknown";
+    try {
+      const { Database } = await Promise.resolve().then(function () { return supabase$1; });
+      const users = await Database.getUsers();
+      supabaseStatus = `connected (${users.length} users)`;
+    } catch (error) {
+      supabaseStatus = `error: ${error.message}`;
+    }
+    return {
+      status: "ok",
+      timestamp: (/* @__PURE__ */ new Date()).toISOString(),
+      environment: envStatus,
+      supabase: supabaseStatus
+    };
+  } catch (error) {
+    throw createError({
+      statusCode: 500,
+      statusMessage: `Debug error: ${error.message}`
+    });
+  }
+});
+
+const status_get$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: status_get
 }, Symbol.toStringTag, { value: 'Module' }));
 
 const delete_delete = defineEventHandler(async (event) => {
