@@ -127,10 +127,6 @@
                     Sign in to Join
                   </NuxtLink>
                 </template>
-                
-                <button class="bg-gray-100 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-200 transition-colors font-medium">
-                  Share Group
-                </button>
               </div>
             </div>
           </div>

@@ -173,6 +173,61 @@
                 <p class="text-xs text-gray-500">Add your technical skills and rate your proficiency level</p>
               </div>
 
+              <!-- Password Update Section -->
+              <div class="border-t border-gray-200 pt-6 mt-6">
+                <h3 class="text-lg font-semibold text-gray-700 mb-4">Change Password</h3>
+                
+                <div class="flex flex-col gap-4">
+                  <!-- Current Password -->
+                  <div class="flex flex-col gap-2">
+                    <label for="currentPassword" class="font-semibold text-gray-700 text-sm mb-1">Current Password</label>
+                    <input 
+                      id="currentPassword"
+                      v-model="passwordForm.currentPassword" 
+                      type="password"
+                      placeholder="Enter your current password" 
+                      class="px-4 py-3 border border-gray-200 rounded-lg text-base transition-all duration-200 bg-white text-gray-700 focus:outline-none focus:border-primary focus:shadow-lg focus:shadow-primary/10"
+                    />
+                  </div>
+
+                  <!-- New Password -->
+                  <div class="flex flex-col gap-2">
+                    <label for="newPassword" class="font-semibold text-gray-700 text-sm mb-1">New Password</label>
+                    <input 
+                      id="newPassword"
+                      v-model="passwordForm.newPassword" 
+                      type="password"
+                      placeholder="Enter your new password (min 6 characters)" 
+                      minlength="6"
+                      class="px-4 py-3 border border-gray-200 rounded-lg text-base transition-all duration-200 bg-white text-gray-700 focus:outline-none focus:border-primary focus:shadow-lg focus:shadow-primary/10"
+                    />
+                  </div>
+
+                  <!-- Confirm New Password -->
+                  <div class="flex flex-col gap-2">
+                    <label for="confirmPassword" class="font-semibold text-gray-700 text-sm mb-1">Confirm New Password</label>
+                    <input 
+                      id="confirmPassword"
+                      v-model="passwordForm.confirmPassword" 
+                      type="password"
+                      placeholder="Confirm your new password" 
+                      class="px-4 py-3 border border-gray-200 rounded-lg text-base transition-all duration-200 bg-white text-gray-700 focus:outline-none focus:border-primary focus:shadow-lg focus:shadow-primary/10"
+                    />
+                  </div>
+
+                  <!-- Update Password Button -->
+                  <button 
+                    type="button"
+                    @click="updatePassword"
+                    :disabled="!canUpdatePassword || updatingPassword"
+                    class="bg-orange-500 text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 hover:bg-orange-600 focus:outline-none focus:shadow-lg focus:shadow-orange-500/25 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <span v-if="updatingPassword">Updating Password...</span>
+                    <span v-else>Update Password</span>
+                  </button>
+                </div>
+              </div>
+
               <!-- Error/Success Messages -->
               <div v-if="error" class="p-3 bg-red-50 border border-red-200 rounded-lg">
                 <p class="text-red-600 text-sm">{{ error }}</p>
@@ -219,6 +274,23 @@ const legacySkillsInput = ref('')
 const submitting = ref(false)
 const error = ref('')
 const success = ref('')
+
+// Password update state
+const passwordForm = reactive({
+  currentPassword: '',
+  newPassword: '',
+  confirmPassword: ''
+})
+const updatingPassword = ref(false)
+
+// Password validation
+const canUpdatePassword = computed(() => {
+  return passwordForm.currentPassword && 
+         passwordForm.newPassword && 
+         passwordForm.confirmPassword && 
+         passwordForm.newPassword === passwordForm.confirmPassword &&
+         passwordForm.newPassword.length >= 6
+})
 
 // Skill level helpers
 const getSkillLevelText = (level) => {
@@ -359,6 +431,42 @@ const updateProfile = async () => {
     error.value = err.data?.message || 'Failed to update profile'
   } finally {
     submitting.value = false
+  }
+}
+
+// Update password
+const updatePassword = async () => {
+  if (!canUpdatePassword.value || updatingPassword.value) return
+
+  if (passwordForm.newPassword !== passwordForm.confirmPassword) {
+    error.value = 'New passwords do not match'
+    return
+  }
+
+  updatingPassword.value = true
+  error.value = ''
+  success.value = ''
+
+  try {
+    await $fetch('/api/user/update-password', {
+      method: 'POST',
+      body: {
+        currentPassword: passwordForm.currentPassword,
+        newPassword: passwordForm.newPassword
+      }
+    })
+
+    success.value = 'Password updated successfully!'
+    
+    // Clear password form
+    passwordForm.currentPassword = ''
+    passwordForm.newPassword = ''
+    passwordForm.confirmPassword = ''
+
+  } catch (err) {
+    error.value = err.data?.message || 'Failed to update password'
+  } finally {
+    updatingPassword.value = false
   }
 }
 

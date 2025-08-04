@@ -41,6 +41,37 @@
           <p class="text-gray-500">Manage users and their information</p>
         </div>
 
+        <!-- CSV Upload Section -->
+        <div class="bg-white rounded-lg border border-gray-200 p-6 mb-8">
+          <h2 class="text-xl font-semibold text-gray-700 mb-4">Bulk User Import</h2>
+          <div class="flex flex-col space-y-4">
+            <div>
+              <label for="csvFile" class="block text-sm font-medium text-gray-700 mb-2">
+                Upload CSV File
+              </label>
+              <input
+                id="csvFile"
+                type="file"
+                accept=".csv"
+                @change="handleCSVUpload"
+                class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-primary file:text-white hover:file:bg-primary-dark"
+              />
+              <p class="text-xs text-gray-500 mt-1">
+                CSV format: name,email,bio (header row required). Default password will be "workshop123"
+              </p>
+            </div>
+            <div v-if="csvProcessing" class="text-sm text-blue-600">
+              Processing CSV file...
+            </div>
+            <div v-if="csvError" class="text-sm text-red-600">
+              {{ csvError }}
+            </div>
+            <div v-if="csvSuccess" class="text-sm text-green-600">
+              {{ csvSuccess }}
+            </div>
+          </div>
+        </div>
+
         <!-- Stats -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div class="bg-white p-6 rounded-lg border border-gray-200">
@@ -60,13 +91,50 @@
         <!-- Users Table -->
         <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
           <div class="p-6 border-b border-gray-200">
-            <h2 class="text-xl font-semibold text-gray-700">All Users</h2>
+            <div class="flex justify-between items-center">
+              <h2 class="text-xl font-semibold text-gray-700">All Users</h2>
+              <div v-if="selectedUsers.length > 0" class="flex items-center space-x-3">
+                <span class="text-sm text-gray-600">{{ selectedUsers.length }} selected</span>
+                <button
+                  @click="bulkMakeAdmin"
+                  class="px-3 py-1 bg-blue-100 text-blue-700 rounded-md text-sm hover:bg-blue-200 transition-colors"
+                >
+                  Make Admin
+                </button>
+                <button
+                  @click="bulkRemoveAdmin"
+                  class="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-md text-sm hover:bg-yellow-200 transition-colors"
+                >
+                  Remove Admin
+                </button>
+                <button
+                  @click="bulkDelete"
+                  class="px-3 py-1 bg-red-100 text-red-700 rounded-md text-sm hover:bg-red-200 transition-colors"
+                >
+                  Delete Selected
+                </button>
+                <button
+                  @click="clearSelection"
+                  class="px-3 py-1 bg-gray-100 text-gray-700 rounded-md text-sm hover:bg-gray-200 transition-colors"
+                >
+                  Clear
+                </button>
+              </div>
+            </div>
           </div>
           
           <div class="overflow-x-auto">
             <table class="w-full">
               <thead class="bg-gray-50">
                 <tr>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <input
+                      type="checkbox"
+                      :checked="allSelected"
+                      @change="toggleSelectAll"
+                      class="rounded border-gray-300 text-primary focus:ring-primary"
+                    />
+                  </th>
                   <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
                   <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
                   <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
@@ -77,6 +145,14 @@
               </thead>
               <tbody class="bg-white divide-y divide-gray-200">
                 <tr v-for="user in users" :key="user.id" class="hover:bg-gray-50">
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <input
+                      type="checkbox"
+                      :value="user.id"
+                      v-model="selectedUsers"
+                      class="rounded border-gray-300 text-primary focus:ring-primary"
+                    />
+                  </td>
                   <td class="px-6 py-4 whitespace-nowrap">
                     <div class="flex items-center">
                       <div class="w-10 h-10 rounded-full overflow-hidden mr-4 flex-shrink-0">
@@ -184,6 +260,163 @@ const adminCount = computed(() => {
 const regularCount = computed(() => {
   return users.value?.filter(user => user.role === 'user').length || 0
 })
+
+// CSV Upload handling
+const csvProcessing = ref(false)
+const csvError = ref('')
+const csvSuccess = ref('')
+
+// Multi-user selection
+const selectedUsers = ref([])
+
+const allSelected = computed(() => {
+  return users.value && users.value.length > 0 && selectedUsers.value.length === users.value.length
+})
+
+const toggleSelectAll = () => {
+  if (allSelected.value) {
+    selectedUsers.value = []
+  } else {
+    selectedUsers.value = users.value ? users.value.map(user => user.id) : []
+  }
+}
+
+const clearSelection = () => {
+  selectedUsers.value = []
+}
+
+const bulkMakeAdmin = async () => {
+  if (selectedUsers.value.length === 0) return
+  
+  const confirmed = confirm(`Make ${selectedUsers.value.length} selected users admin?`)
+  if (!confirmed) return
+
+  try {
+    for (const userId of selectedUsers.value) {
+      await $fetch('/api/admin/toggle-role', {
+        method: 'POST',
+        body: { userId, newRole: 'admin' }
+      })
+    }
+    
+    await refreshUsers()
+    selectedUsers.value = []
+    alert(`Successfully made ${selectedUsers.value.length} users admin`)
+  } catch (error) {
+    alert('Failed to update some users')
+  }
+}
+
+const bulkRemoveAdmin = async () => {
+  if (selectedUsers.value.length === 0) return
+  
+  const confirmed = confirm(`Remove admin role from ${selectedUsers.value.length} selected users?`)
+  if (!confirmed) return
+
+  try {
+    for (const userId of selectedUsers.value) {
+      await $fetch('/api/admin/toggle-role', {
+        method: 'POST',
+        body: { userId, newRole: 'user' }
+      })
+    }
+    
+    await refreshUsers()
+    selectedUsers.value = []
+    alert(`Successfully removed admin role from ${selectedUsers.value.length} users`)
+  } catch (error) {
+    alert('Failed to update some users')
+  }
+}
+
+const bulkDelete = async () => {
+  if (selectedUsers.value.length === 0) return
+  
+  const confirmed = confirm(`Are you sure you want to delete ${selectedUsers.value.length} selected users? This action cannot be undone.`)
+  if (!confirmed) return
+
+  const doubleConfirmed = confirm(`This will permanently delete ${selectedUsers.value.length} users and all their data. Are you absolutely sure?`)
+  if (!doubleConfirmed) return
+
+  try {
+    for (const userId of selectedUsers.value) {
+      await $fetch('/api/admin/delete-user', {
+        method: 'DELETE',
+        body: { userId }
+      })
+    }
+    
+    await refreshUsers()
+    selectedUsers.value = []
+    alert(`Successfully deleted selected users`)
+  } catch (error) {
+    alert('Failed to delete some users')
+  }
+}
+
+const handleCSVUpload = async (event) => {
+  const file = event.target.files[0]
+  if (!file) return
+
+  csvProcessing.value = true
+  csvError.value = ''
+  csvSuccess.value = ''
+
+  try {
+    const text = await file.text()
+    const lines = text.split('\n').filter(line => line.trim())
+    
+    if (lines.length < 2) {
+      throw new Error('CSV file must contain at least a header row and one data row')
+    }
+
+    const headers = lines[0].split(',').map(h => h.trim())
+    if (!headers.includes('name') || !headers.includes('email')) {
+      throw new Error('CSV must contain "name" and "email" columns')
+    }
+
+    const users = []
+    for (let i = 1; i < lines.length; i++) {
+      const values = lines[i].split(',').map(v => v.trim())
+      if (values.length >= 2) {
+        const userObj = {}
+        headers.forEach((header, index) => {
+          userObj[header] = values[index] || ''
+        })
+        
+        if (userObj.name && userObj.email) {
+          users.push({
+            name: userObj.name,
+            email: userObj.email,
+            bio: userObj.bio || '',
+            password: 'workshop123' // Default password
+          })
+        }
+      }
+    }
+
+    if (users.length === 0) {
+      throw new Error('No valid users found in CSV file')
+    }
+
+    // Send to backend
+    const response = await $fetch('/api/admin/bulk-create-users', {
+      method: 'POST',
+      body: { users }
+    })
+
+    csvSuccess.value = `Successfully created ${response.created} users`
+    await refreshUsers()
+    
+    // Clear file input
+    event.target.value = ''
+
+  } catch (error) {
+    csvError.value = error.message || 'Failed to process CSV file'
+  } finally {
+    csvProcessing.value = false
+  }
+}
 
 // Methods
 const handleImageError = (event) => {

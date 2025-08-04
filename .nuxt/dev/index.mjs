@@ -6,8 +6,8 @@ import nodeCrypto from 'node:crypto';
 import { parentPort, threadId } from 'node:worker_threads';
 import { escapeHtml } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/@vue/shared/dist/shared.cjs.js';
 import bcrypt from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/bcrypt/bcrypt.js';
-import jwt from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/jsonwebtoken/index.js';
 import { v4 } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/uuid/dist/esm/index.js';
+import jwt from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/jsonwebtoken/index.js';
 import { put } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/@vercel/blob/dist/index.js';
 import { promises } from 'node:fs';
 import { createClient } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/@supabase/supabase-js/dist/main/index.js';
@@ -1127,16 +1127,16 @@ _imlJlEtcYUErFKlIoV3o40RwAHyYMj1YM8ArfD1nFG0
 const assets = {
   "/index.mjs": {
     "type": "text/javascript; charset=utf-8",
-    "etag": "\"1ffb2-ezP/BMzN3d3qw9now0ATuVEgq8g\"",
-    "mtime": "2025-08-04T07:00:57.711Z",
-    "size": 130994,
+    "etag": "\"212c8-ZL1EwpDSbWcwB+e6mlz8DDrOLKk\"",
+    "mtime": "2025-08-04T07:23:25.767Z",
+    "size": 135880,
     "path": "index.mjs"
   },
   "/index.mjs.map": {
     "type": "application/json",
-    "etag": "\"72d4d-LCCitMczv1HwoGYG4YYLsIu/HXQ\"",
-    "mtime": "2025-08-04T07:00:57.711Z",
-    "size": 470349,
+    "etag": "\"76ca0-cADpoSKFBtow3012HjxBXNK3oWk\"",
+    "mtime": "2025-08-04T07:23:25.767Z",
+    "size": 486560,
     "path": "index.mjs.map"
   }
 };
@@ -1546,6 +1546,7 @@ async function getIslandContext(event) {
   return ctx;
 }
 
+const _lazy_hiK3Zm = () => Promise.resolve().then(function () { return bulkCreateUsers_post$1; });
 const _lazy_6ilHbl = () => Promise.resolve().then(function () { return deleteUser_delete$1; });
 const _lazy_X46lLS = () => Promise.resolve().then(function () { return toggleRole_post$1; });
 const _lazy_XYs2hc = () => Promise.resolve().then(function () { return login_post$1; });
@@ -1567,12 +1568,14 @@ const _lazy_pdoIG1 = () => Promise.resolve().then(function () { return index_get
 const _lazy_HejCb8 = () => Promise.resolve().then(function () { return skills$1; });
 const _lazy_oEw_c6 = () => Promise.resolve().then(function () { return upload_post$1; });
 const _lazy_GGJj8N = () => Promise.resolve().then(function () { return user_get$1; });
+const _lazy_YqJ3kE = () => Promise.resolve().then(function () { return updatePassword_post$1; });
 const _lazy_oxtIvS = () => Promise.resolve().then(function () { return update_post$1; });
 const _lazy_VljHyK = () => Promise.resolve().then(function () { return users$1; });
 const _lazy_mqZ_dN = () => Promise.resolve().then(function () { return renderer$1; });
 
 const handlers = [
   { route: '', handler: _8dfJm_, lazy: false, middleware: true, method: undefined },
+  { route: '/api/admin/bulk-create-users', handler: _lazy_hiK3Zm, lazy: true, middleware: false, method: "post" },
   { route: '/api/admin/delete-user', handler: _lazy_6ilHbl, lazy: true, middleware: false, method: "delete" },
   { route: '/api/admin/toggle-role', handler: _lazy_X46lLS, lazy: true, middleware: false, method: "post" },
   { route: '/api/auth/login', handler: _lazy_XYs2hc, lazy: true, middleware: false, method: "post" },
@@ -1594,6 +1597,7 @@ const handlers = [
   { route: '/api/skills', handler: _lazy_HejCb8, lazy: true, middleware: false, method: undefined },
   { route: '/api/upload', handler: _lazy_oEw_c6, lazy: true, middleware: false, method: "post" },
   { route: '/api/user', handler: _lazy_GGJj8N, lazy: true, middleware: false, method: "get" },
+  { route: '/api/user/update-password', handler: _lazy_YqJ3kE, lazy: true, middleware: false, method: "post" },
   { route: '/api/user/update', handler: _lazy_oxtIvS, lazy: true, middleware: false, method: "post" },
   { route: '/api/users', handler: _lazy_VljHyK, lazy: true, middleware: false, method: undefined },
   { route: '/__nuxt_error', handler: _lazy_mqZ_dN, lazy: true, middleware: false, method: undefined },
@@ -2157,6 +2161,87 @@ const supabase$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty
   Database: Database,
   supabase: supabase,
   supabaseAdmin: supabaseAdmin
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const bulkCreateUsers_post = defineEventHandler(async (event) => {
+  if (getMethod(event) !== "POST") {
+    throw createError({
+      statusCode: 405,
+      statusMessage: "Method not allowed"
+    });
+  }
+  const currentUser = getUserFromRequest(event);
+  if (!currentUser) {
+    throw createError({
+      statusCode: 401,
+      statusMessage: "Authentication required"
+    });
+  }
+  if (currentUser.role !== "admin") {
+    throw createError({
+      statusCode: 403,
+      statusMessage: "Admin access required"
+    });
+  }
+  const body = await readBody(event);
+  const { users } = body;
+  if (!users || !Array.isArray(users) || users.length === 0) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Users array is required"
+    });
+  }
+  try {
+    const existingUsers = await Database.getUsers();
+    const existingEmails = new Set(existingUsers.map((user) => user.email.toLowerCase()));
+    const newUsers = [];
+    const skipped = [];
+    const saltRounds = 10;
+    for (const userData of users) {
+      const { name, email, bio, password } = userData;
+      if (!name || !email) {
+        skipped.push({ email: email || "unknown", reason: "Missing name or email" });
+        continue;
+      }
+      if (existingEmails.has(email.toLowerCase())) {
+        skipped.push({ email, reason: "Email already exists" });
+        continue;
+      }
+      const hashedPassword = await bcrypt.hash(password || "workshop123", saltRounds);
+      const newUser = {
+        id: v4(),
+        name: name.trim(),
+        email: email.toLowerCase().trim(),
+        bio: (bio == null ? void 0 : bio.trim()) || "",
+        password: hashedPassword,
+        role: "user",
+        userRole: "developer",
+        image: "/uploads/default/default_user_icon.png",
+        skills: [],
+        createdAt: (/* @__PURE__ */ new Date()).toISOString()
+      };
+      await Database.createUser(newUser);
+      newUsers.push(newUser);
+      existingEmails.add(email.toLowerCase());
+    }
+    return {
+      message: `Successfully created ${newUsers.length} users`,
+      created: newUsers.length,
+      skipped: skipped.length,
+      skippedDetails: skipped
+    };
+  } catch (error) {
+    console.error("Bulk user creation error:", error);
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Failed to create users"
+    });
+  }
+});
+
+const bulkCreateUsers_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: bulkCreateUsers_post
 }, Symbol.toStringTag, { value: 'Module' }));
 
 const deleteUser_delete = defineEventHandler(async (event) => {
@@ -3463,6 +3548,70 @@ const user_get = defineEventHandler(async (event) => {
 const user_get$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: user_get
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const updatePassword_post = defineEventHandler(async (event) => {
+  if (getMethod(event) !== "POST") {
+    throw createError({
+      statusCode: 405,
+      statusMessage: "Method not allowed"
+    });
+  }
+  const currentUser = getUserFromRequest(event);
+  if (!currentUser) {
+    throw createError({
+      statusCode: 401,
+      statusMessage: "Authentication required"
+    });
+  }
+  const body = await readBody(event);
+  const { currentPassword, newPassword } = body;
+  if (!currentPassword || !newPassword) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Current password and new password are required"
+    });
+  }
+  if (newPassword.length < 6) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "New password must be at least 6 characters long"
+    });
+  }
+  try {
+    const userToUpdate = await Database.getUserById(currentUser.id);
+    if (!userToUpdate) {
+      throw createError({
+        statusCode: 404,
+        statusMessage: "User not found"
+      });
+    }
+    const isCurrentPasswordValid = await bcrypt.compare(currentPassword, userToUpdate.password);
+    if (!isCurrentPasswordValid) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: "Current password is incorrect"
+      });
+    }
+    const saltRounds = 10;
+    const hashedNewPassword = await bcrypt.hash(newPassword, saltRounds);
+    await Database.updateUser(currentUser.id, { password: hashedNewPassword });
+    return { message: "Password updated successfully" };
+  } catch (error) {
+    console.error("Password update error:", error);
+    if (error.statusCode) {
+      throw error;
+    }
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Failed to update password"
+    });
+  }
+});
+
+const updatePassword_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: updatePassword_post
 }, Symbol.toStringTag, { value: 'Module' }));
 
 const update_post = defineEventHandler(async (event) => {
