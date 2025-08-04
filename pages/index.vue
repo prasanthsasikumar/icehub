@@ -189,6 +189,7 @@
                     <div class="flex-1 min-w-0">
                       <h3 class="text-base sm:text-lg font-semibold text-gray-700 mb-1 truncate">{{ user.name }}</h3>
                       <p class="text-xs sm:text-sm text-gray-500 m-0 leading-snug line-clamp-2">{{ user.bio }}</p>
+                      <p v-if="user.expertise" class="text-xs text-primary font-medium mt-1 truncate">{{ user.expertise }}</p>
                     </div>
                   </div>
 

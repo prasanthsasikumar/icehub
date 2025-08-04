@@ -102,6 +102,22 @@
             <p class="text-xs text-gray-500 mt-1">Your current organization, university, or professional status</p>
           </div>
 
+          <!-- Expertise Field -->
+          <div>
+            <label for="expertise" class="block text-sm font-medium text-gray-700 mb-2">
+              Expertise and Experience
+            </label>
+            <input
+              id="expertise"
+              v-model="form.expertise"
+              type="text"
+              class="form-input"
+              placeholder="e.g., Machine Learning and Web Development with 2 years of experience"
+              :disabled="loading"
+            />
+            <p class="text-xs text-gray-500 mt-1">Your primary domain of expertise, experience or specialization in one line</p>
+          </div>
+
           <!-- Gender Field -->
           <div>
             <label for="gender" class="block text-sm font-medium text-gray-700 mb-2">
@@ -220,6 +236,7 @@ const form = reactive({
   image: '',
   userRole: 'developer', // Default to developer
   affiliation: '',
+  expertise: '',
   gender: ''
 })
 
@@ -250,6 +267,7 @@ const handleRegister = async () => {
       imageUrl: form.image,
       userRole: form.userRole,
       affiliation: form.affiliation,
+      expertise: form.expertise,
       gender: form.gender,
       skillsCount: skills.length
     })
@@ -264,6 +282,7 @@ const handleRegister = async () => {
         image: form.image,
         userRole: form.userRole,
         affiliation: form.affiliation,
+        expertise: form.expertise,
         gender: form.gender,
         skills
       }

@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
   }
 
   const body = await readBody(event)
-  const { name, email, password, bio, skills, image, userRole, affiliation, gender } = body
+  const { name, email, password, bio, skills, image, userRole, affiliation, expertise, gender } = body
 
   console.log('Registration request received:', {
     name,
@@ -24,6 +24,7 @@ export default defineEventHandler(async (event) => {
     imageUrl: image,
     userRole,
     affiliation,
+    expertise,
     gender,
     bio: bio?.substring(0, 50) + (bio?.length > 50 ? '...' : ''),
     skillsCount: skills?.length || 0
@@ -86,6 +87,7 @@ export default defineEventHandler(async (event) => {
       role: 'user',
       userRole: userRole || 'developer',
       affiliation: affiliation || '',
+      expertise: expertise || '',
       gender: gender || '',
       createdAt: new Date().toISOString()
     }

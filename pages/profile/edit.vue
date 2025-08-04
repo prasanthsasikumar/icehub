@@ -91,6 +91,21 @@
                 </p>
               </div>
 
+              <!-- Expertise Input -->
+              <div class="flex flex-col gap-2">
+                <label for="expertise" class="font-semibold text-gray-700 text-sm mb-1">Area of Expertise</label>
+                <input 
+                  id="expertise"
+                  v-model="form.expertise" 
+                  type="text"
+                  placeholder="e.g., Machine Learning, Web Development, Data Science" 
+                  class="px-4 py-3 border border-gray-200 rounded-lg text-base transition-all duration-200 bg-white text-gray-700 focus:outline-none focus:border-primary focus:shadow-lg focus:shadow-primary/10"
+                />
+                <p class="text-xs text-gray-500">
+                  Your primary domain of expertise or specialization
+                </p>
+              </div>
+
               <!-- Gender Input -->
               <div class="flex flex-col gap-2">
                 <label for="gender" class="font-semibold text-gray-700 text-sm mb-1">Gender (Optional)</label>
@@ -313,6 +328,7 @@ const form = reactive({
   image: '',
   userRole: 'developer',
   affiliation: '',
+  expertise: '',
   gender: ''
 })
 
@@ -417,10 +433,12 @@ const initializeForm = () => {
     form.image = user.value.image || ''
     form.userRole = user.value.userRole || 'developer'
     form.affiliation = user.value.affiliation || ''
+    form.expertise = user.value.expertise || ''
     form.gender = user.value.gender || ''
     
     console.log('Form after initialization:', {
       affiliation: form.affiliation,
+      expertise: form.expertise,
       gender: form.gender
     })
     
@@ -473,6 +491,7 @@ const updateProfile = async () => {
         image: form.image,
         userRole: form.userRole,
         affiliation: form.affiliation,
+        expertise: form.expertise,
         gender: form.gender,
         skills: skillsList.value // Send skills with levels
       }

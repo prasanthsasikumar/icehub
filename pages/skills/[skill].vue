@@ -185,6 +185,7 @@
                 <h3 class="font-semibold text-gray-800 truncate">{{ user.name }}</h3>
                 <p class="text-sm text-gray-500 truncate">{{ user.email }}</p>
                 <p v-if="user.affiliation" class="text-xs text-gray-400 truncate mt-1">{{ user.affiliation }}</p>
+                <p v-if="user.expertise" class="text-xs text-primary font-medium truncate mt-1">{{ user.expertise }}</p>
               </div>
             </div>
 

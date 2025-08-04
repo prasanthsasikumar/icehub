@@ -103,9 +103,19 @@
                 <div v-if="data.affiliation" class="mb-3 sm:mb-4">
                   <p class="text-sm text-gray-500 flex items-center gap-2">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="text-gray-400">
-                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                      <path d="M19 3H5c-1.1 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
                     </svg>
                     {{ data.affiliation }}
+                  </p>
+                </div>
+
+                <!-- Expertise -->
+                <div v-if="data.expertise" class="mb-3 sm:mb-4">
+                  <p class="text-sm text-gray-500 flex items-center gap-2">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="text-gray-400">
+                      <path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0L19.2 12l-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/>
+                    </svg>
+                    <span class="font-medium">{{ data.expertise }}</span>
                   </p>
                 </div>
                 
@@ -155,11 +165,17 @@
                   <span class="sm:hidden">Sign in</span>
                 </NuxtLink>
               </template>
-              <button class="hero-btn hero-btn-secondary text-sm sm:text-base">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="sm:w-5 sm:h-5">
+              <button @click="shareProfile" class="hero-btn hero-btn-secondary text-sm sm:text-base relative" :disabled="shareLoading">
+                <svg v-if="!shareLoading" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="sm:w-5 sm:h-5">
                   <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/>
                 </svg>
-                Share
+                <svg v-if="shareSuccess" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="sm:w-5 sm:h-5 text-green-600">
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                </svg>
+                <div v-if="shareLoading" class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                <span v-if="shareSuccess">Copied!</span>
+                <span v-else-if="shareLoading">...</span>
+                <span v-else>Share</span>
               </button>
             </div>
           </div>
@@ -319,6 +335,10 @@ const isCurrentUser = computed(() => {
   return currentUser.value && currentUser.value.name === decodeURIComponent(userName)
 })
 
+// Share functionality
+const shareLoading = ref(false)
+const shareSuccess = ref(false)
+
 // Fetch user data
 const { data, pending, error } = await useFetch('/api/user', {
   query: { name: userName }
@@ -346,6 +366,78 @@ const startConversation = () => {
       name: data.value.name
     }
   })
+}
+
+const shareProfile = async () => {
+  if (!data.value) return
+  
+  shareLoading.value = true
+  shareSuccess.value = false
+  
+  try {
+    const profileUrl = `${window.location.origin}/profile/${encodeURIComponent(data.value.name)}`
+    const shareText = `Check out ${data.value.name}'s profile on ICE2025 Workshop`
+    
+    // Check if Web Share API is supported (mainly mobile devices)
+    if (navigator.share && /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+      try {
+        await navigator.share({
+          title: `${data.value.name} - ICE2025 Workshop`,
+          text: shareText,
+          url: profileUrl
+        })
+        return
+      } catch (shareError) {
+        // If user cancels share, fall back to clipboard
+        if (shareError.name !== 'AbortError') {
+          console.warn('Web Share API failed:', shareError)
+        }
+      }
+    }
+    
+    // Fallback to clipboard API
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(profileUrl)
+      shareSuccess.value = true
+      
+      // Reset success state after 2 seconds
+      setTimeout(() => {
+        shareSuccess.value = false
+      }, 2000)
+    } else {
+      // Fallback for older browsers or non-secure contexts
+      const textArea = document.createElement('textarea')
+      textArea.value = profileUrl
+      textArea.style.position = 'fixed'
+      textArea.style.left = '-999999px'
+      textArea.style.top = '-999999px'
+      document.body.appendChild(textArea)
+      textArea.focus()
+      textArea.select()
+      
+      try {
+        document.execCommand('copy')
+        shareSuccess.value = true
+        
+        // Reset success state after 2 seconds
+        setTimeout(() => {
+          shareSuccess.value = false
+        }, 2000)
+      } catch (err) {
+        console.error('Failed to copy to clipboard:', err)
+        // Show a manual copy option
+        alert(`Copy this link to share: ${profileUrl}`)
+      } finally {
+        document.body.removeChild(textArea)
+      }
+    }
+  } catch (error) {
+    console.error('Share failed:', error)
+    // Show error feedback
+    alert('Failed to share. Please try again.')
+  } finally {
+    shareLoading.value = false
+  }
 }
 
 const calculateExperience = (skills) => {
@@ -379,10 +471,11 @@ const getSkillsStringArray = (skills) => {
 
 const getProfileScore = (user) => {
   let score = 0
-  if (user.name) score += 25
-  if (user.image) score += 25
-  if (user.bio && user.bio.length > 10) score += 25
-  if (getSkillsStringArray(user.skills).length > 0) score += 25
+  if (user.name) score += 20
+  if (user.image) score += 20
+  if (user.bio && user.bio.length > 10) score += 20
+  if (getSkillsStringArray(user.skills).length > 0) score += 20
+  if (user.expertise && user.expertise.length > 0) score += 20
   return score
 }
 
