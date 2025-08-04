@@ -67,7 +67,6 @@ declare module "nitropack/types" {
       'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/user/update.post').default>>>>
     }
     '/api/users': {
-      'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/users.post').default>>>>
       'default': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/users').default>>>>
     }
     '/__nuxt_error': {

@@ -1,5 +1,3 @@
-import fs from 'fs'
-import path from 'path'
 import bcrypt from 'bcrypt'
 import { v4 as uuidv4 } from 'uuid'
 import jwt from 'jsonwebtoken'

@@ -2,7 +2,6 @@ declare global {
   const Database: typeof import('../../server/utils/supabase')['Database']
   const __buildAssetsURL: typeof import('../../node_modules/nuxt/dist/core/runtime/nitro/utils/paths')['buildAssetsURL']
   const __publicAssetsURL: typeof import('../../node_modules/nuxt/dist/core/runtime/nitro/utils/paths')['publicAssetsURL']
-  const addMemberToGroupChat: typeof import('../../server/utils/chat')['addMemberToGroupChat']
   const appendCorsHeaders: typeof import('../../node_modules/h3')['appendCorsHeaders']
   const appendCorsPreflightHeaders: typeof import('../../node_modules/h3')['appendCorsPreflightHeaders']
   const appendHeader: typeof import('../../node_modules/h3')['appendHeader']
@@ -17,11 +16,9 @@ declare global {
   const clearSession: typeof import('../../node_modules/h3')['clearSession']
   const createApp: typeof import('../../node_modules/h3')['createApp']
   const createAppEventHandler: typeof import('../../node_modules/h3')['createAppEventHandler']
-  const createChatId: typeof import('../../server/utils/groups')['createChatId']
   const createError: typeof import('../../node_modules/h3')['createError']
   const createEvent: typeof import('../../node_modules/h3')['createEvent']
   const createEventStream: typeof import('../../node_modules/h3')['createEventStream']
-  const createGroupChat: typeof import('../../server/utils/chat')['createGroupChat']
   const createGroupId: typeof import('../../server/utils/groups')['createGroupId']
   const createMessageId: typeof import('../../server/utils/chat')['createMessageId']
   const createRouter: typeof import('../../node_modules/h3')['createRouter']
@@ -103,7 +100,6 @@ declare global {
   const readMultipartFormData: typeof import('../../node_modules/h3')['readMultipartFormData']
   const readRawBody: typeof import('../../node_modules/h3')['readRawBody']
   const readValidatedBody: typeof import('../../node_modules/h3')['readValidatedBody']
-  const removeMemberFromGroupChat: typeof import('../../server/utils/chat')['removeMemberFromGroupChat']
   const removeResponseHeader: typeof import('../../node_modules/h3')['removeResponseHeader']
   const requireAuth: typeof import('../../server/utils/auth')['requireAuth']
   const runTask: typeof import('../../node_modules/nitropack/dist/runtime/internal/task')['runTask']
@@ -135,7 +131,6 @@ declare global {
   const toWebHandler: typeof import('../../node_modules/h3')['toWebHandler']
   const toWebRequest: typeof import('../../node_modules/h3')['toWebRequest']
   const unsealSession: typeof import('../../node_modules/h3')['unsealSession']
-  const updateGroupChatName: typeof import('../../server/utils/chat')['updateGroupChatName']
   const updateSession: typeof import('../../node_modules/h3')['updateSession']
   const uploadImage: typeof import('../../server/utils/image')['uploadImage']
   const useAppConfig: typeof import('../../node_modules/nitropack/dist/runtime/internal/config')['useAppConfig']
@@ -155,10 +150,10 @@ declare global {
   export type { SkillWithLevel, User, AuthUser } from '../../server/utils/auth'
   import('../../server/utils/auth')
   // @ts-ignore
-  export type { Message, GroupChat, DirectConversation, GroupConversation } from '../../server/utils/chat'
+  export type { Message, DirectConversation, GroupConversation } from '../../server/utils/chat'
   import('../../server/utils/chat')
   // @ts-ignore
-  export type { GroupMember, GroupMentor, Group } from '../../server/utils/groups'
+  export type { GroupMember, Group } from '../../server/utils/groups'
   import('../../server/utils/groups')
   // @ts-ignore
   export type { Database } from '../../server/utils/supabase'
@@ -179,8 +174,8 @@ export { appendCorsHeaders, appendCorsPreflightHeaders, appendHeader, appendHead
 export { buildAssetsURL as __buildAssetsURL, publicAssetsURL as __publicAssetsURL } from '/Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/nuxt/dist/core/runtime/nitro/utils/paths';
 export { defineAppConfig } from '/Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/nuxt/dist/core/runtime/nitro/utils/config';
 export { hashPassword, verifyPassword, generateToken, verifyToken, getUserFromRequest, requireAuth } from '/Users/prasanthsasikumar/Documents/GitHub/icehub/server/utils/auth';
-export { createMessageId, createGroupChat, addMemberToGroupChat, removeMemberFromGroupChat, updateGroupChatName } from '/Users/prasanthsasikumar/Documents/GitHub/icehub/server/utils/chat';
-export { getRandomGroupCover, createGroupId, createChatId } from '/Users/prasanthsasikumar/Documents/GitHub/icehub/server/utils/groups';
+export { createMessageId } from '/Users/prasanthsasikumar/Documents/GitHub/icehub/server/utils/chat';
+export { getRandomGroupCover, createGroupId } from '/Users/prasanthsasikumar/Documents/GitHub/icehub/server/utils/groups';
 export { getDefaultUserImage, ensureUserImage, uploadImage } from '/Users/prasanthsasikumar/Documents/GitHub/icehub/server/utils/image';
 export { normalizeSkills, getDefaultSkillLevel, skillsToStringArray, getSkillLevel } from '/Users/prasanthsasikumar/Documents/GitHub/icehub/server/utils/skills';
 export { supabase, supabaseAdmin, Database } from '/Users/prasanthsasikumar/Documents/GitHub/icehub/server/utils/supabase';

@@ -5,12 +5,11 @@ import path, { resolve, dirname, join } from 'node:path';
 import nodeCrypto from 'node:crypto';
 import { parentPort, threadId } from 'node:worker_threads';
 import { escapeHtml } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/@vue/shared/dist/shared.cjs.js';
-import fs, { promises } from 'node:fs';
 import bcrypt from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/bcrypt/bcrypt.js';
 import jwt from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/jsonwebtoken/index.js';
 import { v4 } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/uuid/dist/esm/index.js';
-import { readFile, mkdir, writeFile } from 'node:fs/promises';
 import { put } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/@vercel/blob/dist/index.js';
+import { promises } from 'node:fs';
 import { createClient } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/@supabase/supabase-js/dist/main/index.js';
 import { createRenderer, getRequestDependencies, getPreloadLinks, getPrefetchLinks } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/vue-bundle-renderer/dist/runtime.mjs';
 import { parseURL, withoutBase, joinURL, getQuery, withQuery, withTrailingSlash, decodePath, withLeadingSlash, withoutTrailingSlash, joinRelativeURL } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/ufo/dist/index.mjs';
@@ -26,6 +25,7 @@ import defu, { defuFn } from 'file:///Users/prasanthsasikumar/Documents/GitHub/i
 import { snakeCase } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/scule/dist/index.mjs';
 import { getContext } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/unctx/dist/index.mjs';
 import { toRouteMatcher, createRouter } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/radix3/dist/index.mjs';
+import { readFile } from 'node:fs/promises';
 import consola, { consola as consola$1 } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/consola/dist/index.mjs';
 import { ErrorParser } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/youch-core/build/index.js';
 import { Youch } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/nitropack/node_modules/youch/build/index.js';
@@ -1124,7 +1124,22 @@ const plugins = [
 _imlJlEtcYUErFKlIoV3o40RwAHyYMj1YM8ArfD1nFG0
 ];
 
-const assets = {};
+const assets = {
+  "/index.mjs": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"1f017-N8Kah6zEpJGM8y5h2EaskX6clNo\"",
+    "mtime": "2025-08-04T03:42:35.770Z",
+    "size": 126999,
+    "path": "index.mjs"
+  },
+  "/index.mjs.map": {
+    "type": "application/json",
+    "etag": "\"6f9fa-8F4sWlgKxOz275FaUGK4yigS8Ik\"",
+    "mtime": "2025-08-04T03:42:35.769Z",
+    "size": 457210,
+    "path": "index.mjs.map"
+  }
+};
 
 function readAsset (id) {
   const serverDir = dirname$1(fileURLToPath(globalThis._importMeta_.url));
@@ -1538,21 +1553,20 @@ const _lazy_sfy6lD = () => Promise.resolve().then(function () { return logout_po
 const _lazy_QtDuhZ = () => Promise.resolve().then(function () { return me_get$1; });
 const _lazy_Z_k7UE = () => Promise.resolve().then(function () { return register_post$1; });
 const _lazy_HItsH8 = () => Promise.resolve().then(function () { return conversations_get$1; });
-const _lazy_ttNtBU = () => Promise.resolve().then(function () { return messages_get$1; });
-const _lazy_nCeQW7 = () => Promise.resolve().then(function () { return send_post$1; });
+const _lazy_ttNtBU = () => Promise.resolve().then(function () { return messages_get; });
+const _lazy_nCeQW7 = () => Promise.resolve().then(function () { return send_post; });
 const _lazy_0X8xDp = () => Promise.resolve().then(function () { return status_get$1; });
 const _lazy_ue7UuQ = () => Promise.resolve().then(function () { return delete_delete$1; });
 const _lazy_5f9wml = () => Promise.resolve().then(function () { return index_get$3; });
 const _lazy_RFjUl8 = () => Promise.resolve().then(function () { return join_post$1; });
 const _lazy_8VldZt = () => Promise.resolve().then(function () { return leave_post$1; });
-const _lazy_l0he2L = () => Promise.resolve().then(function () { return update_put$1; });
+const _lazy_l0he2L = () => Promise.resolve().then(function () { return update_put; });
 const _lazy_RjL2E9 = () => Promise.resolve().then(function () { return create_post$1; });
 const _lazy_pdoIG1 = () => Promise.resolve().then(function () { return index_get$1; });
 const _lazy_HejCb8 = () => Promise.resolve().then(function () { return skills$1; });
 const _lazy_oEw_c6 = () => Promise.resolve().then(function () { return upload_post$1; });
 const _lazy_GGJj8N = () => Promise.resolve().then(function () { return user_get$1; });
 const _lazy_oxtIvS = () => Promise.resolve().then(function () { return update_post$1; });
-const _lazy_tD17Uk = () => Promise.resolve().then(function () { return users_post$1; });
 const _lazy_VljHyK = () => Promise.resolve().then(function () { return users$1; });
 const _lazy_mqZ_dN = () => Promise.resolve().then(function () { return renderer$1; });
 
@@ -1579,7 +1593,6 @@ const handlers = [
   { route: '/api/upload', handler: _lazy_oEw_c6, lazy: true, middleware: false, method: "post" },
   { route: '/api/user', handler: _lazy_GGJj8N, lazy: true, middleware: false, method: "get" },
   { route: '/api/user/update', handler: _lazy_oxtIvS, lazy: true, middleware: false, method: "post" },
-  { route: '/api/users', handler: _lazy_tD17Uk, lazy: true, middleware: false, method: "post" },
   { route: '/api/users', handler: _lazy_VljHyK, lazy: true, middleware: false, method: undefined },
   { route: '/__nuxt_error', handler: _lazy_mqZ_dN, lazy: true, middleware: false, method: undefined },
   { route: '/__nuxt_island/**', handler: _SxA8c9, lazy: false, middleware: false, method: undefined },
@@ -2242,32 +2255,37 @@ const toggleRole_post = defineEventHandler(async (event) => {
       statusMessage: "Valid userId and newRole are required"
     });
   }
-  const usersPath = path.join(process.cwd(), "server/data/users.json");
-  const users = JSON.parse(fs.readFileSync(usersPath, "utf8"));
-  const userIndex = users.findIndex((u) => u.id === userId);
-  if (userIndex === -1) {
-    throw createError({
-      statusCode: 404,
-      statusMessage: "User not found"
-    });
-  }
-  if (users[userIndex].id === currentUser.id && newRole === "user") {
-    throw createError({
-      statusCode: 400,
-      statusMessage: "Cannot remove your own admin privileges"
-    });
-  }
-  users[userIndex].role = newRole;
-  fs.writeFileSync(usersPath, JSON.stringify(users, null, 2));
-  return {
-    message: `User role updated to ${newRole}`,
-    user: {
-      id: users[userIndex].id,
-      name: users[userIndex].name,
-      email: users[userIndex].email,
-      role: users[userIndex].role
+  try {
+    const user = await Database.getUserById(userId);
+    if (!user) {
+      throw createError({
+        statusCode: 404,
+        statusMessage: "User not found"
+      });
     }
-  };
+    if (user.id === currentUser.id && newRole === "user") {
+      throw createError({
+        statusCode: 400,
+        statusMessage: "Cannot remove your own admin privileges"
+      });
+    }
+    const updatedUser = await Database.updateUser(userId, { role: newRole });
+    return {
+      message: `User role updated to ${newRole}`,
+      user: {
+        id: updatedUser.id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        role: updatedUser.role
+      }
+    };
+  } catch (error) {
+    console.error("Error updating user role:", error);
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Failed to update user role"
+    });
+  }
 });
 
 const toggleRole_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
@@ -2644,216 +2662,12 @@ const conversations_get$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defin
   default: conversations_get
 }, Symbol.toStringTag, { value: 'Module' }));
 
-const messages_get = defineEventHandler(async (event) => {
-  if (getMethod(event) !== "GET") {
-    throw createError({
-      statusCode: 405,
-      statusMessage: "Method not allowed"
-    });
-  }
-  const currentUser = getUserFromRequest(event);
-  if (!currentUser) {
-    throw createError({
-      statusCode: 401,
-      statusMessage: "Authentication required"
-    });
-  }
-  const query = getQuery$1(event);
-  const { withUserId, chatId } = query;
-  if (!withUserId && !chatId) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: "Either withUserId or chatId parameter is required"
-    });
-  }
-  const messagesPath = path.join(process.cwd(), "server/data/messages.json");
-  const messages = JSON.parse(fs.readFileSync(messagesPath, "utf8"));
-  let conversation = [];
-  if (chatId) {
-    const groupChatsPath = path.join(process.cwd(), "server/data/groupChats.json");
-    const groupChats = JSON.parse(fs.readFileSync(groupChatsPath, "utf8"));
-    const groupChat = groupChats.find((chat) => chat.id === chatId);
-    if (!groupChat || !groupChat.members.includes(currentUser.id)) {
-      throw createError({
-        statusCode: 403,
-        statusMessage: "Access denied to this group chat"
-      });
-    }
-    conversation = messages.filter(
-      (msg) => msg.chatType === "group" && msg.chatId === chatId
-    ).sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
-    const updatedMessages = messages.map((msg) => {
-      if (msg.chatType === "group" && msg.chatId === chatId && msg.senderId !== currentUser.id && !msg.read) {
-        return { ...msg, read: true };
-      }
-      return msg;
-    });
-    if (updatedMessages.some((msg, index) => msg.read !== messages[index].read)) {
-      fs.writeFileSync(messagesPath, JSON.stringify(updatedMessages, null, 2));
-    }
-  } else if (withUserId) {
-    conversation = messages.filter(
-      (msg) => msg.chatType !== "group" && (msg.senderId === currentUser.id && msg.receiverId === withUserId || msg.senderId === withUserId && msg.receiverId === currentUser.id)
-    ).sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
-    const updatedMessages = messages.map((msg) => {
-      if (msg.receiverId === currentUser.id && msg.senderId === withUserId && !msg.read) {
-        return { ...msg, read: true };
-      }
-      return msg;
-    });
-    if (updatedMessages.some((msg, index) => msg.read !== messages[index].read)) {
-      fs.writeFileSync(messagesPath, JSON.stringify(updatedMessages, null, 2));
-    }
-  }
-  return {
-    messages: conversation
-  };
-});
-
-const messages_get$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
-  __proto__: null,
-  default: messages_get
+const messages_get = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null
 }, Symbol.toStringTag, { value: 'Module' }));
 
-function getRandomGroupCover() {
-  const covers = [
-    "/uploads/groupCoverSamples/cover1.svg",
-    "/uploads/groupCoverSamples/cover2.svg",
-    "/uploads/groupCoverSamples/cover3.svg",
-    "/uploads/groupCoverSamples/cover4.svg",
-    "/uploads/groupCoverSamples/cover5.svg"
-  ];
-  return covers[Math.floor(Math.random() * covers.length)];
-}
-function createGroupId() {
-  return "group_" + Math.random().toString(36).substr(2, 9);
-}
-function createChatId() {
-  return "chat_" + Math.random().toString(36).substr(2, 9);
-}
-
-function createMessageId() {
-  return Date.now().toString() + Math.random().toString(36).substr(2, 9);
-}
-function createGroupChat(groupId, groupName, memberIds) {
-  return {
-    id: createChatId(),
-    groupId,
-    groupName,
-    members: memberIds,
-    createdAt: (/* @__PURE__ */ new Date()).toISOString(),
-    lastMessageAt: (/* @__PURE__ */ new Date()).toISOString()
-  };
-}
-function updateGroupChatName(chatId, newGroupName) {
-  const chatsPath = path.join(process.cwd(), "server/data/groupChats.json");
-  const chats = JSON.parse(fs.readFileSync(chatsPath, "utf8"));
-  const chatIndex = chats.findIndex((chat) => chat.id === chatId);
-  if (chatIndex !== -1) {
-    chats[chatIndex].groupName = newGroupName;
-    fs.writeFileSync(chatsPath, JSON.stringify(chats, null, 2));
-  }
-}
-
-const send_post = defineEventHandler(async (event) => {
-  if (getMethod(event) !== "POST") {
-    throw createError({
-      statusCode: 405,
-      statusMessage: "Method not allowed"
-    });
-  }
-  const currentUser = getUserFromRequest(event);
-  if (!currentUser) {
-    throw createError({
-      statusCode: 401,
-      statusMessage: "Authentication required"
-    });
-  }
-  const { receiverId, content, chatId, chatType } = await readBody(event);
-  if (!content || !content.trim()) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: "Message content is required"
-    });
-  }
-  if (!receiverId && !chatId) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: "Either receiverId or chatId is required"
-    });
-  }
-  const messagesPath = path.join(process.cwd(), "server/data/messages.json");
-  const messages = JSON.parse(fs.readFileSync(messagesPath, "utf8"));
-  let newMessage;
-  if (chatId && chatType === "group") {
-    const groupChatsPath = path.join(process.cwd(), "server/data/groupChats.json");
-    const groupChats = JSON.parse(fs.readFileSync(groupChatsPath, "utf8"));
-    const groupChat = groupChats.find((chat) => chat.id === chatId);
-    if (!groupChat) {
-      throw createError({
-        statusCode: 404,
-        statusMessage: "Group chat not found"
-      });
-    }
-    if (!groupChat.members.includes(currentUser.id)) {
-      throw createError({
-        statusCode: 403,
-        statusMessage: "You are not a member of this group chat"
-      });
-    }
-    newMessage = {
-      id: createMessageId(),
-      senderId: currentUser.id,
-      senderName: currentUser.name,
-      content: content.trim(),
-      timestamp: (/* @__PURE__ */ new Date()).toISOString(),
-      read: false,
-      chatId,
-      chatType: "group"
-    };
-    const chatIndex = groupChats.findIndex((chat) => chat.id === chatId);
-    if (chatIndex !== -1) {
-      groupChats[chatIndex].lastMessageAt = newMessage.timestamp;
-      fs.writeFileSync(groupChatsPath, JSON.stringify(groupChats, null, 2));
-    }
-  } else if (receiverId) {
-    const usersPath = path.join(process.cwd(), "server/data/users.json");
-    const users = JSON.parse(fs.readFileSync(usersPath, "utf8"));
-    const receiver = users.find((u) => u.id === receiverId);
-    if (!receiver) {
-      throw createError({
-        statusCode: 404,
-        statusMessage: "Receiver not found"
-      });
-    }
-    newMessage = {
-      id: v4(),
-      senderId: currentUser.id,
-      senderName: currentUser.name,
-      receiverId,
-      receiverName: receiver.name,
-      content: content.trim(),
-      timestamp: (/* @__PURE__ */ new Date()).toISOString(),
-      read: false,
-      chatType: "direct"
-    };
-  } else {
-    throw createError({
-      statusCode: 400,
-      statusMessage: "Invalid message parameters"
-    });
-  }
-  messages.push(newMessage);
-  fs.writeFileSync(messagesPath, JSON.stringify(messages, null, 2));
-  return {
-    message: "Message sent successfully",
-    data: newMessage
-  };
-});
-
-const send_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
-  __proto__: null,
-  default: send_post
+const send_post = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null
 }, Symbol.toStringTag, { value: 'Module' }));
 
 const status_get = defineEventHandler(async (event) => {
@@ -2915,28 +2729,34 @@ const delete_delete = defineEventHandler(async (event) => {
       statusMessage: "Authentication required"
     });
   }
-  const groupsPath = path.join(process.cwd(), "server/data/groups.json");
-  const groups = JSON.parse(fs.readFileSync(groupsPath, "utf8"));
-  const groupIndex = groups.findIndex((g) => g.id === groupId);
-  if (groupIndex === -1) {
+  try {
+    const group = await Database.getGroupById(groupId);
+    if (!group) {
+      throw createError({
+        statusCode: 404,
+        statusMessage: "Group not found"
+      });
+    }
+    if (group.creatorId !== currentUser.id && currentUser.role !== "admin") {
+      throw createError({
+        statusCode: 403,
+        statusMessage: "Only the group creator or admin can delete this group"
+      });
+    }
+    await Database.deleteGroup(groupId);
+    return {
+      message: "Group deleted successfully"
+    };
+  } catch (error) {
+    console.error("Error deleting group:", error);
+    if (error.statusCode) {
+      throw error;
+    }
     throw createError({
-      statusCode: 404,
-      statusMessage: "Group not found"
+      statusCode: 500,
+      statusMessage: "Failed to delete group"
     });
   }
-  const group = groups[groupIndex];
-  const isMember = group.members.some((member) => member.userId === currentUser.id);
-  if (!isMember) {
-    throw createError({
-      statusCode: 403,
-      statusMessage: "Only group members can delete this group"
-    });
-  }
-  groups.splice(groupIndex, 1);
-  fs.writeFileSync(groupsPath, JSON.stringify(groups, null, 2));
-  return {
-    message: "Group deleted successfully"
-  };
 });
 
 const delete_delete$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
@@ -3192,81 +3012,8 @@ const leave_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProper
   default: leave_post
 }, Symbol.toStringTag, { value: 'Module' }));
 
-const update_put = defineEventHandler(async (event) => {
-  if (getMethod(event) !== "PUT") {
-    throw createError({
-      statusCode: 405,
-      statusMessage: "Method not allowed"
-    });
-  }
-  const groupId = getRouterParam(event, "id");
-  if (!groupId) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: "Group ID is required"
-    });
-  }
-  const currentUser = getUserFromRequest(event);
-  if (!currentUser) {
-    throw createError({
-      statusCode: 401,
-      statusMessage: "Authentication required"
-    });
-  }
-  const { name, description, coverImage, isPrivate } = await readBody(event);
-  if (!name || !description) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: "Name and description are required"
-    });
-  }
-  const groupsPath = path.join(process.cwd(), "server/data/groups.json");
-  const groups = JSON.parse(fs.readFileSync(groupsPath, "utf8"));
-  const groupIndex = groups.findIndex((g) => g.id === groupId);
-  if (groupIndex === -1) {
-    throw createError({
-      statusCode: 404,
-      statusMessage: "Group not found"
-    });
-  }
-  const group = groups[groupIndex];
-  const isMember = group.members.some((member) => member.userId === currentUser.id);
-  const isMentor = group.mentors.some((mentor) => mentor.userId === currentUser.id);
-  if (!isMember && !isMentor) {
-    throw createError({
-      statusCode: 403,
-      statusMessage: "Only group members and mentors can manage this group"
-    });
-  }
-  const existingGroup = groups.find((g) => g.name.toLowerCase() === name.toLowerCase() && g.id !== groupId);
-  if (existingGroup) {
-    throw createError({
-      statusCode: 409,
-      statusMessage: "Group name already exists"
-    });
-  }
-  const nameChanged = group.name !== name.trim();
-  groups[groupIndex] = {
-    ...group,
-    name: name.trim(),
-    description: description.trim(),
-    coverImage: coverImage || group.coverImage,
-    // Keep existing if not provided
-    isPrivate: isPrivate !== void 0 ? isPrivate : group.isPrivate
-  };
-  fs.writeFileSync(groupsPath, JSON.stringify(groups, null, 2));
-  if (nameChanged && group.chatId) {
-    updateGroupChatName(group.chatId, name.trim());
-  }
-  return {
-    message: "Group updated successfully",
-    group: groups[groupIndex]
-  };
-});
-
-const update_put$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
-  __proto__: null,
-  default: update_put
+const update_put = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null
 }, Symbol.toStringTag, { value: 'Module' }));
 
 const create_post = defineEventHandler(async (event) => {
@@ -3283,53 +3030,50 @@ const create_post = defineEventHandler(async (event) => {
       statusMessage: "Authentication required"
     });
   }
-  const { name, description, coverImage, isPrivate } = await readBody(event);
+  const { name, description, coverImage, isPublic = true } = await readBody(event);
   if (!name || !description) {
     throw createError({
       statusCode: 400,
       statusMessage: "Name and description are required"
     });
   }
-  const groupsPath = path.join(process.cwd(), "server/data/groups.json");
-  const groups = JSON.parse(fs.readFileSync(groupsPath, "utf8"));
-  const existingGroup = groups.find((g) => g.name.toLowerCase() === name.toLowerCase());
-  if (existingGroup) {
+  try {
+    const existingGroups = await Database.getGroups();
+    const existingGroup = existingGroups.find((g) => g.name.toLowerCase() === name.toLowerCase());
+    if (existingGroup) {
+      throw createError({
+        statusCode: 409,
+        statusMessage: "Group name already exists"
+      });
+    }
+    const newGroup = await Database.createGroup({
+      name: name.trim(),
+      description: description.trim(),
+      coverImage: coverImage || "/uploads/groupCoverSamples/cover1.svg",
+      creatorId: currentUser.id,
+      isPublic,
+      members: [
+        {
+          userId: currentUser.id,
+          userName: currentUser.name,
+          joinedAt: (/* @__PURE__ */ new Date()).toISOString()
+        }
+      ]
+    });
+    return {
+      message: "Group created successfully",
+      group: newGroup
+    };
+  } catch (error) {
+    console.error("Error creating group:", error);
+    if (error.statusCode) {
+      throw error;
+    }
     throw createError({
-      statusCode: 409,
-      statusMessage: "Group name already exists"
+      statusCode: 500,
+      statusMessage: "Failed to create group"
     });
   }
-  const chatId = createChatId();
-  const newGroup = {
-    id: createGroupId(),
-    name: name.trim(),
-    description: description.trim(),
-    coverImage: coverImage || getRandomGroupCover(),
-    createdBy: currentUser.id,
-    createdAt: (/* @__PURE__ */ new Date()).toISOString(),
-    members: [
-      {
-        userId: currentUser.id,
-        userName: currentUser.name,
-        joinedAt: (/* @__PURE__ */ new Date()).toISOString()
-      }
-    ],
-    mentors: [],
-    isPrivate: isPrivate || false,
-    chatId
-  };
-  const groupChat = createGroupChat(newGroup.id, newGroup.name, [currentUser.id]);
-  groupChat.id = chatId;
-  groups.push(newGroup);
-  fs.writeFileSync(groupsPath, JSON.stringify(groups, null, 2));
-  const chatsPath = path.join(process.cwd(), "server/data/groupChats.json");
-  const chats = JSON.parse(fs.readFileSync(chatsPath, "utf8"));
-  chats.push(groupChat);
-  fs.writeFileSync(chatsPath, JSON.stringify(chats, null, 2));
-  return {
-    message: "Group created successfully",
-    group: newGroup
-  };
 });
 
 const create_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
@@ -3414,8 +3158,72 @@ const index_get$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.definePropert
 }, Symbol.toStringTag, { value: 'Module' }));
 
 const skills = defineEventHandler(async () => {
-  const data = await readFile("server/data/skills.txt", "utf-8");
-  return data.split(",").map((s) => s.trim());
+  const skills = [
+    "JavaScript",
+    "TypeScript",
+    "React",
+    "Vue.js",
+    "Angular",
+    "Node.js",
+    "Express.js",
+    "Python",
+    "Django",
+    "Flask",
+    "FastAPI",
+    "Java",
+    "Spring Boot",
+    "C#",
+    ".NET",
+    "PHP",
+    "Laravel",
+    "Ruby",
+    "Rails",
+    "Go",
+    "Rust",
+    "C++",
+    "C",
+    "HTML",
+    "CSS",
+    "SASS",
+    "Tailwind CSS",
+    "Bootstrap",
+    "Material UI",
+    "MySQL",
+    "PostgreSQL",
+    "MongoDB",
+    "Redis",
+    "SQLite",
+    "Firebase",
+    "AWS",
+    "Azure",
+    "Google Cloud",
+    "Docker",
+    "Kubernetes",
+    "DevOps",
+    "Git",
+    "GitHub",
+    "GitLab",
+    "Jira",
+    "Figma",
+    "Photoshop",
+    "Machine Learning",
+    "AI",
+    "Data Science",
+    "TensorFlow",
+    "PyTorch",
+    "React Native",
+    "Flutter",
+    "Swift",
+    "Kotlin",
+    "iOS",
+    "Android",
+    "UI/UX Design",
+    "Product Management",
+    "Agile",
+    "Scrum",
+    "Testing"
+  ];
+  return skills.sort();
 });
 
 const skills$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
@@ -3624,51 +3432,6 @@ const update_post = defineEventHandler(async (event) => {
 const update_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: update_post
-}, Symbol.toStringTag, { value: 'Module' }));
-
-const users_post = defineEventHandler(async (event) => {
-  const body = await readBody(event);
-  const file = "server/data/users.json";
-  try {
-    body.id = v4();
-    if (body.image && body.image.startsWith("data:image/")) {
-      const imageMatch = body.image.match(/^data:image\/([a-zA-Z]+);base64,(.+)$/);
-      if (imageMatch) {
-        const [, format, base64Data] = imageMatch;
-        const allowedFormats = ["jpeg", "jpg", "png", "gif", "webp"];
-        if (!allowedFormats.includes(format.toLowerCase())) {
-          return { success: false, error: "Invalid image format. Allowed: JPEG, PNG, GIF, WebP" };
-        }
-        const imageBuffer = Buffer.from(base64Data, "base64");
-        const maxSize = 5 * 1024 * 1024;
-        if (imageBuffer.length > maxSize) {
-          return { success: false, error: "Image too large. Maximum size is 5MB" };
-        }
-        const timestamp = (/* @__PURE__ */ new Date()).toISOString().split("T")[0];
-        const uniqueId = v4();
-        const fileExtension = format.toLowerCase() === "jpeg" ? "jpg" : format.toLowerCase();
-        const fileName = `${timestamp}-${uniqueId}.${fileExtension}`;
-        const uploadsDir = path.join(process.cwd(), "public", "uploads");
-        await mkdir(uploadsDir, { recursive: true });
-        const filePath = path.join(uploadsDir, fileName);
-        await writeFile(filePath, imageBuffer);
-        body.image = `/uploads/${fileName}`;
-        console.log(`\u2705 Saved profile image: ${fileName} (${(imageBuffer.length / 1024).toFixed(1)}KB)`);
-      }
-    }
-    const users = JSON.parse(await readFile(file, "utf-8"));
-    users.push(body);
-    await writeFile(file, JSON.stringify(users, null, 2));
-    return { success: true };
-  } catch (error) {
-    console.error("Error creating user:", error);
-    return { success: false, error: "Failed to create user" };
-  }
-});
-
-const users_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
-  __proto__: null,
-  default: users_post
 }, Symbol.toStringTag, { value: 'Module' }));
 
 const users = defineEventHandler(async (event) => {

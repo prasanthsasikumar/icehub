@@ -1,7 +1,5 @@
-import fs from 'fs'
-import path from 'path'
 import { getUserFromRequest } from '../../../../server/utils/auth'
-import { type Group } from '../../../../server/utils/groups'
+import { Database } from '../../../../server/utils/supabase'
 
 export default defineEventHandler(async (event) => {
   if (getMethod(event) !== 'DELETE') {
@@ -30,39 +28,39 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  // Read groups from file
-  const groupsPath = path.join(process.cwd(), 'server/data/groups.json')
-  const groups: Group[] = JSON.parse(fs.readFileSync(groupsPath, 'utf8'))
+  try {
+    // Get the group from Supabase
+    const group = await Database.getGroupById(groupId)
+    
+    if (!group) {
+      throw createError({
+        statusCode: 404,
+        statusMessage: 'Group not found'
+      })
+    }
 
-  // Find the group
-  const groupIndex = groups.findIndex(g => g.id === groupId)
-  
-  if (groupIndex === -1) {
+    // Check if user is the creator or an admin
+    if (group.creatorId !== currentUser.id && currentUser.role !== 'admin') {
+      throw createError({
+        statusCode: 403,
+        statusMessage: 'Only the group creator or admin can delete this group'
+      })
+    }
+
+    // Delete the group from Supabase
+    await Database.deleteGroup(groupId)
+
+    return {
+      message: 'Group deleted successfully'
+    }
+  } catch (error) {
+    console.error('Error deleting group:', error)
+    if (error.statusCode) {
+      throw error
+    }
     throw createError({
-      statusCode: 404,
-      statusMessage: 'Group not found'
+      statusCode: 500,
+      statusMessage: 'Failed to delete group'
     })
-  }
-
-  const group = groups[groupIndex]
-
-  // Check if user is a member of the group
-  const isMember = group.members.some(member => member.userId === currentUser.id)
-  
-  if (!isMember) {
-    throw createError({
-      statusCode: 403,
-      statusMessage: 'Only group members can delete this group'
-    })
-  }
-
-  // Remove the group
-  groups.splice(groupIndex, 1)
-
-  // Save to file
-  fs.writeFileSync(groupsPath, JSON.stringify(groups, null, 2))
-
-  return {
-    message: 'Group deleted successfully'
   }
 })

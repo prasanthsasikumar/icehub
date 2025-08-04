@@ -1,6 +1,5 @@
-import fs from 'fs'
-import path from 'path'
-import { getUserFromRequest, type User } from '../../../server/utils/auth'
+import { getUserFromRequest } from '../../../server/utils/auth'
+import { Database } from '../../../server/utils/supabase'
 
 export default defineEventHandler(async (event) => {
   if (getMethod(event) !== 'POST') {
@@ -29,41 +28,42 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  // Read users from file
-  const usersPath = path.join(process.cwd(), 'server/data/users.json')
-  const users: User[] = JSON.parse(fs.readFileSync(usersPath, 'utf8'))
-
-  // Find user to update
-  const userIndex = users.findIndex(u => u.id === userId)
-  
-  if (userIndex === -1) {
-    throw createError({
-      statusCode: 404,
-      statusMessage: 'User not found'
-    })
-  }
-
-  // Prevent admin from removing their own admin privileges
-  if (users[userIndex].id === currentUser.id && newRole === 'user') {
-    throw createError({
-      statusCode: 400,
-      statusMessage: 'Cannot remove your own admin privileges'
-    })
-  }
-
-  // Update user role
-  users[userIndex].role = newRole
-
-  // Save to file
-  fs.writeFileSync(usersPath, JSON.stringify(users, null, 2))
-
-  return {
-    message: `User role updated to ${newRole}`,
-    user: {
-      id: users[userIndex].id,
-      name: users[userIndex].name,
-      email: users[userIndex].email,
-      role: users[userIndex].role
+  try {
+    // Find user in Supabase
+    const user = await Database.getUserById(userId)
+    
+    if (!user) {
+      throw createError({
+        statusCode: 404,
+        statusMessage: 'User not found'
+      })
     }
+
+    // Prevent admin from removing their own admin privileges
+    if (user.id === currentUser.id && newRole === 'user') {
+      throw createError({
+        statusCode: 400,
+        statusMessage: 'Cannot remove your own admin privileges'
+      })
+    }
+
+    // Update user role in Supabase
+    const updatedUser = await Database.updateUser(userId, { role: newRole })
+
+    return {
+      message: `User role updated to ${newRole}`,
+      user: {
+        id: updatedUser.id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        role: updatedUser.role
+      }
+    }
+  } catch (error) {
+    console.error('Error updating user role:', error)
+    throw createError({
+      statusCode: 500,
+      statusMessage: 'Failed to update user role'
+    })
   }
 })
