@@ -1,5 +1,5 @@
 import process from 'node:process';globalThis._importMeta_={url:import.meta.url,env:process.env};import { tmpdir } from 'node:os';
-import { defineEventHandler, handleCacheHeaders, splitCookiesString, createEvent, fetchWithEvent, isEvent, eventHandler, setHeaders, sendRedirect, proxyRequest, getRequestHeader, setResponseHeaders, setResponseStatus, send, getRequestHeaders, setResponseHeader, appendResponseHeader, getRequestURL, getResponseHeader, removeResponseHeader, createError, getQuery as getQuery$1, readBody, createApp, createRouter as createRouter$1, toNodeListener, lazyEventHandler, getResponseStatus, getRouterParam, getCookie, getHeader, getMethod, setCookie, deleteCookie, getResponseStatusText } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/h3/dist/index.mjs';
+import { defineEventHandler, handleCacheHeaders, splitCookiesString, createEvent, fetchWithEvent, isEvent, eventHandler, setHeaders, sendRedirect, proxyRequest, getRequestHeader, setResponseHeaders, setResponseStatus, send, getRequestHeaders, setResponseHeader, appendResponseHeader, getRequestURL, getResponseHeader, removeResponseHeader, createError, getQuery as getQuery$1, readBody, createApp, createRouter as createRouter$1, toNodeListener, lazyEventHandler, getResponseStatus, getRouterParam, getCookie, getHeader, getMethod, setCookie, deleteCookie, readMultipartFormData, getResponseStatusText } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/h3/dist/index.mjs';
 import { Server } from 'node:http';
 import path, { resolve, dirname, join } from 'node:path';
 import nodeCrypto from 'node:crypto';
@@ -1127,16 +1127,16 @@ _imlJlEtcYUErFKlIoV3o40RwAHyYMj1YM8ArfD1nFG0
 const assets = {
   "/index.mjs": {
     "type": "text/javascript; charset=utf-8",
-    "etag": "\"212c8-EnI9prXFNOMkoLascfNz8KvBAaw\"",
-    "mtime": "2025-08-04T07:23:41.359Z",
-    "size": 135880,
+    "etag": "\"24e2c-oddJBIRar4g33mHzw1Ud9S7OnQc\"",
+    "mtime": "2025-08-04T08:14:48.514Z",
+    "size": 151084,
     "path": "index.mjs"
   },
   "/index.mjs.map": {
     "type": "application/json",
-    "etag": "\"76ca0-cADpoSKFBtow3012HjxBXNK3oWk\"",
-    "mtime": "2025-08-04T07:23:41.359Z",
-    "size": 486560,
+    "etag": "\"833e9-cUYtbGnObx5VlkGCxQkjjisPpwU\"",
+    "mtime": "2025-08-04T08:14:48.516Z",
+    "size": 537577,
     "path": "index.mjs.map"
   }
 };
@@ -1559,9 +1559,15 @@ const _lazy_nCeQW7 = () => Promise.resolve().then(function () { return send_post
 const _lazy_0X8xDp = () => Promise.resolve().then(function () { return status_get$1; });
 const _lazy_Cn2ye5 = () => Promise.resolve().then(function () { return testUpload_post$1; });
 const _lazy_ue7UuQ = () => Promise.resolve().then(function () { return delete_delete$1; });
+const _lazy_Mk2bMo = () => Promise.resolve().then(function () { return images_get$1; });
+const _lazy_c6vq9Z = () => Promise.resolve().then(function () { return images_post$1; });
+const _lazy_5veFjA = () => Promise.resolve().then(function () { return _imageId__delete$1; });
 const _lazy_5f9wml = () => Promise.resolve().then(function () { return index_get$3; });
 const _lazy_RFjUl8 = () => Promise.resolve().then(function () { return join_post$1; });
 const _lazy_8VldZt = () => Promise.resolve().then(function () { return leave_post$1; });
+const _lazy_C4YyYf = () => Promise.resolve().then(function () { return links_get$1; });
+const _lazy_fvB86a = () => Promise.resolve().then(function () { return links_post$1; });
+const _lazy_pT4F4z = () => Promise.resolve().then(function () { return _linkId__delete$1; });
 const _lazy_l0he2L = () => Promise.resolve().then(function () { return update_put; });
 const _lazy_RjL2E9 = () => Promise.resolve().then(function () { return create_post$1; });
 const _lazy_pdoIG1 = () => Promise.resolve().then(function () { return index_get$1; });
@@ -1588,9 +1594,15 @@ const handlers = [
   { route: '/api/debug/status', handler: _lazy_0X8xDp, lazy: true, middleware: false, method: "get" },
   { route: '/api/debug/test-upload', handler: _lazy_Cn2ye5, lazy: true, middleware: false, method: "post" },
   { route: '/api/groups/:id/delete', handler: _lazy_ue7UuQ, lazy: true, middleware: false, method: "delete" },
+  { route: '/api/groups/:id/images', handler: _lazy_Mk2bMo, lazy: true, middleware: false, method: "get" },
+  { route: '/api/groups/:id/images', handler: _lazy_c6vq9Z, lazy: true, middleware: false, method: "post" },
+  { route: '/api/groups/:id/images/:imageId', handler: _lazy_5veFjA, lazy: true, middleware: false, method: "delete" },
   { route: '/api/groups/:id', handler: _lazy_5f9wml, lazy: true, middleware: false, method: "get" },
   { route: '/api/groups/:id/join', handler: _lazy_RFjUl8, lazy: true, middleware: false, method: "post" },
   { route: '/api/groups/:id/leave', handler: _lazy_8VldZt, lazy: true, middleware: false, method: "post" },
+  { route: '/api/groups/:id/links', handler: _lazy_C4YyYf, lazy: true, middleware: false, method: "get" },
+  { route: '/api/groups/:id/links', handler: _lazy_fvB86a, lazy: true, middleware: false, method: "post" },
+  { route: '/api/groups/:id/links/:linkId', handler: _lazy_pT4F4z, lazy: true, middleware: false, method: "delete" },
   { route: '/api/groups/:id/update', handler: _lazy_l0he2L, lazy: true, middleware: false, method: "put" },
   { route: '/api/groups/create', handler: _lazy_RjL2E9, lazy: true, middleware: false, method: "post" },
   { route: '/api/groups', handler: _lazy_pdoIG1, lazy: true, middleware: false, method: "get" },
@@ -2154,6 +2166,38 @@ class Database {
     if (error) throw error;
     return data;
   }
+  // Group Links
+  static async getGroupLinks(groupId) {
+    const { data, error } = await supabase.from("group_links").select("*").eq("group_id", groupId).order("created_at", { ascending: false });
+    if (error) throw error;
+    return data || [];
+  }
+  static async createGroupLink(link) {
+    const { data, error } = await supabase.from("group_links").insert([link]).select().single();
+    if (error) throw error;
+    return data;
+  }
+  static async deleteGroupLink(id) {
+    const { data, error } = await supabase.from("group_links").delete().eq("id", id);
+    if (error) throw error;
+    return data;
+  }
+  // Group Images
+  static async getGroupImages(groupId) {
+    const { data, error } = await supabase.from("group_images").select("*").eq("group_id", groupId).order("created_at", { ascending: false });
+    if (error) throw error;
+    return data || [];
+  }
+  static async createGroupImage(image) {
+    const { data, error } = await supabase.from("group_images").insert([image]).select().single();
+    if (error) throw error;
+    return data;
+  }
+  static async deleteGroupImage(id) {
+    const { data, error } = await supabase.from("group_images").delete().eq("id", id);
+    if (error) throw error;
+    return data;
+  }
 }
 
 const supabase$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
@@ -2471,6 +2515,60 @@ const ensureUserImage = (userImage) => {
     return getDefaultUserImage();
   }
   return userImage;
+};
+const uploadImageBuffer = async (imageBuffer, filename, contentType) => {
+  try {
+    console.log("Upload function called with:", {
+      bufferLength: imageBuffer == null ? void 0 : imageBuffer.length,
+      filename,
+      contentType,
+      isProduction: process.env.VERCEL,
+      hasBlobToken: !!process.env.BLOB_READ_WRITE_TOKEN
+    });
+    if (!imageBuffer || imageBuffer.length === 0) {
+      console.log("Invalid image buffer");
+      return {
+        success: false,
+        error: "Invalid image data"
+      };
+    }
+    const uniqueId = v4();
+    const fileExtension = contentType.split("/")[1] || "jpg";
+    const uniqueFilename = `${Date.now()}-${uniqueId}.${fileExtension}`;
+    const isProduction = process.env.VERCEL;
+    if (isProduction && process.env.BLOB_READ_WRITE_TOKEN) {
+      const blob = await put(uniqueFilename, imageBuffer, {
+        access: "public",
+        contentType,
+        token: process.env.BLOB_READ_WRITE_TOKEN
+      });
+      return {
+        success: true,
+        url: blob.url,
+        filename: uniqueFilename
+      };
+    } else {
+      console.log("Using local storage for image upload");
+      const uploadsDir = path.join(process.cwd(), "public", "uploads");
+      await promises.mkdir(uploadsDir, { recursive: true });
+      const filePath = path.join(uploadsDir, uniqueFilename);
+      console.log("Writing file to:", filePath);
+      await promises.writeFile(filePath, imageBuffer);
+      const publicUrl = `/uploads/${uniqueFilename}`;
+      console.log("Image uploaded successfully:", publicUrl);
+      return {
+        success: true,
+        url: publicUrl,
+        filename: uniqueFilename
+      };
+    }
+  } catch (error) {
+    console.error("Image upload error:", error);
+    return {
+      success: false,
+      error: "Failed to upload image"
+    };
+  }
 };
 const uploadImage = async (imageData, filename) => {
   try {
@@ -2971,6 +3069,204 @@ const delete_delete$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.definePro
   default: delete_delete
 }, Symbol.toStringTag, { value: 'Module' }));
 
+const images_get = defineEventHandler(async (event) => {
+  const groupId = getRouterParam(event, "id");
+  if (!groupId) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Group ID is required"
+    });
+  }
+  try {
+    const images = await Database.getGroupImages(groupId);
+    return images || [];
+  } catch (error) {
+    console.error("Error fetching group images:", error);
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Failed to fetch group images"
+    });
+  }
+});
+
+const images_get$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: images_get
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const images_post = defineEventHandler(async (event) => {
+  if (getMethod(event) !== "POST") {
+    throw createError({
+      statusCode: 405,
+      statusMessage: "Method not allowed"
+    });
+  }
+  const groupId = getRouterParam(event, "id");
+  if (!groupId) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Group ID is required"
+    });
+  }
+  const currentUser = getUserFromRequest(event);
+  if (!currentUser) {
+    throw createError({
+      statusCode: 401,
+      statusMessage: "Authentication required"
+    });
+  }
+  try {
+    const group = await Database.getGroupById(groupId);
+    if (!group) {
+      throw createError({
+        statusCode: 404,
+        statusMessage: "Group not found"
+      });
+    }
+    const parsedMembers = group.members ? group.members.map((member) => {
+      try {
+        return typeof member === "string" ? JSON.parse(member) : member;
+      } catch (e) {
+        return member;
+      }
+    }) : [];
+    const isMember = parsedMembers.some((member) => member.userId === currentUser.id);
+    if (!isMember) {
+      throw createError({
+        statusCode: 403,
+        statusMessage: "You must be a group member to upload images"
+      });
+    }
+    const formData = await readMultipartFormData(event);
+    if (!formData || formData.length === 0) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: "No image file provided"
+      });
+    }
+    const imageFile = formData.find((field) => field.name === "image");
+    if (!imageFile) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: "Image field is required"
+      });
+    }
+    const uploadResult = await uploadImageBuffer(
+      imageFile.data,
+      imageFile.filename || "group-image.jpg",
+      imageFile.type || "image/jpeg"
+    );
+    console.log("Upload result:", uploadResult);
+    if (!uploadResult || !uploadResult.success || !uploadResult.url) {
+      throw createError({
+        statusCode: 500,
+        statusMessage: (uploadResult == null ? void 0 : uploadResult.error) || "Failed to upload image"
+      });
+    }
+    const newImage = {
+      group_id: groupId,
+      created_by: currentUser.id,
+      image_url: uploadResult.url,
+      filename: uploadResult.filename
+    };
+    console.log("Creating image record:", newImage);
+    const createdImage = await Database.createGroupImage(newImage);
+    console.log("Created image record:", createdImage);
+    return createdImage;
+  } catch (error) {
+    if (error.statusCode) {
+      throw error;
+    }
+    console.error("Error uploading group image:", error);
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Failed to upload image"
+    });
+  }
+});
+
+const images_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: images_post
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const _imageId__delete = defineEventHandler(async (event) => {
+  if (getMethod(event) !== "DELETE") {
+    throw createError({
+      statusCode: 405,
+      statusMessage: "Method not allowed"
+    });
+  }
+  const groupId = getRouterParam(event, "id");
+  const imageId = getRouterParam(event, "imageId");
+  if (!groupId || !imageId) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Group ID and Image ID are required"
+    });
+  }
+  const currentUser = getUserFromRequest(event);
+  if (!currentUser) {
+    throw createError({
+      statusCode: 401,
+      statusMessage: "Authentication required"
+    });
+  }
+  try {
+    const group = await Database.getGroupById(groupId);
+    if (!group) {
+      throw createError({
+        statusCode: 404,
+        statusMessage: "Group not found"
+      });
+    }
+    const parsedMembers = group.members ? group.members.map((member) => {
+      try {
+        return typeof member === "string" ? JSON.parse(member) : member;
+      } catch (e) {
+        return member;
+      }
+    }) : [];
+    const isMember = parsedMembers.some((member) => member.userId === currentUser.id);
+    if (!isMember) {
+      throw createError({
+        statusCode: 403,
+        statusMessage: "You must be a group member to delete images"
+      });
+    }
+    const images = await Database.getGroupImages(groupId);
+    const imageToDelete = images.find((image) => image.id === imageId);
+    if (!imageToDelete) {
+      throw createError({
+        statusCode: 404,
+        statusMessage: "Image not found"
+      });
+    }
+    if (imageToDelete.user_id !== currentUser.id && currentUser.role !== "admin") {
+      throw createError({
+        statusCode: 403,
+        statusMessage: "You can only delete your own images"
+      });
+    }
+    await Database.deleteGroupImage(imageId);
+    return { message: "Image deleted successfully" };
+  } catch (error) {
+    if (error.statusCode) {
+      throw error;
+    }
+    console.error("Error deleting group image:", error);
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Failed to delete image"
+    });
+  }
+});
+
+const _imageId__delete$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: _imageId__delete
+}, Symbol.toStringTag, { value: 'Module' }));
+
 const index_get$2 = defineEventHandler(async (event) => {
   const groupId = getRouterParam(event, "id");
   if (!groupId) {
@@ -3223,6 +3519,183 @@ const leave_post = defineEventHandler(async (event) => {
 const leave_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: leave_post
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const links_get = defineEventHandler(async (event) => {
+  const groupId = getRouterParam(event, "id");
+  if (!groupId) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Group ID is required"
+    });
+  }
+  try {
+    const links = await Database.getGroupLinks(groupId);
+    return links || [];
+  } catch (error) {
+    console.error("Error fetching group links:", error);
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Failed to fetch group links"
+    });
+  }
+});
+
+const links_get$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: links_get
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const links_post = defineEventHandler(async (event) => {
+  if (getMethod(event) !== "POST") {
+    throw createError({
+      statusCode: 405,
+      statusMessage: "Method not allowed"
+    });
+  }
+  const groupId = getRouterParam(event, "id");
+  if (!groupId) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Group ID is required"
+    });
+  }
+  const currentUser = getUserFromRequest(event);
+  if (!currentUser) {
+    throw createError({
+      statusCode: 401,
+      statusMessage: "Authentication required"
+    });
+  }
+  const body = await readBody(event);
+  const { content } = body;
+  if (!content || !content.trim()) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Content is required"
+    });
+  }
+  try {
+    const group = await Database.getGroupById(groupId);
+    if (!group) {
+      throw createError({
+        statusCode: 404,
+        statusMessage: "Group not found"
+      });
+    }
+    const parsedMembers = group.members ? group.members.map((member) => {
+      try {
+        return typeof member === "string" ? JSON.parse(member) : member;
+      } catch (e) {
+        return member;
+      }
+    }) : [];
+    const isMember = parsedMembers.some((member) => member.userId === currentUser.id);
+    if (!isMember) {
+      throw createError({
+        statusCode: 403,
+        statusMessage: "You must be a group member to share links"
+      });
+    }
+    const newLink = {
+      group_id: groupId,
+      created_by: currentUser.id,
+      content: content.trim()
+    };
+    const createdLink = await Database.createGroupLink(newLink);
+    return createdLink;
+  } catch (error) {
+    if (error.statusCode) {
+      throw error;
+    }
+    console.error("Error creating group link:", error);
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Failed to create shared link"
+    });
+  }
+});
+
+const links_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: links_post
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const _linkId__delete = defineEventHandler(async (event) => {
+  if (getMethod(event) !== "DELETE") {
+    throw createError({
+      statusCode: 405,
+      statusMessage: "Method not allowed"
+    });
+  }
+  const groupId = getRouterParam(event, "id");
+  const linkId = getRouterParam(event, "linkId");
+  if (!groupId || !linkId) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Group ID and Link ID are required"
+    });
+  }
+  const currentUser = getUserFromRequest(event);
+  if (!currentUser) {
+    throw createError({
+      statusCode: 401,
+      statusMessage: "Authentication required"
+    });
+  }
+  try {
+    const group = await Database.getGroupById(groupId);
+    if (!group) {
+      throw createError({
+        statusCode: 404,
+        statusMessage: "Group not found"
+      });
+    }
+    const parsedMembers = group.members ? group.members.map((member) => {
+      try {
+        return typeof member === "string" ? JSON.parse(member) : member;
+      } catch (e) {
+        return member;
+      }
+    }) : [];
+    const isMember = parsedMembers.some((member) => member.userId === currentUser.id);
+    if (!isMember) {
+      throw createError({
+        statusCode: 403,
+        statusMessage: "You must be a group member to delete links"
+      });
+    }
+    const links = await Database.getGroupLinks(groupId);
+    const linkToDelete = links.find((link) => link.id === linkId);
+    if (!linkToDelete) {
+      throw createError({
+        statusCode: 404,
+        statusMessage: "Link not found"
+      });
+    }
+    if (linkToDelete.user_id !== currentUser.id && currentUser.role !== "admin") {
+      throw createError({
+        statusCode: 403,
+        statusMessage: "You can only delete your own links"
+      });
+    }
+    await Database.deleteGroupLink(linkId);
+    return { message: "Link deleted successfully" };
+  } catch (error) {
+    if (error.statusCode) {
+      throw error;
+    }
+    console.error("Error deleting group link:", error);
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Failed to delete shared link"
+    });
+  }
+});
+
+const _linkId__delete$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: _linkId__delete
 }, Symbol.toStringTag, { value: 'Module' }));
 
 const update_put = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({

@@ -358,4 +358,70 @@ export class Database {
     if (error) throw error
     return data
   }
+
+  // Group Links
+  static async getGroupLinks(groupId: string) {
+    const { data, error } = await supabase
+      .from('group_links')
+      .select('*')
+      .eq('group_id', groupId)
+      .order('created_at', { ascending: false })
+    
+    if (error) throw error
+    return data || []
+  }
+
+  static async createGroupLink(link: any) {
+    const { data, error } = await supabase
+      .from('group_links')
+      .insert([link])
+      .select()
+      .single()
+    
+    if (error) throw error
+    return data
+  }
+
+  static async deleteGroupLink(id: string) {
+    const { data, error } = await supabase
+      .from('group_links')
+      .delete()
+      .eq('id', id)
+    
+    if (error) throw error
+    return data
+  }
+
+  // Group Images
+  static async getGroupImages(groupId: string) {
+    const { data, error } = await supabase
+      .from('group_images')
+      .select('*')
+      .eq('group_id', groupId)
+      .order('created_at', { ascending: false })
+    
+    if (error) throw error
+    return data || []
+  }
+
+  static async createGroupImage(image: any) {
+    const { data, error } = await supabase
+      .from('group_images')
+      .insert([image])
+      .select()
+      .single()
+    
+    if (error) throw error
+    return data
+  }
+
+  static async deleteGroupImage(id: string) {
+    const { data, error } = await supabase
+      .from('group_images')
+      .delete()
+      .eq('id', id)
+    
+    if (error) throw error
+    return data
+  }
 }

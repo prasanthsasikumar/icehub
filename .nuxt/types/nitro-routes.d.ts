@@ -42,6 +42,13 @@ declare module "nitropack/types" {
     '/api/groups/:id/delete': {
       'delete': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/groups/[id]/delete.delete').default>>>>
     }
+    '/api/groups/:id/images': {
+      'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/groups/[id]/images.get').default>>>>
+      'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/groups/[id]/images.post').default>>>>
+    }
+    '/api/groups/:id/images/:imageId': {
+      'delete': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/groups/[id]/images/[imageId].delete').default>>>>
+    }
     '/api/groups/:id': {
       'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/groups/[id]/index.get').default>>>>
     }
@@ -50,6 +57,13 @@ declare module "nitropack/types" {
     }
     '/api/groups/:id/leave': {
       'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/groups/[id]/leave.post').default>>>>
+    }
+    '/api/groups/:id/links': {
+      'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/groups/[id]/links.get').default>>>>
+      'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/groups/[id]/links.post').default>>>>
+    }
+    '/api/groups/:id/links/:linkId': {
+      'delete': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/groups/[id]/links/[linkId].delete').default>>>>
     }
     '/api/groups/:id/update': {
       'put': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/groups/[id]/update.put').default>>>>

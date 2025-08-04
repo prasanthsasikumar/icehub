@@ -144,18 +144,127 @@
               <p class="text-gray-600 leading-relaxed">{{ data.description }}</p>
             </div>
 
-            <!-- Project Updates (Placeholder) -->
+            <!-- Shared Links & Resources -->
             <div class="bg-white rounded-xl border border-gray-200 p-6">
-              <h2 class="text-xl font-semibold text-gray-700 mb-4">Recent Updates</h2>
-              <div class="text-center py-8 text-gray-500">
+              <h2 class="text-xl font-semibold text-gray-700 mb-4">Shared Links & Resources</h2>
+              
+              <!-- Add Link Form (for members only) -->
+              <div v-if="data.isMember" class="mb-6 p-4 bg-gray-50 rounded-lg">
+                <div class="flex flex-col gap-3">
+                  <textarea
+                    v-model="newLinkText"
+                    placeholder="Share links, resources, or any useful information with the group..."
+                    rows="3"
+                    class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-primary resize-none"
+                  ></textarea>
+                  <div class="flex justify-end">
+                    <button
+                      @click="addSharedLink"
+                      :disabled="!newLinkText.trim() || addingLink"
+                      class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark disabled:opacity-50 disabled:cursor-not-allowed text-sm transition-colors"
+                    >
+                      <span v-if="addingLink">Adding...</span>
+                      <span v-else>Share</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Shared Links List -->
+              <div v-if="sharedLinks.length > 0" class="space-y-4">
+                <div v-for="link in sharedLinks" :key="link.id" class="p-4 border border-gray-200 rounded-lg">
+                  <div class="flex items-start justify-between">
+                    <div class="flex-1">
+                      <p class="text-sm text-gray-700 whitespace-pre-wrap">{{ link.content }}</p>
+                      <div class="flex items-center gap-2 mt-2 text-xs text-gray-500">
+                        <span>{{ link.userName }}</span>
+                      </div>
+                    </div>
+                    <button
+                      v-if="data.isMember && (link.userId === user?.id || user?.role === 'admin')"
+                      @click="deleteSharedLink(link.id)"
+                      class="text-gray-400 hover:text-red-500 ml-2"
+                    >
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              
+              <div v-else class="text-center py-8 text-gray-500">
                 <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" class="mx-auto mb-3">
-                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                  <polyline points="14,2 14,8 20,8"/>
-                  <line x1="16" y1="13" x2="8" y2="13"/>
-                  <line x1="16" y1="17" x2="8" y2="17"/>
-                  <polyline points="10,9 9,9 8,9"/>
+                  <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                  <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
                 </svg>
-                <p>Project updates will appear here</p>
+                <p>No shared links yet</p>
+                <p v-if="data.isMember" class="text-xs mt-1">Be the first to share something useful!</p>
+              </div>
+            </div>
+
+            <!-- Image Gallery -->
+            <div class="bg-white rounded-xl border border-gray-200 p-6">
+              <h2 class="text-xl font-semibold text-gray-700 mb-4">Image Gallery</h2>
+              
+              <!-- Upload Image Form (for members only) -->
+              <div v-if="data.isMember" class="mb-6">
+                <div class="flex items-center gap-3">
+                  <input
+                    type="file"
+                    ref="imageInput"
+                    @change="handleImageUpload"
+                    accept="image/*"
+                    class="hidden"
+                  />
+                  <button
+                    @click="$refs.imageInput.click()"
+                    :disabled="uploadingImage"
+                    class="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark disabled:opacity-50 disabled:cursor-not-allowed text-sm transition-colors"
+                  >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                      <circle cx="8.5" cy="8.5" r="1.5"/>
+                      <polyline points="21,15 16,10 5,21"/>
+                    </svg>
+                    <span v-if="uploadingImage">Uploading...</span>
+                    <span v-else>Upload Image</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Image Grid -->
+              <div v-if="groupImages.length > 0" class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <div v-for="image in groupImages" :key="image.id" class="relative group">
+                  <img
+                    :src="image.image_url"
+                    :alt="`Uploaded by user`"
+                    class="w-full h-32 object-cover rounded-lg border border-gray-200 cursor-pointer hover:opacity-75 transition-opacity"
+                    @click="openImageModal(image)"
+                  />
+                  <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white text-xs p-2 rounded-b-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                    <p class="truncate">{{ image.filename }}</p>
+                  </div>
+                  <button
+                    v-if="data.isMember && (image.created_by === user?.id || user?.role === 'admin')"
+                    @click="deleteImage(image.id)"
+                    class="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              
+              <div v-else class="text-center py-8 text-gray-500">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" class="mx-auto mb-3">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                  <circle cx="8.5" cy="8.5" r="1.5"/>
+                  <polyline points="21,15 16,10 5,21"/>
+                </svg>
+                <p>No images shared yet</p>
+                <p v-if="data.isMember" class="text-xs mt-1">Share your first image with the group!</p>
               </div>
             </div>
           </div>
@@ -242,8 +351,28 @@ const { user, isLoggedIn, checkAuth } = useAuth()
 // State
 const joiningGroup = ref(false)
 
+// Shared links state
+const newLinkText = ref('')
+const addingLink = ref(false)
+const sharedLinks = ref([])
+
+// Image gallery state
+const uploadingImage = ref(false)
+const groupImages = ref([])
+const selectedImage = ref(null)
+
 // Fetch group data
 const { data, pending, error, refresh } = await useFetch(`/api/groups/${groupId}`)
+
+// Fetch shared links and images
+const { data: linksData, refresh: refreshLinks } = await useFetch(`/api/groups/${groupId}/links`)
+const { data: imagesData, refresh: refreshImages } = await useFetch(`/api/groups/${groupId}/images`)
+
+// Watch for data changes
+watch([linksData, imagesData], ([links, images]) => {
+  if (links) sharedLinks.value = links
+  if (images) groupImages.value = images
+}, { immediate: true })
 
 // Check authentication on mount
 onMounted(async () => {
@@ -272,6 +401,92 @@ const joinGroup = async () => {
   } finally {
     joiningGroup.value = false
   }
+}
+
+// Shared links functions
+const addSharedLink = async () => {
+  if (!newLinkText.value.trim() || addingLink.value) return
+
+  addingLink.value = true
+  
+  try {
+    await $fetch(`/api/groups/${groupId}/links`, {
+      method: 'POST',
+      body: {
+        content: newLinkText.value.trim()
+      }
+    })
+    
+    newLinkText.value = ''
+    await refreshLinks()
+  } catch (error) {
+    console.error('Failed to add shared link:', error)
+    alert('Failed to add shared link')
+  } finally {
+    addingLink.value = false
+  }
+}
+
+const deleteSharedLink = async (linkId) => {
+  if (!confirm('Are you sure you want to delete this shared link?')) return
+
+  try {
+    await $fetch(`/api/groups/${groupId}/links/${linkId}`, {
+      method: 'DELETE'
+    })
+    
+    await refreshLinks()
+  } catch (error) {
+    console.error('Failed to delete shared link:', error)
+    alert('Failed to delete shared link')
+  }
+}
+
+// Image gallery functions
+const handleImageUpload = async (event) => {
+  const file = event.target.files[0]
+  if (!file || uploadingImage.value) return
+
+  uploadingImage.value = true
+
+  try {
+    const formData = new FormData()
+    formData.append('image', file)
+
+    await $fetch(`/api/groups/${groupId}/images`, {
+      method: 'POST',
+      body: formData
+    })
+
+    // Clear the file input
+    event.target.value = ''
+    await refreshImages()
+  } catch (error) {
+    console.error('Failed to upload image:', error)
+    alert('Failed to upload image')
+  } finally {
+    uploadingImage.value = false
+  }
+}
+
+const deleteImage = async (imageId) => {
+  if (!confirm('Are you sure you want to delete this image?')) return
+
+  try {
+    await $fetch(`/api/groups/${groupId}/images/${imageId}`, {
+      method: 'DELETE'
+    })
+    
+    await refreshImages()
+  } catch (error) {
+    console.error('Failed to delete image:', error)
+    alert('Failed to delete image')
+  }
+}
+
+const openImageModal = (image) => {
+  selectedImage.value = image
+  // You could implement a modal here if needed
 }
 
 // Helper functions

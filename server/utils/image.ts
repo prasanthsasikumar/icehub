@@ -16,6 +16,75 @@ export const ensureUserImage = (userImage: string | null | undefined) => {
   return userImage
 }
 
+// Function to upload image from Buffer data (for multipart form uploads)
+export const uploadImageBuffer = async (imageBuffer: Buffer, filename: string, contentType: string) => {
+  try {
+    console.log('Upload function called with:', {
+      bufferLength: imageBuffer?.length,
+      filename,
+      contentType,
+      isProduction: process.env.NODE_ENV === 'production' || process.env.VERCEL,
+      hasBlobToken: !!process.env.BLOB_READ_WRITE_TOKEN
+    })
+    
+    if (!imageBuffer || imageBuffer.length === 0) {
+      console.log('Invalid image buffer')
+      return {
+        success: false,
+        error: 'Invalid image data'
+      }
+    }
+
+    // Generate unique filename
+    const uniqueId = uuidv4()
+    const fileExtension = contentType.split('/')[1] || 'jpg'
+    const uniqueFilename = `${Date.now()}-${uniqueId}.${fileExtension}`
+    
+    // Check if we're in production (Vercel)
+    const isProduction = process.env.NODE_ENV === 'production' || process.env.VERCEL
+    
+    if (isProduction && process.env.BLOB_READ_WRITE_TOKEN) {
+      // Use Vercel Blob in production
+      const blob = await put(uniqueFilename, imageBuffer, {
+        access: 'public',
+        contentType: contentType,
+        token: process.env.BLOB_READ_WRITE_TOKEN
+      })
+
+      return {
+        success: true,
+        url: blob.url,
+        filename: uniqueFilename
+      }
+    } else {
+      // Use local storage in development
+      console.log('Using local storage for image upload')
+      const uploadsDir = path.join(process.cwd(), 'public', 'uploads')
+      await fs.mkdir(uploadsDir, { recursive: true })
+      
+      const filePath = path.join(uploadsDir, uniqueFilename)
+      console.log('Writing file to:', filePath)
+      await fs.writeFile(filePath, imageBuffer)
+
+      const publicUrl = `/uploads/${uniqueFilename}`
+      console.log('Image uploaded successfully:', publicUrl)
+      
+      return {
+        success: true,
+        url: publicUrl,
+        filename: uniqueFilename
+      }
+    }
+
+  } catch (error) {
+    console.error('Image upload error:', error)
+    return {
+      success: false,
+      error: 'Failed to upload image'
+    }
+  }
+}
+
 // Function to upload image - same logic as upload.post.ts
 export const uploadImage = async (imageData: string, filename?: string) => {
   try {
