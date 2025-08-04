@@ -15,7 +15,17 @@ export default defineEventHandler(async (event) => {
   }
 
   const body = await readBody(event)
-  const { name, email, password, bio, skills, image } = body
+  const { name, email, password, bio, skills, image, userRole } = body
+
+  console.log('Registration request received:', {
+    name,
+    email,
+    hasImage: !!image,
+    imageUrl: image,
+    userRole,
+    bio: bio?.substring(0, 50) + (bio?.length > 50 ? '...' : ''),
+    skillsCount: skills?.length || 0
+  })
 
   if (!name || !email || !password) {
     throw createError({
@@ -39,16 +49,27 @@ export default defineEventHandler(async (event) => {
 
     // Handle image upload if provided
     let imageUrl = getDefaultUserImage()
-    if (image && image.startsWith('data:image/')) {
-      try {
-        // If image is provided, upload it
-        const uploadResult = await uploadImage(image)
-        if (uploadResult.success && uploadResult.url) {
-          imageUrl = uploadResult.url
+    if (image) {
+      if (image.startsWith('data:image/')) {
+        console.log('Processing base64 image upload for registration...')
+        try {
+          // If image is provided as base64, upload it
+          const uploadResult = await uploadImage(image)
+          console.log('Image upload result:', uploadResult)
+          if (uploadResult.success && uploadResult.url) {
+            imageUrl = uploadResult.url
+            console.log('Image URL set to:', imageUrl)
+          }
+        } catch (uploadError) {
+          console.error('Error during image upload:', uploadError)
         }
-      } catch (uploadError) {
-        console.error('Error during image upload:', uploadError)
+      } else if (image.startsWith('/uploads/') || image.startsWith('http')) {
+        // Image is already uploaded (from ImageUpload component)
+        imageUrl = image
+        console.log('Using pre-uploaded image:', imageUrl)
       }
+    } else {
+      console.log('No image provided, using default')
     }
 
     // Create new user
@@ -61,10 +82,17 @@ export default defineEventHandler(async (event) => {
       bio: bio || '',
       skills: skills || [],
       role: 'user',
+      userRole: userRole || 'developer',
       createdAt: new Date().toISOString()
     }
 
     const createdUser = await Database.createUser(newUser)
+
+    console.log('User created with image:', {
+      name: createdUser.name,
+      imageUrl: createdUser.image,
+      isDefault: createdUser.image?.includes('default')
+    })
 
     // Generate JWT token
     const token = jwt.sign(

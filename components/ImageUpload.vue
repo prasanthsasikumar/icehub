@@ -88,7 +88,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue', 'upload-status'])
 
 // Reactive state
 const fileInput = ref(null)
@@ -133,10 +133,18 @@ const handleFileSelect = async (event) => {
 
   error.value = ''
   uploading.value = true
+  emit('upload-status', true)
 
   try {
     // Convert to base64
     const base64 = await fileToBase64(file)
+    
+    console.log('Image upload - file details:', {
+      name: file.name,
+      size: file.size,
+      type: file.type,
+      base64Length: base64.length
+    })
     
     // Upload to server
     const response = await $fetch('/api/upload', {
@@ -147,6 +155,8 @@ const handleFileSelect = async (event) => {
       }
     })
 
+    console.log('Image upload response:', response)
+
     // Update model value with the uploaded image URL
     emit('update:modelValue', response.url)
     
@@ -155,6 +165,7 @@ const handleFileSelect = async (event) => {
     error.value = err.data?.message || 'Failed to upload image. Please try again.'
   } finally {
     uploading.value = false
+    emit('upload-status', false)
     // Reset file input
     if (fileInput.value) {
       fileInput.value.value = ''

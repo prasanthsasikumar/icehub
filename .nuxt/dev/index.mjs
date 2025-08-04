@@ -1124,7 +1124,22 @@ const plugins = [
 _imlJlEtcYUErFKlIoV3o40RwAHyYMj1YM8ArfD1nFG0
 ];
 
-const assets = {};
+const assets = {
+  "/index.mjs": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"1f886-Gs1GM50JecVbHq0wd4vQ7Try52o\"",
+    "mtime": "2025-08-04T05:57:37.991Z",
+    "size": 129158,
+    "path": "index.mjs"
+  },
+  "/index.mjs.map": {
+    "type": "application/json",
+    "etag": "\"711ae-YqsMMKkLzjgtW6y/H9NDc+zXDhs\"",
+    "mtime": "2025-08-04T05:57:37.991Z",
+    "size": 463278,
+    "path": "index.mjs.map"
+  }
+};
 
 function readAsset (id) {
   const serverDir = dirname$1(fileURLToPath(globalThis._importMeta_.url));
@@ -1541,6 +1556,7 @@ const _lazy_HItsH8 = () => Promise.resolve().then(function () { return conversat
 const _lazy_ttNtBU = () => Promise.resolve().then(function () { return messages_get; });
 const _lazy_nCeQW7 = () => Promise.resolve().then(function () { return send_post; });
 const _lazy_0X8xDp = () => Promise.resolve().then(function () { return status_get$1; });
+const _lazy_Cn2ye5 = () => Promise.resolve().then(function () { return testUpload_post$1; });
 const _lazy_ue7UuQ = () => Promise.resolve().then(function () { return delete_delete$1; });
 const _lazy_5f9wml = () => Promise.resolve().then(function () { return index_get$3; });
 const _lazy_RFjUl8 = () => Promise.resolve().then(function () { return join_post$1; });
@@ -1567,6 +1583,7 @@ const handlers = [
   { route: '/api/chat/messages', handler: _lazy_ttNtBU, lazy: true, middleware: false, method: "get" },
   { route: '/api/chat/send', handler: _lazy_nCeQW7, lazy: true, middleware: false, method: "post" },
   { route: '/api/debug/status', handler: _lazy_0X8xDp, lazy: true, middleware: false, method: "get" },
+  { route: '/api/debug/test-upload', handler: _lazy_Cn2ye5, lazy: true, middleware: false, method: "post" },
   { route: '/api/groups/:id/delete', handler: _lazy_ue7UuQ, lazy: true, middleware: false, method: "delete" },
   { route: '/api/groups/:id', handler: _lazy_5f9wml, lazy: true, middleware: false, method: "get" },
   { route: '/api/groups/:id/join', handler: _lazy_RFjUl8, lazy: true, middleware: false, method: "post" },
@@ -2468,6 +2485,7 @@ const me_get$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 const register_post = defineEventHandler(async (event) => {
+  var _a;
   if (getMethod(event) !== "POST") {
     throw createError({
       statusCode: 405,
@@ -2475,7 +2493,16 @@ const register_post = defineEventHandler(async (event) => {
     });
   }
   const body = await readBody(event);
-  const { name, email, password, bio, skills, image } = body;
+  const { name, email, password, bio, skills, image, userRole } = body;
+  console.log("Registration request received:", {
+    name,
+    email,
+    hasImage: !!image,
+    imageUrl: image,
+    userRole,
+    bio: (bio == null ? void 0 : bio.substring(0, 50)) + ((bio == null ? void 0 : bio.length) > 50 ? "..." : ""),
+    skillsCount: (skills == null ? void 0 : skills.length) || 0
+  });
   if (!name || !email || !password) {
     throw createError({
       statusCode: 400,
@@ -2492,15 +2519,25 @@ const register_post = defineEventHandler(async (event) => {
     }
     const hashedPassword = await bcrypt.hash(password, 10);
     let imageUrl = getDefaultUserImage();
-    if (image && image.startsWith("data:image/")) {
-      try {
-        const uploadResult = await uploadImage(image);
-        if (uploadResult.success && uploadResult.url) {
-          imageUrl = uploadResult.url;
+    if (image) {
+      if (image.startsWith("data:image/")) {
+        console.log("Processing base64 image upload for registration...");
+        try {
+          const uploadResult = await uploadImage(image);
+          console.log("Image upload result:", uploadResult);
+          if (uploadResult.success && uploadResult.url) {
+            imageUrl = uploadResult.url;
+            console.log("Image URL set to:", imageUrl);
+          }
+        } catch (uploadError) {
+          console.error("Error during image upload:", uploadError);
         }
-      } catch (uploadError) {
-        console.error("Error during image upload:", uploadError);
+      } else if (image.startsWith("/uploads/") || image.startsWith("http")) {
+        imageUrl = image;
+        console.log("Using pre-uploaded image:", imageUrl);
       }
+    } else {
+      console.log("No image provided, using default");
     }
     const newUser = {
       id: v4(),
@@ -2511,9 +2548,15 @@ const register_post = defineEventHandler(async (event) => {
       bio: bio || "",
       skills: skills || [],
       role: "user",
+      userRole: userRole || "developer",
       createdAt: (/* @__PURE__ */ new Date()).toISOString()
     };
     const createdUser = await Database.createUser(newUser);
+    console.log("User created with image:", {
+      name: createdUser.name,
+      imageUrl: createdUser.image,
+      isDefault: (_a = createdUser.image) == null ? void 0 : _a.includes("default")
+    });
     const token = jwt.sign(
       {
         id: createdUser.id,
@@ -2691,6 +2734,28 @@ const status_get = defineEventHandler(async (event) => {
 const status_get$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: status_get
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const testUpload_post = defineEventHandler(async (event) => {
+  const body = await readBody(event);
+  console.log("Test upload request received:", {
+    hasImage: !!body.image,
+    imageFormat: body.image ? body.image.substring(0, 50) + "..." : "none",
+    imageLength: body.image ? body.image.length : 0
+  });
+  return {
+    success: true,
+    received: {
+      hasImage: !!body.image,
+      imageLength: body.image ? body.image.length : 0,
+      imageStart: body.image ? body.image.substring(0, 50) : null
+    }
+  };
+});
+
+const testUpload_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: testUpload_post
 }, Symbol.toStringTag, { value: 'Module' }));
 
 const delete_delete = defineEventHandler(async (event) => {

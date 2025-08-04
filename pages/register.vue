@@ -34,6 +34,7 @@
             <ImageUpload 
               v-model="form.image"
               alt-text="Profile picture"
+              @upload-status="isImageUploading = $event"
             />
           </div>
 
@@ -151,10 +152,11 @@
           <!-- Submit Button -->
           <button
             type="submit"
-            :disabled="loading"
+            :disabled="loading || isImageUploading"
             class="form-button"
           >
             <span v-if="loading">Creating account...</span>
+            <span v-else-if="isImageUploading">Wait for image upload...</span>
             <span v-else>Create account</span>
           </button>
         </form>
@@ -187,6 +189,7 @@ const form = reactive({
 const skillsInput = ref('')
 const loading = ref(false)
 const error = ref('')
+const isImageUploading = ref(false)
 
 // Handle registration
 const handleRegister = async () => {
@@ -201,6 +204,16 @@ const handleRegister = async () => {
       .split(',')
       .map(skill => skill.trim())
       .filter(skill => skill.length > 0)
+
+    console.log('Registration data being sent:', {
+      name: form.name,
+      email: form.email,
+      bio: form.bio,
+      hasImage: !!form.image,
+      imageUrl: form.image,
+      userRole: form.userRole,
+      skillsCount: skills.length
+    })
 
     const response = await $fetch('/api/auth/register', {
       method: 'POST',
