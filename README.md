@@ -1,4 +1,4 @@
-# ICEHub - Developer Community Platform
+# ICE2025 - Developer Community Platform
 
 A modern developer community platform built with Nuxt.js and Tailwind CSS.
 
@@ -13,7 +13,7 @@ A modern developer community platform built with Nuxt.js and Tailwind CSS.
 ## Image Storage System
 
 ### Overview
-ICEHub uses a file-based image storage system instead of storing images as base64 in JSON files. This provides:
+ICE2025 uses a file-based image storage system instead of storing images as base64 in JSON files. This provides:
 
 - **Better Performance**: Faster API responses and page loads
 - **Scalability**: Images are served as static files with browser caching

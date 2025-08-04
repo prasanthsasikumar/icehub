@@ -4,7 +4,7 @@
       <!-- Logo and Header -->
       <div class="text-center mb-6 sm:mb-8">
         <NuxtLink to="/" class="text-2xl sm:text-3xl font-bold text-gray-700 hover:text-primary transition-colors">
-          ICEHub
+          ICE2025
         </NuxtLink>
         <h1 class="text-xl sm:text-2xl font-semibold text-gray-700 mt-3 sm:mt-4 mb-2">Welcome back</h1>
         <p class="text-sm sm:text-base text-gray-500">Sign in to your account</p>
@@ -69,7 +69,7 @@
             <p>Email: test@email.com</p>
             <p>Password: password</p>
             <p class="mt-2"><strong>Admin User:</strong></p>
-            <p>Email: admin@icehub.com</p>
+            <p>Email: admin@ice2025.com</p>
             <p>Password: admin123</p>
           </div>
         </div>
@@ -141,11 +141,11 @@ onMounted(async () => {
 
 // Page meta
 useHead({
-  title: 'Sign In - ICEHub',
+  title: 'Sign In - ICE2025',
   meta: [
     {
       name: 'description',
-      content: 'Sign in to your ICEHub account to access your developer profile and connect with other professionals.'
+      content: 'Sign in to your ICE2025 account to access your developer profile and connect with other professionals.'
     }
   ]
 })

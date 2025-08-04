@@ -133,6 +133,7 @@ declare global {
   const unsealSession: typeof import('../../node_modules/h3')['unsealSession']
   const updateSession: typeof import('../../node_modules/h3')['updateSession']
   const uploadImage: typeof import('../../server/utils/image')['uploadImage']
+  const uploadImageBuffer: typeof import('../../server/utils/image')['uploadImageBuffer']
   const useAppConfig: typeof import('../../node_modules/nitropack/dist/runtime/internal/config')['useAppConfig']
   const useBase: typeof import('../../node_modules/h3')['useBase']
   const useEvent: typeof import('../../node_modules/nitropack/dist/runtime/internal/context')['useEvent']
@@ -176,6 +177,6 @@ export { defineAppConfig } from '/Users/prasanthsasikumar/Documents/GitHub/icehu
 export { hashPassword, verifyPassword, generateToken, verifyToken, getUserFromRequest, requireAuth } from '/Users/prasanthsasikumar/Documents/GitHub/icehub/server/utils/auth';
 export { createMessageId } from '/Users/prasanthsasikumar/Documents/GitHub/icehub/server/utils/chat';
 export { getRandomGroupCover, createGroupId } from '/Users/prasanthsasikumar/Documents/GitHub/icehub/server/utils/groups';
-export { getDefaultUserImage, ensureUserImage, uploadImage } from '/Users/prasanthsasikumar/Documents/GitHub/icehub/server/utils/image';
+export { getDefaultUserImage, ensureUserImage, uploadImageBuffer, uploadImage } from '/Users/prasanthsasikumar/Documents/GitHub/icehub/server/utils/image';
 export { normalizeSkills, getDefaultSkillLevel, skillsToStringArray, getSkillLevel } from '/Users/prasanthsasikumar/Documents/GitHub/icehub/server/utils/skills';
 export { supabase, supabaseAdmin, Database } from '/Users/prasanthsasikumar/Documents/GitHub/icehub/server/utils/supabase';

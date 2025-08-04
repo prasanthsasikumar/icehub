@@ -5,7 +5,7 @@
       <div class="max-w-container mx-auto container-padding flex justify-between items-center h-14 sm:h-16">
         <div class="nav-left">
           <NuxtLink to="/" class="nav-logo">
-            <span class="hidden sm:inline">ICEHub Messages</span>
+            <span class="hidden sm:inline">ICE2025 Messages</span>
             <span class="sm:hidden">Messages</span>
           </NuxtLink>
         </div>
@@ -713,11 +713,11 @@ const scrollToBottom = () => {
 
 // Page meta
 useHead({
-  title: 'Messages - ICEHub',
+  title: 'Messages - ICE2025',
   meta: [
     {
       name: 'description',
-      content: 'Chat with other developers in the ICEHub community.'
+      content: 'Chat with other developers in the ICE2025 community.'
     }
   ]
 })

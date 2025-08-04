@@ -4,7 +4,7 @@
     <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
       <div class="max-w-container mx-auto px-5 flex justify-between items-center h-16">
         <div class="nav-left">
-          <NuxtLink to="/" class="nav-logo">ICEHub</NuxtLink>
+          <NuxtLink to="/" class="nav-logo">ICE2025</NuxtLink>
         </div>
         <div class="nav-right flex items-center gap-4">
           <span v-if="user" class="text-sm text-gray-600">{{ user.name }}</span>
@@ -196,7 +196,7 @@ const createGroup = async () => {
 
 // Page meta
 useHead({
-  title: 'Create Group - ICEHub',
+  title: 'Create Group - ICE2025',
   meta: [
     {
       name: 'description',

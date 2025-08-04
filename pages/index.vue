@@ -4,7 +4,7 @@
     <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
       <div class="max-w-container mx-auto container-padding flex justify-between items-center h-14 sm:h-16">
         <div class="nav-left">
-          <h1 class="nav-logo">ICEHub</h1>
+          <h1 class="nav-logo">ICE2025</h1>
         </div>
         <div class="nav-right hidden sm:flex items-center gap-2 sm:gap-4">
           <template v-if="isLoggedIn">
@@ -104,7 +104,7 @@
     <!-- Hero Section -->
     <section class="bg-gradient-to-br from-gray-50 to-gray-200 section-padding text-center">
       <div class="max-w-container mx-auto container-padding">
-        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-700 mb-4 sm:mb-6 leading-tight">ICE Workshop 2025</h1>
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-700 mb-4 sm:mb-6 leading-tight">ICE2025 Workshop</h1>
         <p class="text-lg sm:text-xl text-gray-500 mb-8 sm:mb-10 max-w-2xl mx-auto">Join 30 selected participants in Sri Lanka's premier AI innovation workshop. Connect with international mentors and build breakthrough products in just 3 days.</p>
         
         <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mb-8 sm:mb-15 max-w-md sm:max-w-none mx-auto">
@@ -127,7 +127,7 @@
         <!-- Stats Section -->
         <div v-if="users && users.length > 0" class="mt-8 sm:mt-15">
           <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-4 sm:mb-6">
-            ICE WORKSHOP BY 
+            ICE2025 WORKSHOP BY 
             <a 
               href="https://www.linkedin.com/in/prof-suranga/" 
               target="_blank" 
@@ -303,7 +303,7 @@ const topSkills = computed(() => {
 
 // Page meta
 useHead({
-  title: 'ICE Workshop 2025 - AI Innovation in Sri Lanka',
+  title: 'ICE2025 Workshop - AI Innovation in Sri Lanka',
   meta: [
     {
       name: 'description',

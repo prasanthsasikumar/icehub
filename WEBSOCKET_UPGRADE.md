@@ -1,9 +1,9 @@
-# ICEHub Real-Time Messaging System
+# ICE2025 Real-Time Messaging System
 
 ## Current Status: Polling-based with WebSocket Framework Ready
 
 ### System Overview
-The ICEHub platform currently uses a **polling-based real-time messaging system** with the infrastructure prepared for WebSocket upgrade when needed.
+The ICE2025 platform currently uses a **polling-based real-time messaging system** with the infrastructure prepared for WebSocket upgrade when needed.
 
 ### Current Implementation (Polling)
 - **Real-time updates**: 2-second polling interval

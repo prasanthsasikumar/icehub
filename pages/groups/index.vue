@@ -4,7 +4,7 @@
     <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
       <div class="max-w-container mx-auto container-padding flex justify-between items-center h-14 sm:h-16">
         <div class="nav-left">
-          <NuxtLink to="/" class="nav-logo">ICEHub</NuxtLink>
+          <NuxtLink to="/" class="nav-logo">ICE2025</NuxtLink>
         </div>
         <div class="nav-right hidden sm:flex items-center gap-2 sm:gap-4">
           <template v-if="isLoggedIn">
@@ -220,7 +220,7 @@ const formatDate = (dateString) => {
 
 // Page meta
 useHead({
-  title: 'Groups - ICEHub',
+  title: 'Groups - ICE2025',
   meta: [
     {
       name: 'description',

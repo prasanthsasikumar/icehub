@@ -4,7 +4,7 @@
     <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
       <div class="max-w-container mx-auto container-padding flex justify-between items-center h-14 sm:h-16">
         <div class="nav-left">
-          <NuxtLink to="/" class="nav-logo">ICEHub</NuxtLink>
+          <NuxtLink to="/" class="nav-logo">ICE2025</NuxtLink>
         </div>
         <div class="nav-right">
           <NuxtLink to="/" class="nav-button nav-button-secondary">
@@ -20,7 +20,7 @@
       <div class="max-w-container mx-auto container-padding">
         <!-- Header -->
         <div class="text-center mb-8 sm:mb-12">
-          <h1 class="text-3xl sm:text-4xl font-bold text-gray-700 mb-3 sm:mb-4">All Developers</h1>
+              <h1 class="text-3xl font-bold mb-8 text-white">ICE2025 Developers</h1>
           <p class="text-base sm:text-lg text-gray-500 max-w-2xl mx-auto leading-relaxed">
             Discover talented developers in our community. Connect, collaborate, and build amazing things together.
           </p>
@@ -220,11 +220,11 @@ const clearFilters = () => {
 
 // Page meta
 useHead({
-  title: 'All Developers - ICEHub',
+  title: 'All Developers - ICE2025',
   meta: [
     {
       name: 'description',
-      content: 'Browse all developers in the ICEHub community. Find talented professionals with the skills you need.'
+      content: 'Browse all developers in the ICE2025 community. Find talented professionals with the skills you need.'
     }
   ]
 })

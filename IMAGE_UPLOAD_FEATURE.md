@@ -1,4 +1,4 @@
-# Image Upload Feature Implementation
+# ICE2025 Image Upload Feature Implementation
 
 ## ✅ **Feature Overview**
 
@@ -89,7 +89,7 @@ Added comprehensive image upload/capture functionality for user registration and
 ## 🎨 **UI/UX Features**
 
 ### **Visual Design**
-- **Clean interface**: Matches existing ICEHub styling
+- **Clean interface**: Matches existing ICE2025 styling
 - **Progress indicators**: Upload status feedback
 - **Error states**: Clear error messaging
 - **Success states**: Confirmation feedback

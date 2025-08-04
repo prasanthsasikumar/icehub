@@ -3,8 +3,10 @@
     <!-- Top Navigation -->
     <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
       <div class="max-w-4xl mx-auto container-padding flex justify-between items-center h-14 sm:h-16">
-        <div class="nav-left">
-          <NuxtLink to="/" class="nav-logo">ICEHub</NuxtLink>
+                <div class="nav-left">
+          <NuxtLink to="/">
+            <h1 class="nav-logo">ICE2025</h1>
+          </NuxtLink>
         </div>
         <div class="nav-right">
           <NuxtLink to="/" class="nav-button nav-button-secondary">
@@ -443,11 +445,11 @@ const getTechStack = (skills) => {
 
 // Page meta
 useHead({
-  title: computed(() => data.value ? `${data.value.name} - ICEHub` : 'Profile - ICEHub'),
+  title: computed(() => data.value ? `${data.value.name} - ICE2025` : 'Profile - ICE2025'),
   meta: [
     {
       name: 'description',
-      content: computed(() => data.value ? `View ${data.value.name}'s developer profile and skills on ICEHub` : 'Developer profile on ICEHub')
+      content: computed(() => data.value ? `View ${data.value.name}'s developer profile and skills on ICE2025` : 'Developer profile on ICE2025')
     }
   ]
 })
