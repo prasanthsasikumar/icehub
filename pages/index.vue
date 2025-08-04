@@ -211,7 +211,12 @@
 
                   <div class="flex flex-col sm:flex-row gap-2 sm:gap-3">
                     <NuxtLink :to="`/profile/${encodeURIComponent(user.name)}`" class="action-btn action-btn-secondary">View Profile</NuxtLink>
-                    <button class="action-btn action-btn-primary">Connect</button>
+                    <template v-if="isLoggedIn">
+                      <button @click="startConversation(user)" class="action-btn action-btn-primary">Message</button>
+                    </template>
+                    <template v-else>
+                      <NuxtLink to="/login" class="action-btn action-btn-primary">Sign in to Message</NuxtLink>
+                    </template>
                   </div>
                 </div>
               </div>
@@ -278,6 +283,20 @@ onMounted(async () => {
 // Handle logout
 const handleLogout = async () => {
   await logout()
+}
+
+// Handle starting a conversation
+const startConversation = async (targetUser) => {
+  if (!user.value) {
+    await navigateTo('/login')
+    return
+  }
+  
+  // Use user ID if available, otherwise use name as identifier
+  const userId = targetUser.id || targetUser.name
+  
+  // Navigate to chat with query parameters to start conversation
+  await navigateTo(`/chat?user=${encodeURIComponent(userId)}&name=${encodeURIComponent(targetUser.name)}`)
 }
 
 // Helper function to get skill names from both formats
