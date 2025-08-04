@@ -41,7 +41,7 @@
               Sign In
             </NuxtLink>
             <NuxtLink to="/register" class="nav-button">
-              Join community
+              Join Workshop
             </NuxtLink>
           </template>
         </div>
@@ -94,7 +94,7 @@
               🔑 Sign In
             </NuxtLink>
             <NuxtLink @click="mobileMenuOpen = false" to="/register" class="mobile-nav-item">
-              ✨ Join Community
+              ✨ Join Workshop
             </NuxtLink>
           </template>
         </div>
@@ -104,12 +104,12 @@
     <!-- Hero Section -->
     <section class="bg-gradient-to-br from-gray-50 to-gray-200 section-padding text-center">
       <div class="max-w-container mx-auto container-padding">
-        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-700 mb-4 sm:mb-6 leading-tight">The home for developers</h1>
-        <p class="text-lg sm:text-xl text-gray-500 mb-8 sm:mb-10 max-w-2xl mx-auto">Where organizations and developers come together to build, inspire, and innovate.</p>
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-700 mb-4 sm:mb-6 leading-tight">ICE Workshop 2025</h1>
+        <p class="text-lg sm:text-xl text-gray-500 mb-8 sm:mb-10 max-w-2xl mx-auto">Join 30 selected participants in Sri Lanka's premier AI innovation workshop. Connect with international mentors and build breakthrough products in just 3 days.</p>
         
         <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mb-8 sm:mb-15 max-w-md sm:max-w-none mx-auto">
           <template v-if="isLoggedIn">
-            <NuxtLink to="/developers" class="hero-btn hero-btn-primary">Browse developers</NuxtLink>
+            <NuxtLink to="/developers" class="hero-btn hero-btn-primary">Meet Participants</NuxtLink>
             <NuxtLink 
               v-if="user" 
               :to="`/profile/${encodeURIComponent(user.name)}`" 
@@ -119,26 +119,26 @@
             </NuxtLink>
           </template>
           <template v-else>
-            <NuxtLink to="/register" class="hero-btn hero-btn-primary">Join community</NuxtLink>
-            <NuxtLink to="/developers" class="hero-btn hero-btn-secondary">Browse developers</NuxtLink>
+            <NuxtLink to="/register" class="hero-btn hero-btn-primary">Join Workshop</NuxtLink>
+            <NuxtLink to="/developers" class="hero-btn hero-btn-secondary">Meet Participants</NuxtLink>
           </template>
         </div>
 
         <!-- Stats Section -->
         <div v-if="users && users.length > 0" class="mt-8 sm:mt-15">
-          <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-4 sm:mb-6">TRUSTED BY DEVELOPERS WORLDWIDE</p>
+          <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-4 sm:mb-6">ICE WORKSHOP POWERED BY NUS</p>
           <div class="flex justify-center gap-8 sm:gap-15 flex-wrap">
             <div class="text-center">
               <span class="block text-2xl sm:text-3xl font-bold text-primary mb-1">{{ users.length }}</span>
-              <span class="text-xs sm:text-sm text-gray-500 uppercase tracking-wider">Developers</span>
+              <span class="text-xs sm:text-sm text-gray-500 uppercase tracking-wider">Participants</span>
             </div>
             <div class="text-center">
               <span class="block text-2xl sm:text-3xl font-bold text-primary mb-1">{{ totalSkills }}</span>
-              <span class="text-xs sm:text-sm text-gray-500 uppercase tracking-wider">Skills</span>
+              <span class="text-xs sm:text-sm text-gray-500 uppercase tracking-wider">AI Skills</span>
             </div>
             <div class="text-center">
-              <span class="block text-2xl sm:text-3xl font-bold text-primary mb-1">50+</span>
-              <span class="text-xs sm:text-sm text-gray-500 uppercase tracking-wider">Technologies</span>
+              <span class="block text-2xl sm:text-3xl font-bold text-primary mb-1">3</span>
+              <span class="text-xs sm:text-sm text-gray-500 uppercase tracking-wider">Days</span>
             </div>
           </div>
         </div>
@@ -156,8 +156,8 @@
               <circle cx="12" cy="7" r="4"/>
             </svg>
           </div>
-          <h2 class="text-xl sm:text-2xl font-semibold text-gray-700 mb-3">No developers yet</h2>
-          <p class="text-sm sm:text-base text-gray-500 mb-6 sm:mb-8 max-w-md mx-auto">Be the first to join our developer community and showcase your skills!</p>
+          <h2 class="text-xl sm:text-2xl font-semibold text-gray-700 mb-3">No participants yet</h2>
+          <p class="text-sm sm:text-base text-gray-500 mb-6 sm:mb-8 max-w-md mx-auto">Be the first to join the ICE Workshop and showcase your AI skills!</p>
           <NuxtLink to="/new" class="bg-primary text-white px-6 py-3 rounded-lg no-underline font-semibold inline-block transition-colors hover:bg-primary-hover">Get Started</NuxtLink>
         </div>
 
@@ -165,8 +165,8 @@
         <div v-else>
           <section class="mb-12 sm:mb-20">
             <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 sm:mb-8 gap-4">
-              <h2 class="text-2xl sm:text-3xl font-bold text-gray-700 m-0">Developers for you</h2>
-              <NuxtLink to="/developers" class="text-primary no-underline font-medium text-sm hover:underline self-start sm:self-auto">View all developers</NuxtLink>
+              <h2 class="text-2xl sm:text-3xl font-bold text-gray-700 m-0">Workshop Participants</h2>
+              <NuxtLink to="/developers" class="text-primary no-underline font-medium text-sm hover:underline self-start sm:self-auto">View all participants</NuxtLink>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
@@ -209,14 +209,14 @@
           <!-- Popular Skills Section -->
           <section class="mb-12 sm:mb-20">
             <div class="flex justify-between items-center mb-6 sm:mb-8">
-              <h2 class="text-2xl sm:text-3xl font-bold text-gray-700 m-0">Top developer skills</h2>
+              <h2 class="text-2xl sm:text-3xl font-bold text-gray-700 m-0">Top AI skills in the workshop</h2>
             </div>
             
             <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
               <div class="bg-gray-50 px-4 sm:px-6 py-3 sm:py-4 grid grid-cols-[60px_1fr_80px] sm:grid-cols-[80px_1fr_120px] gap-3 sm:gap-6 font-semibold text-xs sm:text-sm text-gray-500 uppercase tracking-wider">
                 <div>Rank</div>
                 <div>Skill</div>
-                <div>Devs</div>
+                <div>Participants</div>
               </div>
               <div>
                 <div v-for="(skill, index) in topSkills" :key="skill.name" class="px-4 sm:px-6 py-3 sm:py-4 grid grid-cols-[60px_1fr_80px] sm:grid-cols-[80px_1fr_120px] gap-3 sm:gap-6 border-b border-gray-100 last:border-b-0 transition-colors hover:bg-gray-50">
@@ -293,11 +293,11 @@ const topSkills = computed(() => {
 
 // Page meta
 useHead({
-  title: 'ICEHub - The home for developers',
+  title: 'ICE Workshop 2025 - AI Innovation in Sri Lanka',
   meta: [
     {
       name: 'description',
-      content: 'Where organizations and developers come together to build, inspire, and innovate. Browse talented professionals and their skills.'
+      content: 'Join 30 selected participants in Sri Lanka\'s premier AI innovation workshop led by Professor Suranga Nannayakara from NUS. Connect with international mentors and build breakthrough products in just 3 days.'
     },
     {
       name: 'viewport',
