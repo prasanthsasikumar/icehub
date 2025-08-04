@@ -194,13 +194,14 @@
 
                   <div class="mb-4 sm:mb-6">
                     <div class="flex flex-wrap gap-1.5 sm:gap-2">
-                      <span 
+                      <NuxtLink 
                         v-for="skill in getDisplaySkills(user.skills).slice(0, 6)" 
                         :key="skill" 
-                        class="skill-tag"
+                        :to="`/skills/${encodeURIComponent(skill)}`"
+                        class="skill-tag hover:bg-primary hover:text-white transition-colors cursor-pointer"
                       >
                         {{ skill }}
-                      </span>
+                      </NuxtLink>
                       <span v-if="getDisplaySkills(user.skills).length > 6" class="text-gray-500 text-xs font-medium py-1">
                         +{{ getDisplaySkills(user.skills).length - 6 }} more
                       </span>
@@ -219,7 +220,10 @@
           <!-- Popular Skills Section -->
           <section class="mb-12 sm:mb-20">
             <div class="flex justify-between items-center mb-6 sm:mb-8">
-              <h2 class="text-2xl sm:text-3xl font-bold text-gray-700 m-0">Top skills in the workshop</h2>
+              <div>
+                <h2 class="text-2xl sm:text-3xl font-bold text-gray-700 m-0 mb-2">Top skills in the workshop</h2>
+                <p class="text-sm text-gray-500">Click on any skill to discover participants with that expertise</p>
+              </div>
             </div>
             
             <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
@@ -229,11 +233,21 @@
                 <div>Participants</div>
               </div>
               <div>
-                <div v-for="(skill, index) in topSkills" :key="skill.name" class="px-4 sm:px-6 py-3 sm:py-4 grid grid-cols-[60px_1fr_80px] sm:grid-cols-[80px_1fr_120px] gap-3 sm:gap-6 border-b border-gray-100 last:border-b-0 transition-colors hover:bg-gray-50">
-                  <div class="flex items-center font-semibold text-gray-500 text-sm">{{ index + 1 }}.</div>
-                  <div class="flex items-center font-medium text-gray-700 text-sm sm:text-base truncate">{{ skill.name }}</div>
-                  <div class="flex items-center justify-end text-gray-500 text-sm">{{ skill.count }}</div>
-                </div>
+                <NuxtLink 
+                  v-for="(skill, index) in topSkills" 
+                  :key="skill.name" 
+                  :to="`/skills/${encodeURIComponent(skill.name)}`"
+                  class="block px-4 sm:px-6 py-3 sm:py-4 grid grid-cols-[60px_1fr_80px] sm:grid-cols-[80px_1fr_120px] gap-3 sm:gap-6 border-b border-gray-100 last:border-b-0 transition-all duration-200 hover:bg-blue-50 hover:border-blue-200 cursor-pointer group"
+                >
+                  <div class="flex items-center font-semibold text-gray-500 text-sm group-hover:text-blue-600">{{ index + 1 }}.</div>
+                  <div class="flex items-center font-medium text-gray-700 text-sm sm:text-base truncate group-hover:text-blue-700">
+                    {{ skill.name }}
+                    <svg class="w-4 h-4 ml-2 text-gray-400 group-hover:text-blue-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                  </div>
+                  <div class="flex items-center justify-end text-gray-500 text-sm group-hover:text-blue-600">{{ skill.count }}</div>
+                </NuxtLink>
               </div>
             </div>
           </section>
