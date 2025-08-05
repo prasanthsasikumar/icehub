@@ -99,6 +99,16 @@
                 </div>
                 <p class="text-base sm:text-lg text-gray-600 mb-3 sm:mb-4 leading-relaxed">{{ data.bio }}</p>
                 
+                <!-- Email -->
+                <div v-if="data.email" class="mb-3 sm:mb-4">
+                  <p class="text-sm text-gray-500 flex items-center gap-2">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="text-gray-400">
+                      <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                    </svg>
+                    <a :href="`mailto:${data.email}`" class="text-primary hover:underline">{{ data.email }}</a>
+                  </p>
+                </div>
+
                 <!-- Affiliation -->
                 <div v-if="data.affiliation" class="mb-3 sm:mb-4">
                   <p class="text-sm text-gray-500 flex items-center gap-2">
@@ -228,6 +238,18 @@
                 <div>
                   <h3 class="font-semibold text-gray-700 mb-2">Bio</h3>
                   <p class="text-gray-600 leading-relaxed">{{ data.bio }}</p>
+                </div>
+                
+                <div v-if="data.email">
+                  <h3 class="font-semibold text-gray-700 mb-2">Contact</h3>
+                  <p class="text-gray-600">
+                    <a :href="`mailto:${data.email}`" class="text-primary hover:underline flex items-center gap-2">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="text-gray-400">
+                        <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                      </svg>
+                      {{ data.email }}
+                    </a>
+                  </p>
                 </div>
                 
                 <div>
@@ -528,11 +550,12 @@ const getSkillsStringArray = (skills) => {
 
 const getProfileScore = (user) => {
   let score = 0
-  if (user.name) score += 20
-  if (user.image) score += 20
+  if (user.name) score += 15
+  if (user.email) score += 15
+  if (user.image) score += 15
   if (user.bio && user.bio.length > 10) score += 20
   if (getSkillsStringArray(user.skills).length > 0) score += 20
-  if (user.expertise && user.expertise.length > 0) score += 20
+  if (user.expertise && user.expertise.length > 0) score += 15
   return score
 }
 
