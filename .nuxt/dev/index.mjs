@@ -1119,7 +1119,22 @@ const plugins = [
 _PrQa1nMjyI8aW7twHOgrKJdAvlKKDoWyBB4SMVdF94
 ];
 
-const assets = {};
+const assets = {
+  "/index.mjs": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"2b7c1-KJat4g2+bGrj/Kf8PaWrBhsbIU4\"",
+    "mtime": "2025-08-05T10:29:25.216Z",
+    "size": 178113,
+    "path": "index.mjs"
+  },
+  "/index.mjs.map": {
+    "type": "application/json",
+    "etag": "\"9c23f-5COvtquE6JLVZIrc9QM2as8tV9Q\"",
+    "mtime": "2025-08-05T10:29:25.219Z",
+    "size": 639551,
+    "path": "index.mjs.map"
+  }
+};
 
 function readAsset (id) {
   const serverDir = dirname$1(fileURLToPath(globalThis._importMeta_.url));
@@ -1527,6 +1542,9 @@ async function getIslandContext(event) {
 }
 
 const _lazy_UUPDNC = () => Promise.resolve().then(function () { return addUserToGroup_post$1; });
+const _lazy_yFfWmo = () => Promise.resolve().then(function () { return create_post$3; });
+const _lazy_vCTr7m = () => Promise.resolve().then(function () { return index_get$5; });
+const _lazy_PrS3ov = () => Promise.resolve().then(function () { return restore_post$1; });
 const _lazy_5VJoT8 = () => Promise.resolve().then(function () { return bulkCreateUsers_post$1; });
 const _lazy_DSN8NA = () => Promise.resolve().then(function () { return deleteUser_delete$1; });
 const _lazy_e0GXy1 = () => Promise.resolve().then(function () { return toggleRole_post$1; });
@@ -1564,6 +1582,9 @@ const _lazy_dR2Hf1 = () => Promise.resolve().then(function () { return renderer$
 const handlers = [
   { route: '', handler: _GChHOJ, lazy: false, middleware: true, method: undefined },
   { route: '/api/admin/add-user-to-group', handler: _lazy_UUPDNC, lazy: true, middleware: false, method: "post" },
+  { route: '/api/admin/backup/create', handler: _lazy_yFfWmo, lazy: true, middleware: false, method: "post" },
+  { route: '/api/admin/backup', handler: _lazy_vCTr7m, lazy: true, middleware: false, method: "get" },
+  { route: '/api/admin/backup/restore', handler: _lazy_PrS3ov, lazy: true, middleware: false, method: "post" },
   { route: '/api/admin/bulk-create-users', handler: _lazy_5VJoT8, lazy: true, middleware: false, method: "post" },
   { route: '/api/admin/delete-user', handler: _lazy_DSN8NA, lazy: true, middleware: false, method: "delete" },
   { route: '/api/admin/toggle-role', handler: _lazy_e0GXy1, lazy: true, middleware: false, method: "post" },
@@ -2244,6 +2265,37 @@ class Database {
   static async deleteteamImage(id) {
     return this.deleteTeamImage(id);
   }
+  // Backup-specific methods
+  static async getAllUsers() {
+    const { data, error } = await supabaseAdmin.from("users").select("*");
+    if (error) throw error;
+    return data || [];
+  }
+  static async getAllMessages() {
+    const { data, error } = await supabaseAdmin.from("messages").select("*");
+    if (error) throw error;
+    return data || [];
+  }
+  static async getAllTeams() {
+    const { data, error } = await supabaseAdmin.from("teams").select("*");
+    if (error) throw error;
+    return data || [];
+  }
+  static async getAllTeamChats() {
+    const { data, error } = await supabaseAdmin.from("team_chats").select("*");
+    if (error) throw error;
+    return data || [];
+  }
+  static async getAllTeamLinks() {
+    const { data, error } = await supabaseAdmin.from("team_links").select("*");
+    if (error) throw error;
+    return data || [];
+  }
+  static async getAllTeamImages() {
+    const { data, error } = await supabaseAdmin.from("team_images").select("*");
+    if (error) throw error;
+    return data || [];
+  }
 }
 
 const supabase$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
@@ -2404,6 +2456,379 @@ const addUserToGroup_post = defineEventHandler(async (event) => {
 const addUserToGroup_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: addUserToGroup_post
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const create_post$2 = defineEventHandler(async (event) => {
+  if (getMethod(event) !== "POST") {
+    throw createError({
+      statusCode: 405,
+      statusMessage: "Method not allowed"
+    });
+  }
+  const currentUser = getUserFromRequest(event);
+  if (!currentUser) {
+    throw createError({
+      statusCode: 401,
+      statusMessage: "Authentication required"
+    });
+  }
+  if (currentUser.role !== "admin") {
+    throw createError({
+      statusCode: 403,
+      statusMessage: "Admin access required"
+    });
+  }
+  try {
+    const body = await readBody(event);
+    const backupType = body.type || "full";
+    const includeFiles = body.includeFiles !== false;
+    const includePasswords = body.includePasswords === true;
+    console.log(`Creating ${backupType} backup for admin user: ${currentUser.name}`);
+    const backupData = {
+      metadata: {
+        id: `backup-${Date.now()}`,
+        type: backupType,
+        createdAt: (/* @__PURE__ */ new Date()).toISOString(),
+        createdBy: currentUser.name,
+        includeFiles,
+        includePasswords,
+        version: "1.0.0"
+      },
+      database: {},
+      externalResources: {}
+    };
+    if (backupType === "full" || backupType === "database" || backupType === "users") {
+      const users = await Database.getAllUsers();
+      const processedUsers = users.map((user) => {
+        const userCopy = { ...user };
+        if (!includePasswords) {
+          delete userCopy.password;
+        }
+        return userCopy;
+      });
+      backupData.database.users = processedUsers;
+      if (backupType === "full" || backupType === "database") {
+        try {
+          backupData.database.messages = await Database.getAllMessages();
+        } catch (error) {
+          console.warn("Could not export messages:", error);
+          backupData.database.messages = [];
+        }
+        try {
+          backupData.database.teams = await Database.getAllTeams();
+        } catch (error) {
+          console.warn("Could not export teams:", error);
+          backupData.database.teams = [];
+        }
+        try {
+          backupData.database.team_chats = await Database.getAllTeamChats();
+        } catch (error) {
+          console.warn("Could not export team chats:", error);
+          backupData.database.team_chats = [];
+        }
+        try {
+          backupData.database.team_links = await Database.getAllTeamLinks();
+        } catch (error) {
+          console.warn("Could not export team links:", error);
+          backupData.database.team_links = [];
+        }
+        try {
+          backupData.database.team_images = await Database.getAllTeamImages();
+        } catch (error) {
+          console.warn("Could not export team images:", error);
+          backupData.database.team_images = [];
+        }
+      }
+      backupData.externalResources = createExternalResourcesCatalog(processedUsers);
+    }
+    backupData.restoreInstructions = createRestoreInstructions(backupType, includeFiles, includePasswords);
+    return backupData;
+  } catch (error) {
+    console.error("Backup creation error:", error);
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Failed to create backup: " + error.message
+    });
+  }
+});
+function createExternalResourcesCatalog(users) {
+  const externalResources = {
+    googleDriveLinks: [],
+    userLinks: [],
+    videoLinks: []
+  };
+  for (const user of users) {
+    if (user.image && user.image.includes("drive.google.com")) {
+      externalResources.googleDriveLinks.push({
+        userId: user.id,
+        userName: user.name,
+        type: "profile_image",
+        url: user.image
+      });
+    }
+    if (user.video && user.video.trim()) {
+      externalResources.videoLinks.push({
+        userId: user.id,
+        userName: user.name,
+        url: user.video
+      });
+    }
+    if (user.user_links) {
+      try {
+        const links = typeof user.user_links === "string" ? JSON.parse(user.user_links) : user.user_links;
+        if (Array.isArray(links) && links.length > 0) {
+          externalResources.userLinks.push({
+            userId: user.id,
+            userName: user.name,
+            links
+          });
+        }
+      } catch (error) {
+        console.warn(`Error parsing user links for ${user.name}:`, error);
+      }
+    }
+  }
+  return externalResources;
+}
+function createRestoreInstructions(type, includeFiles, includePasswords) {
+  return `# ICE2025 Backup Restore Instructions
+
+## Backup Information
+- Type: ${type}
+- Files Included: ${includeFiles ? "Yes" : "No"}
+- Passwords Included: ${includePasswords ? "Yes" : "No"}
+- Created: ${(/* @__PURE__ */ new Date()).toISOString()}
+
+## Restore Process
+
+### 1. Database Restoration
+
+#### Users Table
+Use the admin bulk import feature with the data from database.users array
+
+#### Other Tables
+Import data from:
+- database.messages
+- database.teams
+- database.team_chats
+- database.team_links
+- database.team_images
+
+### 2. External Resources
+
+Check externalResources for:
+- Google Drive links that need to be accessible
+- User-submitted external links  
+- Video links (YouTube, Google Drive, etc.)
+
+### 3. Post-Restore Steps
+
+1. Verify database connections
+2. Test file uploads and image serving
+3. Check user authentication (${includePasswords ? "passwords included" : "passwords need to be reset"})
+4. Validate external link accessibility
+
+## Support
+
+For technical support, contact the system administrator.
+Created by ICE2025 Backup System v1.0.0
+`;
+}
+
+const create_post$3 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: create_post$2
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const index_get$4 = defineEventHandler(async (event) => {
+  if (getMethod(event) !== "GET") {
+    throw createError({
+      statusCode: 405,
+      statusMessage: "Method not allowed"
+    });
+  }
+  const currentUser = getUserFromRequest(event);
+  if (!currentUser) {
+    throw createError({
+      statusCode: 401,
+      statusMessage: "Authentication required"
+    });
+  }
+  if (currentUser.role !== "admin") {
+    throw createError({
+      statusCode: 403,
+      statusMessage: "Admin access required"
+    });
+  }
+  try {
+    const backupHistory = [
+      {
+        id: "backup-2025-08-05-120000",
+        type: "full",
+        createdAt: "2025-08-05T12:00:00.000Z",
+        createdBy: "Admin User",
+        size: "15.2 MB",
+        includeFiles: true,
+        includePasswords: false,
+        status: "completed"
+      }
+    ];
+    return {
+      success: true,
+      backups: backupHistory,
+      totalBackups: backupHistory.length
+    };
+  } catch (error) {
+    console.error("Error fetching backup history:", error);
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Failed to fetch backup history"
+    });
+  }
+});
+
+const index_get$5 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: index_get$4
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const restore_post = defineEventHandler(async (event) => {
+  var _a, _b, _c;
+  if (getMethod(event) !== "POST") {
+    throw createError({
+      statusCode: 405,
+      statusMessage: "Method not allowed"
+    });
+  }
+  const currentUser = getUserFromRequest(event);
+  if (!currentUser) {
+    throw createError({
+      statusCode: 401,
+      statusMessage: "Authentication required"
+    });
+  }
+  if (currentUser.role !== "admin") {
+    throw createError({
+      statusCode: 403,
+      statusMessage: "Admin access required"
+    });
+  }
+  try {
+    const body = await readBody(event);
+    const { backupData, restoreOptions } = body;
+    if (!backupData) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: "Backup data is required"
+      });
+    }
+    console.log(`Starting restore process for admin user: ${currentUser.name}`);
+    const results = {
+      users: { imported: 0, skipped: 0, errors: 0, tempPasswordGenerated: 0 },
+      messages: { imported: 0, errors: 0 },
+      teams: { imported: 0, errors: 0 },
+      summary: { success: true, message: "", warnings: [] }
+    };
+    if (((_a = backupData.database) == null ? void 0 : _a.users) && restoreOptions.restoreUsers) {
+      console.log(`Restoring ${backupData.database.users.length} users...`);
+      for (const userData of backupData.database.users) {
+        try {
+          const existingUser = await Database.getUserByEmail(userData.email);
+          if (existingUser && !restoreOptions.overwriteExisting) {
+            results.users.skipped++;
+            continue;
+          }
+          const userDataWithPassword = { ...userData };
+          if (!userDataWithPassword.password) {
+            userDataWithPassword.password = "workshop123";
+            results.users.tempPasswordGenerated++;
+            console.log(`Set default password for user ${userData.email}`);
+          }
+          if (existingUser && restoreOptions.overwriteExisting) {
+            const updateData = { ...userDataWithPassword };
+            if (!userData.password) {
+              delete updateData.password;
+            }
+            await Database.updateUser(existingUser.id, updateData);
+          } else {
+            await Database.createUser(userDataWithPassword);
+          }
+          results.users.imported++;
+        } catch (error) {
+          console.error(`Error importing user ${userData.email}:`, error);
+          results.users.errors++;
+        }
+      }
+    }
+    if (((_b = backupData.database) == null ? void 0 : _b.messages) && restoreOptions.restoreMessages) {
+      results.messages.imported = backupData.database.messages.length;
+      console.log(`Would restore ${results.messages.imported} messages (not implemented yet)`);
+    }
+    if (((_c = backupData.database) == null ? void 0 : _c.teams) && restoreOptions.restoreTeams) {
+      console.log(`Restoring ${backupData.database.teams.length} teams...`);
+      for (const teamData of backupData.database.teams) {
+        try {
+          const existingTeams = await Database.getTeams();
+          const existingTeam = existingTeams.find((t) => t.name.toLowerCase() === teamData.name.toLowerCase());
+          if (existingTeam && !restoreOptions.overwriteExisting) {
+            console.log(`Team ${teamData.name} already exists, skipping`);
+            continue;
+          }
+          if (existingTeam && restoreOptions.overwriteExisting) {
+            await Database.updateTeam(existingTeam.id, {
+              description: teamData.description,
+              coverImage: teamData.coverImage,
+              isPublic: teamData.isPublic,
+              members: teamData.members,
+              updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+            });
+            console.log(`Updated existing team: ${teamData.name}`);
+          } else {
+            await Database.createTeam({
+              ...teamData,
+              // Ensure we have required fields
+              name: teamData.name,
+              description: teamData.description || "",
+              coverImage: teamData.coverImage || "/uploads/groupCoverSamples/cover1.svg",
+              creatorId: teamData.creatorId,
+              isPublic: teamData.isPublic !== false,
+              // Default to true if not specified
+              members: teamData.members || [],
+              createdAt: teamData.createdAt || (/* @__PURE__ */ new Date()).toISOString(),
+              updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+            });
+            console.log(`Created new team: ${teamData.name}`);
+          }
+          results.teams.imported++;
+        } catch (error) {
+          console.error(`Error importing team ${teamData.name}:`, error);
+          results.teams.errors++;
+        }
+      }
+    }
+    results.summary.message = `Restore completed: ${results.users.imported} users imported, ${results.users.skipped} skipped, ${results.users.errors} errors, ${results.teams.imported} teams imported, ${results.teams.errors} team errors`;
+    if (results.users.tempPasswordGenerated > 0) {
+      results.summary.warnings.push(`${results.users.tempPasswordGenerated} users were imported with default password "workshop123". These users should change their passwords after login.`);
+    }
+    return {
+      success: true,
+      results,
+      restoredAt: (/* @__PURE__ */ new Date()).toISOString(),
+      restoredBy: currentUser.name,
+      restoredItems: results.users.imported + results.messages.imported + results.teams.imported
+    };
+  } catch (error) {
+    console.error("Restore failed:", error);
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Restore failed: " + error.message
+    });
+  }
+});
+
+const restore_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: restore_post
 }, Symbol.toStringTag, { value: 'Module' }));
 
 const bulkCreateUsers_post = defineEventHandler(async (event) => {

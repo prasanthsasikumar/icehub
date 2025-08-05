@@ -509,4 +509,59 @@ export class Database {
   static async deleteteamImage(id: string) {
     return this.deleteTeamImage(id)
   }
+
+  // Backup-specific methods
+  static async getAllUsers() {
+    const { data, error } = await supabaseAdmin
+      .from('users')
+      .select('*')
+    
+    if (error) throw error
+    return data || []
+  }
+
+  static async getAllMessages() {
+    const { data, error } = await supabaseAdmin
+      .from('messages')
+      .select('*')
+    
+    if (error) throw error
+    return data || []
+  }
+
+  static async getAllTeams() {
+    const { data, error } = await supabaseAdmin
+      .from('teams')
+      .select('*')
+    
+    if (error) throw error
+    return data || []
+  }
+
+  static async getAllTeamChats() {
+    const { data, error } = await supabaseAdmin
+      .from('team_chats')
+      .select('*')
+    
+    if (error) throw error
+    return data || []
+  }
+
+  static async getAllTeamLinks() {
+    const { data, error } = await supabaseAdmin
+      .from('team_links')
+      .select('*')
+    
+    if (error) throw error
+    return data || []
+  }
+
+  static async getAllTeamImages() {
+    const { data, error } = await supabaseAdmin
+      .from('team_images')
+      .select('*')
+    
+    if (error) throw error
+    return data || []
+  }
 }

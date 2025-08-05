@@ -6,6 +6,15 @@ declare module "nitropack/types" {
     '/api/admin/add-user-to-group': {
       'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/admin/add-user-to-group.post').default>>>>
     }
+    '/api/admin/backup/create': {
+      'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/admin/backup/create.post').default>>>>
+    }
+    '/api/admin/backup': {
+      'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/admin/backup/index.get').default>>>>
+    }
+    '/api/admin/backup/restore': {
+      'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/admin/backup/restore.post').default>>>>
+    }
     '/api/admin/bulk-create-users': {
       'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/admin/bulk-create-users.post').default>>>>
     }
