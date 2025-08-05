@@ -639,6 +639,26 @@ const _inlineRuntimeConfig = {
       "/__nuxt_error": {
         "cache": false
       },
+      "/": {
+        "prerender": true
+      },
+      "/teams/**": {
+        "isr": 60,
+        "headers": {
+          "Cache-Control": "s-maxage=60"
+        }
+      },
+      "/api/teams/**": {
+        "cors": true,
+        "headers": {
+          "access-control-allow-origin": "*",
+          "access-control-allow-methods": "*",
+          "access-control-allow-headers": "*",
+          "access-control-max-age": "0",
+          "Cache-Control": "s-maxage=30",
+          "Access-Control-Allow-Origin": "*"
+        }
+      },
       "/_nuxt/builds/meta/**": {
         "headers": {
           "cache-control": "public, max-age=31536000, immutable"
@@ -1549,6 +1569,7 @@ const _lazy_0X8xDp = () => Promise.resolve().then(function () { return status_ge
 const _lazy_Cn2ye5 = () => Promise.resolve().then(function () { return testUpload_post$1; });
 const _lazy_srlr7l = () => Promise.resolve().then(function () { return proxyImage_get$1; });
 const _lazy_HejCb8 = () => Promise.resolve().then(function () { return skills$1; });
+const _lazy_w7ePJD = () => Promise.resolve().then(function () { return complete_get$1; });
 const _lazy_xNBtKJ = () => Promise.resolve().then(function () { return delete_delete$1; });
 const _lazy_J70_p5 = () => Promise.resolve().then(function () { return images_get$1; });
 const _lazy_Case9e = () => Promise.resolve().then(function () { return images_post$1; });
@@ -1590,6 +1611,7 @@ const handlers = [
   { route: '/api/debug/test-upload', handler: _lazy_Cn2ye5, lazy: true, middleware: false, method: "post" },
   { route: '/api/proxy-image', handler: _lazy_srlr7l, lazy: true, middleware: false, method: "get" },
   { route: '/api/skills', handler: _lazy_HejCb8, lazy: true, middleware: false, method: undefined },
+  { route: '/api/teams/:id/complete', handler: _lazy_w7ePJD, lazy: true, middleware: false, method: "get" },
   { route: '/api/teams/:id/delete', handler: _lazy_xNBtKJ, lazy: true, middleware: false, method: "delete" },
   { route: '/api/teams/:id/images', handler: _lazy_J70_p5, lazy: true, middleware: false, method: "get" },
   { route: '/api/teams/:id/images', handler: _lazy_Case9e, lazy: true, middleware: false, method: "post" },
@@ -3813,6 +3835,115 @@ const skills$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   default: skills
 }, Symbol.toStringTag, { value: 'Module' }));
 
+const complete_get = defineEventHandler(async (event) => {
+  const teamId = getRouterParam(event, "id");
+  if (!teamId) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "team ID is required"
+    });
+  }
+  try {
+    const currentUser = getUserFromRequest(event);
+    const queryStartTime = Date.now();
+    const [team, links, images] = await Promise.all([
+      Database.getteamById(teamId),
+      Database.getTeamLinks(teamId).catch(() => []),
+      // Fallback to empty array on error
+      Database.getTeamImages(teamId).catch(() => [])
+      // Fallback to empty array on error
+    ]);
+    const dbTime = Date.now() - queryStartTime;
+    console.log(`\u{1F680} Complete endpoint: Database queries completed in ${dbTime}ms`);
+    if (!team) {
+      throw createError({
+        statusCode: 404,
+        statusMessage: "team not found"
+      });
+    }
+    const parsedMembers = team.members ? team.members.map((member) => {
+      try {
+        return typeof member === "string" ? JSON.parse(member) : member;
+      } catch (e) {
+        console.error("Error parsing member:", member, e);
+        return member;
+      }
+    }) : [];
+    const membersWithRoles = [];
+    const mentors = [];
+    console.log(`\u{1F680} Database Optimization: Fetching user details for ${parsedMembers.length} members in batch`);
+    const userQueryStartTime = Date.now();
+    const userIds = parsedMembers.map((member) => member.userId);
+    const userDetails = await Database.getUsersByIds(userIds);
+    const userQueryTime = Date.now() - userQueryStartTime;
+    console.log(`\u2705 Batch query completed in ${userQueryTime}ms. Retrieved ${userDetails.length} user records`);
+    const userDetailsMap = /* @__PURE__ */ new Map();
+    userDetails.forEach((user) => {
+      userDetailsMap.set(user.id, user);
+    });
+    for (const member of parsedMembers) {
+      try {
+        const userDetail = userDetailsMap.get(member.userId);
+        if (userDetail) {
+          const memberWithRole = {
+            ...member,
+            userRole: userDetail.userRole || "participant"
+          };
+          if (userDetail.userRole === "mentor") {
+            mentors.push(memberWithRole);
+          } else {
+            membersWithRoles.push(memberWithRole);
+          }
+        } else {
+          membersWithRoles.push(member);
+        }
+      } catch (error) {
+        console.error("Error processing member:", member.userId, error);
+        membersWithRoles.push(member);
+      }
+    }
+    const isMember = currentUser ? parsedMembers.some((member) => member.userId === currentUser.id) : false;
+    if (!team.isPublic && !isMember) {
+      throw createError({
+        statusCode: 403,
+        statusMessage: "Access denied to private team"
+      });
+    }
+    return {
+      team: {
+        id: team.id,
+        name: team.name,
+        description: team.description,
+        coverImage: team.coverImage || "/uploads/teamCoverSamples/cover1.svg",
+        createdBy: team.creatorId,
+        createdAt: team.createdAt,
+        isPrivate: !team.isPublic,
+        // Convert isPublic to isPrivate
+        members: membersWithRoles,
+        mentors,
+        isMember,
+        userRole: isMember ? "member" : null
+      },
+      links: links || [],
+      images: images || []
+    };
+  } catch (error) {
+    if (error.statusCode) {
+      throw error;
+    }
+    console.error("Error fetching complete team data:", error);
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Internal server error"
+    });
+  }
+});
+
+const complete_get$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: complete_get
+}, Symbol.toStringTag, { value: 'Module' }));
+
 const delete_delete = defineEventHandler(async (event) => {
   if (getMethod(event) !== "DELETE") {
     throw createError({
@@ -5128,17 +5259,6 @@ const users$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   default: users
 }, Symbol.toStringTag, { value: 'Module' }));
 
-function renderPayloadResponse(ssrContext) {
-  return {
-    body: stringify(splitPayload(ssrContext).payload, ssrContext._payloadReducers) ,
-    statusCode: getResponseStatus(ssrContext.event),
-    statusMessage: getResponseStatusText(ssrContext.event),
-    headers: {
-      "content-type": "application/json;charset=utf-8" ,
-      "x-powered-by": "Nuxt"
-    }
-  };
-}
 function renderPayloadJsonScript(opts) {
   const contents = opts.data ? stringify(opts.data, opts.ssrContext._payloadReducers) : "";
   const payload = {
@@ -5161,13 +5281,6 @@ function renderPayloadJsonScript(opts) {
     }
   ];
 }
-function splitPayload(ssrContext) {
-  const { data, prerenderedAt, ...initial } = ssrContext.payload;
-  return {
-    initial: { ...initial, prerenderedAt },
-    payload: { data, prerenderedAt }
-  };
-}
 
 const renderSSRHeadOptions = {"omitLineBreaks":true};
 
@@ -5176,7 +5289,6 @@ globalThis.__publicAssetsURL = publicAssetsURL;
 const HAS_APP_TELEPORTS = !!(appTeleportAttrs.id);
 const APP_TELEPORT_OPEN_TAG = HAS_APP_TELEPORTS ? `<${appTeleportTag}${propsToString(appTeleportAttrs)}>` : "";
 const APP_TELEPORT_CLOSE_TAG = HAS_APP_TELEPORTS ? `</${appTeleportTag}>` : "";
-const PAYLOAD_URL_RE = /^[^?]*\/_payload.json(?:\?.*)?$/ ;
 const renderer = defineRenderHandler(async (event) => {
   const nitroApp = useNitroApp();
   const ssrError = event.path.startsWith("/__nuxt_error") ? getQuery$1(event) : null;
@@ -5199,12 +5311,6 @@ const renderer = defineRenderHandler(async (event) => {
     }
     setSSRError(ssrContext, ssrError);
   }
-  const isRenderingPayload = PAYLOAD_URL_RE.test(ssrContext.url);
-  if (isRenderingPayload) {
-    const url = ssrContext.url.substring(0, ssrContext.url.lastIndexOf("/")) || "/";
-    ssrContext.url = url;
-    event._path = event.node.req.url = url;
-  }
   const routeOptions = getRouteRules(event);
   if (routeOptions.ssr === false) {
     ssrContext.noSSR = true;
@@ -5225,10 +5331,6 @@ const renderer = defineRenderHandler(async (event) => {
   }
   if (ssrContext.payload?.error && !ssrError) {
     throw ssrContext.payload.error;
-  }
-  if (isRenderingPayload) {
-    const response = renderPayloadResponse(ssrContext);
-    return response;
   }
   const NO_SCRIPTS = routeOptions.noScripts;
   const { styles, scripts } = getRequestDependencies(ssrContext, renderer.rendererContext);

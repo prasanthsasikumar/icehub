@@ -57,6 +57,9 @@ declare module "nitropack/types" {
     '/api/skills': {
       'default': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/skills').default>>>>
     }
+    '/api/teams/:id/complete': {
+      'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/teams/[id]/complete.get').default>>>>
+    }
     '/api/teams/:id/delete': {
       'delete': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/teams/[id]/delete.delete').default>>>>
     }

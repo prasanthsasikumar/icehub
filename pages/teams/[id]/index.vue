@@ -60,6 +60,8 @@
             :src="data.coverImage" 
             :alt="`${data.name} cover`"
             class="w-full h-full object-cover"
+            loading="eager"
+            fetchpriority="high"
           />
           <div class="absolute inset-0 bg-black bg-opacity-20"></div>
           
@@ -170,8 +172,16 @@
                 </div>
               </div>
 
+              <!-- Loading skeleton for links -->
+              <div v-if="!linksData && !sharedLinks.length" class="space-y-4">
+                <div v-for="i in 2" :key="i" class="animate-pulse">
+                  <div class="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+                  <div class="h-3 bg-gray-200 rounded w-1/2"></div>
+                </div>
+              </div>
+
               <!-- Shared Links List -->
-              <div v-if="sharedLinks.length > 0" class="space-y-4">
+              <div v-else-if="sharedLinks.length > 0" class="space-y-4">
                 <div v-for="link in sharedLinks" :key="link.id" class="p-4 border border-gray-200 rounded-lg">
                   <div class="flex items-start justify-between">
                     <div class="flex-1">
@@ -233,13 +243,21 @@
                 </div>
               </div>
 
+              <!-- Loading skeleton for images -->
+              <div v-if="!imagesData && !teamImages.length" class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <div v-for="i in 6" :key="i" class="animate-pulse">
+                  <div class="h-32 bg-gray-200 rounded-lg"></div>
+                </div>
+              </div>
+
               <!-- Image Grid -->
-              <div v-if="teamImages.length > 0" class="grid grid-cols-2 md:grid-cols-3 gap-4">
+              <div v-else-if="teamImages.length > 0" class="grid grid-cols-2 md:grid-cols-3 gap-4">
                 <div v-for="image in teamImages" :key="image.id" class="relative team">
                   <img
                     :src="image.image_url"
                     :alt="`Uploaded by user`"
                     class="w-full h-32 object-cover rounded-lg border border-gray-200 cursor-pointer hover:opacity-75 transition-opacity"
+                    loading="lazy"
                     @click="openImageModal(image)"
                   />
                   <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white text-xs p-2 rounded-b-lg opacity-0 team-hover:opacity-100 transition-opacity">
@@ -362,12 +380,12 @@ const uploadingImage = ref(false)
 const teamImages = ref([])
 const selectedImage = ref(null)
 
-// Fetch team data
+// Fetch team data first (critical for initial render)
 const { data, pending, error, refresh } = await useFetch(`/api/teams/${teamId}`)
 
-// Fetch shared links and images
-const { data: linksData, refresh: refreshLinks } = await useFetch(`/api/teams/${teamId}/links`)
-const { data: imagesData, refresh: refreshImages } = await useFetch(`/api/teams/${teamId}/images`)
+// Fetch shared links and images with lazy loading (better UX)
+const { data: linksData, refresh: refreshLinks } = await useLazyFetch(`/api/teams/${teamId}/links`)
+const { data: imagesData, refresh: refreshImages } = await useLazyFetch(`/api/teams/${teamId}/images`)
 
 // Watch for data changes
 watch([linksData, imagesData], ([links, images]) => {
