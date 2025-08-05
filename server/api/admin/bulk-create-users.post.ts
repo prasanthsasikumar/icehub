@@ -49,7 +49,17 @@ export default defineEventHandler(async (event) => {
 
     // Process each user
     for (const userData of users) {
-      const { name, email, bio, password } = userData
+      const { 
+        name, 
+        email, 
+        bio, 
+        password, 
+        userRole, 
+        affiliation, 
+        expertise, 
+        gender, 
+        skills 
+      } = userData
 
       // Validate required fields
       if (!name || !email) {
@@ -66,6 +76,20 @@ export default defineEventHandler(async (event) => {
       // Hash password
       const hashedPassword = await bcrypt.hash(password || 'workshop123', saltRounds)
 
+      // Process skills - handle comma-separated string or array
+      let processedSkills = []
+      if (skills) {
+        if (typeof skills === 'string') {
+          // Split comma-separated skills and clean them up
+          processedSkills = skills
+            .split(',')
+            .map(skill => skill.trim())
+            .filter(skill => skill.length > 0)
+        } else if (Array.isArray(skills)) {
+          processedSkills = skills.filter(skill => skill && skill.trim().length > 0)
+        }
+      }
+
       // Create new user object
       const newUser = {
         id: uuidv4(),
@@ -74,9 +98,12 @@ export default defineEventHandler(async (event) => {
         bio: bio?.trim() || '',
         password: hashedPassword,
         role: 'user',
-        userRole: 'developer',
+        userRole: userRole?.trim() || 'developer',
+        affiliation: affiliation?.trim() || '',
+        expertise: expertise?.trim() || '',
+        gender: gender?.trim() || '',
         image: '/uploads/default/default_user_icon.png',
-        skills: [],
+        skills: processedSkills,
         createdAt: new Date().toISOString()
       }
 

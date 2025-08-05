@@ -57,7 +57,9 @@
                 class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-primary file:text-white hover:file:bg-primary-dark"
               />
               <p class="text-xs text-gray-500 mt-1">
-                CSV format: name,email,bio (header row required). Default password will be "workshop123"
+                CSV format: name,email,bio,password,userRole,affiliation,expertise,gender,skills (header row required). 
+                Skills should be comma-separated within quotes. Default password will be "workshop123" if not provided.
+                UserRole can be "developer" or "mentor". Gender options: male, female, non-binary, other.
               </p>
             </div>
             <div v-if="csvProcessing" class="text-sm text-blue-600">
@@ -139,6 +141,8 @@
                   <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
                   <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
                   <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Affiliation</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Expertise</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Gender</th>
                   <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Skills</th>
                   <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Joined</th>
                   <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
@@ -186,6 +190,27 @@
                     <span v-else class="text-gray-400 italic">No affiliation</span>
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <span v-if="user.expertise" class="text-gray-700 font-medium">{{ user.expertise }}</span>
+                    <span v-else class="text-gray-400 italic">No expertise</span>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <div class="flex items-center gap-2">
+                      <div v-if="user.gender" class="w-4 h-4 rounded-full flex items-center justify-center text-white text-xs font-bold" 
+                           :class="{
+                             'bg-blue-500': user.gender === 'male',
+                             'bg-pink-500': user.gender === 'female', 
+                             'bg-purple-500': user.gender === 'non-binary' || user.gender === 'other',
+                             'bg-gray-500': !user.gender
+                           }">
+                        <span v-if="user.gender === 'male'">♂</span>
+                        <span v-else-if="user.gender === 'female'">♀</span>
+                        <span v-else-if="user.gender === 'non-binary' || user.gender === 'other'">⚧</span>
+                      </div>
+                      <span v-if="user.gender" class="capitalize">{{ user.gender }}</span>
+                      <span v-else class="text-gray-400 italic">Not specified</span>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     <div class="flex flex-wrap gap-1 max-w-xs">
                       <span 
                         v-for="skill in user.skills.slice(0, 3)" 
@@ -218,6 +243,9 @@
                     >
                       Edit
                     </button>
+                    <span v-if="user.video" class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-green-100 text-green-800" title="Has profile video">
+                      📹 Video
+                    </span>
                     <button 
                       v-if="user.id !== currentUser?.id"
                       @click="toggleRole(user)"
@@ -444,14 +472,38 @@ const handleCSVUpload = async (event) => {
       throw new Error('CSV file must contain at least a header row and one data row')
     }
 
-    const headers = lines[0].split(',').map(h => h.trim())
+    // Parse CSV with proper handling of quoted fields
+    const parseCSVLine = (line) => {
+      const result = []
+      let current = ''
+      let inQuotes = false
+      
+      for (let i = 0; i < line.length; i++) {
+        const char = line[i]
+        
+        if (char === '"' && (i === 0 || line[i-1] === ',')) {
+          inQuotes = true
+        } else if (char === '"' && inQuotes && (i === line.length - 1 || line[i+1] === ',')) {
+          inQuotes = false
+        } else if (char === ',' && !inQuotes) {
+          result.push(current.trim())
+          current = ''
+        } else {
+          current += char
+        }
+      }
+      result.push(current.trim())
+      return result
+    }
+
+    const headers = parseCSVLine(lines[0])
     if (!headers.includes('name') || !headers.includes('email')) {
       throw new Error('CSV must contain "name" and "email" columns')
     }
 
     const users = []
     for (let i = 1; i < lines.length; i++) {
-      const values = lines[i].split(',').map(v => v.trim())
+      const values = parseCSVLine(lines[i])
       if (values.length >= 2) {
         const userObj = {}
         headers.forEach((header, index) => {
@@ -463,7 +515,12 @@ const handleCSVUpload = async (event) => {
             name: userObj.name,
             email: userObj.email,
             bio: userObj.bio || '',
-            password: 'workshop123' // Default password
+            password: userObj.password || 'workshop123',
+            userRole: userObj.userRole || 'developer',
+            affiliation: userObj.affiliation || '',
+            expertise: userObj.expertise || '',
+            gender: userObj.gender || '',
+            skills: userObj.skills || ''
           })
         }
       }

@@ -1,1 +1,1 @@
-export { default } from "file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/@nuxt/vite-builder/dist/runtime/client.manifest.mjs"
+export { default } from "file:///C:/Users/prasa/OneDrive/Documents/GitHub/icehub/node_modules/@nuxt/vite-builder/dist/runtime/client.manifest.mjs"

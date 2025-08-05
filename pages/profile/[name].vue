@@ -298,19 +298,39 @@
             </div>
           </div>
 
-          <!-- Similar Developers -->
-          <div class="bg-white border border-gray-200 rounded-xl p-8 shadow-sm">
-            <h2 class="text-2xl font-bold text-gray-700 mb-6 flex items-center gap-3">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="text-primary">
-                <path d="M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zm4 18v-6h2.5l-2.54-7.63A2 2 0 0 0 18.05 7h-2.1c-.8 0-1.54.37-2.01.99L12 10.5l-1.94-2.51A2.5 2.5 0 0 0 8.05 7h-2.1c-1.04 0-1.9.78-1.99 1.8L1.5 16H4v6h2v-6h.5l1-3 1.5 3H12v6h4zm-8-10c.83 0 1.5-.67 1.5-1.5S12.83 9 12 9s-1.5.67-1.5 1.5S11.17 12 12 12z"/>
+                    <!-- Profile Video Section -->
+          <div v-if="data.video" class="bg-white border border-gray-200 rounded-xl card-padding shadow-sm">
+            <h2 class="text-xl sm:text-2xl font-bold text-gray-700 mb-4 sm:mb-6 flex items-center gap-2 sm:gap-3">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" class="text-primary sm:w-6 sm:h-6">
+                <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4zM14 13h-3v3H9v-3H6v-2h3V8h2v3h3v2z"/>
               </svg>
-              Similar Developers
+              Profile Video
             </h2>
             
-            <p class="text-gray-500 text-center py-8">
-              Feature coming soon - discover developers with similar skills and interests!
-            </p>
+            <div class="aspect-video rounded-lg overflow-hidden bg-gray-100">
+              <iframe 
+                v-if="getEmbedUrl(data.video)"
+                :src="getEmbedUrl(data.video)" 
+                class="w-full h-full"
+                frameborder="0" 
+                allowfullscreen
+                title="Profile Video"
+              ></iframe>
+              <div v-else class="w-full h-full flex items-center justify-center">
+                <div class="text-center">
+                  <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor" class="text-gray-400 mx-auto mb-2">
+                    <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/>
+                  </svg>
+                  <p class="text-gray-500 text-sm">
+                    <a :href="data.video" target="_blank" class="text-primary hover:underline">
+                      View Video
+                    </a>
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
+          
         </div>
       </div>
     </main>
@@ -545,6 +565,48 @@ const getTechStack = (skills) => {
   
   if (hasWeb) return 'Web Technologies'
   return 'Mixed Technologies'
+}
+
+// Video URL helper function
+const getEmbedUrl = (url) => {
+  if (!url) return null
+  
+  try {
+    // Handle Google Drive URLs
+    if (url.includes('drive.google.com')) {
+      const match = url.match(/\/d\/([a-zA-Z0-9-_]+)/)
+      if (match) {
+        return `https://drive.google.com/file/d/${match[1]}/preview`
+      }
+    }
+    
+    // Handle YouTube URLs
+    if (url.includes('youtube.com/watch') || url.includes('youtu.be/')) {
+      let videoId = null
+      if (url.includes('youtube.com/watch')) {
+        videoId = url.split('v=')[1]?.split('&')[0]
+      } else if (url.includes('youtu.be/')) {
+        videoId = url.split('youtu.be/')[1]?.split('?')[0]
+      }
+      if (videoId) {
+        return `https://www.youtube.com/embed/${videoId}`
+      }
+    }
+    
+    // Handle Vimeo URLs
+    if (url.includes('vimeo.com/')) {
+      const match = url.match(/vimeo\.com\/(\d+)/)
+      if (match) {
+        return `https://player.vimeo.com/video/${match[1]}`
+      }
+    }
+    
+    // Return null if no recognized pattern (will show fallback link)
+    return null
+  } catch (error) {
+    console.error('Error parsing video URL:', error)
+    return null
+  }
 }
 
 // Page meta

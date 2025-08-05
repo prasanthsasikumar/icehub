@@ -37,6 +37,7 @@ export default defineEventHandler(async (event) => {
         affiliation: fullUser.affiliation,
         expertise: fullUser.expertise,
         gender: fullUser.gender,
+        video: fullUser.video,
         createdAt: fullUser.createdAt
       }
     }

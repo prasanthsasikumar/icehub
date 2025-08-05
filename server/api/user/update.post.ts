@@ -20,7 +20,7 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const { name, bio, skills, image, userRole, affiliation, expertise, gender } = await readBody(event)
+  const { name, bio, skills, image, userRole, affiliation, expertise, gender, video } = await readBody(event)
 
   if (!name) {
     throw createError({
@@ -99,6 +99,7 @@ export default defineEventHandler(async (event) => {
       affiliation: affiliation || '',
       expertise: expertise || '',
       gender: gender || '',
+      video: video || '',
       skills: processedSkills
     })
 

@@ -122,6 +122,21 @@
                 </select>
               </div>
 
+              <!-- Video URL Input -->
+              <div class="flex flex-col gap-2">
+                <label for="video" class="font-semibold text-gray-700 text-sm mb-1">Profile Video (Optional)</label>
+                <input 
+                  id="video"
+                  v-model="form.video" 
+                  type="url"
+                  placeholder="e.g., https://drive.google.com/file/d/your-video-id/view" 
+                  class="px-4 py-3 border border-gray-200 rounded-lg text-base transition-all duration-200 bg-white text-gray-700 focus:outline-none focus:border-primary focus:shadow-lg focus:shadow-primary/10"
+                />
+                <p class="text-xs text-gray-500">
+                  Add a link to your profile video (Google Drive, YouTube, etc.). Make sure the video is publicly accessible.
+                </p>
+              </div>
+
               <!-- User Role Input -->
               <div class="flex flex-col gap-2">
                 <label for="userRole" class="font-semibold text-gray-700 text-sm mb-1">Community Role</label>
@@ -329,7 +344,8 @@ const form = reactive({
   userRole: 'developer',
   affiliation: '',
   expertise: '',
-  gender: ''
+  gender: '',
+  video: ''
 })
 
 // Skills management
@@ -435,11 +451,13 @@ const initializeForm = () => {
     form.affiliation = user.value.affiliation || ''
     form.expertise = user.value.expertise || ''
     form.gender = user.value.gender || ''
+    form.video = user.value.video || ''
     
     console.log('Form after initialization:', {
       affiliation: form.affiliation,
       expertise: form.expertise,
-      gender: form.gender
+      gender: form.gender,
+      video: form.video
     })
     
     // Handle skills - support both old and new formats
@@ -493,6 +511,7 @@ const updateProfile = async () => {
         affiliation: form.affiliation,
         expertise: form.expertise,
         gender: form.gender,
+        video: form.video,
         skills: skillsList.value // Send skills with levels
       }
     })

@@ -20,6 +20,10 @@ export interface User {
   skills: string[] | SkillWithLevel[] // Support both formats for backward compatibility
   role: 'user' | 'admin'
   userRole: 'developer' | 'mentor' // User's role in community
+  affiliation?: string
+  expertise?: string
+  gender?: string
+  video?: string
   createdAt: string
 }
 

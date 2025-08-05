@@ -10,7 +10,11 @@ CREATE TABLE users (
     bio TEXT,
     skills JSONB DEFAULT '[]'::jsonb,
     role TEXT DEFAULT 'user',
-    "userRole" TEXT,
+    "userRole" TEXT DEFAULT 'developer',
+    affiliation TEXT,
+    expertise TEXT,
+    gender TEXT,
+    video TEXT,
     "createdAt" TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
