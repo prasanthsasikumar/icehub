@@ -1119,22 +1119,7 @@ const plugins = [
 _PrQa1nMjyI8aW7twHOgrKJdAvlKKDoWyBB4SMVdF94
 ];
 
-const assets = {
-  "/index.mjs": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"27b4a-JDeJTkO0QPNTOBLjkjceI9LrC8g\"",
-    "mtime": "2025-08-05T07:45:02.400Z",
-    "size": 162634,
-    "path": "index.mjs"
-  },
-  "/index.mjs.map": {
-    "type": "application/json",
-    "etag": "\"8db71-4pFoXei8snOyv1t6xxOHZSgxylU\"",
-    "mtime": "2025-08-05T07:45:02.401Z",
-    "size": 580465,
-    "path": "index.mjs.map"
-  }
-};
+const assets = {};
 
 function readAsset (id) {
   const serverDir = dirname$1(fileURLToPath(globalThis._importMeta_.url));
@@ -3661,8 +3646,27 @@ const index_get$2 = defineEventHandler(async (event) => {
         return member;
       }
     }) : [];
-    const regularMembers = parsedMembers.filter((member) => member.role !== "mentor");
-    const mentors = parsedMembers.filter((member) => member.role === "mentor");
+    const membersWithRoles = [];
+    const mentors = [];
+    for (const member of parsedMembers) {
+      try {
+        const userDetails = await Database.getUserById(member.userId);
+        if (userDetails) {
+          const memberWithRole = {
+            ...member,
+            userRole: userDetails.userRole || "participant"
+          };
+          if (userDetails.userRole === "mentor") {
+            mentors.push(memberWithRole);
+          } else {
+            membersWithRoles.push(memberWithRole);
+          }
+        }
+      } catch (error) {
+        console.error("Error getting user details for member:", member.userId, error);
+        membersWithRoles.push(member);
+      }
+    }
     const isMember = currentUser ? parsedMembers.some((member) => member.userId === currentUser.id) : false;
     if (!team.isPublic && !isMember) {
       throw createError({
@@ -3679,7 +3683,7 @@ const index_get$2 = defineEventHandler(async (event) => {
       createdAt: team.createdAt,
       isPrivate: !team.isPublic,
       // Convert isPublic to isPrivate
-      members: regularMembers,
+      members: membersWithRoles,
       mentors,
       isMember,
       userRole: isMember ? "member" : null

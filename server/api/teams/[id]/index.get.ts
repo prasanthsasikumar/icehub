@@ -36,9 +36,31 @@ export default defineEventHandler(async (event) => {
         }
       }) : []
     
-    // Separate members and mentors based on role
-    const regularMembers = parsedMembers.filter((member: any) => member.role !== 'mentor')
-    const mentors = parsedMembers.filter((member: any) => member.role === 'mentor')
+    // Get user details for all members to determine their roles
+    const membersWithRoles: any[] = []
+    const mentors: any[] = []
+    
+    for (const member of parsedMembers) {
+      try {
+        const userDetails = await Database.getUserById(member.userId)
+        if (userDetails) {
+          const memberWithRole = {
+            ...member,
+            userRole: userDetails.userRole || 'participant'
+          }
+          
+          if (userDetails.userRole === 'mentor') {
+            mentors.push(memberWithRole)
+          } else {
+            membersWithRoles.push(memberWithRole)
+          }
+        }
+      } catch (error) {
+        console.error('Error getting user details for member:', member.userId, error)
+        // If we can't get user details, treat as regular member
+        membersWithRoles.push(member)
+      }
+    }
     
     const isMember = currentUser ? 
       parsedMembers.some((member: any) => member.userId === currentUser.id) : false
@@ -59,7 +81,7 @@ export default defineEventHandler(async (event) => {
       createdBy: team.creatorId,
       createdAt: team.createdAt,
       isPrivate: !team.isPublic, // Convert isPublic to isPrivate
-      members: regularMembers,
+      members: membersWithRoles,
       mentors: mentors,
       isMember: isMember,
       userRole: isMember ? 'member' : null
