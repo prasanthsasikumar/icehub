@@ -9,13 +9,13 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const groupId = getRouterParam(event, 'id')
+  const teamId = getRouterParam(event, 'id')
   const imageId = getRouterParam(event, 'imageId')
   
-  if (!groupId || !imageId) {
+  if (!teamId || !imageId) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'Group ID and Image ID are required'
+      statusMessage: 'team ID and Image ID are required'
     })
   }
 
@@ -30,17 +30,17 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    // Check if user is a member of the group
-    const group = await Database.getGroupById(groupId)
-    if (!group) {
+    // Check if user is a member of the team
+    const team = await Database.getteamById(teamId)
+    if (!team) {
       throw createError({
         statusCode: 404,
-        statusMessage: 'Group not found'
+        statusMessage: 'team not found'
       })
     }
 
-    const parsedMembers = group.members ? 
-      group.members.map((member: any) => {
+    const parsedMembers = team.members ? 
+      team.members.map((member: any) => {
         try {
           return typeof member === 'string' ? JSON.parse(member) : member
         } catch (e) {
@@ -53,12 +53,12 @@ export default defineEventHandler(async (event) => {
     if (!isMember) {
       throw createError({
         statusCode: 403,
-        statusMessage: 'You must be a group member to delete images'
+        statusMessage: 'You must be a team member to delete images'
       })
     }
 
     // Get the image to check ownership
-    const images = await Database.getGroupImages(groupId)
+    const images = await Database.getTeamImages(teamId)
     const imageToDelete = images.find((image: any) => image.id === imageId)
     
     if (!imageToDelete) {
@@ -77,14 +77,14 @@ export default defineEventHandler(async (event) => {
     }
 
     // Delete the image
-    await Database.deleteGroupImage(imageId)
+    await Database.deleteteamImage(imageId)
     
     return { message: 'Image deleted successfully' }
   } catch (error: any) {
     if (error.statusCode) {
       throw error
     }
-    console.error('Error deleting group image:', error)
+    console.error('Error deleting team image:', error)
     throw createError({
       statusCode: 500,
       statusMessage: 'Failed to delete image'

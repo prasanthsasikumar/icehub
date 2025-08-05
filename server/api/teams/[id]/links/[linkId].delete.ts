@@ -9,13 +9,13 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const groupId = getRouterParam(event, 'id')
+  const teamId = getRouterParam(event, 'id')
   const linkId = getRouterParam(event, 'linkId')
   
-  if (!groupId || !linkId) {
+  if (!teamId || !linkId) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'Group ID and Link ID are required'
+      statusMessage: 'team ID and Link ID are required'
     })
   }
 
@@ -30,17 +30,17 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    // Check if user is a member of the group and owns the link (or is admin)
-    const group = await Database.getGroupById(groupId)
-    if (!group) {
+    // Check if user is a member of the team and owns the link (or is admin)
+    const team = await Database.getteamById(teamId)
+    if (!team) {
       throw createError({
         statusCode: 404,
-        statusMessage: 'Group not found'
+        statusMessage: 'team not found'
       })
     }
 
-    const parsedMembers = group.members ? 
-      group.members.map((member: any) => {
+    const parsedMembers = team.members ? 
+      team.members.map((member: any) => {
         try {
           return typeof member === 'string' ? JSON.parse(member) : member
         } catch (e) {
@@ -53,12 +53,12 @@ export default defineEventHandler(async (event) => {
     if (!isMember) {
       throw createError({
         statusCode: 403,
-        statusMessage: 'You must be a group member to delete links'
+        statusMessage: 'You must be a team member to delete links'
       })
     }
 
     // Get the link to check ownership
-    const links = await Database.getGroupLinks(groupId)
+    const links = await Database.getTeamLinks(teamId)
     const linkToDelete = links.find((link: any) => link.id === linkId)
     
     if (!linkToDelete) {
@@ -77,14 +77,14 @@ export default defineEventHandler(async (event) => {
     }
 
     // Delete the link
-    await Database.deleteGroupLink(linkId)
+    await Database.deleteteamLink(linkId)
     
     return { message: 'Link deleted successfully' }
   } catch (error: any) {
     if (error.statusCode) {
       throw error
     }
-    console.error('Error deleting group link:', error)
+    console.error('Error deleting team link:', error)
     throw createError({
       statusCode: 500,
       statusMessage: 'Failed to delete shared link'

@@ -39,8 +39,8 @@ vercel
 2. Create tables for:
    - users
    - messages
-   - groups
-   - group_chats
+   - teams
+   - team_chats
 
 3. Update API endpoints
 

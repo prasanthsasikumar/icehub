@@ -47,7 +47,7 @@ Sarah Johnson,sarah.johnson@example.com,AI researcher focusing on machine learni
 ## User Roles
 
 - `developer`: Regular workshop participant
-- `mentor`: Can guide other developers and has special group privileges
+- `mentor`: Can guide other developers and has special team privileges
 
 ## Skills Recommendations
 

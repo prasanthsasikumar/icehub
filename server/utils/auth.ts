@@ -19,7 +19,7 @@ export interface User {
   bio: string
   skills: string[] | SkillWithLevel[] // Support both formats for backward compatibility
   role: 'user' | 'admin'
-  userRole: 'developer' | 'mentor' // User's role in community
+  userRole: 'participant' | 'mentor' // User's role in community
   affiliation?: string
   expertise?: string
   gender?: string
@@ -32,7 +32,7 @@ export interface AuthUser {
   name: string
   email: string
   role: 'user' | 'admin'
-  userRole: 'developer' | 'mentor'
+  userRole: 'participant' | 'mentor'
 }
 
 export async function hashPassword(password: string): Promise<string> {
@@ -65,7 +65,7 @@ export function verifyToken(token: string): AuthUser | null {
       name: decoded.name,
       email: decoded.email,
       role: decoded.role,
-      userRole: decoded.userRole || 'developer' // Default to developer for existing users
+      userRole: decoded.userRole || 'participant' // Default to participant for existing users
     }
   } catch {
     return null

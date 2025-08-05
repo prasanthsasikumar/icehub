@@ -5,7 +5,7 @@
 			"label": "dev",
 			"type": "shell",
 			"command": "npm run dev",
-			"group": "build",
+			"team": "build",
 			"isBackground": true,
 			"problemMatcher": []
 		}

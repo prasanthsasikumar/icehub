@@ -104,30 +104,30 @@ export class Database {
         console.warn('Error deleting received messages:', receivedMessagesError)
       }
       
-      console.log('Updating groups to remove user...')
+      console.log('Updating teams to remove user...')
       
-      // Remove user from group members arrays
-      const { data: allGroups } = await supabaseAdmin
-        .from('groups')
+      // Remove user from team members arrays
+      const { data: allTeams } = await supabaseAdmin
+        .from('teams')
         .select('id, members')
       
-      if (allGroups) {
-        for (const group of allGroups) {
+      if (allTeams) {
+        for (const team of allTeams) {
           let needsUpdate = false
-          let updatedMembers = group.members
+          let updatedMembers = team.members
           
           // Handle members array (includes both members and mentors with role property)
-          if (group.members) {
+          if (team.members) {
             let members
             try {
-              if (typeof group.members === 'string') {
+              if (typeof team.members === 'string') {
                 try {
-                  members = JSON.parse(group.members)
+                  members = JSON.parse(team.members)
                 } catch (jsonError) {
                   members = []
                 }
-              } else if (Array.isArray(group.members)) {
-                members = group.members
+              } else if (Array.isArray(team.members)) {
+                members = team.members
               } else {
                 members = []
               }
@@ -158,15 +158,15 @@ export class Database {
           }
           
           if (needsUpdate) {
-            console.log(`Updating group ${group.id} to remove user ${id}`)
+            console.log(`Updating team ${team.id} to remove user ${id}`)
             
             const { error: updateError } = await supabaseAdmin
-              .from('groups')
+              .from('teams')
               .update({ members: updatedMembers })  // Send as array, not JSON string
-              .eq('id', group.id)
+              .eq('id', team.id)
               
             if (updateError) {
-              console.warn(`Error updating group ${group.id}:`, updateError)
+              console.warn(`Error updating team ${team.id}:`, updateError)
             }
           }
         }
@@ -261,19 +261,19 @@ export class Database {
     return data
   }
 
-  // Groups
-  static async getGroups() {
+  // Teams
+  static async getTeams() {
     const { data, error } = await supabase
-      .from('groups')
+      .from('teams')
       .select('*')
     
     if (error) throw error
     return data || []
   }
 
-  static async getGroupById(id: string) {
+  static async getTeamById(id: string) {
     const { data, error } = await supabase
-      .from('groups')
+      .from('teams')
       .select('*')
       .eq('id', id)
       .single()
@@ -282,10 +282,16 @@ export class Database {
     return data
   }
 
-  static async createGroup(group: any) {
+  static async createTeam(team: any) {
+    // Generate a unique ID if not provided
+    const teamWithId = {
+      id: team.id || crypto.randomUUID(),
+      ...team
+    }
+    
     const { data, error } = await supabase
-      .from('groups')
-      .insert([group])
+      .from('teams')
+      .insert([teamWithId])
       .select()
       .single()
     
@@ -293,9 +299,9 @@ export class Database {
     return data
   }
 
-  static async updateGroup(id: string, updates: any) {
+  static async updateTeam(id: string, updates: any) {
     const { data, error } = await supabase
-      .from('groups')
+      .from('teams')
       .update(updates)
       .eq('id', id)
       .select()
@@ -305,9 +311,9 @@ export class Database {
     return data
   }
 
-  static async deleteGroup(id: string) {
+  static async deleteTeam(id: string) {
     const { data, error } = await supabase
-      .from('groups')
+      .from('teams')
       .delete()
       .eq('id', id)
     
@@ -315,19 +321,19 @@ export class Database {
     return data
   }
 
-  // Group Chats
-  static async getGroupChats() {
+  // Team Chats
+  static async getTeamChats() {
     const { data, error } = await supabase
-      .from('group_chats')
+      .from('team_chats')
       .select('*')
     
     if (error) throw error
     return data || []
   }
 
-  static async getGroupChatById(id: string) {
+  static async getTeamChatById(id: string) {
     const { data, error } = await supabase
-      .from('group_chats')
+      .from('team_chats')
       .select('*')
       .eq('id', id)
       .single()
@@ -336,10 +342,16 @@ export class Database {
     return data
   }
 
-  static async createGroupChat(groupChat: any) {
+  static async createTeamChat(teamChat: any) {
+    // Generate a unique ID if not provided
+    const teamChatWithId = {
+      id: teamChat.id || crypto.randomUUID(),
+      ...teamChat
+    }
+    
     const { data, error } = await supabase
-      .from('group_chats')
-      .insert([groupChat])
+      .from('team_chats')
+      .insert([teamChatWithId])
       .select()
       .single()
     
@@ -347,9 +359,9 @@ export class Database {
     return data
   }
 
-  static async updateGroupChat(id: string, updates: any) {
+  static async updateTeamChat(id: string, updates: any) {
     const { data, error } = await supabase
-      .from('group_chats')
+      .from('team_chats')
       .update(updates)
       .eq('id', id)
       .select()
@@ -359,22 +371,28 @@ export class Database {
     return data
   }
 
-  // Group Links
-  static async getGroupLinks(groupId: string) {
+  // Team Links
+  static async getTeamLinks(teamId: string) {
     const { data, error } = await supabase
-      .from('group_links')
+      .from('team_links')
       .select('*')
-      .eq('group_id', groupId)
+      .eq('team_id', teamId)
       .order('created_at', { ascending: false })
     
     if (error) throw error
     return data || []
   }
 
-  static async createGroupLink(link: any) {
+  static async createTeamLink(link: any) {
+    // Generate a unique ID if not provided
+    const linkWithId = {
+      id: link.id || crypto.randomUUID(),
+      ...link
+    }
+    
     const { data, error } = await supabase
-      .from('group_links')
-      .insert([link])
+      .from('team_links')
+      .insert([linkWithId])
       .select()
       .single()
     
@@ -382,9 +400,9 @@ export class Database {
     return data
   }
 
-  static async deleteGroupLink(id: string) {
+  static async deleteTeamLink(id: string) {
     const { data, error } = await supabase
-      .from('group_links')
+      .from('team_links')
       .delete()
       .eq('id', id)
     
@@ -392,22 +410,28 @@ export class Database {
     return data
   }
 
-  // Group Images
-  static async getGroupImages(groupId: string) {
+  // Team Images
+  static async getTeamImages(teamId: string) {
     const { data, error } = await supabase
-      .from('group_images')
+      .from('team_images')
       .select('*')
-      .eq('group_id', groupId)
+      .eq('team_id', teamId)
       .order('created_at', { ascending: false })
     
     if (error) throw error
     return data || []
   }
 
-  static async createGroupImage(image: any) {
+  static async createTeamImage(image: any) {
+    // Generate a unique ID if not provided
+    const imageWithId = {
+      id: image.id || crypto.randomUUID(),
+      ...image
+    }
+    
     const { data, error } = await supabase
-      .from('group_images')
-      .insert([image])
+      .from('team_images')
+      .insert([imageWithId])
       .select()
       .single()
     
@@ -415,13 +439,74 @@ export class Database {
     return data
   }
 
-  static async deleteGroupImage(id: string) {
+  static async deleteTeamImage(id: string) {
     const { data, error } = await supabase
-      .from('group_images')
+      .from('team_images')
       .delete()
       .eq('id', id)
     
     if (error) throw error
     return data
+  }
+
+  // Legacy compatibility methods for teams API
+  static async getteams() {
+    return this.getTeams()
+  }
+
+  static async getteamById(id: string) {
+    return this.getTeamById(id)
+  }
+
+  static async createteam(team: any) {
+    return this.createTeam(team)
+  }
+
+  static async updateteam(id: string, updates: any) {
+    return this.updateTeam(id, updates)
+  }
+
+  static async deleteteam(id: string) {
+    return this.deleteTeam(id)
+  }
+
+  static async getteamChats() {
+    return this.getTeamChats()
+  }
+
+  static async getteamChatById(id: string) {
+    return this.getTeamChatById(id)
+  }
+
+  static async createteamChat(teamChat: any) {
+    return this.createTeamChat(teamChat)
+  }
+
+  static async updateteamChat(id: string, updates: any) {
+    return this.updateTeamChat(id, updates)
+  }
+
+  static async getteamLinks(teamId: string) {
+    return this.getTeamLinks(teamId)
+  }
+
+  static async createteamLink(link: any) {
+    return this.createTeamLink(link)
+  }
+
+  static async deleteteamLink(id: string) {
+    return this.deleteTeamLink(id)
+  }
+
+  static async getteamImages(teamId: string) {
+    return this.getTeamImages(teamId)
+  }
+
+  static async createteamImage(image: any) {
+    return this.createTeamImage(image)
+  }
+
+  static async deleteteamImage(id: string) {
+    return this.deleteTeamImage(id)
   }
 }

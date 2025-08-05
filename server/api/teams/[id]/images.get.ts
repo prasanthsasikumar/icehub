@@ -2,25 +2,25 @@ import { getUserFromRequest } from '../../../utils/auth'
 import { Database } from '../../../utils/supabase'
 
 export default defineEventHandler(async (event) => {
-  const groupId = getRouterParam(event, 'id')
+  const teamId = getRouterParam(event, 'id')
   
-  if (!groupId) {
+  if (!teamId) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'Group ID is required'
+      statusMessage: 'team ID is required'
     })
   }
 
   try {
-    // Get group images
-    const images = await Database.getGroupImages(groupId)
+    // Get team images
+    const images = await Database.getTeamImages(teamId)
     
     return images || []
   } catch (error: any) {
-    console.error('Error fetching group images:', error)
+    console.error('Error fetching team images:', error)
     throw createError({
       statusCode: 500,
-      statusMessage: 'Failed to fetch group images'
+      statusMessage: 'Failed to fetch team images'
     })
   }
 })

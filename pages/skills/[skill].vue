@@ -9,8 +9,8 @@
         <div class="nav-right hidden sm:flex items-center gap-2 sm:gap-4">
           <template v-if="isLoggedIn">
             <span class="text-xs sm:text-sm text-gray-600 hidden md:inline">Welcome, {{ user?.name }}</span>
-            <NuxtLink to="/groups" class="nav-button nav-button-secondary">
-              Groups
+            <NuxtLink to="/teams" class="nav-button nav-button-secondary">
+              Teams
             </NuxtLink>
             <NuxtLink to="/chat" class="nav-button nav-button-secondary">
               Messages
@@ -57,8 +57,8 @@
         <!-- Mobile menu -->
         <div v-show="mobileMenuOpen" class="mobile-nav-menu">
           <template v-if="isLoggedIn">
-            <NuxtLink @click="mobileMenuOpen = false" to="/groups" class="mobile-nav-item">
-              👥 Groups
+            <NuxtLink @click="mobileMenuOpen = false" to="/teams" class="mobile-nav-item">
+              👥 Teams
             </NuxtLink>
             <NuxtLink @click="mobileMenuOpen = false" to="/chat" class="mobile-nav-item">
               💬 Messages

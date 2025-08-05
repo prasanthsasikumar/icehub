@@ -95,7 +95,7 @@ export default defineEventHandler(async (event) => {
       name: name,
       bio: bio || '',
       image: imageUrl,
-      userRole: userRole || 'developer',
+      userRole: userRole || 'participant',
       affiliation: affiliation || '',
       expertise: expertise || '',
       gender: gender || '',

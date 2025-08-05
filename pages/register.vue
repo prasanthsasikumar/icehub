@@ -7,7 +7,7 @@
           ICE2025
         </NuxtLink>
         <h1 class="text-xl sm:text-2xl font-semibold text-gray-700 mt-3 sm:mt-4 mb-2">Create your account</h1>
-        <p class="text-sm sm:text-base text-gray-500">Join the developer community</p>
+        <p class="text-sm sm:text-base text-gray-500">Join the community</p>
       </div>
 
       <!-- Registration Form -->
@@ -143,18 +143,18 @@
               Join as
             </label>
             <div class="space-y-3">
-              <label class="flex items-start gap-3 p-3 sm:p-4 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors touch-target" :class="{ 'border-primary bg-blue-50': form.userRole === 'developer' }">
+              <label class="flex items-start gap-3 p-3 sm:p-4 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors touch-target" :class="{ 'border-primary bg-blue-50': form.userRole === 'participant' }">
                 <input 
                   type="radio" 
                   v-model="form.userRole" 
-                  value="developer" 
+                  value="participant" 
                   class="mt-1"
                   :disabled="loading"
                 />
                 <div class="flex-1">
                   <div class="font-medium text-gray-700 flex items-center gap-2 text-sm sm:text-base">
                     <span>👨‍💻</span>
-                    Developer
+                    Participant
                   </div>
                   <div class="text-xs sm:text-sm text-gray-500 mt-1">I'm looking to learn, collaborate, and work on projects with others.</div>
                 </div>
@@ -173,7 +173,7 @@
                     <span>🎯</span>
                     Mentor
                   </div>
-                  <div class="text-xs sm:text-sm text-gray-500 mt-1">I want to guide and support other developers in their journey.</div>
+                  <div class="text-xs sm:text-sm text-gray-500 mt-1">I want to guide and support other participants in their journey.</div>
                 </div>
               </label>
             </div>
@@ -234,7 +234,7 @@ const form = reactive({
   password: '',
   bio: '',
   image: '',
-  userRole: 'developer', // Default to developer
+  userRole: 'participant', // Default to participant
   affiliation: '',
   expertise: '',
   gender: ''
@@ -319,7 +319,7 @@ useHead({
   meta: [
     {
       name: 'description',
-      content: 'Create your ICE2025 account to showcase your skills and connect with other developers.'
+      content: 'Create your ICE2025 account to showcase your skills and connect with other Participants.'
     }
   ]
 })

@@ -13,8 +13,8 @@
               Messages
             </NuxtLink>
           </template>
-          <NuxtLink to="/groups" class="nav-button nav-button-secondary">
-            Back to Groups
+          <NuxtLink to="/teams" class="nav-button nav-button-secondary">
+            Back to teams
           </NuxtLink>
         </div>
       </div>
@@ -42,17 +42,17 @@
             <line x1="9" y1="9" x2="15" y2="15"/>
           </svg>
         </div>
-        <h2 class="text-2xl font-bold text-gray-700 mb-3">Group Not Found</h2>
-        <p class="text-gray-500 mb-6">The group you're looking for doesn't exist or you don't have access to it.</p>
-        <NuxtLink to="/groups" class="nav-button">
-          Back to Groups
+        <h2 class="text-2xl font-bold text-gray-700 mb-3">team Not Found</h2>
+        <p class="text-gray-500 mb-6">The team you're looking for doesn't exist or you don't have access to it.</p>
+        <NuxtLink to="/teams" class="nav-button">
+          Back to teams
         </NuxtLink>
       </div>
     </div>
 
-    <!-- Group Content -->
+    <!-- team Content -->
     <div v-else-if="data" class="pb-12">
-      <!-- Group Header -->
+      <!-- team Header -->
       <div class="relative">
         <!-- Cover Image -->
         <div class="h-64 bg-gradient-to-br from-gray-100 to-gray-200 relative overflow-hidden">
@@ -69,12 +69,12 @@
               <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="mr-1">
                 <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM12 17c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
               </svg>
-              Private Group
+              Private team
             </span>
           </div>
         </div>
 
-        <!-- Group Info Overlay -->
+        <!-- team Info Overlay -->
         <div class="max-w-4xl mx-auto px-5">
           <div class="bg-white rounded-xl shadow-lg border border-gray-200 -mt-16 relative z-10 p-8">
             <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
@@ -82,7 +82,7 @@
                 <h1 class="text-3xl font-bold text-gray-700 mb-3">{{ data.name }}</h1>
                 <p class="text-gray-600 mb-4 leading-relaxed">{{ data.description }}</p>
                 
-                <!-- Group Stats -->
+                <!-- team Stats -->
                 <div class="flex flex-wrap gap-6">
                   <div class="flex items-center text-gray-500 text-sm">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="mr-2">
@@ -106,20 +106,20 @@
                     ✓ You're a {{ data.userRole || 'member' }}
                   </span>
                   <NuxtLink 
-                    :to="`/groups/${groupId}/manage`"
+                    :to="`/teams/${teamId}/manage`"
                     class="bg-gray-100 text-gray-700 text-center py-2 px-4 rounded-lg hover:bg-gray-200 transition-colors font-medium"
                   >
-                    Manage Group
+                    Manage Team
                   </NuxtLink>
                 </template>
                 <template v-else-if="isLoggedIn">
                   <button 
-                    @click="joinGroup"
-                    :disabled="joiningGroup"
+                    @click="jointeam"
+                    :disabled="joiningteam"
                     class="bg-primary text-white py-2 px-4 rounded-lg hover:bg-primary-dark transition-colors font-medium disabled:opacity-50"
                   >
-                    <span v-if="joiningGroup">Joining...</span>
-                    <span v-else>Join Group</span>
+                    <span v-if="joiningteam">Joining...</span>
+                    <span v-else>Join team</span>
                   </button>
                 </template>
                 <template v-else>
@@ -133,14 +133,14 @@
         </div>
       </div>
 
-      <!-- Group Content -->
+      <!-- team Content -->
       <div class="max-w-4xl mx-auto px-5 mt-8">
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <!-- Main Content -->
           <div class="lg:col-span-2 space-y-8">
             <!-- About Section -->
             <div class="bg-white rounded-xl border border-gray-200 p-6">
-              <h2 class="text-xl font-semibold text-gray-700 mb-4">About This Group</h2>
+              <h2 class="text-xl font-semibold text-gray-700 mb-4">About This team</h2>
               <p class="text-gray-600 leading-relaxed">{{ data.description }}</p>
             </div>
 
@@ -153,7 +153,7 @@
                 <div class="flex flex-col gap-3">
                   <textarea
                     v-model="newLinkText"
-                    placeholder="Share links, resources, or any useful information with the group..."
+                    placeholder="Share links, resources, or any useful information with the team..."
                     rows="3"
                     class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-primary resize-none"
                   ></textarea>
@@ -234,21 +234,21 @@
               </div>
 
               <!-- Image Grid -->
-              <div v-if="groupImages.length > 0" class="grid grid-cols-2 md:grid-cols-3 gap-4">
-                <div v-for="image in groupImages" :key="image.id" class="relative group">
+              <div v-if="teamImages.length > 0" class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <div v-for="image in teamImages" :key="image.id" class="relative team">
                   <img
                     :src="image.image_url"
                     :alt="`Uploaded by user`"
                     class="w-full h-32 object-cover rounded-lg border border-gray-200 cursor-pointer hover:opacity-75 transition-opacity"
                     @click="openImageModal(image)"
                   />
-                  <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white text-xs p-2 rounded-b-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white text-xs p-2 rounded-b-lg opacity-0 team-hover:opacity-100 transition-opacity">
                     <p class="truncate">{{ image.filename }}</p>
                   </div>
                   <button
                     v-if="data.isMember && (image.created_by === user?.id || user?.role === 'admin')"
                     @click="deleteImage(image.id)"
-                    class="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                    class="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 team-hover:opacity-100 transition-opacity"
                   >
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
                       <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
@@ -264,7 +264,7 @@
                   <polyline points="21,15 16,10 5,21"/>
                 </svg>
                 <p>No images shared yet</p>
-                <p v-if="data.isMember" class="text-xs mt-1">Share your first image with the group!</p>
+                <p v-if="data.isMember" class="text-xs mt-1">Share your first image with the team!</p>
               </div>
             </div>
           </div>
@@ -311,9 +311,9 @@
               </div>
             </div>
 
-            <!-- Group Info -->
+            <!-- team Info -->
             <div class="bg-white rounded-xl border border-gray-200 p-6">
-              <h3 class="text-lg font-semibold text-gray-700 mb-4">Group Info</h3>
+              <h3 class="text-lg font-semibold text-gray-700 mb-4">team Info</h3>
               <div class="space-y-3 text-sm">
                 <div class="flex justify-between">
                   <span class="text-gray-500">Privacy</span>
@@ -341,15 +341,15 @@
 </template>
 
 <script setup>
-// Get the group ID from the route
+// Get the team ID from the route
 const route = useRoute()
-const groupId = route.params.id
+const teamId = route.params.id
 
 // Authentication
 const { user, isLoggedIn, checkAuth } = useAuth()
 
 // State
-const joiningGroup = ref(false)
+const joiningteam = ref(false)
 
 // Shared links state
 const newLinkText = ref('')
@@ -358,20 +358,20 @@ const sharedLinks = ref([])
 
 // Image gallery state
 const uploadingImage = ref(false)
-const groupImages = ref([])
+const teamImages = ref([])
 const selectedImage = ref(null)
 
-// Fetch group data
-const { data, pending, error, refresh } = await useFetch(`/api/groups/${groupId}`)
+// Fetch team data
+const { data, pending, error, refresh } = await useFetch(`/api/teams/${teamId}`)
 
 // Fetch shared links and images
-const { data: linksData, refresh: refreshLinks } = await useFetch(`/api/groups/${groupId}/links`)
-const { data: imagesData, refresh: refreshImages } = await useFetch(`/api/groups/${groupId}/images`)
+const { data: linksData, refresh: refreshLinks } = await useFetch(`/api/teams/${teamId}/links`)
+const { data: imagesData, refresh: refreshImages } = await useFetch(`/api/teams/${teamId}/images`)
 
 // Watch for data changes
 watch([linksData, imagesData], ([links, images]) => {
   if (links) sharedLinks.value = links
-  if (images) groupImages.value = images
+  if (images) teamImages.value = images
 }, { immediate: true })
 
 // Check authentication on mount
@@ -379,27 +379,27 @@ onMounted(async () => {
   await checkAuth()
 })
 
-// Join group function
-const joinGroup = async () => {
+// Join team function
+const jointeam = async () => {
   if (!isLoggedIn.value) {
     navigateTo('/login')
     return
   }
 
-  joiningGroup.value = true
+  joiningteam.value = true
   
   try {
-    await $fetch(`/api/groups/${groupId}/join`, {
+    await $fetch(`/api/teams/${teamId}/join`, {
       method: 'POST'
     })
     
-    // Refresh the group data
+    // Refresh the team data
     await refresh()
   } catch (error) {
-    console.error('Failed to join group:', error)
+    console.error('Failed to join team:', error)
     // You could add a toast notification here
   } finally {
-    joiningGroup.value = false
+    joiningteam.value = false
   }
 }
 
@@ -410,7 +410,7 @@ const addSharedLink = async () => {
   addingLink.value = true
   
   try {
-    await $fetch(`/api/groups/${groupId}/links`, {
+    await $fetch(`/api/teams/${teamId}/links`, {
       method: 'POST',
       body: {
         content: newLinkText.value.trim()
@@ -431,7 +431,7 @@ const deleteSharedLink = async (linkId) => {
   if (!confirm('Are you sure you want to delete this shared link?')) return
 
   try {
-    await $fetch(`/api/groups/${groupId}/links/${linkId}`, {
+    await $fetch(`/api/teams/${teamId}/links/${linkId}`, {
       method: 'DELETE'
     })
     
@@ -453,7 +453,7 @@ const handleImageUpload = async (event) => {
     const formData = new FormData()
     formData.append('image', file)
 
-    await $fetch(`/api/groups/${groupId}/images`, {
+    await $fetch(`/api/teams/${teamId}/images`, {
       method: 'POST',
       body: formData
     })
@@ -473,7 +473,7 @@ const deleteImage = async (imageId) => {
   if (!confirm('Are you sure you want to delete this image?')) return
 
   try {
-    await $fetch(`/api/groups/${groupId}/images/${imageId}`, {
+    await $fetch(`/api/teams/${teamId}/images/${imageId}`, {
       method: 'DELETE'
     })
     
@@ -500,11 +500,11 @@ const formatDate = (dateString) => {
 
 // Page meta
 useHead({
-  title: computed(() => data.value ? `${data.value.name} - ICE2025` : 'Group - ICE2025'),
+  title: computed(() => data.value ? `${data.value.name} - ICE2025` : 'team - ICE2025'),
   meta: [
     {
       name: 'description',
-      content: computed(() => data.value ? `Join ${data.value.name} and collaborate on ${data.value.description}` : 'Developer group on ICE2025')
+      content: computed(() => data.value ? `Join ${data.value.name} and collaborate on ${data.value.description}` : 'Participant team on ICE2025')
     }
   ]
 })

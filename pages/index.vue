@@ -9,8 +9,8 @@
         <div class="nav-right hidden sm:flex items-center gap-2 sm:gap-4">
           <template v-if="isLoggedIn">
             <span class="text-xs sm:text-sm text-gray-600 hidden md:inline">Welcome, {{ user?.name }}</span>
-            <NuxtLink to="/groups" class="nav-button nav-button-secondary">
-              Groups
+            <NuxtLink to="/teams" class="nav-button nav-button-secondary">
+              Teams
             </NuxtLink>
             <NuxtLink to="/chat" class="nav-button nav-button-secondary">
               Messages
@@ -34,8 +34,8 @@
             </button>
           </template>
           <template v-else>
-            <NuxtLink to="/groups" class="nav-button nav-button-secondary">
-              Groups
+            <NuxtLink to="/teams" class="nav-button nav-button-secondary">
+              Teams
             </NuxtLink>
             <NuxtLink to="/login" class="nav-button nav-button-secondary">
               Sign In
@@ -60,8 +60,8 @@
         <!-- Mobile menu -->
         <div v-show="mobileMenuOpen" class="mobile-nav-menu">
           <template v-if="isLoggedIn">
-            <NuxtLink @click="mobileMenuOpen = false" to="/groups" class="mobile-nav-item">
-              👥 Groups
+            <NuxtLink @click="mobileMenuOpen = false" to="/teams" class="mobile-nav-item">
+              👥 Teams
             </NuxtLink>
             <NuxtLink @click="mobileMenuOpen = false" to="/chat" class="mobile-nav-item">
               💬 Messages
@@ -87,8 +87,8 @@
             </button>
           </template>
           <template v-else>
-            <NuxtLink @click="mobileMenuOpen = false" to="/groups" class="mobile-nav-item">
-              👥 Groups
+            <NuxtLink @click="mobileMenuOpen = false" to="/teams" class="mobile-nav-item">
+              👥 Teams
             </NuxtLink>
             <NuxtLink @click="mobileMenuOpen = false" to="/login" class="mobile-nav-item">
               🔑 Sign In
@@ -105,22 +105,51 @@
     <section class="bg-gradient-to-br from-gray-50 to-gray-200 section-padding text-center">
       <div class="max-w-container mx-auto container-padding">
         <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-700 mb-4 sm:mb-6 leading-tight">ICE2025 Workshop</h1>
-        <p class="text-lg sm:text-xl text-gray-500 mb-8 sm:mb-10 max-w-2xl mx-auto">Join 30 selected participants in Sri Lanka's premier AI innovation workshop. Connect with international mentors and build breakthrough products in just 3 days.</p>
+        <p class="text-lg sm:text-xl text-gray-500 mb-6 sm:mb-8 max-w-2xl mx-auto">Join 30 selected participants in Sri Lanka's premier AI innovation workshop. Connect with international mentors and build breakthrough products in just 3 days.</p>
+        
+        <!-- Countdown Timer -->
+        <div class="mb-8 sm:mb-10">
+          <div class="bg-white rounded-xl shadow-lg p-4 sm:p-6 max-w-md mx-auto border border-gray-200">
+            <p class="text-xs sm:text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Workshop Starts In</p>
+            <div v-if="!eventStarted" class="grid grid-cols-4 gap-2 sm:gap-4 text-center">
+              <div class="bg-gray-50 rounded-lg p-2 sm:p-3">
+                <div class="text-lg sm:text-2xl font-bold text-primary">{{ countdown.days }}</div>
+                <div class="text-xs text-gray-500 uppercase tracking-wide">Days</div>
+              </div>
+              <div class="bg-gray-50 rounded-lg p-2 sm:p-3">
+                <div class="text-lg sm:text-2xl font-bold text-primary">{{ countdown.hours }}</div>
+                <div class="text-xs text-gray-500 uppercase tracking-wide">Hours</div>
+              </div>
+              <div class="bg-gray-50 rounded-lg p-2 sm:p-3">
+                <div class="text-lg sm:text-2xl font-bold text-primary">{{ countdown.minutes }}</div>
+                <div class="text-xs text-gray-500 uppercase tracking-wide">Min</div>
+              </div>
+              <div class="bg-gray-50 rounded-lg p-2 sm:p-3">
+                <div class="text-lg sm:text-2xl font-bold text-primary">{{ countdown.seconds }}</div>
+                <div class="text-xs text-gray-500 uppercase tracking-wide">Sec</div>
+              </div>
+            </div>
+            <div v-else class="text-center">
+              <div class="text-2xl sm:text-3xl font-bold text-green-600 mb-2">🎉 Workshop Started!</div>
+              <p class="text-sm text-gray-600">The ICE2025 Workshop is now in progress</p>
+            </div>
+          </div>
+        </div>
         
         <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mb-8 sm:mb-15 max-w-md sm:max-w-none mx-auto">
           <template v-if="isLoggedIn">
-            <NuxtLink to="/developers" class="hero-btn hero-btn-primary">Meet Participants</NuxtLink>
+            <NuxtLink to="/participants" class="hero-btn hero-btn-primary">Meet Participants</NuxtLink>
             <NuxtLink 
-              v-if="user" 
-              :to="`/profile/${encodeURIComponent(user.name)}`" 
+              to="/teams" 
               class="hero-btn hero-btn-secondary"
             >
-              View my profile
+              View Teams
             </NuxtLink>
           </template>
           <template v-else>
             <NuxtLink to="/register" class="hero-btn hero-btn-primary">Join Workshop</NuxtLink>
-            <NuxtLink to="/developers" class="hero-btn hero-btn-secondary">Meet Participants</NuxtLink>
+            <NuxtLink to="/teams" class="hero-btn hero-btn-secondary">Teams</NuxtLink>
+            <NuxtLink to="/participants" class="hero-btn hero-btn-secondary">Meet Participants</NuxtLink>
           </template>
         </div>
 
@@ -138,17 +167,17 @@
             </a>
           </p>
           <div class="flex justify-center gap-8 sm:gap-15 flex-wrap">
-            <div class="text-center">
-              <span class="block text-2xl sm:text-3xl font-bold text-primary mb-1">{{ users.length }}</span>
+            <div class="text-center cursor-pointer transition-transform hover:scale-105" @click="scrollToSection('participants')">
+              <span class="block text-2xl sm:text-3xl font-bold text-primary mb-1">{{ participantCount }}</span>
               <span class="text-xs sm:text-sm text-gray-500 uppercase tracking-wider">Participants</span>
             </div>
-            <div class="text-center">
-              <span class="block text-2xl sm:text-3xl font-bold text-primary mb-1">{{ totalSkills }}</span>
-              <span class="text-xs sm:text-sm text-gray-500 uppercase tracking-wider">AI Skills</span>
+            <div class="text-center cursor-pointer transition-transform hover:scale-105" @click="scrollToSection('mentors')">
+              <span class="block text-2xl sm:text-3xl font-bold text-primary mb-1">{{ mentorCount }}</span>
+              <span class="text-xs sm:text-sm text-gray-500 uppercase tracking-wider">Mentors</span>
             </div>
-            <div class="text-center">
-              <span class="block text-2xl sm:text-3xl font-bold text-primary mb-1">3</span>
-              <span class="text-xs sm:text-sm text-gray-500 uppercase tracking-wider">Days</span>
+            <div class="text-center cursor-pointer transition-transform hover:scale-105" @click="scrollToSection('skills')">
+              <span class="block text-2xl sm:text-3xl font-bold text-primary mb-1">{{ totalSkills }}</span>
+              <span class="text-xs sm:text-sm text-gray-500 uppercase tracking-wider">Skills</span>
             </div>
           </div>
         </div>
@@ -171,16 +200,16 @@
           <NuxtLink to="/new" class="bg-primary text-white px-6 py-3 rounded-lg no-underline font-semibold inline-block transition-colors hover:bg-primary-hover">Get Started</NuxtLink>
         </div>
 
-        <!-- Developers Section -->
+        <!-- Participants Section -->
         <div v-else>
-          <section class="mb-12 sm:mb-20">
+          <section id="participants" class="mb-12 sm:mb-20">
             <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 sm:mb-8 gap-4">
               <h2 class="text-2xl sm:text-3xl font-bold text-gray-700 m-0">Workshop Participants</h2>
-              <NuxtLink to="/developers" class="text-primary no-underline font-medium text-sm hover:underline self-start sm:self-auto">View all participants</NuxtLink>
+              <NuxtLink to="/participants" class="text-primary no-underline font-medium text-sm hover:underline self-start sm:self-auto">View all participants</NuxtLink>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-              <div v-for="user in users" :key="user.name" class="developer-card">
+              <div v-for="user in displayedParticipants" :key="user.name" class="participant-card">
                 <div class="card-padding">
                   <div class="flex items-center mb-4 sm:mb-5">
                     <div class="w-12 h-12 sm:w-15 sm:h-15 rounded-full overflow-hidden mr-3 sm:mr-4 flex-shrink-0">
@@ -196,15 +225,15 @@
                   <div class="mb-4 sm:mb-6">
                     <div class="flex flex-wrap gap-1.5 sm:gap-2">
                       <NuxtLink 
-                        v-for="skill in getDisplaySkills(user.skills).slice(0, 6)" 
+                        v-for="skill in getDisplaySkills(user.skills).slice(0, 3)" 
                         :key="skill" 
                         :to="`/skills/${encodeURIComponent(skill)}`"
                         class="skill-tag hover:bg-primary hover:text-white transition-colors cursor-pointer"
                       >
                         {{ skill }}
                       </NuxtLink>
-                      <span v-if="getDisplaySkills(user.skills).length > 6" class="text-gray-500 text-xs font-medium py-1">
-                        +{{ getDisplaySkills(user.skills).length - 6 }} more
+                      <span v-if="getDisplaySkills(user.skills).length > 3" class="text-gray-500 text-xs font-medium py-1">
+                        +{{ getDisplaySkills(user.skills).length - 3 }} more
                       </span>
                     </div>
                   </div>
@@ -221,10 +250,95 @@
                 </div>
               </div>
             </div>
+
+            <!-- Mobile Expand Button -->
+            <div v-if="shouldShowExpandButton" class="mt-6 text-center sm:hidden">
+              <button 
+                @click="showAllParticipants = true"
+                class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-b from-gray-50 to-gray-100 border border-gray-200 rounded-lg text-gray-600 font-medium transition-all duration-200 hover:from-gray-100 hover:to-gray-200 hover:border-gray-300 hover:text-gray-700 active:scale-95"
+              >
+                <span>Show {{ displayedParticipants.length > 10 ? users.filter(user => { const role = user.role || ''; const userRole = user.userRole || ''; return role !== 'admin' && userRole !== 'mentor' }).length - 10 : 0 }} more participants</span>
+                <svg class="w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                </svg>
+              </button>
+            </div>
+
+            <!-- Mobile Collapse Button -->
+            <div v-if="showAllParticipants && users && users.filter(user => { const role = user.role || ''; const userRole = user.userRole || ''; return role !== 'admin' && userRole !== 'mentor' }).length > 10" class="mt-6 text-center sm:hidden">
+              <button 
+                @click="showAllParticipants = false"
+                class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-b from-gray-50 to-gray-100 border border-gray-200 rounded-lg text-gray-600 font-medium transition-all duration-200 hover:from-gray-100 hover:to-gray-200 hover:border-gray-300 hover:text-gray-700 active:scale-95"
+              >
+                <span>Show less</span>
+                <svg class="w-4 h-4 transition-transform duration-200 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                </svg>
+              </button>
+            </div>
+          </section>
+
+          <!-- Mentors Section -->
+          <section id="mentors" v-if="mentors && mentors.length > 0" class="mb-12 sm:mb-20">
+            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 sm:mb-8 gap-4">
+              <h2 class="text-2xl sm:text-3xl font-bold text-gray-700 m-0">Workshop Mentors</h2>
+              <div class="text-sm text-gray-500 self-start sm:self-auto">International experts guiding the workshop</div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+              <div v-for="mentor in mentors" :key="mentor.name" class="participant-card border-l-4 border-l-green-500">
+                <div class="card-padding">
+                  <div class="flex items-center mb-4 sm:mb-5">
+                    <div class="w-12 h-12 sm:w-15 sm:h-15 rounded-full overflow-hidden mr-3 sm:mr-4 flex-shrink-0">
+                      <img :src="getImageUrl(mentor.image)" :alt="`${mentor.name}'s avatar`" class="w-full h-full object-cover" />
+                    </div>
+                    <div class="flex-1 min-w-0">
+                      <div class="flex items-center gap-2 mb-1">
+                        <h3 class="text-base sm:text-lg font-semibold text-gray-700 truncate">{{ mentor.name }}</h3>
+                        <span class="inline-flex items-center gap-1 px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
+                          <svg class="w-3 h-3" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+                          </svg>
+                          Mentor
+                        </span>
+                      </div>
+                      <p class="text-xs sm:text-sm text-gray-500 m-0 leading-snug line-clamp-2">{{ mentor.bio }}</p>
+                      <p v-if="mentor.expertise" class="text-xs text-green-600 font-medium mt-1 truncate">{{ mentor.expertise }}</p>
+                    </div>
+                  </div>
+
+                  <div class="mb-4 sm:mb-6">
+                    <div class="flex flex-wrap gap-1.5 sm:gap-2">
+                      <NuxtLink 
+                        v-for="skill in getDisplaySkills(mentor.skills).slice(0, 3)" 
+                        :key="skill" 
+                        :to="`/skills/${encodeURIComponent(skill)}`"
+                        class="skill-tag hover:bg-green-600 hover:text-white transition-colors cursor-pointer"
+                      >
+                        {{ skill }}
+                      </NuxtLink>
+                      <span v-if="getDisplaySkills(mentor.skills).length > 3" class="text-gray-500 text-xs font-medium py-1">
+                        +{{ getDisplaySkills(mentor.skills).length - 3 }} more
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="flex flex-col sm:flex-row gap-2 sm:gap-3">
+                    <NuxtLink :to="`/profile/${encodeURIComponent(mentor.name)}`" class="action-btn action-btn-secondary">View Profile</NuxtLink>
+                    <template v-if="isLoggedIn">
+                      <button @click="startConversation(mentor)" class="action-btn action-btn-primary">Message</button>
+                    </template>
+                    <template v-else>
+                      <NuxtLink to="/login" class="action-btn action-btn-primary">Sign in to Message</NuxtLink>
+                    </template>
+                  </div>
+                </div>
+              </div>
+            </div>
           </section>
 
           <!-- Popular Skills Section -->
-          <section class="mb-12 sm:mb-20">
+          <section id="skills" class="mb-12 sm:mb-20">
             <div class="flex justify-between items-center mb-6 sm:mb-8">
               <div>
                 <h2 class="text-2xl sm:text-3xl font-bold text-gray-700 m-0 mb-2">Top skills in the workshop</h2>
@@ -243,16 +357,16 @@
                   v-for="(skill, index) in topSkills" 
                   :key="skill.name" 
                   :to="`/skills/${encodeURIComponent(skill.name)}`"
-                  class="block px-4 sm:px-6 py-3 sm:py-4 grid grid-cols-[60px_1fr_80px] sm:grid-cols-[80px_1fr_120px] gap-3 sm:gap-6 border-b border-gray-100 last:border-b-0 transition-all duration-200 hover:bg-blue-50 hover:border-blue-200 cursor-pointer group"
+                  class="block px-4 sm:px-6 py-3 sm:py-4 grid grid-cols-[60px_1fr_80px] sm:grid-cols-[80px_1fr_120px] gap-3 sm:gap-6 border-b border-gray-100 last:border-b-0 transition-all duration-200 hover:bg-blue-50 hover:border-blue-200 cursor-pointer team"
                 >
-                  <div class="flex items-center font-semibold text-gray-500 text-sm group-hover:text-blue-600">{{ index + 1 }}.</div>
-                  <div class="flex items-center font-medium text-gray-700 text-sm sm:text-base truncate group-hover:text-blue-700">
+                  <div class="flex items-center font-semibold text-gray-500 text-sm team-hover:text-blue-600">{{ index + 1 }}.</div>
+                  <div class="flex items-center font-medium text-gray-700 text-sm sm:text-base truncate team-hover:text-blue-700">
                     {{ skill.name }}
-                    <svg class="w-4 h-4 ml-2 text-gray-400 group-hover:text-blue-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-4 h-4 ml-2 text-gray-400 team-hover:text-blue-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                     </svg>
                   </div>
-                  <div class="flex items-center justify-end text-gray-500 text-sm group-hover:text-blue-600">{{ skill.count }}</div>
+                  <div class="flex items-center justify-end text-gray-500 text-sm team-hover:text-blue-600">{{ skill.count }}</div>
                 </NuxtLink>
               </div>
             </div>
@@ -272,12 +386,82 @@ const { user, isLoggedIn, isAdmin, logout, checkAuth } = useAuth()
 // Mobile menu state
 const mobileMenuOpen = ref(false)
 
+// Mobile participants expansion state
+const showAllParticipants = ref(false)
+const isMobile = ref(false)
+
+// Countdown functionality
+const countdown = ref({
+  days: 0,
+  hours: 0,
+  minutes: 0,
+  seconds: 0
+})
+const eventStarted = ref(false)
+
+// Target date: August 8th, 2025 at 8:00 AM Sri Lanka Time (UTC+5:30)
+const targetDate = new Date('2025-08-08T08:00:00+05:30')
+
+const updateCountdown = () => {
+  const now = new Date()
+  const distance = targetDate.getTime() - now.getTime()
+  
+  if (distance < 0) {
+    eventStarted.value = true
+    return
+  }
+  
+  countdown.value = {
+    days: Math.floor(distance / (1000 * 60 * 60 * 24)),
+    hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+    minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
+    seconds: Math.floor((distance % (1000 * 60)) / 1000)
+  }
+}
+
+// Smooth scroll to section
+const scrollToSection = (sectionId) => {
+  const element = document.getElementById(sectionId)
+  if (element) {
+    element.scrollIntoView({ 
+      behavior: 'smooth',
+      block: 'start'
+    })
+  }
+}
+
 // Check authentication on both server and client
 await checkAuth()
 
 // Also check on mount for client-side navigation
 onMounted(async () => {
   await checkAuth()
+  
+  // Initialize countdown
+  updateCountdown()
+  
+  // Update countdown every second
+  const countdownInterval = setInterval(updateCountdown, 1000)
+  
+  // Set initial mobile state
+  isMobile.value = window.innerWidth < 640
+  
+  // Listen for resize events to update mobile state
+  const handleResize = () => {
+    isMobile.value = window.innerWidth < 640
+    // Reset expansion state when switching to desktop
+    if (!isMobile.value) {
+      showAllParticipants.value = false
+    }
+  }
+  
+  window.addEventListener('resize', handleResize)
+  
+  // Cleanup on unmount
+  onUnmounted(() => {
+    window.removeEventListener('resize', handleResize)
+    clearInterval(countdownInterval)
+  })
 })
 
 // Handle logout
@@ -356,6 +540,57 @@ const totalSkills = computed(() => {
   return new Set(allSkills).size
 })
 
+// Mobile-specific computed property for displayed participants
+const displayedParticipants = computed(() => {
+  if (!users.value) return []
+  
+  // Filter out mentors and admins from workshop participants
+  const regularParticipants = users.value.filter(user => {
+    const role = user.role || ''
+    const userRole = user.userRole || ''
+    return role !== 'admin' && userRole !== 'mentor'
+  })
+  
+  // On mobile, show only first 10 unless expanded
+  if (isMobile.value && !showAllParticipants.value && regularParticipants.length > 10) {
+    return regularParticipants.slice(0, 10)
+  }
+  
+  return regularParticipants
+})
+
+const shouldShowExpandButton = computed(() => {
+  if (!users.value) return false
+  const regularParticipants = users.value.filter(user => {
+    const role = user.role || ''
+    const userRole = user.userRole || ''
+    return role !== 'admin' && userRole !== 'mentor'
+  })
+  return isMobile.value && regularParticipants.length > 10 && !showAllParticipants.value
+})
+
+// Separate mentors from regular participants
+const mentors = computed(() => {
+  if (!users.value) return []
+  return users.value.filter(user => {
+    const userRole = user.userRole || ''
+    return userRole === 'mentor'
+  })
+})
+
+const participantCount = computed(() => {
+  if (!users.value) return 0
+  return users.value.filter(user => {
+    const role = user.role || ''
+    const userRole = user.userRole || ''
+    return role !== 'admin' && userRole !== 'mentor'
+  }).length
+})
+
+const mentorCount = computed(() => {
+  return mentors.value.length
+})
+
 const topSkills = computed(() => {
   if (!users.value) return []
   
@@ -378,7 +613,7 @@ useHead({
   meta: [
     {
       name: 'description',
-      content: 'Join 30 selected participants in Sri Lanka\'s premier AI innovation workshop led by Professor Suranga Nannayakara from NUS. Connect with international mentors and build breakthrough products in just 3 days.'
+      content: 'Join 30 selected participants in Sri Lanka\'s premier AI innovation workshop led by Professor Suranga Nannayakara from NUS. Connect with mentors and build breakthrough products in just 3 days.'
     },
     {
       name: 'viewport',
@@ -443,6 +678,7 @@ useHead({
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }

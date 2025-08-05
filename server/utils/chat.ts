@@ -8,9 +8,9 @@ export interface Message {
   // For direct messages
   receiverId?: string
   receiverName?: string
-  // For group messages
+  // For team messages
   chatId?: string
-  chatType?: 'direct' | 'group'
+  chatType?: 'direct' | 'team'
 }
 
 export interface DirectConversation {
@@ -22,11 +22,11 @@ export interface DirectConversation {
   unreadCount: number
 }
 
-export interface GroupConversation {
+export interface teamConversation {
   chatId: string
-  groupId: string
-  groupName: string
-  groupImage: string
+  teamId: string
+  teamName: string
+  teamImage: string
   lastMessage: string
   lastMessageTime: string
   unreadCount: number
@@ -37,5 +37,5 @@ export function createMessageId(): string {
   return Date.now().toString() + Math.random().toString(36).substr(2, 9)
 }
 
-// Note: Group chat functionality is now handled directly in the Supabase Database class
-// through the groups table and messages table relationships
+// Note: team chat functionality is now handled directly in the Supabase Database class
+// through the teams table and messages table relationships

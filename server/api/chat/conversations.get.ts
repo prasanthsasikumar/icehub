@@ -20,7 +20,7 @@ export default defineEventHandler(async (event) => {
     try {
       const messages = await Database.getMessages()
       
-      // Group messages by conversation (sender-receiver pairs)
+      // team messages by conversation (sender-receiver pairs)
       const conversationMap = new Map()
       
       messages.forEach((message: any) => {
@@ -76,7 +76,7 @@ export default defineEventHandler(async (event) => {
     return {
       success: true,
       directConversations,
-      groupConversations: [] // Empty array since we removed group chat
+      teamConversations: [] // Empty array since we removed team chat
     }
   } catch (error: any) {
     if (error.statusCode) {

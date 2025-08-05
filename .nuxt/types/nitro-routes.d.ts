@@ -42,46 +42,46 @@ declare module "nitropack/types" {
     '/api/debug/test-upload': {
       'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/debug/test-upload.post').default>>>>
     }
-    '/api/groups/:id/delete': {
-      'delete': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/groups/[id]/delete.delete').default>>>>
-    }
-    '/api/groups/:id/images': {
-      'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/groups/[id]/images.get').default>>>>
-      'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/groups/[id]/images.post').default>>>>
-    }
-    '/api/groups/:id/images/:imageId': {
-      'delete': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/groups/[id]/images/[imageId].delete').default>>>>
-    }
-    '/api/groups/:id': {
-      'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/groups/[id]/index.get').default>>>>
-    }
-    '/api/groups/:id/join': {
-      'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/groups/[id]/join.post').default>>>>
-    }
-    '/api/groups/:id/leave': {
-      'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/groups/[id]/leave.post').default>>>>
-    }
-    '/api/groups/:id/links': {
-      'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/groups/[id]/links.get').default>>>>
-      'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/groups/[id]/links.post').default>>>>
-    }
-    '/api/groups/:id/links/:linkId': {
-      'delete': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/groups/[id]/links/[linkId].delete').default>>>>
-    }
-    '/api/groups/:id/update': {
-      'put': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/groups/[id]/update.put').default>>>>
-    }
-    '/api/groups/create': {
-      'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/groups/create.post').default>>>>
-    }
-    '/api/groups': {
-      'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/groups/index.get').default>>>>
-    }
     '/api/proxy-image': {
       'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/proxy-image.get').default>>>>
     }
     '/api/skills': {
       'default': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/skills').default>>>>
+    }
+    '/api/teams/:id/delete': {
+      'delete': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/teams/[id]/delete.delete').default>>>>
+    }
+    '/api/teams/:id/images': {
+      'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/teams/[id]/images.get').default>>>>
+      'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/teams/[id]/images.post').default>>>>
+    }
+    '/api/teams/:id/images/:imageId': {
+      'delete': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/teams/[id]/images/[imageId].delete').default>>>>
+    }
+    '/api/teams/:id': {
+      'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/teams/[id]/index.get').default>>>>
+    }
+    '/api/teams/:id/join': {
+      'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/teams/[id]/join.post').default>>>>
+    }
+    '/api/teams/:id/leave': {
+      'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/teams/[id]/leave.post').default>>>>
+    }
+    '/api/teams/:id/links': {
+      'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/teams/[id]/links.get').default>>>>
+      'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/teams/[id]/links.post').default>>>>
+    }
+    '/api/teams/:id/links/:linkId': {
+      'delete': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/teams/[id]/links/[linkId].delete').default>>>>
+    }
+    '/api/teams/:id/update': {
+      'put': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/teams/[id]/update.put').default>>>>
+    }
+    '/api/teams/create': {
+      'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/teams/create.post').default>>>>
+    }
+    '/api/teams': {
+      'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/teams/index.get').default>>>>
     }
     '/api/upload': {
       'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/upload.post').default>>>>

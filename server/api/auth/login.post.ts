@@ -48,7 +48,7 @@ export default defineEventHandler(async (event) => {
         email: user.email, 
         name: user.name,
         role: user.role,
-        userRole: user.userRole || 'developer'  // Default to developer if not set
+        userRole: user.userRole || 'participant'  // Default to participant if not set
       },
       JWT_SECRET,
       { expiresIn: '24h' }

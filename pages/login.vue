@@ -145,7 +145,7 @@ useHead({
   meta: [
     {
       name: 'description',
-      content: 'Sign in to your ICE2025 account to access your developer profile and connect with other professionals.'
+      content: 'Sign in to your ICE2025 account to access your participant profile and connect with other professionals.'
     }
   ]
 })

@@ -26,25 +26,25 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const { userId, groupId, role } = await readBody(event)
+  const { userId, teamId, role } = await readBody(event)
 
-  if (!userId || !groupId) {
+  if (!userId || !teamId) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'User ID and Group ID are required'
+      statusMessage: 'User ID and team ID are required'
     })
   }
 
-  console.log('Admin adding user to group:', { userId, groupId, role, adminId: currentUser.id })
+  console.log('Admin adding user to team:', { userId, teamId, role, adminId: currentUser.id })
 
   try {
-    // Get the group from Supabase
-    const group = await Database.getGroupById(groupId)
+    // Get the team from Supabase
+    const team = await Database.getteamById(teamId)
     
-    if (!group) {
+    if (!team) {
       throw createError({
         statusCode: 404,
-        statusMessage: 'Group not found'
+        statusMessage: 'team not found'
       })
     }
 
@@ -62,18 +62,18 @@ export default defineEventHandler(async (event) => {
     let members: any[] = []
     
     try {
-      if (group.members) {
-        if (typeof group.members === 'string') {
+      if (team.members) {
+        if (typeof team.members === 'string') {
           try {
             // First try to parse as a JSON array
-            members = JSON.parse(group.members)
+            members = JSON.parse(team.members)
           } catch (jsonError) {
             console.log('Failed to parse as JSON, attempting manual parsing...')
             // Handle malformed array that might be a mix of JSON strings and objects
             members = []
           }
-        } else if (Array.isArray(group.members)) {
-          members = group.members
+        } else if (Array.isArray(team.members)) {
+          members = team.members
         }
       }
     } catch (e) {
@@ -133,7 +133,7 @@ export default defineEventHandler(async (event) => {
     if (existingMember) {
       throw createError({
         statusCode: 409,
-        statusMessage: 'User is already a member of this group'
+        statusMessage: 'User is already a member of this team'
       })
     }
 
@@ -154,13 +154,13 @@ export default defineEventHandler(async (event) => {
 
     members.push(newMember)
 
-    // Update the group with new members - use JSONB format for PostgreSQL
-    const updatedGroup = await Database.updateGroup(groupId, {
+    // Update the team with new members - use JSONB format for PostgreSQL
+    const updatedteam = await Database.updateteam(teamId, {
       members: members // Pass as an array, not JSON string
     })
 
-    console.log('Successfully added user to group:', {
-      groupId,
+    console.log('Successfully added user to team:', {
+      teamId,
       userId,
       role: memberRole,
       totalMembers: members.length
@@ -168,8 +168,8 @@ export default defineEventHandler(async (event) => {
 
     return {
       success: true,
-      message: `${userToAdd.name} has been added to ${group.name} as ${memberRole}`,
-      group: updatedGroup,
+      message: `${userToAdd.name} has been added to ${team.name} as ${memberRole}`,
+      team: updatedteam,
       newMember
     }
 
@@ -178,10 +178,10 @@ export default defineEventHandler(async (event) => {
       throw error
     }
     
-    console.error('Error adding user to group:', error)
+    console.error('Error adding user to team:', error)
     throw createError({
       statusCode: 500,
-      statusMessage: 'Failed to add user to group'
+      statusMessage: 'Failed to add user to team'
     })
   }
 })

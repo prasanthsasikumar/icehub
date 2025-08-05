@@ -9,12 +9,12 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const groupId = getRouterParam(event, 'id')
+  const teamId = getRouterParam(event, 'id')
   
-  if (!groupId) {
+  if (!teamId) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'Group ID is required'
+      statusMessage: 'team ID is required'
     })
   }
 
@@ -29,24 +29,24 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    // Get the group from Supabase
-    const group = await Database.getGroupById(groupId)
+    // Get the team from Supabase
+    const team = await Database.getteamById(teamId)
 
     // Parse members array (includes both members and mentors with role property)
     let members: any[] = []
     
     try {
-      if (group.members) {
-        if (typeof group.members === 'string') {
+      if (team.members) {
+        if (typeof team.members === 'string') {
           // Try to parse as JSON first
           try {
-            members = JSON.parse(group.members)
+            members = JSON.parse(team.members)
           } catch (jsonError) {
             // If JSON parse fails, initialize as empty array
             members = []
           }
-        } else if (Array.isArray(group.members)) {
-          members = group.members
+        } else if (Array.isArray(team.members)) {
+          members = team.members
         } else {
           members = []
         }
@@ -68,42 +68,42 @@ export default defineEventHandler(async (event) => {
       return member
     }).filter(Boolean) // Remove null entries
 
-    // Check if user is in the group
+    // Check if user is in the team
     const memberIndex = members.findIndex((member: any) => member.userId === currentUser.id)
     
     if (memberIndex === -1) {
       throw createError({
         statusCode: 409,
-        statusMessage: 'User is not part of this group'
+        statusMessage: 'User is not part of this team'
       })
     }
 
     // Remove user from members array
     members.splice(memberIndex, 1)
 
-    // If group becomes empty, delete it
+    // If team becomes empty, delete it
     if (members.length === 0) {
-      await Database.deleteGroup(groupId)
+      await Database.deleteteam(teamId)
       
       return {
-        message: 'Left group and group was deleted (no members left)'
+        message: 'Left team and team was deleted (no members left)'
       }
     } else {
-      // Update the group with new members array (send as array, not JSON string)
-      await Database.updateGroup(groupId, {
+      // Update the team with new members array (send as array, not JSON string)
+      await Database.updateteam(teamId, {
         members: members  // Send as array, let Supabase handle JSONB conversion
       })
       
       return {
-        message: 'Successfully left the group'
+        message: 'Successfully left the team'
       }
     }
     
   } catch (error) {
-    console.error('Error leaving group:', error)
+    console.error('Error leaving team:', error)
     throw createError({
       statusCode: 500,
-      statusMessage: 'Failed to leave group'
+      statusMessage: 'Failed to leave team'
     })
   }
 })

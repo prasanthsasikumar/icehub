@@ -3,7 +3,7 @@ import { Server } from 'node:http';
 import path, { resolve, dirname, join } from 'node:path';
 import nodeCrypto from 'node:crypto';
 import { parentPort, threadId } from 'node:worker_threads';
-import { defineEventHandler, handleCacheHeaders, splitCookiesString, createEvent, fetchWithEvent, isEvent, eventHandler, setHeaders, sendRedirect, proxyRequest, getRequestHeader, setResponseHeaders, setResponseStatus, send, getRequestHeaders, setResponseHeader, appendResponseHeader, getRequestURL, getResponseHeader, removeResponseHeader, createError, getQuery as getQuery$1, readBody, createApp, createRouter as createRouter$1, toNodeListener, lazyEventHandler, getResponseStatus, getRouterParam, getCookie, getHeader, getMethod, setCookie, deleteCookie, readMultipartFormData, setHeader, getResponseStatusText } from 'file://C:/Users/prasa/OneDrive/Documents/GitHub/icehub/node_modules/h3/dist/index.mjs';
+import { defineEventHandler, handleCacheHeaders, splitCookiesString, createEvent, fetchWithEvent, isEvent, eventHandler, setHeaders, sendRedirect, proxyRequest, getRequestHeader, setResponseHeaders, setResponseStatus, send, getRequestHeaders, setResponseHeader, appendResponseHeader, getRequestURL, getResponseHeader, removeResponseHeader, createError, getQuery as getQuery$1, readBody, createApp, createRouter as createRouter$1, toNodeListener, lazyEventHandler, getResponseStatus, getRouterParam, getCookie, getHeader, getMethod, setCookie, deleteCookie, setHeader, readMultipartFormData, getResponseStatusText } from 'file://C:/Users/prasa/OneDrive/Documents/GitHub/icehub/node_modules/h3/dist/index.mjs';
 import { escapeHtml } from 'file://C:/Users/prasa/OneDrive/Documents/GitHub/icehub/node_modules/@vue/shared/dist/shared.cjs.js';
 import bcrypt from 'file://C:/Users/prasa/OneDrive/Documents/GitHub/icehub/node_modules/bcrypt/bcrypt.js';
 import { v4 } from 'file://C:/Users/prasa/OneDrive/Documents/GitHub/icehub/node_modules/uuid/dist/esm/index.js';
@@ -1122,16 +1122,16 @@ _PrQa1nMjyI8aW7twHOgrKJdAvlKKDoWyBB4SMVdF94
 const assets = {
   "/index.mjs": {
     "type": "text/javascript; charset=utf-8",
-    "etag": "\"26c63-c4+y0RnJ8qDGBWspzBHmETRerc8\"",
-    "mtime": "2025-08-05T04:53:38.568Z",
-    "size": 158819,
+    "etag": "\"27b4a-JDeJTkO0QPNTOBLjkjceI9LrC8g\"",
+    "mtime": "2025-08-05T07:45:02.400Z",
+    "size": 162634,
     "path": "index.mjs"
   },
   "/index.mjs.map": {
     "type": "application/json",
-    "etag": "\"8a07d-vn1v004Gm2cnB91gfyJDeWrqLAc\"",
-    "mtime": "2025-08-05T04:53:38.569Z",
-    "size": 565373,
+    "etag": "\"8db71-4pFoXei8snOyv1t6xxOHZSgxylU\"",
+    "mtime": "2025-08-05T07:45:02.401Z",
+    "size": 580465,
     "path": "index.mjs.map"
   }
 };
@@ -1554,21 +1554,21 @@ const _lazy_JlvD9o = () => Promise.resolve().then(function () { return messages_
 const _lazy_ANhgb1 = () => Promise.resolve().then(function () { return send_post$1; });
 const _lazy_uIGDLQ = () => Promise.resolve().then(function () { return status_get$1; });
 const _lazy_uZ1WNJ = () => Promise.resolve().then(function () { return testUpload_post$1; });
-const _lazy_i07xCD = () => Promise.resolve().then(function () { return delete_delete$1; });
-const _lazy_gkzpXv = () => Promise.resolve().then(function () { return images_get$1; });
-const _lazy_G86MrJ = () => Promise.resolve().then(function () { return images_post$1; });
-const _lazy_1J1BQ3 = () => Promise.resolve().then(function () { return _imageId__delete$1; });
-const _lazy_RSD3Yy = () => Promise.resolve().then(function () { return index_get$3; });
-const _lazy_DqnHXC = () => Promise.resolve().then(function () { return join_post$1; });
-const _lazy_LqPjmT = () => Promise.resolve().then(function () { return leave_post$1; });
-const _lazy_p3Qc_n = () => Promise.resolve().then(function () { return links_get$1; });
-const _lazy_glR0Y0 = () => Promise.resolve().then(function () { return links_post$1; });
-const _lazy_24y7d0 = () => Promise.resolve().then(function () { return _linkId__delete$1; });
-const _lazy_0CBvIK = () => Promise.resolve().then(function () { return update_put; });
-const _lazy_bPwzpJ = () => Promise.resolve().then(function () { return create_post$1; });
-const _lazy_KQFSdj = () => Promise.resolve().then(function () { return index_get$1; });
 const _lazy_iiZPnM = () => Promise.resolve().then(function () { return proxyImage_get$1; });
 const _lazy_TAOxgK = () => Promise.resolve().then(function () { return skills$1; });
+const _lazy_AM2WzJ = () => Promise.resolve().then(function () { return delete_delete$1; });
+const _lazy_Gh5pnx = () => Promise.resolve().then(function () { return images_get$1; });
+const _lazy_USHlHV = () => Promise.resolve().then(function () { return images_post$1; });
+const _lazy_9yrlM5 = () => Promise.resolve().then(function () { return _imageId__delete$1; });
+const _lazy_qPpFas = () => Promise.resolve().then(function () { return index_get$3; });
+const _lazy_FbMXkD = () => Promise.resolve().then(function () { return join_post$1; });
+const _lazy_OOipVc = () => Promise.resolve().then(function () { return leave_post$1; });
+const _lazy_HZgu0_ = () => Promise.resolve().then(function () { return links_get$1; });
+const _lazy_VLZTa7 = () => Promise.resolve().then(function () { return links_post$1; });
+const _lazy_uIhQfG = () => Promise.resolve().then(function () { return _linkId__delete$1; });
+const _lazy_9QbP3f = () => Promise.resolve().then(function () { return update_put$1; });
+const _lazy_siP8VF = () => Promise.resolve().then(function () { return create_post$1; });
+const _lazy_NRwVz0 = () => Promise.resolve().then(function () { return index_get$1; });
 const _lazy_tf6qb9 = () => Promise.resolve().then(function () { return upload_post$1; });
 const _lazy_NGO5j7 = () => Promise.resolve().then(function () { return user_get$1; });
 const _lazy_fwUlnN = () => Promise.resolve().then(function () { return updatePassword_post$1; });
@@ -1591,21 +1591,21 @@ const handlers = [
   { route: '/api/chat/send', handler: _lazy_ANhgb1, lazy: true, middleware: false, method: "post" },
   { route: '/api/debug/status', handler: _lazy_uIGDLQ, lazy: true, middleware: false, method: "get" },
   { route: '/api/debug/test-upload', handler: _lazy_uZ1WNJ, lazy: true, middleware: false, method: "post" },
-  { route: '/api/groups/:id/delete', handler: _lazy_i07xCD, lazy: true, middleware: false, method: "delete" },
-  { route: '/api/groups/:id/images', handler: _lazy_gkzpXv, lazy: true, middleware: false, method: "get" },
-  { route: '/api/groups/:id/images', handler: _lazy_G86MrJ, lazy: true, middleware: false, method: "post" },
-  { route: '/api/groups/:id/images/:imageId', handler: _lazy_1J1BQ3, lazy: true, middleware: false, method: "delete" },
-  { route: '/api/groups/:id', handler: _lazy_RSD3Yy, lazy: true, middleware: false, method: "get" },
-  { route: '/api/groups/:id/join', handler: _lazy_DqnHXC, lazy: true, middleware: false, method: "post" },
-  { route: '/api/groups/:id/leave', handler: _lazy_LqPjmT, lazy: true, middleware: false, method: "post" },
-  { route: '/api/groups/:id/links', handler: _lazy_p3Qc_n, lazy: true, middleware: false, method: "get" },
-  { route: '/api/groups/:id/links', handler: _lazy_glR0Y0, lazy: true, middleware: false, method: "post" },
-  { route: '/api/groups/:id/links/:linkId', handler: _lazy_24y7d0, lazy: true, middleware: false, method: "delete" },
-  { route: '/api/groups/:id/update', handler: _lazy_0CBvIK, lazy: true, middleware: false, method: "put" },
-  { route: '/api/groups/create', handler: _lazy_bPwzpJ, lazy: true, middleware: false, method: "post" },
-  { route: '/api/groups', handler: _lazy_KQFSdj, lazy: true, middleware: false, method: "get" },
   { route: '/api/proxy-image', handler: _lazy_iiZPnM, lazy: true, middleware: false, method: "get" },
   { route: '/api/skills', handler: _lazy_TAOxgK, lazy: true, middleware: false, method: undefined },
+  { route: '/api/teams/:id/delete', handler: _lazy_AM2WzJ, lazy: true, middleware: false, method: "delete" },
+  { route: '/api/teams/:id/images', handler: _lazy_Gh5pnx, lazy: true, middleware: false, method: "get" },
+  { route: '/api/teams/:id/images', handler: _lazy_USHlHV, lazy: true, middleware: false, method: "post" },
+  { route: '/api/teams/:id/images/:imageId', handler: _lazy_9yrlM5, lazy: true, middleware: false, method: "delete" },
+  { route: '/api/teams/:id', handler: _lazy_qPpFas, lazy: true, middleware: false, method: "get" },
+  { route: '/api/teams/:id/join', handler: _lazy_FbMXkD, lazy: true, middleware: false, method: "post" },
+  { route: '/api/teams/:id/leave', handler: _lazy_OOipVc, lazy: true, middleware: false, method: "post" },
+  { route: '/api/teams/:id/links', handler: _lazy_HZgu0_, lazy: true, middleware: false, method: "get" },
+  { route: '/api/teams/:id/links', handler: _lazy_VLZTa7, lazy: true, middleware: false, method: "post" },
+  { route: '/api/teams/:id/links/:linkId', handler: _lazy_uIhQfG, lazy: true, middleware: false, method: "delete" },
+  { route: '/api/teams/:id/update', handler: _lazy_9QbP3f, lazy: true, middleware: false, method: "put" },
+  { route: '/api/teams/create', handler: _lazy_siP8VF, lazy: true, middleware: false, method: "post" },
+  { route: '/api/teams', handler: _lazy_NRwVz0, lazy: true, middleware: false, method: "get" },
   { route: '/api/upload', handler: _lazy_tf6qb9, lazy: true, middleware: false, method: "post" },
   { route: '/api/user', handler: _lazy_NGO5j7, lazy: true, middleware: false, method: "get" },
   { route: '/api/user/update-password', handler: _lazy_fwUlnN, lazy: true, middleware: false, method: "post" },
@@ -1950,8 +1950,8 @@ function verifyToken(token) {
       name: decoded.name,
       email: decoded.email,
       role: decoded.role,
-      userRole: decoded.userRole || "developer"
-      // Default to developer for existing users
+      userRole: decoded.userRole || "participant"
+      // Default to participant for existing users
     };
   } catch {
     return null;
@@ -2023,23 +2023,23 @@ class Database {
       if (receivedMessagesError) {
         console.warn("Error deleting received messages:", receivedMessagesError);
       }
-      console.log("Updating groups to remove user...");
-      const { data: allGroups } = await supabaseAdmin.from("groups").select("id, members");
-      if (allGroups) {
-        for (const group of allGroups) {
+      console.log("Updating teams to remove user...");
+      const { data: allTeams } = await supabaseAdmin.from("teams").select("id, members");
+      if (allTeams) {
+        for (const team of allTeams) {
           let needsUpdate = false;
-          let updatedMembers = group.members;
-          if (group.members) {
+          let updatedMembers = team.members;
+          if (team.members) {
             let members;
             try {
-              if (typeof group.members === "string") {
+              if (typeof team.members === "string") {
                 try {
-                  members = JSON.parse(group.members);
+                  members = JSON.parse(team.members);
                 } catch (jsonError) {
                   members = [];
                 }
-              } else if (Array.isArray(group.members)) {
-                members = group.members;
+              } else if (Array.isArray(team.members)) {
+                members = team.members;
               } else {
                 members = [];
               }
@@ -2065,10 +2065,10 @@ class Database {
             }
           }
           if (needsUpdate) {
-            console.log(`Updating group ${group.id} to remove user ${id}`);
-            const { error: updateError } = await supabaseAdmin.from("groups").update({ members: updatedMembers }).eq("id", group.id);
+            console.log(`Updating team ${team.id} to remove user ${id}`);
+            const { error: updateError } = await supabaseAdmin.from("teams").update({ members: updatedMembers }).eq("id", team.id);
             if (updateError) {
-              console.warn(`Error updating group ${group.id}:`, updateError);
+              console.warn(`Error updating team ${team.id}:`, updateError);
             }
           }
         }
@@ -2118,84 +2118,146 @@ class Database {
     if (error) throw error;
     return data;
   }
-  // Groups
-  static async getGroups() {
-    const { data, error } = await supabase.from("groups").select("*");
+  // Teams
+  static async getTeams() {
+    const { data, error } = await supabase.from("teams").select("*");
     if (error) throw error;
     return data || [];
   }
-  static async getGroupById(id) {
-    const { data, error } = await supabase.from("groups").select("*").eq("id", id).single();
+  static async getTeamById(id) {
+    const { data, error } = await supabase.from("teams").select("*").eq("id", id).single();
     if (error) throw error;
     return data;
   }
-  static async createGroup(group) {
-    const { data, error } = await supabase.from("groups").insert([group]).select().single();
+  static async createTeam(team) {
+    const teamWithId = {
+      id: team.id || crypto.randomUUID(),
+      ...team
+    };
+    const { data, error } = await supabase.from("teams").insert([teamWithId]).select().single();
     if (error) throw error;
     return data;
   }
-  static async updateGroup(id, updates) {
-    const { data, error } = await supabase.from("groups").update(updates).eq("id", id).select().single();
+  static async updateTeam(id, updates) {
+    const { data, error } = await supabase.from("teams").update(updates).eq("id", id).select().single();
     if (error) throw error;
     return data;
   }
-  static async deleteGroup(id) {
-    const { data, error } = await supabase.from("groups").delete().eq("id", id);
+  static async deleteTeam(id) {
+    const { data, error } = await supabase.from("teams").delete().eq("id", id);
     if (error) throw error;
     return data;
   }
-  // Group Chats
-  static async getGroupChats() {
-    const { data, error } = await supabase.from("group_chats").select("*");
+  // Team Chats
+  static async getTeamChats() {
+    const { data, error } = await supabase.from("team_chats").select("*");
     if (error) throw error;
     return data || [];
   }
-  static async getGroupChatById(id) {
-    const { data, error } = await supabase.from("group_chats").select("*").eq("id", id).single();
+  static async getTeamChatById(id) {
+    const { data, error } = await supabase.from("team_chats").select("*").eq("id", id).single();
     if (error) throw error;
     return data;
   }
-  static async createGroupChat(groupChat) {
-    const { data, error } = await supabase.from("group_chats").insert([groupChat]).select().single();
+  static async createTeamChat(teamChat) {
+    const teamChatWithId = {
+      id: teamChat.id || crypto.randomUUID(),
+      ...teamChat
+    };
+    const { data, error } = await supabase.from("team_chats").insert([teamChatWithId]).select().single();
     if (error) throw error;
     return data;
   }
-  static async updateGroupChat(id, updates) {
-    const { data, error } = await supabase.from("group_chats").update(updates).eq("id", id).select().single();
+  static async updateTeamChat(id, updates) {
+    const { data, error } = await supabase.from("team_chats").update(updates).eq("id", id).select().single();
     if (error) throw error;
     return data;
   }
-  // Group Links
-  static async getGroupLinks(groupId) {
-    const { data, error } = await supabase.from("group_links").select("*").eq("group_id", groupId).order("created_at", { ascending: false });
+  // Team Links
+  static async getTeamLinks(teamId) {
+    const { data, error } = await supabase.from("team_links").select("*").eq("team_id", teamId).order("created_at", { ascending: false });
     if (error) throw error;
     return data || [];
   }
-  static async createGroupLink(link) {
-    const { data, error } = await supabase.from("group_links").insert([link]).select().single();
+  static async createTeamLink(link) {
+    const linkWithId = {
+      id: link.id || crypto.randomUUID(),
+      ...link
+    };
+    const { data, error } = await supabase.from("team_links").insert([linkWithId]).select().single();
     if (error) throw error;
     return data;
   }
-  static async deleteGroupLink(id) {
-    const { data, error } = await supabase.from("group_links").delete().eq("id", id);
+  static async deleteTeamLink(id) {
+    const { data, error } = await supabase.from("team_links").delete().eq("id", id);
     if (error) throw error;
     return data;
   }
-  // Group Images
-  static async getGroupImages(groupId) {
-    const { data, error } = await supabase.from("group_images").select("*").eq("group_id", groupId).order("created_at", { ascending: false });
+  // Team Images
+  static async getTeamImages(teamId) {
+    const { data, error } = await supabase.from("team_images").select("*").eq("team_id", teamId).order("created_at", { ascending: false });
     if (error) throw error;
     return data || [];
   }
-  static async createGroupImage(image) {
-    const { data, error } = await supabase.from("group_images").insert([image]).select().single();
+  static async createTeamImage(image) {
+    const imageWithId = {
+      id: image.id || crypto.randomUUID(),
+      ...image
+    };
+    const { data, error } = await supabase.from("team_images").insert([imageWithId]).select().single();
     if (error) throw error;
     return data;
   }
-  static async deleteGroupImage(id) {
-    const { data, error } = await supabase.from("group_images").delete().eq("id", id);
+  static async deleteTeamImage(id) {
+    const { data, error } = await supabase.from("team_images").delete().eq("id", id);
     if (error) throw error;
     return data;
+  }
+  // Legacy compatibility methods for teams API
+  static async getteams() {
+    return this.getTeams();
+  }
+  static async getteamById(id) {
+    return this.getTeamById(id);
+  }
+  static async createteam(team) {
+    return this.createTeam(team);
+  }
+  static async updateteam(id, updates) {
+    return this.updateTeam(id, updates);
+  }
+  static async deleteteam(id) {
+    return this.deleteTeam(id);
+  }
+  static async getteamChats() {
+    return this.getTeamChats();
+  }
+  static async getteamChatById(id) {
+    return this.getTeamChatById(id);
+  }
+  static async createteamChat(teamChat) {
+    return this.createTeamChat(teamChat);
+  }
+  static async updateteamChat(id, updates) {
+    return this.updateTeamChat(id, updates);
+  }
+  static async getteamLinks(teamId) {
+    return this.getTeamLinks(teamId);
+  }
+  static async createteamLink(link) {
+    return this.createTeamLink(link);
+  }
+  static async deleteteamLink(id) {
+    return this.deleteTeamLink(id);
+  }
+  static async getteamImages(teamId) {
+    return this.getTeamImages(teamId);
+  }
+  static async createteamImage(image) {
+    return this.createTeamImage(image);
+  }
+  static async deleteteamImage(id) {
+    return this.deleteTeamImage(id);
   }
 }
 
@@ -2226,20 +2288,20 @@ const addUserToGroup_post = defineEventHandler(async (event) => {
       statusMessage: "Admin access required"
     });
   }
-  const { userId, groupId, role } = await readBody(event);
-  if (!userId || !groupId) {
+  const { userId, teamId, role } = await readBody(event);
+  if (!userId || !teamId) {
     throw createError({
       statusCode: 400,
-      statusMessage: "User ID and Group ID are required"
+      statusMessage: "User ID and team ID are required"
     });
   }
-  console.log("Admin adding user to group:", { userId, groupId, role, adminId: currentUser.id });
+  console.log("Admin adding user to team:", { userId, teamId, role, adminId: currentUser.id });
   try {
-    const group = await Database.getGroupById(groupId);
-    if (!group) {
+    const team = await Database.getteamById(teamId);
+    if (!team) {
       throw createError({
         statusCode: 404,
-        statusMessage: "Group not found"
+        statusMessage: "team not found"
       });
     }
     const userToAdd = await Database.getUserById(userId);
@@ -2251,16 +2313,16 @@ const addUserToGroup_post = defineEventHandler(async (event) => {
     }
     let members = [];
     try {
-      if (group.members) {
-        if (typeof group.members === "string") {
+      if (team.members) {
+        if (typeof team.members === "string") {
           try {
-            members = JSON.parse(group.members);
+            members = JSON.parse(team.members);
           } catch (jsonError) {
             console.log("Failed to parse as JSON, attempting manual parsing...");
             members = [];
           }
-        } else if (Array.isArray(group.members)) {
-          members = group.members;
+        } else if (Array.isArray(team.members)) {
+          members = team.members;
         }
       }
     } catch (e) {
@@ -2307,7 +2369,7 @@ const addUserToGroup_post = defineEventHandler(async (event) => {
     if (existingMember) {
       throw createError({
         statusCode: 409,
-        statusMessage: "User is already a member of this group"
+        statusMessage: "User is already a member of this team"
       });
     }
     const memberRole = role || (userToAdd.userRole === "mentor" ? "mentor" : "member");
@@ -2326,30 +2388,30 @@ const addUserToGroup_post = defineEventHandler(async (event) => {
       // Track who added this user
     };
     members.push(newMember);
-    const updatedGroup = await Database.updateGroup(groupId, {
+    const updatedteam = await Database.updateteam(teamId, {
       members
       // Pass as an array, not JSON string
     });
-    console.log("Successfully added user to group:", {
-      groupId,
+    console.log("Successfully added user to team:", {
+      teamId,
       userId,
       role: memberRole,
       totalMembers: members.length
     });
     return {
       success: true,
-      message: `${userToAdd.name} has been added to ${group.name} as ${memberRole}`,
-      group: updatedGroup,
+      message: `${userToAdd.name} has been added to ${team.name} as ${memberRole}`,
+      team: updatedteam,
       newMember
     };
   } catch (error) {
     if (error.statusCode) {
       throw error;
     }
-    console.error("Error adding user to group:", error);
+    console.error("Error adding user to team:", error);
     throw createError({
       statusCode: 500,
-      statusMessage: "Failed to add user to group"
+      statusMessage: "Failed to add user to team"
     });
   }
 });
@@ -2403,7 +2465,9 @@ const bulkCreateUsers_post = defineEventHandler(async (event) => {
         affiliation,
         expertise,
         gender,
-        skills
+        skills,
+        image,
+        video
       } = userData;
       if (!name || !email) {
         skipped.push({ email: email || "unknown", reason: "Missing name or email" });
@@ -2429,11 +2493,12 @@ const bulkCreateUsers_post = defineEventHandler(async (event) => {
         bio: (bio == null ? void 0 : bio.trim()) || "",
         password: hashedPassword,
         role: "user",
-        userRole: (userRole == null ? void 0 : userRole.trim()) || "developer",
+        userRole: (userRole == null ? void 0 : userRole.trim()) || "participant",
         affiliation: (affiliation == null ? void 0 : affiliation.trim()) || "",
         expertise: (expertise == null ? void 0 : expertise.trim()) || "",
         gender: (gender == null ? void 0 : gender.trim()) || "",
-        image: "/uploads/default/default_user_icon.png",
+        image: (image == null ? void 0 : image.trim()) || "/uploads/default/default_user_icon.png",
+        video: (video == null ? void 0 : video.trim()) || "",
         skills: processedSkills,
         createdAt: (/* @__PURE__ */ new Date()).toISOString()
       };
@@ -2634,8 +2699,8 @@ const login_post = defineEventHandler(async (event) => {
         email: user.email,
         name: user.name,
         role: user.role,
-        userRole: user.userRole || "developer"
-        // Default to developer if not set
+        userRole: user.userRole || "participant"
+        // Default to participant if not set
       },
       JWT_SECRET$1,
       { expiresIn: "24h" }
@@ -2900,7 +2965,7 @@ const register_post = defineEventHandler(async (event) => {
       bio: bio || "",
       skills: skills || [],
       role: "user",
-      userRole: userRole || "developer",
+      userRole: userRole || "participant",
       affiliation: affiliation || "",
       expertise: expertise || "",
       gender: gender || "",
@@ -2918,8 +2983,8 @@ const register_post = defineEventHandler(async (event) => {
         email: createdUser.email,
         name: createdUser.name,
         role: createdUser.role,
-        userRole: createdUser.userRole || "developer"
-        // Default to developer if not set
+        userRole: createdUser.userRole || "participant"
+        // Default to participant if not set
       },
       JWT_SECRET,
       { expiresIn: "24h" }
@@ -3006,8 +3071,8 @@ const conversations_get = defineEventHandler(async (event) => {
     return {
       success: true,
       directConversations,
-      groupConversations: []
-      // Empty array since we removed group chat
+      teamConversations: []
+      // Empty array since we removed team chat
     };
   } catch (error) {
     if (error.statusCode) {
@@ -3185,833 +3250,6 @@ const testUpload_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineP
   default: testUpload_post
 }, Symbol.toStringTag, { value: 'Module' }));
 
-const delete_delete = defineEventHandler(async (event) => {
-  if (getMethod(event) !== "DELETE") {
-    throw createError({
-      statusCode: 405,
-      statusMessage: "Method not allowed"
-    });
-  }
-  const groupId = getRouterParam(event, "id");
-  if (!groupId) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: "Group ID is required"
-    });
-  }
-  const currentUser = getUserFromRequest(event);
-  if (!currentUser) {
-    throw createError({
-      statusCode: 401,
-      statusMessage: "Authentication required"
-    });
-  }
-  try {
-    const group = await Database.getGroupById(groupId);
-    if (!group) {
-      throw createError({
-        statusCode: 404,
-        statusMessage: "Group not found"
-      });
-    }
-    if (group.creatorId !== currentUser.id && currentUser.role !== "admin") {
-      throw createError({
-        statusCode: 403,
-        statusMessage: "Only the group creator or admin can delete this group"
-      });
-    }
-    await Database.deleteGroup(groupId);
-    return {
-      message: "Group deleted successfully"
-    };
-  } catch (error) {
-    console.error("Error deleting group:", error);
-    if (error.statusCode) {
-      throw error;
-    }
-    throw createError({
-      statusCode: 500,
-      statusMessage: "Failed to delete group"
-    });
-  }
-});
-
-const delete_delete$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
-  __proto__: null,
-  default: delete_delete
-}, Symbol.toStringTag, { value: 'Module' }));
-
-const images_get = defineEventHandler(async (event) => {
-  const groupId = getRouterParam(event, "id");
-  if (!groupId) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: "Group ID is required"
-    });
-  }
-  try {
-    const images = await Database.getGroupImages(groupId);
-    return images || [];
-  } catch (error) {
-    console.error("Error fetching group images:", error);
-    throw createError({
-      statusCode: 500,
-      statusMessage: "Failed to fetch group images"
-    });
-  }
-});
-
-const images_get$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
-  __proto__: null,
-  default: images_get
-}, Symbol.toStringTag, { value: 'Module' }));
-
-const images_post = defineEventHandler(async (event) => {
-  if (getMethod(event) !== "POST") {
-    throw createError({
-      statusCode: 405,
-      statusMessage: "Method not allowed"
-    });
-  }
-  const groupId = getRouterParam(event, "id");
-  if (!groupId) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: "Group ID is required"
-    });
-  }
-  const currentUser = getUserFromRequest(event);
-  if (!currentUser) {
-    throw createError({
-      statusCode: 401,
-      statusMessage: "Authentication required"
-    });
-  }
-  try {
-    const group = await Database.getGroupById(groupId);
-    if (!group) {
-      throw createError({
-        statusCode: 404,
-        statusMessage: "Group not found"
-      });
-    }
-    const parsedMembers = group.members ? group.members.map((member) => {
-      try {
-        return typeof member === "string" ? JSON.parse(member) : member;
-      } catch (e) {
-        return member;
-      }
-    }) : [];
-    const isMember = parsedMembers.some((member) => member.userId === currentUser.id);
-    if (!isMember) {
-      throw createError({
-        statusCode: 403,
-        statusMessage: "You must be a group member to upload images"
-      });
-    }
-    const formData = await readMultipartFormData(event);
-    if (!formData || formData.length === 0) {
-      throw createError({
-        statusCode: 400,
-        statusMessage: "No image file provided"
-      });
-    }
-    const imageFile = formData.find((field) => field.name === "image");
-    if (!imageFile) {
-      throw createError({
-        statusCode: 400,
-        statusMessage: "Image field is required"
-      });
-    }
-    const uploadResult = await uploadImageBuffer(
-      imageFile.data,
-      imageFile.filename || "group-image.jpg",
-      imageFile.type || "image/jpeg"
-    );
-    if (!uploadResult || !uploadResult.success || !uploadResult.url) {
-      throw createError({
-        statusCode: 500,
-        statusMessage: (uploadResult == null ? void 0 : uploadResult.error) || "Failed to upload image"
-      });
-    }
-    const newImage = {
-      group_id: groupId,
-      created_by: currentUser.id,
-      image_url: uploadResult.url,
-      filename: uploadResult.filename
-    };
-    const createdImage = await Database.createGroupImage(newImage);
-    return createdImage;
-  } catch (error) {
-    if (error.statusCode) {
-      throw error;
-    }
-    console.error("Error uploading group image:", error);
-    throw createError({
-      statusCode: 500,
-      statusMessage: "Failed to upload image"
-    });
-  }
-});
-
-const images_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
-  __proto__: null,
-  default: images_post
-}, Symbol.toStringTag, { value: 'Module' }));
-
-const _imageId__delete = defineEventHandler(async (event) => {
-  if (getMethod(event) !== "DELETE") {
-    throw createError({
-      statusCode: 405,
-      statusMessage: "Method not allowed"
-    });
-  }
-  const groupId = getRouterParam(event, "id");
-  const imageId = getRouterParam(event, "imageId");
-  if (!groupId || !imageId) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: "Group ID and Image ID are required"
-    });
-  }
-  const currentUser = getUserFromRequest(event);
-  if (!currentUser) {
-    throw createError({
-      statusCode: 401,
-      statusMessage: "Authentication required"
-    });
-  }
-  try {
-    const group = await Database.getGroupById(groupId);
-    if (!group) {
-      throw createError({
-        statusCode: 404,
-        statusMessage: "Group not found"
-      });
-    }
-    const parsedMembers = group.members ? group.members.map((member) => {
-      try {
-        return typeof member === "string" ? JSON.parse(member) : member;
-      } catch (e) {
-        return member;
-      }
-    }) : [];
-    const isMember = parsedMembers.some((member) => member.userId === currentUser.id);
-    if (!isMember) {
-      throw createError({
-        statusCode: 403,
-        statusMessage: "You must be a group member to delete images"
-      });
-    }
-    const images = await Database.getGroupImages(groupId);
-    const imageToDelete = images.find((image) => image.id === imageId);
-    if (!imageToDelete) {
-      throw createError({
-        statusCode: 404,
-        statusMessage: "Image not found"
-      });
-    }
-    if (imageToDelete.user_id !== currentUser.id && currentUser.role !== "admin") {
-      throw createError({
-        statusCode: 403,
-        statusMessage: "You can only delete your own images"
-      });
-    }
-    await Database.deleteGroupImage(imageId);
-    return { message: "Image deleted successfully" };
-  } catch (error) {
-    if (error.statusCode) {
-      throw error;
-    }
-    console.error("Error deleting group image:", error);
-    throw createError({
-      statusCode: 500,
-      statusMessage: "Failed to delete image"
-    });
-  }
-});
-
-const _imageId__delete$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
-  __proto__: null,
-  default: _imageId__delete
-}, Symbol.toStringTag, { value: 'Module' }));
-
-const index_get$2 = defineEventHandler(async (event) => {
-  const groupId = getRouterParam(event, "id");
-  if (!groupId) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: "Group ID is required"
-    });
-  }
-  try {
-    const currentUser = getUserFromRequest(event);
-    const group = await Database.getGroupById(groupId);
-    if (!group) {
-      throw createError({
-        statusCode: 404,
-        statusMessage: "Group not found"
-      });
-    }
-    const parsedMembers = group.members ? group.members.map((member) => {
-      try {
-        return typeof member === "string" ? JSON.parse(member) : member;
-      } catch (e) {
-        console.error("Error parsing member:", member, e);
-        return member;
-      }
-    }) : [];
-    const regularMembers = parsedMembers.filter((member) => member.role !== "mentor");
-    const mentors = parsedMembers.filter((member) => member.role === "mentor");
-    const isMember = currentUser ? parsedMembers.some((member) => member.userId === currentUser.id) : false;
-    if (!group.isPublic && !isMember) {
-      throw createError({
-        statusCode: 403,
-        statusMessage: "Access denied to private group"
-      });
-    }
-    return {
-      id: group.id,
-      name: group.name,
-      description: group.description,
-      coverImage: group.coverImage || "/uploads/groupCoverSamples/cover1.svg",
-      createdBy: group.creatorId,
-      createdAt: group.createdAt,
-      isPrivate: !group.isPublic,
-      // Convert isPublic to isPrivate
-      members: regularMembers,
-      mentors,
-      isMember,
-      userRole: isMember ? "member" : null
-    };
-  } catch (error) {
-    if (error.statusCode) {
-      throw error;
-    }
-    console.error("Error fetching group:", error);
-    throw createError({
-      statusCode: 500,
-      statusMessage: "Internal server error"
-    });
-  }
-});
-
-const index_get$3 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
-  __proto__: null,
-  default: index_get$2
-}, Symbol.toStringTag, { value: 'Module' }));
-
-const join_post = defineEventHandler(async (event) => {
-  if (getMethod(event) !== "POST") {
-    throw createError({
-      statusCode: 405,
-      statusMessage: "Method not allowed"
-    });
-  }
-  const groupId = getRouterParam(event, "id");
-  if (!groupId) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: "Group ID is required"
-    });
-  }
-  const currentUser = getUserFromRequest(event);
-  if (!currentUser) {
-    throw createError({
-      statusCode: 401,
-      statusMessage: "Authentication required"
-    });
-  }
-  console.log("Current user for group join:", currentUser);
-  try {
-    const group = await Database.getGroupById(groupId);
-    const joinAsRole = currentUser.userRole === "mentor" ? "mentor" : "member";
-    let members = [];
-    try {
-      if (group.members) {
-        if (typeof group.members === "string") {
-          try {
-            members = JSON.parse(group.members);
-          } catch (jsonError) {
-            members = [];
-          }
-        } else if (Array.isArray(group.members)) {
-          members = group.members;
-        } else {
-          members = [];
-        }
-      }
-    } catch (e) {
-      members = [];
-    }
-    members = members.map((member) => {
-      if (typeof member === "string") {
-        try {
-          return JSON.parse(member);
-        } catch {
-          return null;
-        }
-      }
-      return member;
-    }).filter(Boolean);
-    const isAlreadyMember = members.some((member) => member.userId === currentUser.id);
-    if (isAlreadyMember) {
-      throw createError({
-        statusCode: 409,
-        statusMessage: "User is already part of this group"
-      });
-    }
-    let userName = currentUser.name;
-    if (!userName) {
-      console.warn("Name missing from JWT token, fetching from database...");
-      const fullUser = await Database.getUserById(currentUser.id);
-      userName = (fullUser == null ? void 0 : fullUser.name) || "Unknown User";
-    }
-    const newMember = {
-      userId: currentUser.id,
-      userName,
-      role: joinAsRole,
-      joinedAt: (/* @__PURE__ */ new Date()).toISOString()
-    };
-    console.log("Adding new member:", newMember);
-    if (!currentUser.name) {
-      console.warn("Warning: currentUser.name is missing. CurrentUser:", currentUser);
-    }
-    members.push(newMember);
-    console.log("Updated members array:", members);
-    console.log("Sending to database:", { members });
-    const updatedGroup = await Database.updateGroup(groupId, {
-      members
-      // Send as array, let Supabase handle JSONB conversion
-    });
-    console.log("Database update result:", updatedGroup);
-    return {
-      message: "Successfully joined the group",
-      group: updatedGroup
-    };
-  } catch (error) {
-    console.error("Error joining group:", error);
-    throw createError({
-      statusCode: 500,
-      statusMessage: "Failed to join group"
-    });
-  }
-});
-
-const join_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
-  __proto__: null,
-  default: join_post
-}, Symbol.toStringTag, { value: 'Module' }));
-
-const leave_post = defineEventHandler(async (event) => {
-  if (getMethod(event) !== "POST") {
-    throw createError({
-      statusCode: 405,
-      statusMessage: "Method not allowed"
-    });
-  }
-  const groupId = getRouterParam(event, "id");
-  if (!groupId) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: "Group ID is required"
-    });
-  }
-  const currentUser = getUserFromRequest(event);
-  if (!currentUser) {
-    throw createError({
-      statusCode: 401,
-      statusMessage: "Authentication required"
-    });
-  }
-  try {
-    const group = await Database.getGroupById(groupId);
-    let members = [];
-    try {
-      if (group.members) {
-        if (typeof group.members === "string") {
-          try {
-            members = JSON.parse(group.members);
-          } catch (jsonError) {
-            members = [];
-          }
-        } else if (Array.isArray(group.members)) {
-          members = group.members;
-        } else {
-          members = [];
-        }
-      }
-    } catch (e) {
-      members = [];
-    }
-    members = members.map((member) => {
-      if (typeof member === "string") {
-        try {
-          return JSON.parse(member);
-        } catch {
-          return null;
-        }
-      }
-      return member;
-    }).filter(Boolean);
-    const memberIndex = members.findIndex((member) => member.userId === currentUser.id);
-    if (memberIndex === -1) {
-      throw createError({
-        statusCode: 409,
-        statusMessage: "User is not part of this group"
-      });
-    }
-    members.splice(memberIndex, 1);
-    if (members.length === 0) {
-      await Database.deleteGroup(groupId);
-      return {
-        message: "Left group and group was deleted (no members left)"
-      };
-    } else {
-      await Database.updateGroup(groupId, {
-        members
-        // Send as array, let Supabase handle JSONB conversion
-      });
-      return {
-        message: "Successfully left the group"
-      };
-    }
-  } catch (error) {
-    console.error("Error leaving group:", error);
-    throw createError({
-      statusCode: 500,
-      statusMessage: "Failed to leave group"
-    });
-  }
-});
-
-const leave_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
-  __proto__: null,
-  default: leave_post
-}, Symbol.toStringTag, { value: 'Module' }));
-
-const links_get = defineEventHandler(async (event) => {
-  const groupId = getRouterParam(event, "id");
-  if (!groupId) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: "Group ID is required"
-    });
-  }
-  try {
-    const links = await Database.getGroupLinks(groupId);
-    return links || [];
-  } catch (error) {
-    console.error("Error fetching group links:", error);
-    throw createError({
-      statusCode: 500,
-      statusMessage: "Failed to fetch group links"
-    });
-  }
-});
-
-const links_get$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
-  __proto__: null,
-  default: links_get
-}, Symbol.toStringTag, { value: 'Module' }));
-
-const links_post = defineEventHandler(async (event) => {
-  if (getMethod(event) !== "POST") {
-    throw createError({
-      statusCode: 405,
-      statusMessage: "Method not allowed"
-    });
-  }
-  const groupId = getRouterParam(event, "id");
-  if (!groupId) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: "Group ID is required"
-    });
-  }
-  const currentUser = getUserFromRequest(event);
-  if (!currentUser) {
-    throw createError({
-      statusCode: 401,
-      statusMessage: "Authentication required"
-    });
-  }
-  const body = await readBody(event);
-  const { content } = body;
-  if (!content || !content.trim()) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: "Content is required"
-    });
-  }
-  try {
-    const group = await Database.getGroupById(groupId);
-    if (!group) {
-      throw createError({
-        statusCode: 404,
-        statusMessage: "Group not found"
-      });
-    }
-    const parsedMembers = group.members ? group.members.map((member) => {
-      try {
-        return typeof member === "string" ? JSON.parse(member) : member;
-      } catch (e) {
-        return member;
-      }
-    }) : [];
-    const isMember = parsedMembers.some((member) => member.userId === currentUser.id);
-    if (!isMember) {
-      throw createError({
-        statusCode: 403,
-        statusMessage: "You must be a group member to share links"
-      });
-    }
-    const newLink = {
-      group_id: groupId,
-      created_by: currentUser.id,
-      content: content.trim()
-    };
-    const createdLink = await Database.createGroupLink(newLink);
-    return createdLink;
-  } catch (error) {
-    if (error.statusCode) {
-      throw error;
-    }
-    console.error("Error creating group link:", error);
-    throw createError({
-      statusCode: 500,
-      statusMessage: "Failed to create shared link"
-    });
-  }
-});
-
-const links_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
-  __proto__: null,
-  default: links_post
-}, Symbol.toStringTag, { value: 'Module' }));
-
-const _linkId__delete = defineEventHandler(async (event) => {
-  if (getMethod(event) !== "DELETE") {
-    throw createError({
-      statusCode: 405,
-      statusMessage: "Method not allowed"
-    });
-  }
-  const groupId = getRouterParam(event, "id");
-  const linkId = getRouterParam(event, "linkId");
-  if (!groupId || !linkId) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: "Group ID and Link ID are required"
-    });
-  }
-  const currentUser = getUserFromRequest(event);
-  if (!currentUser) {
-    throw createError({
-      statusCode: 401,
-      statusMessage: "Authentication required"
-    });
-  }
-  try {
-    const group = await Database.getGroupById(groupId);
-    if (!group) {
-      throw createError({
-        statusCode: 404,
-        statusMessage: "Group not found"
-      });
-    }
-    const parsedMembers = group.members ? group.members.map((member) => {
-      try {
-        return typeof member === "string" ? JSON.parse(member) : member;
-      } catch (e) {
-        return member;
-      }
-    }) : [];
-    const isMember = parsedMembers.some((member) => member.userId === currentUser.id);
-    if (!isMember) {
-      throw createError({
-        statusCode: 403,
-        statusMessage: "You must be a group member to delete links"
-      });
-    }
-    const links = await Database.getGroupLinks(groupId);
-    const linkToDelete = links.find((link) => link.id === linkId);
-    if (!linkToDelete) {
-      throw createError({
-        statusCode: 404,
-        statusMessage: "Link not found"
-      });
-    }
-    if (linkToDelete.user_id !== currentUser.id && currentUser.role !== "admin") {
-      throw createError({
-        statusCode: 403,
-        statusMessage: "You can only delete your own links"
-      });
-    }
-    await Database.deleteGroupLink(linkId);
-    return { message: "Link deleted successfully" };
-  } catch (error) {
-    if (error.statusCode) {
-      throw error;
-    }
-    console.error("Error deleting group link:", error);
-    throw createError({
-      statusCode: 500,
-      statusMessage: "Failed to delete shared link"
-    });
-  }
-});
-
-const _linkId__delete$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
-  __proto__: null,
-  default: _linkId__delete
-}, Symbol.toStringTag, { value: 'Module' }));
-
-const update_put = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
-  __proto__: null
-}, Symbol.toStringTag, { value: 'Module' }));
-
-const create_post = defineEventHandler(async (event) => {
-  if (getMethod(event) !== "POST") {
-    throw createError({
-      statusCode: 405,
-      statusMessage: "Method not allowed"
-    });
-  }
-  const currentUser = getUserFromRequest(event);
-  if (!currentUser) {
-    throw createError({
-      statusCode: 401,
-      statusMessage: "Authentication required"
-    });
-  }
-  const { name, description, coverImage, isPublic = true } = await readBody(event);
-  if (!name || !description) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: "Name and description are required"
-    });
-  }
-  try {
-    const existingGroups = await Database.getGroups();
-    const existingGroup = existingGroups.find((g) => g.name.toLowerCase() === name.toLowerCase());
-    if (existingGroup) {
-      throw createError({
-        statusCode: 409,
-        statusMessage: "Group name already exists"
-      });
-    }
-    const newGroup = await Database.createGroup({
-      name: name.trim(),
-      description: description.trim(),
-      coverImage: coverImage || "/uploads/groupCoverSamples/cover1.svg",
-      creatorId: currentUser.id,
-      isPublic,
-      members: [
-        {
-          userId: currentUser.id,
-          userName: currentUser.name,
-          joinedAt: (/* @__PURE__ */ new Date()).toISOString()
-        }
-      ]
-    });
-    return {
-      message: "Group created successfully",
-      group: newGroup
-    };
-  } catch (error) {
-    console.error("Error creating group:", error);
-    if (error.statusCode) {
-      throw error;
-    }
-    throw createError({
-      statusCode: 500,
-      statusMessage: "Failed to create group"
-    });
-  }
-});
-
-const create_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
-  __proto__: null,
-  default: create_post
-}, Symbol.toStringTag, { value: 'Module' }));
-
-const index_get = defineEventHandler(async (event) => {
-  try {
-    const groups = await Database.getGroups();
-    if (!groups) {
-      return [];
-    }
-    const query = getQuery$1(event);
-    const userId = query.userId;
-    let filteredGroups = groups;
-    const processedGroups = filteredGroups.map((group) => {
-      let members = [];
-      try {
-        if (group.members) {
-          if (typeof group.members === "string") {
-            members = JSON.parse(group.members);
-          } else if (Array.isArray(group.members)) {
-            members = group.members;
-          }
-        }
-      } catch (e) {
-        members = [];
-      }
-      members = members.map((member) => {
-        if (typeof member === "string") {
-          try {
-            return JSON.parse(member);
-          } catch {
-            return null;
-          }
-        }
-        return member;
-      }).filter(Boolean);
-      return {
-        ...group,
-        parsedMembers: members
-      };
-    });
-    if (!userId) {
-      filteredGroups = processedGroups.filter((group) => !group.isPrivate);
-    } else {
-      filteredGroups = processedGroups.filter(
-        (group) => !group.isPrivate || group.parsedMembers && group.parsedMembers.some((member) => member.userId === userId)
-      );
-    }
-    return filteredGroups.map((group) => {
-      var _a;
-      const isMember = userId ? group.parsedMembers && group.parsedMembers.some((member) => member.userId === userId) : false;
-      let userRole = null;
-      if (isMember && group.parsedMembers) {
-        const userMember = group.parsedMembers.find((member) => member.userId === userId);
-        userRole = (userMember == null ? void 0 : userMember.role) || "member";
-      }
-      return {
-        id: group.id,
-        name: group.name,
-        description: group.description,
-        coverImage: group.coverImage || "/uploads/groupCoverSamples/cover1.svg",
-        createdBy: group.createdBy,
-        createdAt: group.createdAt,
-        memberCount: ((_a = group.parsedMembers) == null ? void 0 : _a.length) || 0,
-        isPrivate: group.isPrivate,
-        isMember,
-        userRole
-      };
-    });
-  } catch (error) {
-    console.error("Error fetching groups:", error);
-    return [];
-  }
-});
-
-const index_get$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
-  __proto__: null,
-  default: index_get
-}, Symbol.toStringTag, { value: 'Module' }));
-
 const proxyImage_get = defineEventHandler(async (event) => {
   var _a;
   const query = getQuery$1(event);
@@ -4145,6 +3383,915 @@ const skills = defineEventHandler(async () => {
 const skills$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: skills
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const delete_delete = defineEventHandler(async (event) => {
+  if (getMethod(event) !== "DELETE") {
+    throw createError({
+      statusCode: 405,
+      statusMessage: "Method not allowed"
+    });
+  }
+  const teamId = getRouterParam(event, "id");
+  if (!teamId) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "team ID is required"
+    });
+  }
+  const currentUser = getUserFromRequest(event);
+  if (!currentUser) {
+    throw createError({
+      statusCode: 401,
+      statusMessage: "Authentication required"
+    });
+  }
+  try {
+    const team = await Database.getteamById(teamId);
+    if (!team) {
+      throw createError({
+        statusCode: 404,
+        statusMessage: "team not found"
+      });
+    }
+    if (team.creatorId !== currentUser.id && currentUser.role !== "admin") {
+      throw createError({
+        statusCode: 403,
+        statusMessage: "Only the team creator or admin can delete this team"
+      });
+    }
+    await Database.deleteteam(teamId);
+    return {
+      message: "team deleted successfully"
+    };
+  } catch (error) {
+    console.error("Error deleting team:", error);
+    if (error.statusCode) {
+      throw error;
+    }
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Failed to delete team"
+    });
+  }
+});
+
+const delete_delete$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: delete_delete
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const images_get = defineEventHandler(async (event) => {
+  const teamId = getRouterParam(event, "id");
+  if (!teamId) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "team ID is required"
+    });
+  }
+  try {
+    const images = await Database.getTeamImages(teamId);
+    return images || [];
+  } catch (error) {
+    console.error("Error fetching team images:", error);
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Failed to fetch team images"
+    });
+  }
+});
+
+const images_get$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: images_get
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const images_post = defineEventHandler(async (event) => {
+  if (getMethod(event) !== "POST") {
+    throw createError({
+      statusCode: 405,
+      statusMessage: "Method not allowed"
+    });
+  }
+  const teamId = getRouterParam(event, "id");
+  if (!teamId) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "team ID is required"
+    });
+  }
+  const currentUser = getUserFromRequest(event);
+  if (!currentUser) {
+    throw createError({
+      statusCode: 401,
+      statusMessage: "Authentication required"
+    });
+  }
+  try {
+    const team = await Database.getteamById(teamId);
+    if (!team) {
+      throw createError({
+        statusCode: 404,
+        statusMessage: "team not found"
+      });
+    }
+    const parsedMembers = team.members ? team.members.map((member) => {
+      try {
+        return typeof member === "string" ? JSON.parse(member) : member;
+      } catch (e) {
+        return member;
+      }
+    }) : [];
+    const isMember = parsedMembers.some((member) => member.userId === currentUser.id);
+    if (!isMember) {
+      throw createError({
+        statusCode: 403,
+        statusMessage: "You must be a team member to upload images"
+      });
+    }
+    const formData = await readMultipartFormData(event);
+    if (!formData || formData.length === 0) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: "No image file provided"
+      });
+    }
+    const imageFile = formData.find((field) => field.name === "image");
+    if (!imageFile) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: "Image field is required"
+      });
+    }
+    const uploadResult = await uploadImageBuffer(
+      imageFile.data,
+      imageFile.filename || "team-image.jpg",
+      imageFile.type || "image/jpeg"
+    );
+    if (!uploadResult || !uploadResult.success || !uploadResult.url) {
+      throw createError({
+        statusCode: 500,
+        statusMessage: (uploadResult == null ? void 0 : uploadResult.error) || "Failed to upload image"
+      });
+    }
+    const newImage = {
+      team_id: teamId,
+      created_by: currentUser.id,
+      image_url: uploadResult.url,
+      filename: uploadResult.filename
+    };
+    const createdImage = await Database.createteamImage(newImage);
+    return createdImage;
+  } catch (error) {
+    if (error.statusCode) {
+      throw error;
+    }
+    console.error("Error uploading team image:", error);
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Failed to upload image"
+    });
+  }
+});
+
+const images_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: images_post
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const _imageId__delete = defineEventHandler(async (event) => {
+  if (getMethod(event) !== "DELETE") {
+    throw createError({
+      statusCode: 405,
+      statusMessage: "Method not allowed"
+    });
+  }
+  const teamId = getRouterParam(event, "id");
+  const imageId = getRouterParam(event, "imageId");
+  if (!teamId || !imageId) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "team ID and Image ID are required"
+    });
+  }
+  const currentUser = getUserFromRequest(event);
+  if (!currentUser) {
+    throw createError({
+      statusCode: 401,
+      statusMessage: "Authentication required"
+    });
+  }
+  try {
+    const team = await Database.getteamById(teamId);
+    if (!team) {
+      throw createError({
+        statusCode: 404,
+        statusMessage: "team not found"
+      });
+    }
+    const parsedMembers = team.members ? team.members.map((member) => {
+      try {
+        return typeof member === "string" ? JSON.parse(member) : member;
+      } catch (e) {
+        return member;
+      }
+    }) : [];
+    const isMember = parsedMembers.some((member) => member.userId === currentUser.id);
+    if (!isMember) {
+      throw createError({
+        statusCode: 403,
+        statusMessage: "You must be a team member to delete images"
+      });
+    }
+    const images = await Database.getTeamImages(teamId);
+    const imageToDelete = images.find((image) => image.id === imageId);
+    if (!imageToDelete) {
+      throw createError({
+        statusCode: 404,
+        statusMessage: "Image not found"
+      });
+    }
+    if (imageToDelete.user_id !== currentUser.id && currentUser.role !== "admin") {
+      throw createError({
+        statusCode: 403,
+        statusMessage: "You can only delete your own images"
+      });
+    }
+    await Database.deleteteamImage(imageId);
+    return { message: "Image deleted successfully" };
+  } catch (error) {
+    if (error.statusCode) {
+      throw error;
+    }
+    console.error("Error deleting team image:", error);
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Failed to delete image"
+    });
+  }
+});
+
+const _imageId__delete$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: _imageId__delete
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const index_get$2 = defineEventHandler(async (event) => {
+  const teamId = getRouterParam(event, "id");
+  if (!teamId) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "team ID is required"
+    });
+  }
+  try {
+    const currentUser = getUserFromRequest(event);
+    const team = await Database.getteamById(teamId);
+    if (!team) {
+      throw createError({
+        statusCode: 404,
+        statusMessage: "team not found"
+      });
+    }
+    const parsedMembers = team.members ? team.members.map((member) => {
+      try {
+        return typeof member === "string" ? JSON.parse(member) : member;
+      } catch (e) {
+        console.error("Error parsing member:", member, e);
+        return member;
+      }
+    }) : [];
+    const regularMembers = parsedMembers.filter((member) => member.role !== "mentor");
+    const mentors = parsedMembers.filter((member) => member.role === "mentor");
+    const isMember = currentUser ? parsedMembers.some((member) => member.userId === currentUser.id) : false;
+    if (!team.isPublic && !isMember) {
+      throw createError({
+        statusCode: 403,
+        statusMessage: "Access denied to private team"
+      });
+    }
+    return {
+      id: team.id,
+      name: team.name,
+      description: team.description,
+      coverImage: team.coverImage || "/uploads/teamCoverSamples/cover1.svg",
+      createdBy: team.creatorId,
+      createdAt: team.createdAt,
+      isPrivate: !team.isPublic,
+      // Convert isPublic to isPrivate
+      members: regularMembers,
+      mentors,
+      isMember,
+      userRole: isMember ? "member" : null
+    };
+  } catch (error) {
+    if (error.statusCode) {
+      throw error;
+    }
+    console.error("Error fetching team:", error);
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Internal server error"
+    });
+  }
+});
+
+const index_get$3 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: index_get$2
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const join_post = defineEventHandler(async (event) => {
+  if (getMethod(event) !== "POST") {
+    throw createError({
+      statusCode: 405,
+      statusMessage: "Method not allowed"
+    });
+  }
+  const teamId = getRouterParam(event, "id");
+  if (!teamId) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "team ID is required"
+    });
+  }
+  const currentUser = getUserFromRequest(event);
+  if (!currentUser) {
+    throw createError({
+      statusCode: 401,
+      statusMessage: "Authentication required"
+    });
+  }
+  console.log("Current user for team join:", currentUser);
+  try {
+    const team = await Database.getteamById(teamId);
+    const joinAsRole = currentUser.userRole === "mentor" ? "mentor" : "member";
+    let members = [];
+    try {
+      if (team.members) {
+        if (typeof team.members === "string") {
+          try {
+            members = JSON.parse(team.members);
+          } catch (jsonError) {
+            members = [];
+          }
+        } else if (Array.isArray(team.members)) {
+          members = team.members;
+        } else {
+          members = [];
+        }
+      }
+    } catch (e) {
+      members = [];
+    }
+    members = members.map((member) => {
+      if (typeof member === "string") {
+        try {
+          return JSON.parse(member);
+        } catch {
+          return null;
+        }
+      }
+      return member;
+    }).filter(Boolean);
+    const isAlreadyMember = members.some((member) => member.userId === currentUser.id);
+    if (isAlreadyMember) {
+      throw createError({
+        statusCode: 409,
+        statusMessage: "User is already part of this team"
+      });
+    }
+    let userName = currentUser.name;
+    if (!userName) {
+      console.warn("Name missing from JWT token, fetching from database...");
+      const fullUser = await Database.getUserById(currentUser.id);
+      userName = (fullUser == null ? void 0 : fullUser.name) || "Unknown User";
+    }
+    const newMember = {
+      userId: currentUser.id,
+      userName,
+      role: joinAsRole,
+      joinedAt: (/* @__PURE__ */ new Date()).toISOString()
+    };
+    console.log("Adding new member:", newMember);
+    if (!currentUser.name) {
+      console.warn("Warning: currentUser.name is missing. CurrentUser:", currentUser);
+    }
+    members.push(newMember);
+    console.log("Updated members array:", members);
+    console.log("Sending to database:", { members });
+    const updatedteam = await Database.updateteam(teamId, {
+      members
+      // Send as array, let Supabase handle JSONB conversion
+    });
+    console.log("Database update result:", updatedteam);
+    return {
+      message: "Successfully joined the team",
+      team: updatedteam
+    };
+  } catch (error) {
+    console.error("Error joining team:", error);
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Failed to join team"
+    });
+  }
+});
+
+const join_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: join_post
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const leave_post = defineEventHandler(async (event) => {
+  if (getMethod(event) !== "POST") {
+    throw createError({
+      statusCode: 405,
+      statusMessage: "Method not allowed"
+    });
+  }
+  const teamId = getRouterParam(event, "id");
+  if (!teamId) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "team ID is required"
+    });
+  }
+  const currentUser = getUserFromRequest(event);
+  if (!currentUser) {
+    throw createError({
+      statusCode: 401,
+      statusMessage: "Authentication required"
+    });
+  }
+  try {
+    const team = await Database.getteamById(teamId);
+    let members = [];
+    try {
+      if (team.members) {
+        if (typeof team.members === "string") {
+          try {
+            members = JSON.parse(team.members);
+          } catch (jsonError) {
+            members = [];
+          }
+        } else if (Array.isArray(team.members)) {
+          members = team.members;
+        } else {
+          members = [];
+        }
+      }
+    } catch (e) {
+      members = [];
+    }
+    members = members.map((member) => {
+      if (typeof member === "string") {
+        try {
+          return JSON.parse(member);
+        } catch {
+          return null;
+        }
+      }
+      return member;
+    }).filter(Boolean);
+    const memberIndex = members.findIndex((member) => member.userId === currentUser.id);
+    if (memberIndex === -1) {
+      throw createError({
+        statusCode: 409,
+        statusMessage: "User is not part of this team"
+      });
+    }
+    members.splice(memberIndex, 1);
+    if (members.length === 0) {
+      await Database.deleteteam(teamId);
+      return {
+        message: "Left team and team was deleted (no members left)"
+      };
+    } else {
+      await Database.updateteam(teamId, {
+        members
+        // Send as array, let Supabase handle JSONB conversion
+      });
+      return {
+        message: "Successfully left the team"
+      };
+    }
+  } catch (error) {
+    console.error("Error leaving team:", error);
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Failed to leave team"
+    });
+  }
+});
+
+const leave_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: leave_post
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const links_get = defineEventHandler(async (event) => {
+  const teamId = getRouterParam(event, "id");
+  if (!teamId) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "team ID is required"
+    });
+  }
+  try {
+    const links = await Database.getTeamLinks(teamId);
+    return links || [];
+  } catch (error) {
+    console.error("Error fetching team links:", error);
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Failed to fetch team links"
+    });
+  }
+});
+
+const links_get$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: links_get
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const links_post = defineEventHandler(async (event) => {
+  if (getMethod(event) !== "POST") {
+    throw createError({
+      statusCode: 405,
+      statusMessage: "Method not allowed"
+    });
+  }
+  const teamId = getRouterParam(event, "id");
+  if (!teamId) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "team ID is required"
+    });
+  }
+  const currentUser = getUserFromRequest(event);
+  if (!currentUser) {
+    throw createError({
+      statusCode: 401,
+      statusMessage: "Authentication required"
+    });
+  }
+  const body = await readBody(event);
+  const { content } = body;
+  if (!content || !content.trim()) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Content is required"
+    });
+  }
+  try {
+    const team = await Database.getteamById(teamId);
+    if (!team) {
+      throw createError({
+        statusCode: 404,
+        statusMessage: "team not found"
+      });
+    }
+    const parsedMembers = team.members ? team.members.map((member) => {
+      try {
+        return typeof member === "string" ? JSON.parse(member) : member;
+      } catch (e) {
+        return member;
+      }
+    }) : [];
+    const isMember = parsedMembers.some((member) => member.userId === currentUser.id);
+    if (!isMember) {
+      throw createError({
+        statusCode: 403,
+        statusMessage: "You must be a team member to share links"
+      });
+    }
+    const newLink = {
+      team_id: teamId,
+      created_by: currentUser.id,
+      content: content.trim()
+    };
+    const createdLink = await Database.createteamLink(newLink);
+    return createdLink;
+  } catch (error) {
+    if (error.statusCode) {
+      throw error;
+    }
+    console.error("Error creating team link:", error);
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Failed to create shared link"
+    });
+  }
+});
+
+const links_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: links_post
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const _linkId__delete = defineEventHandler(async (event) => {
+  if (getMethod(event) !== "DELETE") {
+    throw createError({
+      statusCode: 405,
+      statusMessage: "Method not allowed"
+    });
+  }
+  const teamId = getRouterParam(event, "id");
+  const linkId = getRouterParam(event, "linkId");
+  if (!teamId || !linkId) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "team ID and Link ID are required"
+    });
+  }
+  const currentUser = getUserFromRequest(event);
+  if (!currentUser) {
+    throw createError({
+      statusCode: 401,
+      statusMessage: "Authentication required"
+    });
+  }
+  try {
+    const team = await Database.getteamById(teamId);
+    if (!team) {
+      throw createError({
+        statusCode: 404,
+        statusMessage: "team not found"
+      });
+    }
+    const parsedMembers = team.members ? team.members.map((member) => {
+      try {
+        return typeof member === "string" ? JSON.parse(member) : member;
+      } catch (e) {
+        return member;
+      }
+    }) : [];
+    const isMember = parsedMembers.some((member) => member.userId === currentUser.id);
+    if (!isMember) {
+      throw createError({
+        statusCode: 403,
+        statusMessage: "You must be a team member to delete links"
+      });
+    }
+    const links = await Database.getTeamLinks(teamId);
+    const linkToDelete = links.find((link) => link.id === linkId);
+    if (!linkToDelete) {
+      throw createError({
+        statusCode: 404,
+        statusMessage: "Link not found"
+      });
+    }
+    if (linkToDelete.user_id !== currentUser.id && currentUser.role !== "admin") {
+      throw createError({
+        statusCode: 403,
+        statusMessage: "You can only delete your own links"
+      });
+    }
+    await Database.deleteteamLink(linkId);
+    return { message: "Link deleted successfully" };
+  } catch (error) {
+    if (error.statusCode) {
+      throw error;
+    }
+    console.error("Error deleting team link:", error);
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Failed to delete shared link"
+    });
+  }
+});
+
+const _linkId__delete$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: _linkId__delete
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const update_put = defineEventHandler(async (event) => {
+  if (getMethod(event) !== "PUT") {
+    throw createError({
+      statusCode: 405,
+      statusMessage: "Method not allowed"
+    });
+  }
+  const teamId = getRouterParam(event, "id");
+  if (!teamId) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Team ID is required"
+    });
+  }
+  const currentUser = getUserFromRequest(event);
+  if (!currentUser) {
+    throw createError({
+      statusCode: 401,
+      statusMessage: "Authentication required"
+    });
+  }
+  try {
+    const body = await readBody(event);
+    if (!body.name || typeof body.name !== "string" || body.name.trim().length === 0) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: "Team name is required"
+      });
+    }
+    if (!body.description || typeof body.description !== "string" || body.description.trim().length === 0) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: "Team description is required"
+      });
+    }
+    const team = await Database.getTeamById(teamId);
+    if (!team) {
+      throw createError({
+        statusCode: 404,
+        statusMessage: "Team not found"
+      });
+    }
+    if (team.createdBy !== currentUser.id && currentUser.role !== "admin") {
+      throw createError({
+        statusCode: 403,
+        statusMessage: "You do not have permission to update this team"
+      });
+    }
+    const updatedTeam = await Database.updateTeam(teamId, {
+      name: body.name.trim(),
+      description: body.description.trim(),
+      coverImage: body.coverImage || team.coverImage,
+      isPublic: body.isPrivate !== void 0 ? !body.isPrivate : team.isPublic,
+      // Convert isPrivate to isPublic
+      updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+    });
+    return {
+      success: true,
+      team: {
+        ...updatedTeam,
+        isPrivate: !updatedTeam.isPublic
+        // Convert isPublic back to isPrivate for frontend
+      }
+    };
+  } catch (error) {
+    console.error("Update team error:", error);
+    if (error.statusCode) {
+      throw error;
+    }
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Internal server error"
+    });
+  }
+});
+
+const update_put$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: update_put
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const create_post = defineEventHandler(async (event) => {
+  if (getMethod(event) !== "POST") {
+    throw createError({
+      statusCode: 405,
+      statusMessage: "Method not allowed"
+    });
+  }
+  const currentUser = getUserFromRequest(event);
+  if (!currentUser) {
+    throw createError({
+      statusCode: 401,
+      statusMessage: "Authentication required"
+    });
+  }
+  const { name, description, coverImage, isPrivate = false } = await readBody(event);
+  const isPublic = !isPrivate;
+  if (!name || !description) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Name and description are required"
+    });
+  }
+  try {
+    const existingteams = await Database.getteams();
+    const existingteam = existingteams.find((g) => g.name.toLowerCase() === name.toLowerCase());
+    if (existingteam) {
+      throw createError({
+        statusCode: 409,
+        statusMessage: "team name already exists"
+      });
+    }
+    const newteam = await Database.createteam({
+      name: name.trim(),
+      description: description.trim(),
+      coverImage: coverImage || "/uploads/teamCoverSamples/cover1.svg",
+      creatorId: currentUser.id,
+      isPublic,
+      members: [
+        {
+          userId: currentUser.id,
+          userName: currentUser.name,
+          joinedAt: (/* @__PURE__ */ new Date()).toISOString()
+        }
+      ]
+    });
+    return {
+      message: "team created successfully",
+      team: {
+        ...newteam,
+        isPrivate: !newteam.isPublic
+        // Convert isPublic to isPrivate for frontend
+      }
+    };
+  } catch (error) {
+    console.error("Error creating team:", error);
+    if (error.statusCode) {
+      throw error;
+    }
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Failed to create team"
+    });
+  }
+});
+
+const create_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: create_post
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const index_get = defineEventHandler(async (event) => {
+  try {
+    const teams = await Database.getteams();
+    if (!teams) {
+      return [];
+    }
+    const query = getQuery$1(event);
+    const userId = query.userId;
+    let filteredteams = teams;
+    const processedteams = filteredteams.map((team) => {
+      let members = [];
+      try {
+        if (team.members) {
+          if (typeof team.members === "string") {
+            members = JSON.parse(team.members);
+          } else if (Array.isArray(team.members)) {
+            members = team.members;
+          }
+        }
+      } catch (e) {
+        members = [];
+      }
+      members = members.map((member) => {
+        if (typeof member === "string") {
+          try {
+            return JSON.parse(member);
+          } catch {
+            return null;
+          }
+        }
+        return member;
+      }).filter(Boolean);
+      return {
+        ...team,
+        parsedMembers: members
+      };
+    });
+    if (!userId) {
+      filteredteams = processedteams.filter((team) => !team.isPrivate);
+    } else {
+      filteredteams = processedteams.filter(
+        (team) => !team.isPrivate || team.parsedMembers && team.parsedMembers.some((member) => member.userId === userId)
+      );
+    }
+    return filteredteams.map((team) => {
+      var _a;
+      const isMember = userId ? team.parsedMembers && team.parsedMembers.some((member) => member.userId === userId) : false;
+      let userRole = null;
+      if (isMember && team.parsedMembers) {
+        const userMember = team.parsedMembers.find((member) => member.userId === userId);
+        userRole = (userMember == null ? void 0 : userMember.role) || "member";
+      }
+      return {
+        id: team.id,
+        name: team.name,
+        description: team.description,
+        coverImage: team.coverImage || "/uploads/teamCoverSamples/cover1.svg",
+        createdBy: team.createdBy,
+        createdAt: team.createdAt,
+        memberCount: ((_a = team.parsedMembers) == null ? void 0 : _a.length) || 0,
+        isPrivate: team.isPrivate,
+        isMember,
+        userRole
+      };
+    });
+  } catch (error) {
+    console.error("Error fetching teams:", error);
+    return [];
+  }
+});
+
+const index_get$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: index_get
 }, Symbol.toStringTag, { value: 'Module' }));
 
 const upload_post = defineEventHandler(async (event) => {
@@ -4383,7 +4530,7 @@ const update_post = defineEventHandler(async (event) => {
       name,
       bio: bio || "",
       image: imageUrl,
-      userRole: userRole || "developer",
+      userRole: userRole || "participant",
       affiliation: affiliation || "",
       expertise: expertise || "",
       gender: gender || "",

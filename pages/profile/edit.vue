@@ -145,11 +145,11 @@
                   v-model="form.userRole" 
                   class="px-4 py-3 border border-gray-200 rounded-lg text-base transition-all duration-200 bg-white text-gray-700 focus:outline-none focus:border-primary focus:shadow-lg focus:shadow-primary/10"
                 >
-                  <option value="developer">Developer</option>
+                  <option value="participant">Participant</option>
                   <option value="mentor">Mentor</option>
                 </select>
                 <p class="text-xs text-gray-500">
-                  Choose your primary role in the community. Mentors can guide other developers and have special privileges in groups.
+                  Choose your primary role in the community. Mentors can guide Participant and have special privileges in teams.
                 </p>
               </div>
 
@@ -341,7 +341,7 @@ const form = reactive({
   name: '',
   bio: '',
   image: '',
-  userRole: 'developer',
+  userRole: 'participant',
   affiliation: '',
   expertise: '',
   gender: '',
@@ -447,7 +447,7 @@ const initializeForm = () => {
     form.name = user.value.name || ''
     form.bio = user.value.bio || ''
     form.image = user.value.image || ''
-    form.userRole = user.value.userRole || 'developer'
+    form.userRole = user.value.userRole || 'participant'
     form.affiliation = user.value.affiliation || ''
     form.expertise = user.value.expertise || ''
     form.gender = user.value.gender || ''

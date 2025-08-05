@@ -9,12 +9,12 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const groupId = getRouterParam(event, 'id')
+  const teamId = getRouterParam(event, 'id')
   
-  if (!groupId) {
+  if (!teamId) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'Group ID is required'
+      statusMessage: 'team ID is required'
     })
   }
 
@@ -28,11 +28,11 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  console.log('Current user for group join:', currentUser)
+  console.log('Current user for team join:', currentUser)
 
   try {
-    // Get the group from Supabase
-    const group = await Database.getGroupById(groupId)
+    // Get the team from Supabase
+    const team = await Database.getteamById(teamId)
 
     // Use the user's userRole to determine how they join
     const joinAsRole = currentUser.userRole === 'mentor' ? 'mentor' : 'member'
@@ -41,18 +41,18 @@ export default defineEventHandler(async (event) => {
     let members: any[] = []
     
     try {
-      if (group.members) {
-        if (typeof group.members === 'string') {
+      if (team.members) {
+        if (typeof team.members === 'string') {
           // Try to parse as JSON first
           try {
-            members = JSON.parse(group.members)
+            members = JSON.parse(team.members)
           } catch (jsonError) {
             // If JSON parse fails, it might be a PostgreSQL array string
             // Initialize as empty array and let the update handle it
             members = []
           }
-        } else if (Array.isArray(group.members)) {
-          members = group.members
+        } else if (Array.isArray(team.members)) {
+          members = team.members
         } else {
           members = []
         }
@@ -80,7 +80,7 @@ export default defineEventHandler(async (event) => {
     if (isAlreadyMember) {
       throw createError({
         statusCode: 409,
-        statusMessage: 'User is already part of this group'
+        statusMessage: 'User is already part of this team'
       })
     }
 
@@ -112,25 +112,25 @@ export default defineEventHandler(async (event) => {
 
     console.log('Updated members array:', members)
 
-    // Update the group in Supabase (store as JSONB, not as string)
+    // Update the team in Supabase (store as JSONB, not as string)
     console.log('Sending to database:', { members })
     
-    const updatedGroup = await Database.updateGroup(groupId, {
+    const updatedteam = await Database.updateteam(teamId, {
       members: members  // Send as array, let Supabase handle JSONB conversion
     })
 
-    console.log('Database update result:', updatedGroup)
+    console.log('Database update result:', updatedteam)
 
     return {
-      message: 'Successfully joined the group',
-      group: updatedGroup
+      message: 'Successfully joined the team',
+      team: updatedteam
     }
     
   } catch (error) {
-    console.error('Error joining group:', error)
+    console.error('Error joining team:', error)
     throw createError({
       statusCode: 500,
-      statusMessage: 'Failed to join group'
+      statusMessage: 'Failed to join team'
     })
   }
 })

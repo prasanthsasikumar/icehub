@@ -4,8 +4,8 @@
 
 ### ❌ Old Data Storage
 - `server/data/` (entire directory)
-  - `users.json`, `groups.json`, `messages.json`
-  - `groupChats.json`, `skills.txt`, `users.backup.json`
+  - `users.json`, `teams.json`, `messages.json`
+  - `teamChats.json`, `skills.txt`, `users.backup.json`
 
 ### ❌ Migration Scripts  
 - `migrate-to-supabase.mjs`
@@ -26,16 +26,16 @@
 
 ### ✅ API Endpoints (File System → Supabase)
 - `server/api/admin/toggle-role.post.ts` - Now uses Database.updateUser()
-- `server/api/groups/create.post.ts` - Now uses Database.createGroup()
-- `server/api/groups/[id]/update.put.ts` - Now uses Database.updateGroup()
-- `server/api/groups/[id]/delete.delete.ts` - Now uses Database.deleteGroup()
+- `server/api/teams/create.post.ts` - Now uses Database.createteam()
+- `server/api/teams/[id]/update.put.ts` - Now uses Database.updateteam()
+- `server/api/teams/[id]/delete.delete.ts` - Now uses Database.deleteteam()
 - `server/api/chat/messages.get.ts` - Now uses Database.getMessages()
 - `server/api/chat/send.post.ts` - Now uses Database.createMessage()
 - `server/api/skills.ts` - Now returns hardcoded skills list
 
 ### ✅ Utilities Simplified
 - `server/utils/chat.ts` - Removed file system functions, kept interfaces
-- `server/utils/groups.ts` - Updated interfaces, removed chatId concept
+- `server/utils/teams.ts` - Updated interfaces, removed chatId concept
 
 ### ✅ Documentation Updated
 - `SUPABASE_MIGRATION_GUIDE.md` - Now reflects completed migration status

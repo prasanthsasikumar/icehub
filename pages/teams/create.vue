@@ -8,8 +8,8 @@
         </div>
         <div class="nav-right flex items-center gap-4">
           <span v-if="user" class="text-sm text-gray-600">{{ user.name }}</span>
-          <NuxtLink to="/groups" class="nav-button nav-button-secondary">
-            Back to Groups
+          <NuxtLink to="/teams" class="nav-button nav-button-secondary">
+            Back to Teams
           </NuxtLink>
         </div>
       </div>
@@ -25,43 +25,43 @@
       <div class="text-center">
         <div class="text-blue-500 text-6xl mb-4">🔒</div>
         <h1 class="text-2xl font-bold text-gray-700 mb-4">Authentication Required</h1>
-        <p class="text-gray-500 mb-6">Please sign in to create a group.</p>
+        <p class="text-gray-500 mb-6">Please sign in to create a team.</p>
         <NuxtLink to="/login" class="nav-button">
           Sign In
         </NuxtLink>
       </div>
     </div>
 
-    <!-- Create Group Form -->
+    <!-- Create Team Form -->
     <main v-else class="py-12">
       <div class="max-w-2xl mx-auto px-5">
         <div class="text-center mb-10">
-          <h1 class="text-3xl font-bold text-gray-700 mb-3">Create a New Group</h1>
+          <h1 class="text-3xl font-bold text-gray-700 mb-3">Create a New Team</h1>
           <p class="text-base text-gray-500">Start a community around your project or interests</p>
         </div>
         
         <div class="bg-white border border-gray-200 rounded-xl p-10 shadow-sm">
-          <form @submit.prevent="createGroup" class="flex flex-col gap-6">
+          <form @submit.prevent="createTeam" class="flex flex-col gap-6">
             
             <!-- Cover Image Upload -->
             <div class="flex flex-col gap-2">
               <label class="font-semibold text-gray-700 text-sm mb-1">Cover Image (Optional)</label>
               <ImageUpload 
                 v-model="form.coverImage"
-                alt-text="Group cover image"
+                alt-text="Team cover image"
                 :aspect-ratio="'16:9'"
               />
               <p class="text-xs text-gray-500">Upload a cover image or we'll assign a beautiful default one</p>
             </div>
 
-            <!-- Group Name Input -->
+            <!-- Team Name Input -->
             <div class="flex flex-col gap-2">
-              <label for="name" class="font-semibold text-gray-700 text-sm mb-1">Group Name</label>
+              <label for="name" class="font-semibold text-gray-700 text-sm mb-1">Team Name</label>
               <input 
                 id="name"
                 v-model="form.name" 
                 type="text"
-                placeholder="Enter group name" 
+                placeholder="Enter team name" 
                 required 
                 class="px-4 py-3 border border-gray-200 rounded-lg text-base transition-all duration-200 bg-white text-gray-700 focus:outline-none focus:border-primary focus:shadow-lg focus:shadow-primary/10"
               />
@@ -93,8 +93,8 @@
                     class="w-4 h-4 text-primary border-gray-300 focus:ring-primary focus:ring-2"
                   />
                   <div class="ml-3">
-                    <div class="font-medium text-gray-700">Public Group</div>
-                    <div class="text-sm text-gray-500">Anyone can discover and join this group</div>
+                    <div class="font-medium text-gray-700">Public Team</div>
+                    <div class="text-sm text-gray-500">Anyone can discover and join this team</div>
                   </div>
                 </label>
                 <label class="flex items-center cursor-pointer">
@@ -106,7 +106,7 @@
                     class="w-4 h-4 text-primary border-gray-300 focus:ring-primary focus:ring-2"
                   />
                   <div class="ml-3">
-                    <div class="font-medium text-gray-700">Private Group</div>
+                    <div class="font-medium text-gray-700">Private Team</div>
                     <div class="text-sm text-gray-500">Only invited members can join</div>
                   </div>
                 </label>
@@ -128,8 +128,8 @@
               :disabled="submitting"
               class="bg-primary text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 hover:bg-primary-dark focus:outline-none focus:shadow-lg focus:shadow-primary/25 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <span v-if="submitting">Creating Group...</span>
-              <span v-else>Create Group</span>
+              <span v-if="submitting">Creating Team...</span>
+              <span v-else>Create Team</span>
             </button>
           </form>
         </div>
@@ -161,8 +161,8 @@ onMounted(async () => {
   loading.value = false
 })
 
-// Create group
-const createGroup = async () => {
+// Create team
+const createTeam = async () => {
   if (submitting.value || !user.value) return
 
   submitting.value = true
@@ -170,7 +170,7 @@ const createGroup = async () => {
   success.value = ''
 
   try {
-    const response = await $fetch('/api/groups/create', {
+    const response = await $fetch('/api/teams/create', {
       method: 'POST',
       body: {
         name: form.name,
@@ -180,15 +180,15 @@ const createGroup = async () => {
       }
     })
 
-    success.value = 'Group created successfully!'
+    success.value = 'Team created successfully!'
     
-    // Redirect to the new group after a moment
+    // Redirect to the new team after a moment
     setTimeout(() => {
-      navigateTo(`/groups/${response.group.id}`)
+      navigateTo(`/teams/${response.team.id}`)
     }, 1500)
 
   } catch (err) {
-    error.value = err.data?.message || 'Failed to create group'
+    error.value = err.data?.message || 'Failed to create team'
   } finally {
     submitting.value = false
   }
@@ -196,11 +196,11 @@ const createGroup = async () => {
 
 // Page meta
 useHead({
-  title: 'Create Group - ICE2025',
+  title: 'Create Team - ICE2025',
   meta: [
     {
       name: 'description',
-      content: 'Create a new developer group to collaborate on projects and connect with peers.'
+      content: 'Create a new participant team to collaborate on projects and connect with peers.'
     }
   ]
 })

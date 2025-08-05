@@ -20,9 +20,9 @@
       <div class="max-w-container mx-auto container-padding">
         <!-- Header -->
         <div class="text-center mb-8 sm:mb-12">
-              <h1 class="text-3xl font-bold mb-8 text-white">ICE2025 Developers</h1>
+              <h1 class="text-3xl font-bold mb-8 text-white">ICE2025 Participants</h1>
           <p class="text-base sm:text-lg text-gray-500 max-w-2xl mx-auto leading-relaxed">
-            Discover talented developers in our community. Connect, collaborate, and build amazing things together.
+            Discover talented participants in our community. Connect, collaborate, and build amazing things together.
           </p>
         </div>
 
@@ -59,13 +59,13 @@
         <!-- Results Count -->
         <div class="mb-4 sm:mb-6">
           <p class="text-sm sm:text-base text-gray-600">
-            Showing {{ filteredUsers.length }} of {{ users?.length || 0 }} developers
+            Showing {{ filteredUsers.length }} of {{ users?.length || 0 }} participants
           </p>
         </div>
 
-        <!-- Developers Grid -->
-        <div v-if="filteredUsers.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-          <div v-for="user in filteredUsers" :key="user.id || user.name" class="developer-card">
+        <!-- Participants Grid -->
+        <div v-if="filteredUsers.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+          <div v-for="user in filteredUsers" :key="user.id || user.name" class="participant-card">
             <div class="card-padding">
               <div class="flex items-center mb-4 sm:mb-5">
                 <div class="w-12 h-12 sm:w-16 sm:h-16 rounded-full overflow-hidden mr-3 sm:mr-4 flex-shrink-0">
@@ -136,7 +136,7 @@
               <path d="m21 21-4.35-4.35"/>
             </svg>
           </div>
-          <h2 class="text-2xl font-semibold text-gray-700 mb-3">No developers found</h2>
+          <h2 class="text-2xl font-semibold text-gray-700 mb-3">No participants found</h2>
           <p class="text-gray-500 mb-6">Try adjusting your search or filter criteria.</p>
           <button @click="clearFilters" class="nav-button">
             Clear Filters
@@ -149,7 +149,7 @@
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
             </svg>
-            Showing all developers
+            Showing all participants
           </button>
         </div>
       </div>
@@ -246,18 +246,18 @@ const clearFilters = () => {
 
 // Page meta
 useHead({
-  title: 'All Developers - ICE2025',
+  title: 'All Participants - ICE2025',
   meta: [
     {
       name: 'description',
-      content: 'Browse all developers in the ICE2025 community. Find talented professionals with the skills you need.'
+      content: 'Browse all participants in the ICE2025 community. Find talented professionals with the skills you need.'
     }
   ]
 })
 </script>
 
 <style scoped>
-.developer-card {
+.participant-card {
   background: white;
   border: 1px solid #e5e7eb;
   border-radius: 0.75rem;
@@ -265,7 +265,7 @@ useHead({
   transition: all 0.2s;
 }
 
-.developer-card:hover {
+.participant-card:hover {
   border-color: #0d7ae4;
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(13, 122, 228, 0.1);

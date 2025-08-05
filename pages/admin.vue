@@ -59,7 +59,7 @@
               <p class="text-xs text-gray-500 mt-1">
                 CSV format: name,email,bio,password,userRole,affiliation,expertise,gender,skills (header row required). 
                 Skills should be comma-separated within quotes. Default password will be "workshop123" if not provided.
-                UserRole can be "developer" or "mentor". Gender options: male, female, non-binary, other.
+                UserRole can be "participant" or "mentor". Gender options: male, female, non-binary, other.
               </p>
             </div>
             <div v-if="csvProcessing" class="text-sm text-blue-600">
@@ -267,17 +267,17 @@
           </div>
         </div>
 
-        <!-- Group Management Section -->
+        <!-- team Management Section -->
         <div class="bg-white rounded-lg border border-gray-200 overflow-hidden mt-8">
           <div class="p-6 border-b border-gray-200">
-            <h2 class="text-xl font-semibold text-gray-700 mb-4">Group Management</h2>
-            <p class="text-sm text-gray-500 mb-6">Add users to groups directly without requiring them to join manually.</p>
+            <h2 class="text-xl font-semibold text-gray-700 mb-4">team Management</h2>
+            <p class="text-sm text-gray-500 mb-6">Add users to teams directly without requiring them to join manually.</p>
             
-            <!-- Add User to Group Form -->
+            <!-- Add User to team Form -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Select User</label>
-                <select v-model="selectedUserForGroup" class="form-select w-full px-3 py-2 border border-gray-300 rounded-md text-sm">
+                <select v-model="selectedUserForteam" class="form-select w-full px-3 py-2 border border-gray-300 rounded-md text-sm">
                   <option value="">Choose a user...</option>
                   <option v-for="user in users" :key="user.id" :value="user.id">
                     {{ user.name }} ({{ user.email }})
@@ -286,17 +286,17 @@
               </div>
               
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Select Group</label>
-                <select v-model="selectedGroupForUser" class="form-select w-full px-3 py-2 border border-gray-300 rounded-md text-sm">
-                  <option value="">Choose a group...</option>
-                  <option v-for="group in groups" :key="group.id" :value="group.id">
-                    {{ group.name }}
+                <label class="block text-sm font-medium text-gray-700 mb-2">Select team</label>
+                <select v-model="selectedteamForUser" class="form-select w-full px-3 py-2 border border-gray-300 rounded-md text-sm">
+                  <option value="">Choose a team...</option>
+                  <option v-for="team in teams" :key="team.id" :value="team.id">
+                    {{ team.name }}
                   </option>
                 </select>
               </div>
               
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Role in Group</label>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Role in team</label>
                 <select v-model="selectedRoleForUser" class="form-select w-full px-3 py-2 border border-gray-300 rounded-md text-sm">
                   <option value="member">Member</option>
                   <option value="mentor">Mentor</option>
@@ -305,22 +305,22 @@
               
               <div class="flex items-end">
                 <button 
-                  @click="addUserToGroup"
-                  :disabled="!selectedUserForGroup || !selectedGroupForUser || addingToGroup"
+                  @click="addUserToteam"
+                  :disabled="!selectedUserForteam || !selectedteamForUser || addingToteam"
                   class="w-full px-4 py-2 bg-primary text-white rounded-md text-sm hover:bg-primary-dark disabled:bg-gray-300 disabled:cursor-not-allowed"
                 >
-                  <span v-if="addingToGroup">Adding...</span>
-                  <span v-else>Add to Group</span>
+                  <span v-if="addingToteam">Adding...</span>
+                  <span v-else>Add to team</span>
                 </button>
               </div>
             </div>
 
             <!-- Status Messages -->
-            <div v-if="groupManagementError" class="mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
-              <p class="text-red-600 text-sm">{{ groupManagementError }}</p>
+            <div v-if="teamManagementError" class="mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
+              <p class="text-red-600 text-sm">{{ teamManagementError }}</p>
             </div>
-            <div v-if="groupManagementSuccess" class="mb-4 p-3 bg-green-50 border border-green-200 rounded-md">
-              <p class="text-green-600 text-sm">{{ groupManagementSuccess }}</p>
+            <div v-if="teamManagementSuccess" class="mb-4 p-3 bg-green-50 border border-green-200 rounded-md">
+              <p class="text-green-600 text-sm">{{ teamManagementSuccess }}</p>
             </div>
           </div>
         </div>
@@ -337,16 +337,16 @@ const loading = ref(true)
 // Fetch users data
 const { data: users, refresh: refreshUsers } = await useFetch('/api/users')
 
-// Fetch groups data
-const { data: groups, refresh: refreshGroups } = await useFetch('/api/groups')
+// Fetch teams data
+const { data: teams, refresh: refreshteams } = await useFetch('/api/teams')
 
-// Group management state
-const selectedUserForGroup = ref('')
-const selectedGroupForUser = ref('')
+// team management state
+const selectedUserForteam = ref('')
+const selectedteamForUser = ref('')
 const selectedRoleForUser = ref('member')
-const addingToGroup = ref(false)
-const groupManagementError = ref('')
-const groupManagementSuccess = ref('')
+const addingToteam = ref(false)
+const teamManagementError = ref('')
+const teamManagementSuccess = ref('')
 
 // Check authentication on mount
 onMounted(async () => {
@@ -516,11 +516,13 @@ const handleCSVUpload = async (event) => {
             email: userObj.email,
             bio: userObj.bio || '',
             password: userObj.password || 'workshop123',
-            userRole: userObj.userRole || 'developer',
+            userRole: userObj.userRole || 'participant',
             affiliation: userObj.affiliation || '',
             expertise: userObj.expertise || '',
             gender: userObj.gender || '',
-            skills: userObj.skills || ''
+            skills: userObj.skills || '',
+            image: userObj.image || '',
+            video: userObj.video || ''
           })
         }
       }
@@ -551,7 +553,7 @@ const handleCSVUpload = async (event) => {
 
 // Methods
 const handleImageError = (event) => {
-  event.target.src = '/uploads/default/user-avatar.svg'
+  event.target.src = '/uploads/default/default_user_icon.png'
 }
 
 const formatDate = (dateString) => {
@@ -642,42 +644,42 @@ const deleteUser = async (user) => {
   }
 }
 
-// Add user to group function
-const addUserToGroup = async () => {
-  if (!selectedUserForGroup.value || !selectedGroupForUser.value) {
+// Add user to team function
+const addUserToteam = async () => {
+  if (!selectedUserForteam.value || !selectedteamForUser.value) {
     return
   }
 
-  addingToGroup.value = true
-  groupManagementError.value = ''
-  groupManagementSuccess.value = ''
+  addingToteam.value = true
+  teamManagementError.value = ''
+  teamManagementSuccess.value = ''
 
   try {
-    const response = await $fetch('/api/admin/add-user-to-group', {
+    const response = await $fetch('/api/admin/add-user-to-team', {
       method: 'POST',
       body: {
-        userId: selectedUserForGroup.value,
-        groupId: selectedGroupForUser.value,
+        userId: selectedUserForteam.value,
+        teamId: selectedteamForUser.value,
         role: selectedRoleForUser.value
       }
     })
 
-    groupManagementSuccess.value = response.message
+    teamManagementSuccess.value = response.message
     
     // Clear form
-    selectedUserForGroup.value = ''
-    selectedGroupForUser.value = ''
+    selectedUserForteam.value = ''
+    selectedteamForUser.value = ''
     selectedRoleForUser.value = 'member'
     
     // Auto-clear success message after 5 seconds
     setTimeout(() => {
-      groupManagementSuccess.value = ''
+      teamManagementSuccess.value = ''
     }, 5000)
 
   } catch (error) {
-    groupManagementError.value = error.data?.message || 'Failed to add user to group'
+    teamManagementError.value = error.data?.message || 'Failed to add user to team'
   } finally {
-    addingToGroup.value = false
+    addingToteam.value = false
   }
 }
 

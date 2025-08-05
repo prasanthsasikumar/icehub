@@ -1,34 +1,34 @@
-export interface GroupMember {
+export interface teamMember {
   userId: string
   userName: string
   role?: string
   joinedAt: string
 }
 
-export interface Group {
+export interface team {
   id: string
   name: string
   description: string
   coverImage: string
   creatorId: string
   isPublic: boolean
-  members: GroupMember[]
+  members: teamMember[]
   createdAt: string
   updatedAt: string
 }
 
-export function getRandomGroupCover(): string {
+export function getRandomteamCover(): string {
   const covers = [
-    '/uploads/groupCoverSamples/cover1.svg',
-    '/uploads/groupCoverSamples/cover2.svg',
-    '/uploads/groupCoverSamples/cover3.svg',
-    '/uploads/groupCoverSamples/cover4.svg',
-    '/uploads/groupCoverSamples/cover5.svg'
+    '/uploads/teamCoverSamples/cover1.svg',
+    '/uploads/teamCoverSamples/cover2.svg',
+    '/uploads/teamCoverSamples/cover3.svg',
+    '/uploads/teamCoverSamples/cover4.svg',
+    '/uploads/teamCoverSamples/cover5.svg'
   ]
   
   return covers[Math.floor(Math.random() * covers.length)]
 }
 
-export function createGroupId(): string {
-  return 'group_' + Math.random().toString(36).substr(2, 9)
+export function createteamId(): string {
+  return 'team_' + Math.random().toString(36).substr(2, 9)
 }

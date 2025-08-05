@@ -2,12 +2,12 @@ import { Database } from '../../../utils/supabase'
 import { getUserFromRequest } from '../../../../server/utils/auth'
 
 export default defineEventHandler(async (event) => {
-  const groupId = getRouterParam(event, 'id')
+  const teamId = getRouterParam(event, 'id')
   
-  if (!groupId) {
+  if (!teamId) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'Group ID is required'
+      statusMessage: 'team ID is required'
     })
   }
 
@@ -15,19 +15,19 @@ export default defineEventHandler(async (event) => {
     // Get current user (optional)
     const currentUser = getUserFromRequest(event)
 
-    // Get group from Supabase
-    const group = await Database.getGroupById(groupId)
+    // Get team from Supabase
+    const team = await Database.getteamById(teamId)
     
-    if (!group) {
+    if (!team) {
       throw createError({
         statusCode: 404,
-        statusMessage: 'Group not found'
+        statusMessage: 'team not found'
       })
     }
 
-    // Check if user can view this group
-    const parsedMembers = group.members ? 
-      group.members.map((member: any) => {
+    // Check if user can view this team
+    const parsedMembers = team.members ? 
+      team.members.map((member: any) => {
         try {
           return typeof member === 'string' ? JSON.parse(member) : member
         } catch (e) {
@@ -43,22 +43,22 @@ export default defineEventHandler(async (event) => {
     const isMember = currentUser ? 
       parsedMembers.some((member: any) => member.userId === currentUser.id) : false
     
-    if (!group.isPublic && !isMember) {
+    if (!team.isPublic && !isMember) {
       throw createError({
         statusCode: 403,
-        statusMessage: 'Access denied to private group'
+        statusMessage: 'Access denied to private team'
       })
     }
 
-    // Return full group details with proper field mapping
+    // Return full team details with proper field mapping
     return {
-      id: group.id,
-      name: group.name,
-      description: group.description,
-      coverImage: group.coverImage || '/uploads/groupCoverSamples/cover1.svg',
-      createdBy: group.creatorId,
-      createdAt: group.createdAt,
-      isPrivate: !group.isPublic, // Convert isPublic to isPrivate
+      id: team.id,
+      name: team.name,
+      description: team.description,
+      coverImage: team.coverImage || '/uploads/teamCoverSamples/cover1.svg',
+      createdBy: team.creatorId,
+      createdAt: team.createdAt,
+      isPrivate: !team.isPublic, // Convert isPublic to isPrivate
       members: regularMembers,
       mentors: mentors,
       isMember: isMember,
@@ -68,7 +68,7 @@ export default defineEventHandler(async (event) => {
     if (error.statusCode) {
       throw error
     }
-    console.error('Error fetching group:', error)
+    console.error('Error fetching team:', error)
     throw createError({
       statusCode: 500,
       statusMessage: 'Internal server error'

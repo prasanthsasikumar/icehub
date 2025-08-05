@@ -12,8 +12,8 @@
             <NuxtLink to="/chat" class="nav-button nav-button-secondary">
               Messages
             </NuxtLink>
-            <NuxtLink to="/groups/create" class="nav-button">
-              Create Group
+            <NuxtLink to="/teams/create" class="nav-button">
+              Create Team
             </NuxtLink>
           </template>
           <template v-else>
@@ -43,8 +43,8 @@
             <NuxtLink @click="mobileMenuOpen = false" to="/chat" class="mobile-nav-item">
               💬 Messages
             </NuxtLink>
-            <NuxtLink @click="mobileMenuOpen = false" to="/groups/create" class="mobile-nav-item">
-              ➕ Create Group
+            <NuxtLink @click="mobileMenuOpen = false" to="/teams/create" class="mobile-nav-item">
+              ➕ Create Team
             </NuxtLink>
           </template>
           <template v-else>
@@ -63,8 +63,8 @@
     <main class="section-padding">
       <div class="max-w-6xl mx-auto container-padding">
         <div class="mb-6 sm:mb-8">
-          <h1 class="text-2xl sm:text-3xl font-bold text-gray-700 mb-2 sm:mb-3">Developer Groups</h1>
-          <p class="text-sm sm:text-base text-gray-600">Join groups to collaborate on projects and connect with like-minded developers</p>
+          <h1 class="text-2xl sm:text-3xl font-bold text-gray-700 mb-2 sm:mb-3">Participant Teams</h1>
+          <p class="text-sm sm:text-base text-gray-600">Join teams to collaborate on projects and connect with like-minded participants</p>
         </div>
 
         <!-- Loading State -->
@@ -79,17 +79,17 @@
           </div>
         </div>
 
-        <!-- Groups Grid -->
+        <!-- Teams Grid -->
         <div v-else-if="data && data.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-          <div v-for="group in data" :key="group.id" class="group-card bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+          <div v-for="team in data" :key="team.id" class="team-card bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow">
             <!-- Cover Image -->
             <div class="h-32 sm:h-48 bg-gradient-to-br from-gray-100 to-gray-200 relative overflow-hidden">
               <img 
-                :src="group.coverImage" 
-                :alt="`${group.name} cover`"
+                :src="team.coverImage" 
+                :alt="`${team.name} cover`"
                 class="w-full h-full object-cover"
               />
-              <div v-if="group.isPrivate" class="absolute top-2 right-2 sm:top-3 sm:right-3">
+              <div v-if="team.isPrivate" class="absolute top-2 right-2 sm:top-3 sm:right-3">
                 <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-800 text-white">
                   <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" class="mr-1 sm:w-3 sm:h-3">
                     <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM12 17c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
@@ -99,10 +99,10 @@
               </div>
             </div>
 
-            <!-- Group Info -->
+            <!-- Team Info -->
             <div class="p-4 sm:p-6">
-              <h3 class="text-base sm:text-lg font-semibold text-gray-700 mb-2">{{ group.name }}</h3>
-              <p class="text-gray-600 text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-2">{{ group.description }}</p>
+              <h3 class="text-base sm:text-lg font-semibold text-gray-700 mb-2">{{ team.name }}</h3>
+              <p class="text-gray-600 text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-2">{{ team.description }}</p>
               
               <!-- Stats -->
               <div class="flex items-center justify-between mb-3 sm:mb-4">
@@ -110,36 +110,36 @@
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" class="mr-1 sm:w-4 sm:h-4">
                     <path d="M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zm4 18v-6h2.5l-2.54-7.63c-.37-.89-1.27-1.37-2.17-1.37h-2.74c-.8 0-1.54.37-2.01.99L12 10.5l-1.04-1.5c-.47-.62-1.21-.99-2.01-.99H6.21c-.9 0-1.8.48-2.17 1.37L1.5 16H4v6h2v-6h.5l1.5-3 1.5 3H12v6h4z"/>
                   </svg>
-                  {{ group.memberCount }} {{ group.memberCount === 1 ? 'member' : 'members' }}
+                  {{ team.memberCount }} {{ team.memberCount === 1 ? 'member' : 'members' }}
                 </div>
                 <div class="text-xs text-gray-400">
-                  {{ formatDate(group.createdAt) }}
+                  {{ formatDate(team.createdAt) }}
                 </div>
               </div>
 
               <!-- Actions -->
               <div class="flex flex-col sm:flex-row gap-2">
                 <NuxtLink 
-                  :to="`/groups/${group.id}`" 
+                  :to="`/teams/${team.id}`" 
                   class="flex-1 bg-primary text-white text-center py-2 px-3 sm:px-4 rounded-lg hover:bg-primary-dark transition-colors text-xs sm:text-sm font-medium"
                 >
-                  View Group
+                  View Team
                 </NuxtLink>
                 <button 
-                  v-if="!group.isMember && isLoggedIn"
-                  @click="joinGroup(group.id)"
-                  :disabled="joiningGroup === group.id"
+                  v-if="!team.isMember && isLoggedIn"
+                  @click="joinTeam(team.id)"
+                  :disabled="joiningTeam === team.id"
                   class="flex-1 bg-gray-100 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-200 transition-colors text-sm font-medium disabled:opacity-50"
                 >
-                  <span v-if="joiningGroup === group.id">Joining...</span>
+                  <span v-if="joiningTeam === team.id">Joining...</span>
                   <span v-else>Join</span>
                 </button>
                 <span 
-                  v-else-if="group.isMember"
+                  v-else-if="team.isMember"
                   class="flex-1 text-center py-2 px-4 rounded-lg text-sm font-medium"
-                  :class="group.userRole === 'mentor' ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'"
+                  :class="team.userRole === 'mentor' ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'"
                 >
-                  {{ group.userRole === 'mentor' ? '🎯 Mentor' : '👥 Member' }}
+                  {{ team.userRole === 'mentor' ? '🎯 Mentor' : '👥 Member' }}
                 </span>
               </div>
             </div>
@@ -156,9 +156,9 @@
               <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
             </svg>
           </div>
-          <h2 class="text-2xl font-semibold text-gray-700 mb-3">No groups yet</h2>
-          <p class="text-base text-gray-500 mb-8">Be the first to create a developer group and start collaborating!</p>
-          <NuxtLink v-if="isLoggedIn" to="/groups/create" class="bg-primary text-white px-6 py-3 rounded-lg no-underline font-semibold inline-block transition-colors hover:bg-primary-dark">Create First Group</NuxtLink>
+          <h2 class="text-2xl font-semibold text-gray-700 mb-3">No teams yet</h2>
+          <p class="text-base text-gray-500 mb-8">Be the first to create a participant team and start collaborating!</p>
+          <NuxtLink v-if="isLoggedIn" to="/teams/create" class="bg-primary text-white px-6 py-3 rounded-lg no-underline font-semibold inline-block transition-colors hover:bg-primary-dark">Create First Team</NuxtLink>
         </div>
       </div>
     </main>
@@ -173,10 +173,10 @@ const { user, isLoggedIn, checkAuth } = useAuth()
 const mobileMenuOpen = ref(false)
 
 // State
-const joiningGroup = ref(null)
+const joiningTeam = ref(null)
 
-// Fetch groups with user context
-const { data, pending, refresh } = await useFetch('/api/groups', {
+// Fetch teams with user context
+const { data, pending, refresh } = await useFetch('/api/teams', {
   query: computed(() => ({ userId: user.value?.id }))
 })
 
@@ -185,27 +185,27 @@ onMounted(async () => {
   await checkAuth()
 })
 
-// Join group function
-const joinGroup = async (groupId) => {
+// Join team function
+const joinTeam = async (teamId) => {
   if (!isLoggedIn.value) {
     navigateTo('/login')
     return
   }
 
-  joiningGroup.value = groupId
+  joiningTeam.value = teamId
   
   try {
-    await $fetch(`/api/groups/${groupId}/join`, {
+    await $fetch(`/api/teams/${teamId}/join`, {
       method: 'POST'
     })
     
-    // Refresh the groups list
+    // Refresh the teams list
     await refresh()
   } catch (error) {
-    console.error('Failed to join group:', error)
+    console.error('Failed to join team:', error)
     // You could add a toast notification here
   } finally {
-    joiningGroup.value = null
+    joiningTeam.value = null
   }
 }
 
@@ -220,18 +220,18 @@ const formatDate = (dateString) => {
 
 // Page meta
 useHead({
-  title: 'Groups - ICE2025',
+  title: 'Teams - ICE2025',
   meta: [
     {
       name: 'description',
-      content: 'Discover and join developer groups to collaborate on projects and connect with peers.'
+      content: 'Discover and join participant teams to collaborate on projects and connect with peers.'
     }
   ]
 })
 </script>
 
 <style scoped>
-.group-card:hover {
+.team-card:hover {
   transform: translateY(-2px);
 }
 

@@ -9,12 +9,12 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const groupId = getRouterParam(event, 'id')
+  const teamId = getRouterParam(event, 'id')
   
-  if (!groupId) {
+  if (!teamId) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'Group ID is required'
+      statusMessage: 'team ID is required'
     })
   }
 
@@ -29,38 +29,38 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    // Get the group from Supabase
-    const group = await Database.getGroupById(groupId)
+    // Get the team from Supabase
+    const team = await Database.getteamById(teamId)
     
-    if (!group) {
+    if (!team) {
       throw createError({
         statusCode: 404,
-        statusMessage: 'Group not found'
+        statusMessage: 'team not found'
       })
     }
 
     // Check if user is the creator or an admin
-    if (group.creatorId !== currentUser.id && currentUser.role !== 'admin') {
+    if (team.creatorId !== currentUser.id && currentUser.role !== 'admin') {
       throw createError({
         statusCode: 403,
-        statusMessage: 'Only the group creator or admin can delete this group'
+        statusMessage: 'Only the team creator or admin can delete this team'
       })
     }
 
-    // Delete the group from Supabase
-    await Database.deleteGroup(groupId)
+    // Delete the team from Supabase
+    await Database.deleteteam(teamId)
 
     return {
-      message: 'Group deleted successfully'
+      message: 'team deleted successfully'
     }
   } catch (error) {
-    console.error('Error deleting group:', error)
+    console.error('Error deleting team:', error)
     if (error.statusCode) {
       throw error
     }
     throw createError({
       statusCode: 500,
-      statusMessage: 'Failed to delete group'
+      statusMessage: 'Failed to delete team'
     })
   }
 })

@@ -39,7 +39,7 @@
             </svg>
           </div>
           <h2 class="text-xl sm:text-2xl font-bold text-gray-700 mb-3">User Not Found</h2>
-          <p class="text-sm sm:text-base text-gray-500 mb-6">The developer profile you're looking for doesn't exist.</p>
+          <p class="text-sm sm:text-base text-gray-500 mb-6">The participant profile you're looking for doesn't exist.</p>
           <NuxtLink to="/" class="nav-button">
             Back to Home
           </NuxtLink>
@@ -221,7 +221,7 @@
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="text-primary">
                   <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
                 </svg>
-                About Developer
+                {{ isMentor(data) ? 'About Mentor' : 'About Participant' }}
               </h2>
               
               <div class="space-y-4">
@@ -652,7 +652,7 @@ useHead({
   meta: [
     {
       name: 'description',
-      content: computed(() => data.value ? `View ${data.value.name}'s developer profile and skills on ICE2025` : 'Developer profile on ICE2025')
+      content: computed(() => data.value ? `View ${data.value.name}'s participant profile and skills on ICE2025` : 'Participant profile on ICE2025')
     }
   ]
 })

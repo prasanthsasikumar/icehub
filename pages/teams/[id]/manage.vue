@@ -8,8 +8,8 @@
         </div>
         <div class="nav-right flex items-center gap-4">
           <span v-if="user" class="text-sm text-gray-600">{{ user.name }}</span>
-          <NuxtLink :to="`/groups/${groupId}`" class="nav-button nav-button-secondary">
-            Back to Group
+          <NuxtLink :to="`/teams/${teamId}`" class="nav-button nav-button-secondary">
+            Back to team
           </NuxtLink>
         </div>
       </div>
@@ -25,7 +25,7 @@
       <div class="text-center">
         <div class="text-blue-500 text-6xl mb-4">🔒</div>
         <h1 class="text-2xl font-bold text-gray-700 mb-4">Authentication Required</h1>
-        <p class="text-gray-500 mb-6">Please sign in to manage groups.</p>
+        <p class="text-gray-500 mb-6">Please sign in to manage teams.</p>
         <NuxtLink to="/login" class="nav-button">
           Sign In
         </NuxtLink>
@@ -33,51 +33,51 @@
     </div>
 
     <!-- No Access -->
-    <div v-else-if="groupData && !groupData.isMember" class="flex justify-center items-center py-20">
+    <div v-else-if="teamData && !teamData.isMember" class="flex justify-center items-center py-20">
       <div class="text-center">
         <div class="text-red-500 text-6xl mb-4">⛔</div>
         <h1 class="text-2xl font-bold text-gray-700 mb-4">Access Denied</h1>
-        <p class="text-gray-500 mb-6">Only group members can manage this group.</p>
-        <NuxtLink :to="`/groups/${groupId}`" class="nav-button">
-          Back to Group
+        <p class="text-gray-500 mb-6">Only team members can manage this team.</p>
+        <NuxtLink :to="`/teams/${teamId}`" class="nav-button">
+          Back to team
         </NuxtLink>
       </div>
     </div>
 
-    <!-- Manage Group Form -->
-    <main v-else-if="groupData" class="py-12">
+    <!-- Manage team Form -->
+    <main v-else-if="teamData" class="py-12">
       <div class="max-w-4xl mx-auto px-5">
         <div class="mb-8">
-          <h1 class="text-3xl font-bold text-gray-700 mb-3">Manage Group</h1>
-          <p class="text-base text-gray-500">Update group information and manage members</p>
+          <h1 class="text-3xl font-bold text-gray-700 mb-3">Manage team</h1>
+          <p class="text-base text-gray-500">Update team information and manage members</p>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <!-- Main Settings -->
           <div class="lg:col-span-2 space-y-8">
-            <!-- Group Information -->
+            <!-- team Information -->
             <div class="bg-white border border-gray-200 rounded-xl p-8 shadow-sm">
-              <h2 class="text-xl font-semibold text-gray-700 mb-6">Group Information</h2>
+              <h2 class="text-xl font-semibold text-gray-700 mb-6">team Information</h2>
               
-              <form @submit.prevent="updateGroup" class="flex flex-col gap-6">
+              <form @submit.prevent="updateTeam" class="flex flex-col gap-6">
                 <!-- Cover Image Upload -->
                 <div class="flex flex-col gap-2">
                   <label class="font-semibold text-gray-700 text-sm mb-1">Cover Image</label>
                   <ImageUpload 
                     v-model="form.coverImage"
-                    alt-text="Group cover image"
+                    alt-text="team cover image"
                     :aspect-ratio="'16:9'"
                   />
                 </div>
 
-                <!-- Group Name Input -->
+                <!-- team Name Input -->
                 <div class="flex flex-col gap-2">
-                  <label for="name" class="font-semibold text-gray-700 text-sm mb-1">Group Name</label>
+                  <label for="name" class="font-semibold text-gray-700 text-sm mb-1">team Name</label>
                   <input 
                     id="name"
                     v-model="form.name" 
                     type="text"
-                    placeholder="Enter group name" 
+                    placeholder="Enter team name" 
                     required 
                     class="px-4 py-3 border border-gray-200 rounded-lg text-base transition-all duration-200 bg-white text-gray-700 focus:outline-none focus:border-primary focus:shadow-lg focus:shadow-primary/10"
                   />
@@ -109,8 +109,8 @@
                         class="w-4 h-4 text-primary border-gray-300 focus:ring-primary focus:ring-2"
                       />
                       <div class="ml-3">
-                        <div class="font-medium text-gray-700">Public Group</div>
-                        <div class="text-sm text-gray-500">Anyone can discover and join this group</div>
+                        <div class="font-medium text-gray-700">Public team</div>
+                        <div class="text-sm text-gray-500">Anyone can discover and join this team</div>
                       </div>
                     </label>
                     <label class="flex items-center cursor-pointer">
@@ -122,7 +122,7 @@
                         class="w-4 h-4 text-primary border-gray-300 focus:ring-primary focus:ring-2"
                       />
                       <div class="ml-3">
-                        <div class="font-medium text-gray-700">Private Group</div>
+                        <div class="font-medium text-gray-700">Private team</div>
                         <div class="text-sm text-gray-500">Only invited members can join</div>
                       </div>
                     </label>
@@ -145,7 +145,7 @@
                   class="bg-primary text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 hover:bg-primary-dark focus:outline-none focus:shadow-lg focus:shadow-primary/25 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <span v-if="updating">Updating...</span>
-                  <span v-else>Update Group</span>
+                  <span v-else>Update team</span>
                 </button>
               </form>
             </div>
@@ -155,31 +155,31 @@
               <h2 class="text-xl font-semibold text-red-700 mb-6">Danger Zone</h2>
               
               <div class="space-y-6">
-                <!-- Leave Group -->
+                <!-- Leave team -->
                 <div class="flex items-center justify-between p-4 bg-red-50 rounded-lg">
                   <div>
-                    <h3 class="font-semibold text-gray-700">Leave Group</h3>
-                    <p class="text-sm text-gray-600">Remove yourself from this group</p>
+                    <h3 class="font-semibold text-gray-700">Leave team</h3>
+                    <p class="text-sm text-gray-600">Remove yourself from this team</p>
                   </div>
                   <button 
                     @click="showLeaveConfirm = true"
                     class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors font-medium"
                   >
-                    Leave Group
+                    Leave team
                   </button>
                 </div>
 
-                <!-- Delete Group -->
+                <!-- Delete team -->
                 <div class="flex items-center justify-between p-4 bg-red-50 rounded-lg">
                   <div>
-                    <h3 class="font-semibold text-gray-700">Delete Group</h3>
-                    <p class="text-sm text-gray-600">Permanently delete this group and all its data</p>
+                    <h3 class="font-semibold text-gray-700">Delete team</h3>
+                    <p class="text-sm text-gray-600">Permanently delete this team and all its data</p>
                   </div>
                   <button 
                     @click="showDeleteConfirm = true"
                     class="bg-red-700 text-white px-4 py-2 rounded-lg hover:bg-red-800 transition-colors font-medium"
                   >
-                    Delete Group
+                    Delete team
                   </button>
                 </div>
               </div>
@@ -190,9 +190,9 @@
           <div class="space-y-6">
             <!-- Members Management -->
             <div class="bg-white rounded-xl border border-gray-200 p-6">
-              <h3 class="text-lg font-semibold text-gray-700 mb-4">Members ({{ groupData.members.length }})</h3>
+              <h3 class="text-lg font-semibold text-gray-700 mb-4">Members ({{ teamData.members.length }})</h3>
               <div class="space-y-3">
-                <div v-for="member in groupData.members" :key="member.userId" class="flex items-center justify-between">
+                <div v-for="member in teamData.members" :key="member.userId" class="flex items-center justify-between">
                   <div class="flex items-center gap-3">
                     <div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
                       <span class="text-xs font-medium text-gray-600">{{ member.userName.charAt(0).toUpperCase() }}</span>
@@ -203,7 +203,7 @@
                     </div>
                   </div>
                   <button 
-                    v-if="member.userId !== user?.id && groupData.members.length > 1"
+                    v-if="member.userId !== user?.id && teamData.members.length > 1"
                     @click="removeMember(member.userId, member.userName)"
                     class="text-red-500 hover:text-red-700 p-1"
                     title="Remove member"
@@ -216,21 +216,21 @@
               </div>
             </div>
 
-            <!-- Group Stats -->
+            <!-- team Stats -->
             <div class="bg-white rounded-xl border border-gray-200 p-6">
-              <h3 class="text-lg font-semibold text-gray-700 mb-4">Group Stats</h3>
+              <h3 class="text-lg font-semibold text-gray-700 mb-4">team Stats</h3>
               <div class="space-y-3 text-sm">
                 <div class="flex justify-between">
                   <span class="text-gray-500">Created</span>
-                  <span class="font-medium">{{ formatDate(groupData.createdAt) }}</span>
+                  <span class="font-medium">{{ formatDate(teamData.createdAt) }}</span>
                 </div>
                 <div class="flex justify-between">
                   <span class="text-gray-500">Members</span>
-                  <span class="font-medium">{{ groupData.members.length }}</span>
+                  <span class="font-medium">{{ teamData.members.length }}</span>
                 </div>
                 <div class="flex justify-between">
                   <span class="text-gray-500">Privacy</span>
-                  <span class="font-medium">{{ groupData.isPrivate ? 'Private' : 'Public' }}</span>
+                  <span class="font-medium">{{ teamData.isPrivate ? 'Private' : 'Public' }}</span>
                 </div>
               </div>
             </div>
@@ -242,13 +242,13 @@
     <!-- Leave Confirmation Modal -->
     <div v-if="showLeaveConfirm" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" @click="showLeaveConfirm = false">
       <div class="bg-white rounded-xl p-6 max-w-md mx-4" @click.stop>
-        <h3 class="text-lg font-semibold text-gray-700 mb-3">Leave Group</h3>
-        <p class="text-gray-600 mb-6">Are you sure you want to leave "{{ groupData?.name }}"? You'll need to be re-invited to join again.</p>
+        <h3 class="text-lg font-semibold text-gray-700 mb-3">Leave team</h3>
+        <p class="text-gray-600 mb-6">Are you sure you want to leave "{{ teamData?.name }}"? You'll need to be re-invited to join again.</p>
         <div class="flex gap-3 justify-end">
           <button @click="showLeaveConfirm = false" class="px-4 py-2 text-gray-600 hover:text-gray-800">Cancel</button>
-          <button @click="leaveGroup" :disabled="leaving" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 disabled:opacity-50">
+          <button @click="leaveTeam" :disabled="leaving" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 disabled:opacity-50">
             <span v-if="leaving">Leaving...</span>
-            <span v-else>Leave Group</span>
+            <span v-else>Leave team</span>
           </button>
         </div>
       </div>
@@ -257,13 +257,13 @@
     <!-- Delete Confirmation Modal -->
     <div v-if="showDeleteConfirm" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" @click="showDeleteConfirm = false">
       <div class="bg-white rounded-xl p-6 max-w-md mx-4" @click.stop>
-        <h3 class="text-lg font-semibold text-gray-700 mb-3">Delete Group</h3>
-        <p class="text-gray-600 mb-6">Are you sure you want to permanently delete "{{ groupData?.name }}"? This action cannot be undone.</p>
+        <h3 class="text-lg font-semibold text-gray-700 mb-3">Delete team</h3>
+        <p class="text-gray-600 mb-6">Are you sure you want to permanently delete "{{ teamData?.name }}"? This action cannot be undone.</p>
         <div class="flex gap-3 justify-end">
           <button @click="showDeleteConfirm = false" class="px-4 py-2 text-gray-600 hover:text-gray-800">Cancel</button>
-          <button @click="deleteGroup" :disabled="deleting" class="bg-red-700 text-white px-4 py-2 rounded-lg hover:bg-red-800 disabled:opacity-50">
+          <button @click="deleteTeam" :disabled="deleting" class="bg-red-700 text-white px-4 py-2 rounded-lg hover:bg-red-800 disabled:opacity-50">
             <span v-if="deleting">Deleting...</span>
-            <span v-else>Delete Group</span>
+            <span v-else>Delete team</span>
           </button>
         </div>
       </div>
@@ -272,9 +272,9 @@
 </template>
 
 <script setup>
-// Get the group ID from the route
+// Get the team ID from the route
 const route = useRoute()
-const groupId = route.params.id
+const teamId = route.params.id
 
 // Authentication
 const { user, isLoggedIn, checkAuth } = useAuth()
@@ -297,16 +297,16 @@ const deleting = ref(false)
 const showLeaveConfirm = ref(false)
 const showDeleteConfirm = ref(false)
 
-// Fetch group data
-const { data: groupData, refresh } = await useFetch(`/api/groups/${groupId}`)
+// Fetch team data
+const { data: teamData, refresh } = await useFetch(`/api/teams/${teamId}`)
 
 // Initialize form
 const initializeForm = () => {
-  if (groupData.value) {
-    form.name = groupData.value.name
-    form.description = groupData.value.description
-    form.coverImage = groupData.value.coverImage
-    form.isPrivate = groupData.value.isPrivate
+  if (teamData.value) {
+    form.name = teamData.value.name
+    form.description = teamData.value.description
+    form.coverImage = teamData.value.coverImage
+    form.isPrivate = teamData.value.isPrivate
   }
 }
 
@@ -317,15 +317,15 @@ onMounted(async () => {
   loading.value = false
 })
 
-// Watch for group data changes
-watch(groupData, (newData) => {
+// Watch for team data changes
+watch(teamData, (newData) => {
   if (newData) {
     initializeForm()
   }
 }, { immediate: true })
 
-// Update group
-const updateGroup = async () => {
+// Update team
+const updateTeam = async () => {
   if (updating.value) return
 
   updating.value = true
@@ -333,7 +333,7 @@ const updateGroup = async () => {
   updateSuccess.value = ''
 
   try {
-    await $fetch(`/api/groups/${groupId}/update`, {
+    await $fetch(`/api/teams/${teamId}/update`, {
       method: 'PUT',
       body: {
         name: form.name,
@@ -343,50 +343,50 @@ const updateGroup = async () => {
       }
     })
 
-    updateSuccess.value = 'Group updated successfully!'
+    updateSuccess.value = 'team updated successfully!'
     await refresh()
 
   } catch (err) {
-    updateError.value = err.data?.message || 'Failed to update group'
+    updateError.value = err.data?.message || 'Failed to update team'
   } finally {
     updating.value = false
   }
 }
 
-// Leave group
-const leaveGroup = async () => {
+// Leave team
+const leaveTeam = async () => {
   leaving.value = true
 
   try {
-    await $fetch(`/api/groups/${groupId}/leave`, {
+    await $fetch(`/api/teams/${teamId}/leave`, {
       method: 'POST'
     })
 
-    // Redirect to groups page
-    navigateTo('/groups')
+    // Redirect to teams page
+    navigateTo('/teams')
 
   } catch (err) {
-    console.error('Failed to leave group:', err)
+    console.error('Failed to leave team:', err)
   } finally {
     leaving.value = false
     showLeaveConfirm.value = false
   }
 }
 
-// Delete group
-const deleteGroup = async () => {
+// Delete team
+const deleteTeam = async () => {
   deleting.value = true
 
   try {
-    await $fetch(`/api/groups/${groupId}/delete`, {
+    await $fetch(`/api/teams/${teamId}/delete`, {
       method: 'DELETE'
     })
 
-    // Redirect to groups page
-    navigateTo('/groups')
+    // Redirect to teams page
+    navigateTo('/teams')
 
   } catch (err) {
-    console.error('Failed to delete group:', err)
+    console.error('Failed to delete team:', err)
   } finally {
     deleting.value = false
     showDeleteConfirm.value = false
@@ -410,11 +410,11 @@ const formatDate = (dateString) => {
 
 // Page meta
 useHead({
-  title: computed(() => groupData.value ? `Manage ${groupData.value.name} - ICE2025` : 'Manage Group - ICE2025'),
+  title: computed(() => teamData.value ? `Manage ${teamData.value.name} - ICE2025` : 'Manage team - ICE2025'),
   meta: [
     {
       name: 'description',
-      content: 'Manage group settings, members, and information.'
+      content: 'Manage team settings, members, and information.'
     }
   ]
 })

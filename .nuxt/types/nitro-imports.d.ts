@@ -19,9 +19,9 @@ declare global {
   const createError: typeof import('../../node_modules/h3')['createError']
   const createEvent: typeof import('../../node_modules/h3')['createEvent']
   const createEventStream: typeof import('../../node_modules/h3')['createEventStream']
-  const createGroupId: typeof import('../../server/utils/groups')['createGroupId']
   const createMessageId: typeof import('../../server/utils/chat')['createMessageId']
   const createRouter: typeof import('../../node_modules/h3')['createRouter']
+  const createteamId: typeof import('../../server/utils/groups')['createteamId']
   const defaultContentType: typeof import('../../node_modules/h3')['defaultContentType']
   const defineAppConfig: typeof import('../../node_modules/nuxt/dist/core/runtime/nitro/utils/config')['defineAppConfig']
   const defineCachedEventHandler: typeof import('../../node_modules/nitropack/dist/runtime/internal/cache')['defineCachedEventHandler']
@@ -56,7 +56,7 @@ declare global {
   const getMethod: typeof import('../../node_modules/h3')['getMethod']
   const getProxyRequestHeaders: typeof import('../../node_modules/h3')['getProxyRequestHeaders']
   const getQuery: typeof import('../../node_modules/h3')['getQuery']
-  const getRandomGroupCover: typeof import('../../server/utils/groups')['getRandomGroupCover']
+  const getRandomteamCover: typeof import('../../server/utils/groups')['getRandomteamCover']
   const getRequestFingerprint: typeof import('../../node_modules/h3')['getRequestFingerprint']
   const getRequestHeader: typeof import('../../node_modules/h3')['getRequestHeader']
   const getRequestHeaders: typeof import('../../node_modules/h3')['getRequestHeaders']
@@ -151,10 +151,10 @@ declare global {
   export type { SkillWithLevel, User, AuthUser } from '../../server/utils/auth'
   import('../../server/utils/auth')
   // @ts-ignore
-  export type { Message, DirectConversation, GroupConversation } from '../../server/utils/chat'
+  export type { Message, DirectConversation, teamConversation } from '../../server/utils/chat'
   import('../../server/utils/chat')
   // @ts-ignore
-  export type { GroupMember, Group } from '../../server/utils/groups'
+  export type { teamMember, team } from '../../server/utils/groups'
   import('../../server/utils/groups')
   // @ts-ignore
   export type { Database } from '../../server/utils/supabase'
@@ -176,7 +176,7 @@ export { buildAssetsURL as __buildAssetsURL, publicAssetsURL as __publicAssetsUR
 export { defineAppConfig } from 'C:/Users/prasa/OneDrive/Documents/GitHub/icehub/node_modules/nuxt/dist/core/runtime/nitro/utils/config';
 export { hashPassword, verifyPassword, generateToken, verifyToken, getUserFromRequest, requireAuth } from 'C:/Users/prasa/OneDrive/Documents/GitHub/icehub/server/utils/auth';
 export { createMessageId } from 'C:/Users/prasa/OneDrive/Documents/GitHub/icehub/server/utils/chat';
-export { getRandomGroupCover, createGroupId } from 'C:/Users/prasa/OneDrive/Documents/GitHub/icehub/server/utils/groups';
+export { getRandomteamCover, createteamId } from 'C:/Users/prasa/OneDrive/Documents/GitHub/icehub/server/utils/groups';
 export { getDefaultUserImage, ensureUserImage, uploadImageBuffer, uploadImage } from 'C:/Users/prasa/OneDrive/Documents/GitHub/icehub/server/utils/image';
 export { normalizeSkills, getDefaultSkillLevel, skillsToStringArray, getSkillLevel } from 'C:/Users/prasa/OneDrive/Documents/GitHub/icehub/server/utils/skills';
 export { supabase, supabaseAdmin, Database } from 'C:/Users/prasa/OneDrive/Documents/GitHub/icehub/server/utils/supabase';

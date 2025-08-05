@@ -62,7 +62,7 @@
           <div v-if="conversations.length === 0" class="p-4 text-center text-gray-500">
             <div class="text-3xl sm:text-4xl mb-2">📭</div>
             <p class="text-sm">No conversations yet</p>
-            <p class="text-xs text-gray-400 mt-1">Start chatting with other developers!</p>
+            <p class="text-xs text-gray-400 mt-1">Start chatting with other participants!</p>
           </div>
           
           <div v-else>
@@ -234,7 +234,7 @@
           <input
             v-model="userSearchQuery"
             type="text"
-            placeholder="Search for developers..."
+            placeholder="Search for participants..."
             class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-primary"
           />
         </div>
@@ -717,7 +717,7 @@ useHead({
   meta: [
     {
       name: 'description',
-      content: 'Chat with other developers in the ICE2025 community.'
+      content: 'Chat with other participants in the ICE2025 community.'
     }
   ]
 })

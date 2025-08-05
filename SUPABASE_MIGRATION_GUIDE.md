@@ -6,12 +6,12 @@
 
 ### Database: Supabase PostgreSQL
 - **Users**: Complete user profiles with authentication
-- **Groups**: Community groups with JSONB member arrays  
-- **Messages**: Chat messages for both direct and group conversations
+- **teams**: Community teams with JSONB member arrays  
+- **Messages**: Chat messages for both direct and team conversations
 - **Row Level Security**: Proper access controls implemented
 
 ### File Storage: Vercel Blob (Production) / Local Storage (Development)
-- **Images**: User avatars and group cover images
+- **Images**: User avatars and team cover images
 - **Uploads**: Persistent file storage with CDN delivery
 
 ### Authentication: JWT + HTTP-only Cookies
@@ -65,18 +65,18 @@ NODE_ENV=production
 - `POST /api/admin/toggle-role` - Admin: Change user roles
 - `DELETE /api/admin/delete-user` - Admin: Delete users with cascade
 
-### Groups
-- `GET /api/groups` - List all public groups
-- `POST /api/groups/create` - Create new group
-- `GET /api/groups/[id]` - Get group details
-- `PUT /api/groups/[id]/update` - Update group (creator/admin only)
-- `DELETE /api/groups/[id]/delete` - Delete group (creator/admin only)
-- `POST /api/groups/[id]/join` - Join group
-- `POST /api/groups/[id]/leave` - Leave group
+### teams
+- `GET /api/teams` - List all public teams
+- `POST /api/teams/create` - Create new team
+- `GET /api/teams/[id]` - Get team details
+- `PUT /api/teams/[id]/update` - Update team (creator/admin only)
+- `DELETE /api/teams/[id]/delete` - Delete team (creator/admin only)
+- `POST /api/teams/[id]/join` - Join team
+- `POST /api/teams/[id]/leave` - Leave team
 
 ### Chat & Messaging
 - `GET /api/chat/messages` - Get conversation messages
-- `POST /api/chat/send` - Send message (direct/group)
+- `POST /api/chat/send` - Send message (direct/team)
 - `GET /api/chat/conversations` - List user conversations
 
 ### File Uploads

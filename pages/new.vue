@@ -5,7 +5,7 @@
         <div class="text-4xl sm:text-6xl mb-4">🚀</div>
         <h1 class="text-2xl sm:text-3xl font-bold text-gray-700 mb-3 sm:mb-4">Ready to join ICE2025?</h1>
         <p class="text-base sm:text-lg text-gray-500 mb-6 sm:mb-8 leading-relaxed">
-          Create your account to showcase your skills and connect with other developers.
+          Create your account to showcase your skills and connect with other participants.
         </p>
       </div>
 
@@ -40,7 +40,7 @@ useHead({
   meta: [
     {
       name: 'description',
-      content: 'Join the ICE2025 developer community. Create your profile and connect with talented professionals.'
+      content: 'Join the ICE2025 community. Create your profile and connect with talented professionals.'
     }
   ]
 })

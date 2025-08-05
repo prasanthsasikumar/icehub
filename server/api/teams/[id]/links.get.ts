@@ -2,25 +2,25 @@ import { getUserFromRequest } from '../../../utils/auth'
 import { Database } from '../../../utils/supabase'
 
 export default defineEventHandler(async (event) => {
-  const groupId = getRouterParam(event, 'id')
+  const teamId = getRouterParam(event, 'id')
   
-  if (!groupId) {
+  if (!teamId) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'Group ID is required'
+      statusMessage: 'team ID is required'
     })
   }
 
   try {
-    // Get shared links for this group
-    const links = await Database.getGroupLinks(groupId)
+    // Get shared links for this team
+    const links = await Database.getTeamLinks(teamId)
     
     return links || []
   } catch (error: any) {
-    console.error('Error fetching group links:', error)
+    console.error('Error fetching team links:', error)
     throw createError({
       statusCode: 500,
-      statusMessage: 'Failed to fetch group links'
+      statusMessage: 'Failed to fetch team links'
     })
   }
 })

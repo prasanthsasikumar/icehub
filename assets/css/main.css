@@ -42,7 +42,7 @@
     @apply bg-white text-primary border border-primary hover:bg-gray-50;
   }
   
-  .developer-card {
+  .participant-card {
     @apply bg-white border border-gray-200 rounded-xl overflow-hidden transition-all duration-200 hover:border-primary sm:hover:-translate-y-0.5 hover:shadow-xl;
   }
   

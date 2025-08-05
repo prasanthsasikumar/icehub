@@ -19,7 +19,8 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const { name, description, coverImage, isPublic = true } = await readBody(event)
+  const { name, description, coverImage, isPrivate = false } = await readBody(event)
+  const isPublic = !isPrivate // Convert isPrivate to isPublic
 
   if (!name || !description) {
     throw createError({
@@ -29,22 +30,22 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    // Check if group name already exists
-    const existingGroups = await Database.getGroups()
-    const existingGroup = existingGroups.find(g => g.name.toLowerCase() === name.toLowerCase())
+    // Check if team name already exists
+    const existingteams = await Database.getteams()
+    const existingteam = existingteams.find(g => g.name.toLowerCase() === name.toLowerCase())
     
-    if (existingGroup) {
+    if (existingteam) {
       throw createError({
         statusCode: 409,
-        statusMessage: 'Group name already exists'
+        statusMessage: 'team name already exists'
       })
     }
 
-    // Create new group with creator as first member
-    const newGroup = await Database.createGroup({
+    // Create new team with creator as first member
+    const newteam = await Database.createteam({
       name: name.trim(),
       description: description.trim(),
-      coverImage: coverImage || '/uploads/groupCoverSamples/cover1.svg',
+      coverImage: coverImage || '/uploads/teamCoverSamples/cover1.svg',
       creatorId: currentUser.id,
       isPublic,
       members: [
@@ -57,17 +58,20 @@ export default defineEventHandler(async (event) => {
     })
 
     return {
-      message: 'Group created successfully',
-      group: newGroup
+      message: 'team created successfully',
+      team: {
+        ...newteam,
+        isPrivate: !newteam.isPublic // Convert isPublic to isPrivate for frontend
+      }
     }
   } catch (error) {
-    console.error('Error creating group:', error)
+    console.error('Error creating team:', error)
     if (error.statusCode) {
       throw error
     }
     throw createError({
       statusCode: 500,
-      statusMessage: 'Failed to create group'
+      statusMessage: 'Failed to create team'
     })
   }
 })

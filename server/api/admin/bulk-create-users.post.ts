@@ -58,7 +58,9 @@ export default defineEventHandler(async (event) => {
         affiliation, 
         expertise, 
         gender, 
-        skills 
+        skills,
+        image,
+        video
       } = userData
 
       // Validate required fields
@@ -98,11 +100,12 @@ export default defineEventHandler(async (event) => {
         bio: bio?.trim() || '',
         password: hashedPassword,
         role: 'user',
-        userRole: userRole?.trim() || 'developer',
+        userRole: userRole?.trim() || 'participant',
         affiliation: affiliation?.trim() || '',
         expertise: expertise?.trim() || '',
         gender: gender?.trim() || '',
-        image: '/uploads/default/default_user_icon.png',
+        image: image?.trim() || '/uploads/default/default_user_icon.png',
+        video: video?.trim() || '',
         skills: processedSkills,
         createdAt: new Date().toISOString()
       }
