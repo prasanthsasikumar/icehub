@@ -1,14 +1,49 @@
 <template>
-  <div class="min-h-screen font-sans text-gray-700 bg-gray-50 flex flex-col">
-    <div class="flex-1 flex items-center justify-center container-padding py-8">
-      <div class="w-full max-w-md">
+  <div class="min-h-screen font-sans text-gray-700 bg-gray-50">
+    <!-- Top Navigation -->
+    <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
+      <div class="max-w-container mx-auto container-padding flex justify-between items-center h-14 sm:h-16">
+        <div class="nav-left">
+          <NuxtLink to="/" class="nav-logo">ICE2025</NuxtLink>
+        </div>
+        <div class="nav-right hidden sm:flex items-center gap-2 sm:gap-4">
+          <NuxtLink to="/login" class="nav-button nav-button-secondary">
+            Sign In
+          </NuxtLink>
+          <NuxtLink to="/" class="nav-button nav-button-secondary">
+            Back to Home
+          </NuxtLink>
+        </div>
+        
+        <!-- Mobile menu button -->
+        <button 
+          @click="mobileMenuOpen = !mobileMenuOpen"
+          class="mobile-nav-toggle"
+        >
+          <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Mobile menu -->
+      <div v-if="mobileMenuOpen" class="mobile-nav-menu">
+        <NuxtLink to="/login" class="mobile-nav-item" @click="mobileMenuOpen = false">
+          Sign In
+        </NuxtLink>
+        <NuxtLink to="/" class="mobile-nav-item" @click="mobileMenuOpen = false">
+          Back to Home
+        </NuxtLink>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="section-padding">
+      <div class="max-w-md mx-auto container-padding">
         <!-- Logo and Header -->
         <div class="text-center mb-6 sm:mb-8">
-          <NuxtLink to="/" class="text-2xl sm:text-3xl font-bold text-gray-700 hover:text-primary transition-colors">
-            ICE2025
-          </NuxtLink>
-          <h1 class="text-xl sm:text-2xl font-semibold text-gray-700 mt-3 sm:mt-4 mb-2">Create your account</h1>
-          <p class="text-sm sm:text-base text-gray-500">Join the community</p>
+          <h1 class="text-xl sm:text-2xl font-semibold text-gray-700 mb-2">Create your account</h1>
+          <p class="text-sm sm:text-base text-gray-500">Join the Workshop</p>
         </div>
 
         <!-- Registration Form -->
@@ -221,15 +256,18 @@
               Sign in
             </NuxtLink>
           </p>
+          </div>
         </div>
       </div>
     </div>
-    </div>
+    
     <Footer />
   </div>
 </template>
 
 <script setup>
+// Mobile menu state
+const mobileMenuOpen = ref(false)
 // Form state
 const form = reactive({
   name: '',
@@ -338,87 +376,12 @@ useHead({
   color: #0969da;
 }
 
-.bg-primary {
-  background-color: #0d7ae4;
-}
-
-.bg-primary-dark {
-  background-color: #0969da;
-}
-
-.border-primary {
-  border-color: #0d7ae4;
-}
-
-.focus\:border-primary:focus {
-  border-color: #0d7ae4;
-}
-
-.hover\:bg-primary-dark:hover {
-  background-color: #0969da;
-}
-
 .hover\:text-primary-dark:hover {
   color: #0969da;
 }
 
-/* Additional form enhancements */
-.form-input {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  border: 1px solid #e5e7eb;
-  border-radius: 0.5rem;
-  transition: border-color 0.2s ease-in-out;
-  font-size: 1rem;
-}
-
-.form-input:focus {
-  outline: none;
-  border-color: #0d7ae4;
-  box-shadow: 0 0 0 3px rgba(13, 122, 228, 0.1);
-}
-
-.form-button {
-  width: 100%;
-  background-color: #0d7ae4;
-  color: white;
-  padding: 0.75rem 1rem;
-  border-radius: 0.5rem;
-  font-weight: 500;
-  transition: background-color 0.2s ease-in-out;
-  border: none;
-  cursor: pointer;
-  font-size: 1rem;
-}
-
-.form-button:hover:not(:disabled) {
-  background-color: #0969da;
-}
-
-.form-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.card-padding {
-  padding: 1.5rem;
-}
-
-@media (min-width: 640px) {
-  .card-padding {
-    padding: 2rem;
-  }
-}
-
-.container-padding {
-  padding-left: 1rem;
-  padding-right: 1rem;
-}
-
-@media (min-width: 640px) {
-  .container-padding {
-    padding-left: 1.25rem;
-    padding-right: 1.25rem;
-  }
+/* Max width for container to match other pages */
+.max-w-container {
+  max-width: 1200px;
 }
 </style>

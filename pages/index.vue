@@ -105,7 +105,7 @@
     <section class="bg-gradient-to-br from-gray-50 to-gray-200 section-padding text-center">
       <div class="max-w-container mx-auto container-padding">
         <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-700 mb-4 sm:mb-6 leading-tight">ICE2025 Workshop</h1>
-        <p class="text-lg sm:text-xl text-gray-500 mb-6 sm:mb-8 max-w-2xl mx-auto">Join 30 selected participants in Sri Lanka's premier AI innovation workshop. Connect with international mentors and build breakthrough products in just 3 days.</p>
+        <p class="text-lg sm:text-xl text-gray-500 mb-6 sm:mb-8 max-w-2xl mx-auto">Join 30 selected participants in Sri Lanka's premier AI innovation workshop. Connect with international mentors and build breakthrough prototypes in 3 days.</p>
         
         <!-- Countdown Timer -->
         <div class="mb-8 sm:mb-10">
@@ -622,7 +622,7 @@ useHead({
   meta: [
     {
       name: 'description',
-      content: 'Join 30 selected participants in Sri Lanka\'s premier AI innovation workshop led by Professor Suranga Nannayakara from NUS. Connect with mentors and build breakthrough products in just 3 days.'
+      content: 'Join 30 selected participants in Sri Lanka\'s premier AI innovation workshop led by Professor Suranga Nannayakara from NUS. Connect with mentors and build breakthrough prototypes in 3 days.'
     },
     {
       name: 'viewport',

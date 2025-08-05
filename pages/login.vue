@@ -1,14 +1,48 @@
 <template>
-  <div class="min-h-screen font-sans text-gray-700 bg-gray-50 flex flex-col">
-    <!-- Main Content Area -->
-    <div class="flex-1 flex items-center justify-center container-padding py-8">
-      <div class="w-full max-w-md">
+  <div class="min-h-screen font-sans text-gray-700 bg-gray-50">
+    <!-- Top Navigation -->
+    <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
+      <div class="max-w-container mx-auto container-padding flex justify-between items-center h-14 sm:h-16">
+        <div class="nav-left">
+          <NuxtLink to="/" class="nav-logo">ICE2025</NuxtLink>
+        </div>
+        <div class="nav-right hidden sm:flex items-center gap-2 sm:gap-4">
+          <NuxtLink to="/register" class="nav-button nav-button-secondary">
+            Sign Up
+          </NuxtLink>
+          <NuxtLink to="/" class="nav-button nav-button-secondary">
+            Back to Home
+          </NuxtLink>
+        </div>
+        
+        <!-- Mobile menu button -->
+        <button 
+          @click="mobileMenuOpen = !mobileMenuOpen"
+          class="mobile-nav-toggle"
+        >
+          <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Mobile menu -->
+      <div v-if="mobileMenuOpen" class="mobile-nav-menu">
+        <NuxtLink to="/register" class="mobile-nav-item" @click="mobileMenuOpen = false">
+          Sign Up
+        </NuxtLink>
+        <NuxtLink to="/" class="mobile-nav-item" @click="mobileMenuOpen = false">
+          Back to Home
+        </NuxtLink>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="section-padding">
+      <div class="max-w-md mx-auto container-padding">
         <!-- Logo and Header -->
         <div class="text-center mb-6 sm:mb-8">
-          <NuxtLink to="/" class="text-2xl sm:text-3xl font-bold text-gray-700 hover:text-primary transition-colors">
-            ICE2025
-          </NuxtLink>
-          <h1 class="text-xl sm:text-2xl font-semibold text-gray-700 mt-3 sm:mt-4 mb-2">Welcome back</h1>
+          <h1 class="text-xl sm:text-2xl font-semibold text-gray-700 mb-2">Welcome back</h1>
           <p class="text-sm sm:text-base text-gray-500">Sign in to your account</p>
         </div>
 
@@ -95,6 +129,8 @@
 </template>
 
 <script setup>
+// Mobile menu state
+const mobileMenuOpen = ref(false)
 // Form state
 const form = reactive({
   email: '',
@@ -166,23 +202,12 @@ useHead({
   color: #0969da;
 }
 
-.bg-primary {
-  background-color: #0d7ae4;
-}
-
-.bg-primary-dark {
-  background-color: #0969da;
-}
-
-.focus\:border-primary:focus {
-  border-color: #0d7ae4;
-}
-
-.hover\:bg-primary-dark:hover {
-  background-color: #0969da;
-}
-
 .hover\:text-primary-dark:hover {
   color: #0969da;
+}
+
+/* Max width for container to match other pages */
+.max-w-container {
+  max-width: 1200px;
 }
 </style>
