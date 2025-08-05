@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Google Drive URL Conversion Test</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            max-width: 800px; 
+            margin: 0 auto; 
+            padding: 20px; 
+        }
+        .test { 
+            border: 1px solid #ddd; 
+            padding: 15px; 
+            margin: 10px 0; 
+            border-radius: 5px; 
+        }
+        .original { color: #666; font-size: 14px; }
+        .converted { color: #0066cc; font-weight: bold; }
+        img { 
+            max-width: 200px; 
+            border: 2px solid #ddd; 
+            border-radius: 5px; 
+            margin: 10px 0; 
+        }
+        .success { color: green; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <h1>🔧 Google Drive URL Conversion Test</h1>
+    <p>Testing the conversion from Google Drive sharing URLs to thumbnail URLs that work in IMG tags.</p>
+
+    <div id="results"></div>
+
+    <script>
+        function getImageUrl(url) {
+            if (!url) return '/uploads/default/user-avatar.svg'
+            
+            try {
+                // Handle Google Drive URLs - convert to proper thumbnail format
+                if (url.includes('drive.google.com')) {
+                    // Extract file ID from various Google Drive URL formats
+                    let fileId = null
+                    
+                    // Format: https://drive.google.com/file/d/FILE_ID/view?usp=sharing
+                    let match = url.match(/\/file\/d\/([a-zA-Z0-9-_]+)/)
+                    if (match) {
+                        fileId = match[1]
+                    } else {
+                        // Format: https://drive.google.com/open?id=FILE_ID
+                        match = url.match(/[?&]id=([a-zA-Z0-9-_]+)/)
+                        if (match) {
+                            fileId = match[1]
+                        }
+                    }
+                    
+                    if (fileId) {
+                        console.log('Converting Google Drive URL:', url, '-> fileId:', fileId)
+                        // Use the direct googleusercontent.com format that we found in the redirect
+                        return `https://lh3.googleusercontent.com/d/${fileId}=w400`
+                    }
+                }
+                
+                // Return original URL for other formats (direct URLs, etc.)
+                return url
+            } catch (error) {
+                console.error('Error parsing image URL:', error)
+                return '/uploads/default/user-avatar.svg'
+            }
+        }
+
+        // Test URLs
+        const testUrls = [
+            'https://drive.google.com/file/d/1eYO8wuJx7y1HdaBEsoUm8xfjkWSyZ2Hy/view?usp=sharing',
+            'https://drive.google.com/file/d/1exampleFileId123/view',
+            'https://drive.google.com/open?id=1anotherExampleId456',
+            'https://ahlab.org/wp-content/uploads/2023/05/Screenshot-2023-05-04-092500-Prasanth-Sasikumar-1-300x300.png'
+        ];
+
+        // Test proxy URLs (what actually works)
+        const proxyTestUrls = [
+            '/api/proxy-image?id=1eYO8wuJx7y1HdaBEsoUm8xfjkWSyZ2Hy',
+            'https://ahlab.org/wp-content/uploads/2023/05/Screenshot-2023-05-04-092500-Prasanth-Sasikumar-1-300x300.png'
+        ];
+
+        const resultsDiv = document.getElementById('results');
+
+        // Test converted URLs (previous approach - doesn't work)
+        testUrls.forEach((originalUrl, index) => {
+            const convertedUrl = getImageUrl(originalUrl);
+            
+            const testDiv = document.createElement('div');
+            testDiv.className = 'test';
+            testDiv.innerHTML = `
+                <h3>Test ${index + 1} - URL Conversion (Broken)</h3>
+                <div class="original"><strong>Original:</strong> ${originalUrl}</div>
+                <div class="converted"><strong>Converted:</strong> ${convertedUrl}</div>
+                <div>
+                    <strong>Image Test:</strong>
+                    <div id="result-${index}">Loading...</div>
+                    <img src="${convertedUrl}" alt="Test image ${index + 1}" 
+                         onload="document.getElementById('result-${index}').innerHTML='<span class=\\"success\\">✅ Image loaded successfully!</span>'" 
+                         onerror="document.getElementById('result-${index}').innerHTML='<span class=\\"error\\">❌ Failed to load image</span>'" />
+                </div>
+            `;
+            
+            resultsDiv.appendChild(testDiv);
+        });
+
+        // Test proxy URLs (should work)
+        proxyTestUrls.forEach((proxyUrl, index) => {
+            const testDiv = document.createElement('div');
+            testDiv.className = 'test';
+            testDiv.style.backgroundColor = '#f0f8ff';
+            testDiv.innerHTML = `
+                <h3>Proxy Test ${index + 1} - Server Proxy (Should Work)</h3>
+                <div class="converted"><strong>Proxy URL:</strong> ${proxyUrl}</div>
+                <div>
+                    <strong>Image Test:</strong>
+                    <div id="proxy-result-${index}">Loading...</div>
+                    <img src="${proxyUrl}" alt="Proxy test image ${index + 1}" 
+                         onload="document.getElementById('proxy-result-${index}').innerHTML='<span class=\\"success\\">✅ Proxy image loaded successfully!</span>'" 
+                         onerror="document.getElementById('proxy-result-${index}').innerHTML='<span class=\\"error\\">❌ Proxy failed to load image</span>'" />
+                </div>
+            `;
+            
+            resultsDiv.appendChild(testDiv);
+        });        console.log('URL Conversion Test Results:');
+        testUrls.forEach(url => {
+            console.log(`${url} -> ${getImageUrl(url)}`);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,610 @@
+[
+  {
+    "id": "f64ffe08-aa30-426b-bc2f-750917b9715c",
+    "name": "Vishagar Arunan",
+    "email": "vishagar.arunan@example.com",
+    "image": "https://drive.google.com/file/d/1eYO8wuJx7y1HdaBEsoUm8xfjkWSyZ2Hy/view?usp=sharing",
+    "bio": "Passionate researcher specializing in 3D reconstruction and immersive web technologies for virtual tourism applications",
+    "skills": [
+      "3D Modeling",
+      "WebGL",
+      "Computer Vision"
+    ],
+    "role": "user",
+    "userRole": "developer",
+    "createdAt": "2025-08-05T04:06:19.613+00:00",
+    "affiliation": "University of Moratuwa",
+    "gender": "male",
+    "expertise": "3D Reconstruction and Immersive Web Visualization",
+    "video": "https://drive.google.com/file/d/1IUrQDD8F0LpuLLSFOPUe8M_i1Zb6oWTl/view?usp=sharing"
+  },
+  {
+    "id": "b364c816-61ab-4986-87e7-bd2097cc5f1a",
+    "name": "Pasindhu Weerathunga",
+    "email": "pasindhu.weerathunga@example.com",
+    "image": "https://drive.google.com/file/d/16lMMb5NP3FvgUJdPHQJMTk49WL9rBs1E/view?usp=sharing",
+    "bio": "Mechanical engineer turned XR developer with research focus on VR applications in education and immersive technology startups",
+    "skills": [
+      "Virtual Reality",
+      "Unity",
+      "C#"
+    ],
+    "role": "user",
+    "userRole": "developer",
+    "createdAt": "2025-08-05T04:06:19.683+00:00",
+    "affiliation": "University of Sri Jayewardenepura",
+    "gender": "male",
+    "expertise": "XR Development and Educational Technology",
+    "video": "https://drive.google.com/file/d/1Xc-KnQ7oKh8mHHYVgU4p6BoAxDDaRCWl/view?usp=sharing"
+  },
+  {
+    "id": "8c5951c9-0900-4061-b272-87ab92a2d5d1",
+    "name": "Prasanth Sasikumar",
+    "email": "psk@ahlab.org",
+    "image": "/uploads/3c4c2a8a-6b1b-4219-b8ae-42addc0c8c60.jpeg",
+    "bio": "Test",
+    "skills": [
+      "JavaScript",
+      "React",
+      "Python"
+    ],
+    "role": "admin",
+    "userRole": "developer",
+    "createdAt": "2025-08-03T08:45:27.691+00:00",
+    "affiliation": "",
+    "gender": "",
+    "expertise": "",
+    "video": "https://drive.google.com/file/d/1ifR4Yc-trqTXHKHTodDjYV5ZKC8EvBtb/view?usp=drive_link"
+  },
+  {
+    "id": "357f7d91-9fd1-4216-9173-4be38b37f479",
+    "name": "Lasitha Amarasinghe",
+    "email": "lasitha.amarasinghe@example.com",
+    "image": "https://drive.google.com/file/d/1cVEy5WKQEslmThNTDayyzoK34WX36qaC/view?usp=sharing",
+    "bio": "Research intern building cutting-edge digital assistant platforms for augmented reality glasses at NUS",
+    "skills": [
+      "Augmented Reality",
+      "Computer Vision",
+      "Unity"
+    ],
+    "role": "user",
+    "userRole": "developer",
+    "createdAt": "2025-08-05T04:06:19.748+00:00",
+    "affiliation": "University of Moratuwa",
+    "gender": "male",
+    "expertise": "Augmented Reality and Digital Assistants",
+    "video": "https://drive.google.com/file/d/121BFIzaU51Mn9wYb2xECB7-z0bG6AvFY/view?usp=sharing"
+  },
+  {
+    "id": "9c2c0f6d-179f-4759-8581-f15f18e9d643",
+    "name": "Samudi Perera",
+    "email": "samudi.perera@example.com",
+    "image": "https://drive.google.com/file/d/11g7yqYFudO1jcBYlUvCKxUOT0wN-6bUg/view?usp=sharing",
+    "bio": "HCI researcher focused on real-time cognitive load detection and developing adaptive user interfaces for better user experiences",
+    "skills": [
+      "Human-Computer Interaction",
+      "Machine Learning",
+      "Python"
+    ],
+    "role": "user",
+    "userRole": "developer",
+    "createdAt": "2025-08-05T04:06:19.81+00:00",
+    "affiliation": "University of Colombo School of Computing",
+    "gender": "female",
+    "expertise": "Human-Computer Interaction and Cognitive Computing",
+    "video": "https://drive.google.com/file/d/1nQJs18iNi-72j-dVmtR2jT_iTCzd2lVF/view?usp=sharing"
+  },
+  {
+    "id": "8ab708db-197c-4e52-9234-a95d8436654e",
+    "name": "Sahan Abeyrathna",
+    "email": "sahan.abeyrathna@example.com",
+    "image": "https://drive.google.com/file/d/1gkkZMy2ndu8HFTM3w9Gr3JTGw3-QomBM/view?usp=sharing",
+    "bio": "Electronics and telecommunications engineering student with startup experience and expertise in physiological signal extraction from video",
+    "skills": [
+      "Computer Vision",
+      "Signal Processing",
+      "Python"
+    ],
+    "role": "user",
+    "userRole": "developer",
+    "createdAt": "2025-08-05T04:06:19.881+00:00",
+    "affiliation": "University of Moratuwa",
+    "gender": "male",
+    "expertise": "Biomedical Signal Processing and Computer Vision",
+    "video": "https://drive.google.com/file/d/1DprOvBRW2CzNuC1lAj4nynz3jF5IsdVR/view?usp=sharing"
+  },
+  {
+    "id": "0ac91b24-9eda-4b22-9d65-046bf74d54f7",
+    "name": "Julian Silva",
+    "email": "julian.silva@example.com",
+    "image": "https://drive.google.com/file/d/10GhW5P0Jy0qx6ox7F6yiO8PDXbCrV9oN/view?usp=sharing",
+    "bio": "Embedded ML engineer and AI startup founder specializing in computer vision robotics and assistive technology solutions",
+    "skills": [
+      "Machine Learning",
+      "Computer Vision",
+      "Robotics"
+    ],
+    "role": "user",
+    "userRole": "mentor",
+    "createdAt": "2025-08-05T04:06:19.944+00:00",
+    "affiliation": "University of Moratuwa",
+    "gender": "male",
+    "expertise": "Embedded Machine Learning and Computer Vision",
+    "video": "https://drive.google.com/file/d/1j45qgiJcxWMDIaHZHiI5MvFfY_e5ljMs/view?usp=sharing"
+  },
+  {
+    "id": "f17670d9-00ed-4966-bfb8-e16ddada92fa",
+    "name": "Charuka Bandara",
+    "email": "charuka.bandara@example.com",
+    "image": "https://drive.google.com/file/d/1HqKVvP_GBUrfBeE-SOpY5wt_VLhnOhgA/view?usp=sharing",
+    "bio": "AI research engineer building humanoid robots with computer vision capabilities and MIT machine learning experience",
+    "skills": [
+      "Computer Vision",
+      "Machine Learning",
+      "Robotics"
+    ],
+    "role": "user",
+    "userRole": "developer",
+    "createdAt": "2025-08-05T04:06:20.02+00:00",
+    "affiliation": "University of Moratuwa",
+    "gender": "female",
+    "expertise": "AI Research and Computer Vision",
+    "video": "https://drive.google.com/file/d/1Acv_0GkpKqdZOw9Rf_cg-xS56XEX7KCc/view?usp=sharing"
+  },
+  {
+    "id": "78b80e19-4194-46d4-add1-2928e54009ba",
+    "name": "Lakshitha Eranga",
+    "email": "lakshitha.eranga@example.com",
+    "image": "https://drive.google.com/file/d/1CSekResuWwKrt2FDUVU5_2RGutGpL7li/view?usp=sharing",
+    "bio": "Entrepreneur running a startup focused on web-based solutions and exploring AI service integrations",
+    "skills": [
+      "Web Development",
+      "JavaScript",
+      "React"
+    ],
+    "role": "user",
+    "userRole": "developer",
+    "createdAt": "2025-08-05T04:06:20.091+00:00",
+    "affiliation": "University of Peradeniya",
+    "gender": "male",
+    "expertise": "Web Development and AI Services",
+    "video": "https://drive.google.com/file/d/1ZQGyad0myFsE7yjBCPZhW4yH1iCys6Ep/view?usp=sharing"
+  },
+  {
+    "id": "64df3281-15eb-4d04-94b8-637ba77238e2",
+    "name": "Shakya Dissanayake",
+    "email": "shakya.dissanayake@example.com",
+    "image": "https://drive.google.com/file/d/11UZt_Ghscwt1dzor_njy03fgg6gs_EuK/view?usp=sharing",
+    "bio": "Freelance ML developer specializing in computer vision and LLMs with research focus on on-device AI and edge computing",
+    "skills": [
+      "Machine Learning",
+      "Computer Vision",
+      "LLMs"
+    ],
+    "role": "user",
+    "userRole": "developer",
+    "createdAt": "2025-08-05T04:06:20.16+00:00",
+    "affiliation": "Kotelawala Defence University",
+    "gender": "male",
+    "expertise": "Computer Vision and Edge AI",
+    "video": "https://drive.google.com/file/d/1XastL_CuLr5-zwZbnmJD7TfSdYSPFirA/view?usp=sharing"
+  },
+  {
+    "id": "6729272e-c5bd-4964-95e1-7e347cb2bfd3",
+    "name": "Ransadi de Alwis",
+    "email": "ransadi.dealwis@example.com",
+    "image": "/uploads/default/default_user_icon.png",
+    "bio": "Deep learning enthusiast with passion for smart wearables and human-computer interaction technologies",
+    "skills": [
+      "Deep Learning",
+      "Machine Learning",
+      "Python"
+    ],
+    "role": "user",
+    "userRole": "developer",
+    "createdAt": "2025-08-05T04:06:20.225+00:00",
+    "affiliation": "University of Moratuwa",
+    "gender": "female",
+    "expertise": "Wearable Technology and Deep Learning",
+    "video": ""
+  },
+  {
+    "id": "6301cbee-ae1d-4a41-9373-67904138f2d0",
+    "name": "W C K Jayaweera",
+    "email": "wck.jayaweera@example.com",
+    "image": "https://drive.google.com/file/d/10LuwsaPdmnPKSMTsEpkFYYyZKas1mGVr/view?usp=sharing",
+    "bio": "Postgraduate researcher specializing in Natural Language Processing and Large Language Models with advanced NLP expertise",
+    "skills": [
+      "Natural Language Processing",
+      "Large Language Models",
+      "Python"
+    ],
+    "role": "user",
+    "userRole": "mentor",
+    "createdAt": "2025-08-05T04:06:20.289+00:00",
+    "affiliation": "University of Moratuwa",
+    "gender": "female",
+    "expertise": "Natural Language Processing and LLMs",
+    "video": "https://drive.google.com/file/d/1OVPe8IMJiwHfoUNQcPZ8ZqlscT6TLtqV/view?usp=sharing"
+  },
+  {
+    "id": "b8053585-1c81-4cd6-96ac-d1d25802dd11",
+    "name": "Sanjani Wickramasinghe",
+    "email": "sanjani.wickramasinghe@example.com",
+    "image": "https://drive.google.com/file/d/1OnAtLCqbwP9LDPSvJEDQwKKjQrFwngp2/view?usp=sharing",
+    "bio": "Data scientist at IFS developing enterprise AI solutions including OCR machine learning and generative AI applications",
+    "skills": [
+      "Machine Learning",
+      "Data Science",
+      "OCR"
+    ],
+    "role": "user",
+    "userRole": "developer",
+    "createdAt": "2025-08-05T04:06:20.355+00:00",
+    "affiliation": "University of Colombo",
+    "gender": "female",
+    "expertise": "Enterprise AI and Machine Learning",
+    "video": "https://drive.google.com/file/d/1Vyl18x48U5wEr6MAe0vG5LHkCgn9cRyE/view?usp=sharing"
+  },
+  {
+    "id": "b59348f0-53a1-4ebe-a90e-9418586d4ce7",
+    "name": "Manith Marapperuma",
+    "email": "manith.marapperuma@example.com",
+    "image": "https://drive.google.com/file/d/10DQRgc7FjmcGG49hbDV4F-zFQdxeVg-_/view?usp=sharing",
+    "bio": "Machine learning intern specializing in Graph Neural Networks and Graph Database technologies for complex data relationships",
+    "skills": [
+      "Graph Neural Networks",
+      "Machine Learning",
+      "Python"
+    ],
+    "role": "user",
+    "userRole": "developer",
+    "createdAt": "2025-08-05T04:06:20.426+00:00",
+    "affiliation": "Kotelawala Defence University",
+    "gender": "male",
+    "expertise": "Graph Neural Networks and Graph Databases",
+    "video": "https://drive.google.com/file/d/1MYxgXue9kEK-t_3b21IyCNq-MHJ6N5OD/view?usp=sharing"
+  },
+  {
+    "id": "49be1551-8598-49b1-a8b6-b1103db843d1",
+    "name": "Nipun Sadeepa W",
+    "email": "nipun.sadeepa@example.com",
+    "image": "https://drive.google.com/file/d/1uJqLqD3napWN-wwlOfLZRw6qkIe4Tp4i/view?usp=sharing",
+    "bio": "AI/ML intern at H2O.ai with entrepreneurial goals to build AI software solutions for agricultural applications",
+    "skills": [
+      "Machine Learning",
+      "Agriculture Technology",
+      "Python"
+    ],
+    "role": "user",
+    "userRole": "developer",
+    "createdAt": "2025-08-05T04:06:20.489+00:00",
+    "affiliation": "University of Jaffna",
+    "gender": "male",
+    "expertise": "AI for Agriculture and Machine Learning",
+    "video": "https://drive.google.com/file/d/1UYyBEh2KET4ka481xbAYMzW7anNOQu6Z/view?usp=sharing"
+  },
+  {
+    "id": "539c8b09-9d02-4d88-8ba5-430345b5093e",
+    "name": "Shaveen Herath",
+    "email": "shaveen.herath@example.com",
+    "image": "https://drive.google.com/file/d/1U69pMPcqo763GPJOKCLcwzUwCnoPn1rQ/view?usp=sharing",
+    "bio": "AI engineer intern working on vision-language models with hobby projects in transformer architectures",
+    "skills": [
+      "Vision-Language Models",
+      "Transformers",
+      "Deep Learning"
+    ],
+    "role": "user",
+    "userRole": "developer",
+    "createdAt": "2025-08-05T04:06:20.564+00:00",
+    "affiliation": "University of Moratuwa",
+    "gender": "male",
+    "expertise": "Vision-Language Models and Transformers",
+    "video": "https://drive.google.com/file/d/1tTLAKrvwCUGPDsnGC-XDYrlbT53IJqr1/view?usp=sharing"
+  },
+  {
+    "id": "103bfb81-188f-4a4b-953a-72c05b26865f",
+    "name": "Nirasha Nelki",
+    "email": "nirasha.nelki@example.com",
+    "image": "https://drive.google.com/file/d/1iWQkthxHNLfiCkiyQK2Ssol_xCNqlzRM/view?usp=sharing",
+    "bio": "Research intern focused on enhancing explainability in text summarization models with strong interest in human-computer interaction",
+    "skills": [
+      "Natural Language Processing",
+      "Explainable AI",
+      "Machine Learning"
+    ],
+    "role": "user",
+    "userRole": "developer",
+    "createdAt": "2025-08-05T04:06:20.635+00:00",
+    "affiliation": "University of Colombo School of Computing",
+    "gender": "female",
+    "expertise": "Explainable AI and Text Summarization",
+    "video": "https://drive.google.com/file/d/1tMrsZ4pN22xadA3qerX2h_XNzJmcdSaL/view?usp=sharing"
+  },
+  {
+    "id": "426bc15c-b809-4c63-8e7c-3e29e4addb46",
+    "name": "Shaveen Silva",
+    "email": "shaveen.silva@example.com",
+    "image": "https://drive.google.com/file/d/1XVyjTQxWBBK2j2lm_bEBXwUlZfgQrXza/view?usp=sharing",
+    "bio": "Startup developer building agentic AI platforms with unique background combining finance expertise and AI development",
+    "skills": [
+      "Agentic AI",
+      "Machine Learning",
+      "Finance"
+    ],
+    "role": "user",
+    "userRole": "developer",
+    "createdAt": "2025-08-05T04:06:20.7+00:00",
+    "affiliation": "University of Moratuwa",
+    "gender": "male",
+    "expertise": "Agentic AI and Financial Technology",
+    "video": "https://drive.google.com/file/d/1FMl0qKS_lLRX7s0fPdldpeR16Zp8McSz/view?usp=sharing"
+  },
+  {
+    "id": "9c885165-e104-499c-8698-ab7fdc86bf01",
+    "name": "K. D. Sunera S",
+    "email": "sunera.s@example.com",
+    "image": "https://drive.google.com/file/d/1tqMF8fy5C_x36Z1jn-TS0BLH6niUZGEK/view?usp=sharing",
+    "bio": "Software engineer intern at CodeGen aiming for leadership positions while building expertise in AI and machine learning",
+    "skills": [
+      "Software Engineering",
+      "Machine Learning",
+      "Python"
+    ],
+    "role": "user",
+    "userRole": "developer",
+    "createdAt": "2025-08-05T04:06:20.767+00:00",
+    "affiliation": "University of Moratuwa",
+    "gender": "male",
+    "expertise": "Software Engineering and AI/ML",
+    "video": "https://drive.google.com/file/d/1UTk1RLlrECFJPszGfWjtpHxo4XcEQCwh/view?usp=sharing"
+  },
+  {
+    "id": "cf86ac4f-6d1f-414d-bb02-6a32e636cd16",
+    "name": "Ovindu Atukorala",
+    "email": "ovindu.atukorala@example.com",
+    "image": "https://drive.google.com/file/d/1iX8OCcYzYiwNKh9V8xR6XUCdRI_YnAe8/view?usp=sharing",
+    "bio": "GenAI intern creating agentic workers with experience in finance and startup pitching for innovative AI solutions",
+    "skills": [
+      "Generative AI",
+      "Agentic Systems",
+      "Machine Learning"
+    ],
+    "role": "user",
+    "userRole": "developer",
+    "createdAt": "2025-08-05T04:06:20.832+00:00",
+    "affiliation": "University of Moratuwa",
+    "gender": "male",
+    "expertise": "Generative AI and Agentic Systems",
+    "video": "https://drive.google.com/file/d/1QmiWvHg-mmDLRpKOZ43fZgemHH2GFsE1/view?usp=sharing"
+  },
+  {
+    "id": "17b0b489-87bb-4288-be20-5f990058e022",
+    "name": "H.K. Dilki Sewwandi",
+    "email": "dilki.sewwandi@example.com",
+    "image": "/uploads/default/default_user_icon.png",
+    "bio": "HCI lab research assistant with CHI 2025 publication and software development experience in human-computer interaction",
+    "skills": [
+      "Human-Computer Interaction",
+      "Research",
+      "Software Development"
+    ],
+    "role": "user",
+    "userRole": "developer",
+    "createdAt": "2025-08-05T04:06:20.897+00:00",
+    "affiliation": "University of Colombo School of Computing",
+    "gender": "female",
+    "expertise": "Human-Computer Interaction Research",
+    "video": ""
+  },
+  {
+    "id": "a7a05a07-fe00-4d7e-a499-1f53c07becbd",
+    "name": "Dilina Bandara",
+    "email": "dilina.bandara@example.com",
+    "image": "https://drive.google.com/file/d/1x6YHYeEDVOSCZCtovOlx_6MQrV5muvTF/view?usp=sharing",
+    "bio": "Young entrepreneur and founder of JustEnglish.lk generating revenue while building innovative educational technology solutions",
+    "skills": [
+      "Entrepreneurship",
+      "Educational Technology",
+      "Web Development"
+    ],
+    "role": "user",
+    "userRole": "mentor",
+    "createdAt": "2025-08-05T04:06:20.96+00:00",
+    "affiliation": "Informatics Institute of Technology",
+    "gender": "male",
+    "expertise": "Educational Technology and Entrepreneurship",
+    "video": "https://drive.google.com/file/d/1AjFwvNN81Q1DgrHI82b4FnlZIk9C4U3k/view?usp=sharing"
+  },
+  {
+    "id": "8e4619b2-4d5e-4ea8-b95f-308c2397eb7e",
+    "name": "Ranshika Sandeepani",
+    "email": "ranshika.sandeepani@example.com",
+    "image": "https://drive.google.com/file/d/1mD3fVfuztCTZraot9hC-d0gJiYs7uSsI/view?usp=sharing",
+    "bio": "Data science student researching AI applications in mental health and healthcare analytics with time series forecasting expertise",
+    "skills": [
+      "Data Science",
+      "Healthcare Analytics",
+      "Machine Learning"
+    ],
+    "role": "user",
+    "userRole": "developer",
+    "createdAt": "2025-08-05T04:06:21.02+00:00",
+    "affiliation": "Kotelawala Defence University",
+    "gender": "female",
+    "expertise": "AI for Mental Health and Healthcare Analytics",
+    "video": "https://drive.google.com/file/d/1TmkWoEecFtldXBE8vs99sHseWsj8JEzV/view?usp=sharing"
+  },
+  {
+    "id": "e7915303-06d9-4ce9-863a-51cb52761f0e",
+    "name": "Leeshan Liyanaarachchi",
+    "email": "leeshan.liyanaarachchi@example.com",
+    "image": "https://drive.google.com/file/d/1qK-95JUzMRgeXUvK1r7lxjT5w_jU3cMf/view?usp=sharing",
+    "bio": "Entrepreneur planning tourism and agri-tech startups with extensive leadership experience and image processing focus",
+    "skills": [
+      "Image Processing",
+      "Computer Vision",
+      "Entrepreneurship"
+    ],
+    "role": "user",
+    "userRole": "developer",
+    "createdAt": "2025-08-05T04:06:21.082+00:00",
+    "affiliation": "University of Peradeniya",
+    "gender": "male",
+    "expertise": "Image Processing and Entrepreneurship",
+    "video": "https://drive.google.com/file/d/1ItFAeJsZ6TSSJHmTNVv6jt5l6-I5yMjz/view?usp=sharing"
+  },
+  {
+    "id": "0829a62e-c914-4254-b20c-fe5056c0c209",
+    "name": "Sajeev Kugarajah",
+    "email": "sajeev.kugarajah@example.com",
+    "image": "/uploads/default/default_user_icon.png",
+    "bio": "ML engineer intern working on LLM-based forecasting and disaster management systems using multi-agent approaches for social good",
+    "skills": [
+      "Large Language Models",
+      "Forecasting",
+      "Machine Learning"
+    ],
+    "role": "user",
+    "userRole": "developer",
+    "createdAt": "2025-08-05T04:06:21.143+00:00",
+    "affiliation": "University of Moratuwa",
+    "gender": "male",
+    "expertise": "LLM Forecasting and Disaster Management",
+    "video": ""
+  },
+  {
+    "id": "46f0ea55-5da8-4832-abe4-dde9b7ea3fd8",
+    "name": "Gayuni Basnayake",
+    "email": "gayuni.basnayake@example.com",
+    "image": "https://drive.google.com/file/d/1_DRGN9MwRrYsUo1eyzow1XIa48j6u5tp/view?usp=sharing",
+    "bio": "AI/ML intern and robotics instructor combining fuzzy logic research with computer vision for enhanced educational robotics",
+    "skills": [
+      "Fuzzy Logic",
+      "Computer Vision",
+      "Robotics"
+    ],
+    "role": "user",
+    "userRole": "developer",
+    "createdAt": "2025-08-05T04:06:21.206+00:00",
+    "affiliation": "University of Moratuwa",
+    "gender": "female",
+    "expertise": "Fuzzy Logic and Computer Vision",
+    "video": "https://drive.google.com/file/d/107nJBsbVSRQXZxGAdtOGnG8DEWfvJCRq/view?usp=sharing"
+  },
+  {
+    "id": "20c0aa65-1b98-4cca-ba63-0a6644a95eb3",
+    "name": "Lasindu Ranasinghe",
+    "email": "lasindu.ranasinghe@example.com",
+    "image": "https://drive.google.com/file/d/1PNtGGr7wG4w8LZ2-ubWXfhNYCT4JCrWc/view?usp=sharing",
+    "bio": "Event organizer and networking enthusiast who successfully organized Ideate360 entrepreneurship event for university peers",
+    "skills": [
+      "Event Management",
+      "Entrepreneurship",
+      "Leadership"
+    ],
+    "role": "user",
+    "userRole": "developer",
+    "createdAt": "2025-08-05T04:06:21.28+00:00",
+    "affiliation": "Kotelawala Defence University",
+    "gender": "male",
+    "expertise": "Event Management and Entrepreneurship",
+    "video": "https://drive.google.com/file/d/14ISAKPROKVY8F2GLz3IBwbXy6la_ZJqq/view?usp=sharing"
+  },
+  {
+    "id": "358cbf5f-4a6e-4dfe-a7b4-26ec723dc558",
+    "name": "T.N Sasindi Peiris",
+    "email": "sasindi.peiris@example.com",
+    "image": "/uploads/default/default_user_icon.png",
+    "bio": "Fashion technology enthusiast and public speaking champion interested in blending artificial intelligence with fashion innovation",
+    "skills": [
+      "Fashion Technology",
+      "AI Applications",
+      "Public Speaking"
+    ],
+    "role": "user",
+    "userRole": "developer",
+    "createdAt": "2025-08-05T04:06:21.349+00:00",
+    "affiliation": "University of Moratuwa",
+    "gender": "female",
+    "expertise": "AI in Fashion and Public Speaking",
+    "video": ""
+  },
+  {
+    "id": "c5c7dda4-500c-4b68-8c3e-7b31b42b7d40",
+    "name": "Subhavi",
+    "email": "subhavi@example.com",
+    "image": "https://drive.google.com/file/d/1nfCzD3Q-9pbPjfKBHHi89gcEhzMKNoXl/view?usp=sharing",
+    "bio": "Fashion design student interning at MAS Active with vision to innovate at intersection of fashion technology and sustainability",
+    "skills": [
+      "Fashion Design",
+      "Sustainability",
+      "Innovation"
+    ],
+    "role": "user",
+    "userRole": "developer",
+    "createdAt": "2025-08-05T04:06:21.415+00:00",
+    "affiliation": "University of Moratuwa",
+    "gender": "female",
+    "expertise": "Sustainable Fashion Technology",
+    "video": "https://drive.google.com/file/d/1z2-_xdULYIbFEZ7GORIbcXkYzbRh0mzG/view?usp=sharing"
+  },
+  {
+    "id": "c0f7bae4-24f7-4d11-9792-c55eb0623c8a",
+    "name": "Alfer",
+    "email": "alfer@example.com",
+    "image": "https://drive.google.com/file/d/1IG5vr9xfTXBcXqloSAbV5eTkfrVL0FkO/view?usp=sharing",
+    "bio": "Computer science graduate working as software engineer intern with comprehensive full-stack development experience",
+    "skills": [
+      "Full-Stack Development",
+      "JavaScript",
+      "React"
+    ],
+    "role": "user",
+    "userRole": "developer",
+    "createdAt": "2025-08-05T04:06:21.482+00:00",
+    "affiliation": "University of Jaffna",
+    "gender": "male",
+    "expertise": "Full-Stack Development",
+    "video": "https://drive.google.com/file/d/1ymXlb1dc8qicF9UmbjdZS8cokbWlEqHT/view?usp=sharing"
+  },
+  {
+    "id": "73db7d59-76b9-443c-a989-b0abc0c8f2ac",
+    "name": "Lahiru Praveen",
+    "email": "lahiru.praveen@example.com",
+    "image": "https://drive.google.com/file/d/1-pnuvBmW89M2Y6OTt38f5j6_WcTzZCXC/view?usp=sharing",
+    "bio": "AI degree student interning at Sysco LABS with PhD aspirations to bridge AI research with real-world applications",
+    "skills": [
+      "Artificial Intelligence",
+      "Machine Learning",
+      "Research"
+    ],
+    "role": "user",
+    "userRole": "developer",
+    "createdAt": "2025-08-05T04:06:21.546+00:00",
+    "affiliation": "University of Moratuwa",
+    "gender": "male",
+    "expertise": "AI Research and Development",
+    "video": "https://drive.google.com/file/d/1XUFO7P0RB02AbKQtVdcZUBmB0HgtVJVQ/view?usp=sharing"
+  },
+  {
+    "id": "ba541a42-aea6-46fc-91ed-d126c5f6deda",
+    "name": "Sachintha Nimesh S",
+    "email": "sachintha.nimesh@example.com",
+    "image": "/uploads/default/default_user_icon.png",
+    "bio": "Software engineering intern at WSO2 with undergraduate research focus on distributed machine learning systems",
+    "skills": [
+      "Distributed Systems",
+      "Machine Learning",
+      "Software Engineering"
+    ],
+    "role": "user",
+    "userRole": "developer",
+    "createdAt": "2025-08-05T04:06:21.605+00:00",
+    "affiliation": "University of Jaffna",
+    "gender": "male",
+    "expertise": "Distributed Machine Learning",
+    "video": ""
+  }
+]

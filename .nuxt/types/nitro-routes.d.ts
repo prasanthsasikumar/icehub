@@ -77,6 +77,9 @@ declare module "nitropack/types" {
     '/api/groups': {
       'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/groups/index.get').default>>>>
     }
+    '/api/proxy-image': {
+      'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/proxy-image.get').default>>>>
+    }
     '/api/skills': {
       'default': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/skills').default>>>>
     }

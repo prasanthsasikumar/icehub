@@ -3,7 +3,7 @@ import { Server } from 'node:http';
 import path, { resolve, dirname, join } from 'node:path';
 import nodeCrypto from 'node:crypto';
 import { parentPort, threadId } from 'node:worker_threads';
-import { defineEventHandler, handleCacheHeaders, splitCookiesString, createEvent, fetchWithEvent, isEvent, eventHandler, setHeaders, sendRedirect, proxyRequest, getRequestHeader, setResponseHeaders, setResponseStatus, send, getRequestHeaders, setResponseHeader, appendResponseHeader, getRequestURL, getResponseHeader, removeResponseHeader, createError, getQuery as getQuery$1, readBody, createApp, createRouter as createRouter$1, toNodeListener, lazyEventHandler, getResponseStatus, getRouterParam, getCookie, getHeader, getMethod, setCookie, deleteCookie, readMultipartFormData, getResponseStatusText } from 'file://C:/Users/prasa/OneDrive/Documents/GitHub/icehub/node_modules/h3/dist/index.mjs';
+import { defineEventHandler, handleCacheHeaders, splitCookiesString, createEvent, fetchWithEvent, isEvent, eventHandler, setHeaders, sendRedirect, proxyRequest, getRequestHeader, setResponseHeaders, setResponseStatus, send, getRequestHeaders, setResponseHeader, appendResponseHeader, getRequestURL, getResponseHeader, removeResponseHeader, createError, getQuery as getQuery$1, readBody, createApp, createRouter as createRouter$1, toNodeListener, lazyEventHandler, getResponseStatus, getRouterParam, getCookie, getHeader, getMethod, setCookie, deleteCookie, readMultipartFormData, setHeader, getResponseStatusText } from 'file://C:/Users/prasa/OneDrive/Documents/GitHub/icehub/node_modules/h3/dist/index.mjs';
 import { escapeHtml } from 'file://C:/Users/prasa/OneDrive/Documents/GitHub/icehub/node_modules/@vue/shared/dist/shared.cjs.js';
 import bcrypt from 'file://C:/Users/prasa/OneDrive/Documents/GitHub/icehub/node_modules/bcrypt/bcrypt.js';
 import { v4 } from 'file://C:/Users/prasa/OneDrive/Documents/GitHub/icehub/node_modules/uuid/dist/esm/index.js';
@@ -1122,16 +1122,16 @@ _PrQa1nMjyI8aW7twHOgrKJdAvlKKDoWyBB4SMVdF94
 const assets = {
   "/index.mjs": {
     "type": "text/javascript; charset=utf-8",
-    "etag": "\"263a6-FvG7rCJQ5dtIeWXqsAjw0LM+dpI\"",
-    "mtime": "2025-08-05T02:59:07.362Z",
-    "size": 156582,
+    "etag": "\"26c63-c4+y0RnJ8qDGBWspzBHmETRerc8\"",
+    "mtime": "2025-08-05T04:53:38.568Z",
+    "size": 158819,
     "path": "index.mjs"
   },
   "/index.mjs.map": {
     "type": "application/json",
-    "etag": "\"88651-uv8g9lU2+FRxkEjfuMbM7SXm/A4\"",
-    "mtime": "2025-08-05T02:59:07.363Z",
-    "size": 558673,
+    "etag": "\"8a07d-vn1v004Gm2cnB91gfyJDeWrqLAc\"",
+    "mtime": "2025-08-05T04:53:38.569Z",
+    "size": 565373,
     "path": "index.mjs.map"
   }
 };
@@ -1567,6 +1567,7 @@ const _lazy_24y7d0 = () => Promise.resolve().then(function () { return _linkId__
 const _lazy_0CBvIK = () => Promise.resolve().then(function () { return update_put; });
 const _lazy_bPwzpJ = () => Promise.resolve().then(function () { return create_post$1; });
 const _lazy_KQFSdj = () => Promise.resolve().then(function () { return index_get$1; });
+const _lazy_iiZPnM = () => Promise.resolve().then(function () { return proxyImage_get$1; });
 const _lazy_TAOxgK = () => Promise.resolve().then(function () { return skills$1; });
 const _lazy_tf6qb9 = () => Promise.resolve().then(function () { return upload_post$1; });
 const _lazy_NGO5j7 = () => Promise.resolve().then(function () { return user_get$1; });
@@ -1603,6 +1604,7 @@ const handlers = [
   { route: '/api/groups/:id/update', handler: _lazy_0CBvIK, lazy: true, middleware: false, method: "put" },
   { route: '/api/groups/create', handler: _lazy_bPwzpJ, lazy: true, middleware: false, method: "post" },
   { route: '/api/groups', handler: _lazy_KQFSdj, lazy: true, middleware: false, method: "get" },
+  { route: '/api/proxy-image', handler: _lazy_iiZPnM, lazy: true, middleware: false, method: "get" },
   { route: '/api/skills', handler: _lazy_TAOxgK, lazy: true, middleware: false, method: undefined },
   { route: '/api/upload', handler: _lazy_tf6qb9, lazy: true, middleware: false, method: "post" },
   { route: '/api/user', handler: _lazy_NGO5j7, lazy: true, middleware: false, method: "get" },
@@ -4008,6 +4010,67 @@ const index_get = defineEventHandler(async (event) => {
 const index_get$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: index_get
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const proxyImage_get = defineEventHandler(async (event) => {
+  var _a;
+  const query = getQuery$1(event);
+  const { id } = query;
+  if (!id || typeof id !== "string") {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Missing file ID"
+    });
+  }
+  try {
+    const urls = [
+      `https://lh3.googleusercontent.com/d/${id}=w400`,
+      `https://drive.google.com/thumbnail?id=${id}&sz=w400`,
+      `https://drive.google.com/uc?export=view&id=${id}`
+    ];
+    let imageResponse = null;
+    let error = null;
+    for (const url of urls) {
+      try {
+        console.log(`Trying to fetch image from: ${url}`);
+        const response = await fetch(url);
+        if (response.ok && ((_a = response.headers.get("content-type")) == null ? void 0 : _a.startsWith("image/"))) {
+          console.log(`Success with URL: ${url}`);
+          imageResponse = response;
+          break;
+        } else {
+          console.log(`Failed with URL: ${url}, status: ${response.status}`);
+        }
+      } catch (fetchError) {
+        console.log(`Error with URL: ${url}`, fetchError);
+        error = fetchError;
+        continue;
+      }
+    }
+    if (!imageResponse || !imageResponse.ok) {
+      throw createError({
+        statusCode: 404,
+        statusMessage: "Image not found or inaccessible"
+      });
+    }
+    const imageBuffer = await imageResponse.arrayBuffer();
+    const contentType = imageResponse.headers.get("content-type") || "image/jpeg";
+    setHeader(event, "Content-Type", contentType);
+    setHeader(event, "Cache-Control", "public, max-age=86400");
+    setHeader(event, "Access-Control-Allow-Origin", "*");
+    return new Uint8Array(imageBuffer);
+  } catch (error) {
+    console.error("Proxy image error:", error);
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Failed to fetch image"
+    });
+  }
+});
+
+const proxyImage_get$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: proxyImage_get
 }, Symbol.toStringTag, { value: 'Module' }));
 
 const skills = defineEventHandler(async () => {

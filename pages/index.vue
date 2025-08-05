@@ -184,7 +184,7 @@
                 <div class="card-padding">
                   <div class="flex items-center mb-4 sm:mb-5">
                     <div class="w-12 h-12 sm:w-15 sm:h-15 rounded-full overflow-hidden mr-3 sm:mr-4 flex-shrink-0">
-                      <img :src="user.image" :alt="`${user.name}'s avatar`" class="w-full h-full object-cover" />
+                      <img :src="getImageUrl(user.image)" :alt="`${user.name}'s avatar`" class="w-full h-full object-cover" />
                     </div>
                     <div class="flex-1 min-w-0">
                       <h3 class="text-base sm:text-lg font-semibold text-gray-700 mb-1 truncate">{{ user.name }}</h3>
@@ -310,6 +310,43 @@ const getDisplaySkills = (skills) => {
   
   // Old format - already strings
   return skills
+}
+
+// Image URL helper function for Google Drive images
+const getImageUrl = (url) => {
+  if (!url) return '/uploads/default/default_user_icon.png'
+  
+  try {
+    // Handle Google Drive URLs - use our proxy API
+    if (url.includes('drive.google.com')) {
+      // Extract file ID from various Google Drive URL formats
+      let fileId = null
+      
+      // Format: https://drive.google.com/file/d/FILE_ID/view?usp=sharing
+      let match = url.match(/\/file\/d\/([a-zA-Z0-9-_]+)/)
+      if (match) {
+        fileId = match[1]
+      } else {
+        // Format: https://drive.google.com/open?id=FILE_ID
+        match = url.match(/[?&]id=([a-zA-Z0-9-_]+)/)
+        if (match) {
+          fileId = match[1]
+        }
+      }
+      
+      if (fileId) {
+        console.log('Converting Google Drive URL to proxy:', url, '-> fileId:', fileId)
+        // Use our server-side proxy to serve the image
+        return `/api/proxy-image?id=${fileId}`
+      }
+    }
+    
+    // Return original URL for other formats (direct URLs, etc.)
+    return url
+  } catch (error) {
+    console.error('Error parsing image URL:', error)
+    return '/uploads/default/default_user_icon.png'
+  }
 }
 
 // Computed properties

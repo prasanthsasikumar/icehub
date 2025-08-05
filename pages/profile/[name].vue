@@ -53,7 +53,7 @@
               <!-- Profile Image -->
               <div class="relative">
                 <img 
-                  :src="data.image" 
+                  :src="getImageUrl(data.image)" 
                   :alt="`${data.name}'s profile`"
                   class="w-24 h-24 sm:w-32 sm:h-32 rounded-full object-cover border-4 border-gray-100 shadow-lg"
                   @error="handleImageError"
@@ -367,6 +367,43 @@ const { data, pending, error } = await useFetch('/api/user', {
 // Helper functions
 const handleImageError = (event) => {
   event.target.src = '/uploads/default/user-avatar.svg'
+}
+
+// Image URL helper function for Google Drive images
+const getImageUrl = (url) => {
+  if (!url) return '/uploads/default/user-avatar.svg'
+  
+  try {
+    // Handle Google Drive URLs - use our proxy API
+    if (url.includes('drive.google.com')) {
+      // Extract file ID from various Google Drive URL formats
+      let fileId = null
+      
+      // Format: https://drive.google.com/file/d/FILE_ID/view?usp=sharing
+      let match = url.match(/\/file\/d\/([a-zA-Z0-9-_]+)/)
+      if (match) {
+        fileId = match[1]
+      } else {
+        // Format: https://drive.google.com/open?id=FILE_ID
+        match = url.match(/[?&]id=([a-zA-Z0-9-_]+)/)
+        if (match) {
+          fileId = match[1]
+        }
+      }
+      
+      if (fileId) {
+        console.log('Converting Google Drive URL to proxy:', url, '-> fileId:', fileId)
+        // Use our server-side proxy to serve the image
+        return `/api/proxy-image?id=${fileId}`
+      }
+    }
+    
+    // Return original URL for other formats (direct URLs, etc.)
+    return url
+  } catch (error) {
+    console.error('Error parsing image URL:', error)
+    return '/uploads/default/user-avatar.svg'
+  }
 }
 
 const isMentor = (user) => {
