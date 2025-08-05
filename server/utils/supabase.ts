@@ -32,6 +32,43 @@ export class Database {
     return data
   }
 
+  static async getUsersByIds(ids: string[]) {
+    if (ids.length === 0) return []
+    
+    const { data, error } = await supabase
+      .from('users')
+      .select('*')
+      .in('id', ids)
+    
+    if (error) throw error
+    return data || []
+  }
+
+  // Method to simulate old approach (for comparison purposes)
+  static async getUsersByIdsOldWay(ids: string[]) {
+    if (ids.length === 0) return []
+    
+    console.log(`🐌 Old approach: Making ${ids.length} individual database calls...`)
+    const startTime = Date.now()
+    
+    const users = []
+    for (const id of ids) {
+      try {
+        const user = await this.getUserById(id)
+        if (user) {
+          users.push(user)
+        }
+      } catch (error) {
+        console.error(`Failed to get user ${id}:`, error)
+      }
+    }
+    
+    const endTime = Date.now()
+    console.log(`🐌 Old approach completed in ${endTime - startTime}ms with ${ids.length} database calls`)
+    
+    return users
+  }
+
   static async getUserByEmail(email: string) {
     const { data, error } = await supabase
       .from('users')

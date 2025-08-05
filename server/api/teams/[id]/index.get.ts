@@ -40,24 +40,44 @@ export default defineEventHandler(async (event) => {
     const membersWithRoles: any[] = []
     const mentors: any[] = []
     
+    console.log(`🚀 Database Optimization: Fetching user details for ${parsedMembers.length} members in batch instead of ${parsedMembers.length} individual queries`)
+    const startTime = Date.now()
+    
+    // Batch fetch all user details in a single query
+    const userIds = parsedMembers.map((member: any) => member.userId)
+    const userDetails = await Database.getUsersByIds(userIds)
+    
+    const endTime = Date.now()
+    console.log(`✅ Batch query completed in ${endTime - startTime}ms. Retrieved ${userDetails.length} user records in 1 database call instead of ${parsedMembers.length} calls`)
+    
+    // Create a map for quick lookup of user details
+    const userDetailsMap = new Map()
+    userDetails.forEach(user => {
+      userDetailsMap.set(user.id, user)
+    })
+    
+    // Process members with their roles
     for (const member of parsedMembers) {
       try {
-        const userDetails = await Database.getUserById(member.userId)
-        if (userDetails) {
+        const userDetail = userDetailsMap.get(member.userId)
+        if (userDetail) {
           const memberWithRole = {
             ...member,
-            userRole: userDetails.userRole || 'participant'
+            userRole: userDetail.userRole || 'participant'
           }
           
-          if (userDetails.userRole === 'mentor') {
+          if (userDetail.userRole === 'mentor') {
             mentors.push(memberWithRole)
           } else {
             membersWithRoles.push(memberWithRole)
           }
+        } else {
+          // If we can't find user details, treat as regular member
+          membersWithRoles.push(member)
         }
       } catch (error) {
-        console.error('Error getting user details for member:', member.userId, error)
-        // If we can't get user details, treat as regular member
+        console.error('Error processing member:', member.userId, error)
+        // If we can't process member, treat as regular member
         membersWithRoles.push(member)
       }
     }

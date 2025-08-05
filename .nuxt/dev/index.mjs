@@ -1124,7 +1124,22 @@ const plugins = [
 _imlJlEtcYUErFKlIoV3o40RwAHyYMj1YM8ArfD1nFG0
 ];
 
-const assets = {};
+const assets = {
+  "/index.mjs": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"2c962-Ep7i4J19L2wGD5G0bFoB6evD+Dk\"",
+    "mtime": "2025-08-05T14:45:17.199Z",
+    "size": 182626,
+    "path": "index.mjs"
+  },
+  "/index.mjs.map": {
+    "type": "application/json",
+    "etag": "\"a04c6-8xcoeeLlybdikPNrecUfda5SLcY\"",
+    "mtime": "2025-08-05T14:45:17.200Z",
+    "size": 656582,
+    "path": "index.mjs.map"
+  }
+};
 
 function readAsset (id) {
   const serverDir = dirname$1(fileURLToPath(globalThis._importMeta_.url));
@@ -1562,6 +1577,7 @@ const _lazy_QdJ6da = () => Promise.resolve().then(function () { return _linkId__
 const _lazy_PlLZQY = () => Promise.resolve().then(function () { return update_put$1; });
 const _lazy_WcKr2s = () => Promise.resolve().then(function () { return create_post$1; });
 const _lazy_dYTeGo = () => Promise.resolve().then(function () { return index_get$1; });
+const _lazy__RvuYf = () => Promise.resolve().then(function () { return optimization_get$1; });
 const _lazy_oEw_c6 = () => Promise.resolve().then(function () { return upload_post$1; });
 const _lazy_GGJj8N = () => Promise.resolve().then(function () { return user_get$1; });
 const _lazy_YqJ3kE = () => Promise.resolve().then(function () { return updatePassword_post$1; });
@@ -1602,6 +1618,7 @@ const handlers = [
   { route: '/api/teams/:id/update', handler: _lazy_PlLZQY, lazy: true, middleware: false, method: "put" },
   { route: '/api/teams/create', handler: _lazy_WcKr2s, lazy: true, middleware: false, method: "post" },
   { route: '/api/teams', handler: _lazy_dYTeGo, lazy: true, middleware: false, method: "get" },
+  { route: '/api/test/optimization', handler: _lazy__RvuYf, lazy: true, middleware: false, method: "get" },
   { route: '/api/upload', handler: _lazy_oEw_c6, lazy: true, middleware: false, method: "post" },
   { route: '/api/user', handler: _lazy_GGJj8N, lazy: true, middleware: false, method: "get" },
   { route: '/api/user/update-password', handler: _lazy_YqJ3kE, lazy: true, middleware: false, method: "post" },
@@ -1986,6 +2003,32 @@ class Database {
     const { data, error } = await supabase.from("users").select("*").eq("id", id).single();
     if (error) throw error;
     return data;
+  }
+  static async getUsersByIds(ids) {
+    if (ids.length === 0) return [];
+    const { data, error } = await supabase.from("users").select("*").in("id", ids);
+    if (error) throw error;
+    return data || [];
+  }
+  // Method to simulate old approach (for comparison purposes)
+  static async getUsersByIdsOldWay(ids) {
+    if (ids.length === 0) return [];
+    console.log(`\u{1F40C} Old approach: Making ${ids.length} individual database calls...`);
+    const startTime = Date.now();
+    const users = [];
+    for (const id of ids) {
+      try {
+        const user = await this.getUserById(id);
+        if (user) {
+          users.push(user);
+        }
+      } catch (error) {
+        console.error(`Failed to get user ${id}:`, error);
+      }
+    }
+    const endTime = Date.now();
+    console.log(`\u{1F40C} Old approach completed in ${endTime - startTime}ms with ${ids.length} database calls`);
+    return users;
   }
   static async getUserByEmail(email) {
     const { data, error } = await supabase.from("users").select("*").eq("email", email).single();
@@ -4063,22 +4106,34 @@ const index_get$2 = defineEventHandler(async (event) => {
     }) : [];
     const membersWithRoles = [];
     const mentors = [];
+    console.log(`\u{1F680} Database Optimization: Fetching user details for ${parsedMembers.length} members in batch instead of ${parsedMembers.length} individual queries`);
+    const startTime = Date.now();
+    const userIds = parsedMembers.map((member) => member.userId);
+    const userDetails = await Database.getUsersByIds(userIds);
+    const endTime = Date.now();
+    console.log(`\u2705 Batch query completed in ${endTime - startTime}ms. Retrieved ${userDetails.length} user records in 1 database call instead of ${parsedMembers.length} calls`);
+    const userDetailsMap = /* @__PURE__ */ new Map();
+    userDetails.forEach((user) => {
+      userDetailsMap.set(user.id, user);
+    });
     for (const member of parsedMembers) {
       try {
-        const userDetails = await Database.getUserById(member.userId);
-        if (userDetails) {
+        const userDetail = userDetailsMap.get(member.userId);
+        if (userDetail) {
           const memberWithRole = {
             ...member,
-            userRole: userDetails.userRole || "participant"
+            userRole: userDetail.userRole || "participant"
           };
-          if (userDetails.userRole === "mentor") {
+          if (userDetail.userRole === "mentor") {
             mentors.push(memberWithRole);
           } else {
             membersWithRoles.push(memberWithRole);
           }
+        } else {
+          membersWithRoles.push(member);
         }
       } catch (error) {
-        console.error("Error getting user details for member:", member.userId, error);
+        console.error("Error processing member:", member.userId, error);
         membersWithRoles.push(member);
       }
     }
@@ -4711,6 +4766,74 @@ const index_get = defineEventHandler(async (event) => {
 const index_get$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: index_get
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const optimization_get = defineEventHandler(async (event) => {
+  try {
+    const allUsers = await Database.getUsers();
+    const sampleUserIds = allUsers.slice(0, 10).map((user) => user.id);
+    if (sampleUserIds.length === 0) {
+      return {
+        message: "No users found to test with",
+        oldApproach: null,
+        newApproach: null,
+        improvement: null
+      };
+    }
+    console.log(`
+\u{1F525} DATABASE OPTIMIZATION COMPARISON TEST`);
+    console.log(`Testing with ${sampleUserIds.length} user IDs`);
+    console.log(`===========================================`);
+    const oldStartTime = Date.now();
+    await Database.getUsersByIdsOldWay(sampleUserIds);
+    const oldEndTime = Date.now();
+    const oldDuration = oldEndTime - oldStartTime;
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    const newStartTime = Date.now();
+    await Database.getUsersByIds(sampleUserIds);
+    const newEndTime = Date.now();
+    const newDuration = newEndTime - newStartTime;
+    const improvement = ((oldDuration - newDuration) / oldDuration * 100).toFixed(1);
+    const speedup = (oldDuration / newDuration).toFixed(1);
+    console.log(`
+\u{1F4CA} PERFORMANCE COMPARISON RESULTS:`);
+    console.log(`Old approach (${sampleUserIds.length} individual calls): ${oldDuration}ms`);
+    console.log(`New approach (1 batch call): ${newDuration}ms`);
+    console.log(`Performance improvement: ${improvement}% faster (${speedup}x speedup)`);
+    console.log(`Database calls reduced from ${sampleUserIds.length} to 1`);
+    console.log(`===========================================
+`);
+    return {
+      message: "Database optimization comparison completed",
+      testUserIds: sampleUserIds.length,
+      oldApproach: {
+        duration: oldDuration,
+        databaseCalls: sampleUserIds.length,
+        method: "Individual getUserById() calls"
+      },
+      newApproach: {
+        duration: newDuration,
+        databaseCalls: 1,
+        method: "Batch getUsersByIds() call"
+      },
+      improvement: {
+        percentFaster: `${improvement}%`,
+        speedupFactor: `${speedup}x`,
+        callsReduced: `${sampleUserIds.length} calls \u2192 1 call`
+      }
+    };
+  } catch (error) {
+    console.error("Error in optimization test:", error);
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Test failed"
+    });
+  }
+});
+
+const optimization_get$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: optimization_get
 }, Symbol.toStringTag, { value: 'Module' }));
 
 const upload_post = defineEventHandler(async (event) => {

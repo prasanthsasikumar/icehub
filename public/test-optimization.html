@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Optimization Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .result {
+            background: #f5f5f5;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #007acc;
+        }
+        .error {
+            border-left-color: #cc0000;
+            background: #ffe6e6;
+        }
+        .success {
+            border-left-color: #00cc00;
+            background: #e6ffe6;
+        }
+        button {
+            background: #007acc;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #005a9a;
+        }
+        pre {
+            background: #f8f8f8;
+            padding: 10px;
+            border-radius: 3px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Database Query Optimization Test</h1>
+    <p>This page tests the database query optimization that reduces N+1 queries for team member lookups.</p>
+    
+    <h2>Optimization Details:</h2>
+    <ul>
+        <li><strong>Problem:</strong> Team API was making individual Database.getUserById() calls for each member</li>
+        <li><strong>Solution:</strong> Added getUsersByIds() batch method to fetch all users in a single query</li>
+        <li><strong>Improvement:</strong> Reduced from N database calls to just 1 batch call</li>
+    </ul>
+
+    <h2>Test API Endpoints:</h2>
+    <button onclick="testTeamsList()">Test Teams List API</button>
+    <button onclick="testSpecificTeam()">Test Specific Team API</button>
+    <button onclick="testOptimizationComparison()">Test Optimization Comparison</button>
+    <button onclick="clearResults()">Clear Results</button>
+
+    <h2>Results:</h2>
+    <div id="results"></div>
+
+    <script>
+        function addResult(message, type = 'result') {
+            const results = document.getElementById('results');
+            const div = document.createElement('div');
+            div.className = `result ${type}`;
+            div.innerHTML = message;
+            results.appendChild(div);
+        }
+
+        function clearResults() {
+            document.getElementById('results').innerHTML = '';
+        }
+
+        async function testTeamsList() {
+            addResult('Testing teams list API...', 'result');
+            try {
+                const start = performance.now();
+                const response = await fetch('/api/teams');
+                const end = performance.now();
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    addResult(`✅ Teams list loaded in ${(end - start).toFixed(2)}ms. Found ${data.length} teams.`, 'success');
+                    addResult(`<pre>${JSON.stringify(data.slice(0, 2), null, 2)}</pre>`, 'result');
+                } else {
+                    addResult(`❌ Error: ${response.status} ${response.statusText}`, 'error');
+                }
+            } catch (error) {
+                addResult(`❌ Network error: ${error.message}`, 'error');
+            }
+        }
+
+        async function testSpecificTeam() {
+            addResult('Getting a team ID first...', 'result');
+            try {
+                // First get teams list to find a team ID
+                const teamsResponse = await fetch('/api/teams');
+                if (!teamsResponse.ok) {
+                    addResult(`❌ Failed to get teams list: ${teamsResponse.status}`, 'error');
+                    return;
+                }
+                
+                const teams = await teamsResponse.json();
+                if (teams.length === 0) {
+                    addResult('❌ No teams found to test with', 'error');
+                    return;
+                }
+
+                const teamId = teams[0].id;
+                addResult(`Testing team API with ID: ${teamId}`, 'result');
+                
+                const start = performance.now();
+                const response = await fetch(`/api/teams/${teamId}`);
+                const end = performance.now();
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    addResult(`✅ Team details loaded in ${(end - start).toFixed(2)}ms. Team has ${data.members.length} members and ${data.mentors.length} mentors.`, 'success');
+                    addResult(`<strong>Team:</strong> ${data.name}`, 'result');
+                    addResult(`<strong>Members:</strong> ${data.members.length}, <strong>Mentors:</strong> ${data.mentors.length}`, 'result');
+                    addResult('Check the server console for database optimization logs! 🚀', 'success');
+                } else {
+                    addResult(`❌ Error: ${response.status} ${response.statusText}`, 'error');
+                }
+            } catch (error) {
+                addResult(`❌ Network error: ${error.message}`, 'error');
+            }
+        }
+
+        async function testOptimizationComparison() {
+            addResult('Running database optimization comparison test...', 'result');
+            try {
+                const start = performance.now();
+                const response = await fetch('/api/test/optimization');
+                const end = performance.now();
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    addResult(`✅ Optimization test completed in ${(end - start).toFixed(2)}ms`, 'success');
+                    addResult(`<strong>📊 Performance Comparison Results:</strong>`, 'success');
+                    addResult(`🐌 <strong>Old Approach:</strong> ${data.oldApproach.duration}ms (${data.oldApproach.databaseCalls} database calls)`, 'result');
+                    addResult(`🚀 <strong>New Approach:</strong> ${data.newApproach.duration}ms (${data.newApproach.databaseCalls} database call)`, 'result');
+                    addResult(`🎯 <strong>Improvement:</strong> ${data.improvement.percentFaster} faster (${data.improvement.speedupFactor} speedup)`, 'success');
+                    addResult(`📈 <strong>Database Calls:</strong> ${data.improvement.callsReduced}`, 'success');
+                    addResult('Check the server console for detailed logs! 🚀', 'success');
+                } else {
+                    addResult(`❌ Error: ${response.status} ${response.statusText}`, 'error');
+                }
+            } catch (error) {
+                addResult(`❌ Network error: ${error.message}`, 'error');
+            }
+        }
+
+        // Auto-run initial test
+        document.addEventListener('DOMContentLoaded', () => {
+            addResult('🚀 Database Optimization Test Page Loaded', 'success');
+            addResult('Click the buttons above to test the optimized API endpoints. Check the server console for optimization logs!', 'result');
+        });
+    </script>
+</body>
+</html>

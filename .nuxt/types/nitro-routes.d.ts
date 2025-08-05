@@ -92,6 +92,9 @@ declare module "nitropack/types" {
     '/api/teams': {
       'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/teams/index.get').default>>>>
     }
+    '/api/test/optimization': {
+      'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/test/optimization.get').default>>>>
+    }
     '/api/upload': {
       'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/upload.post').default>>>>
     }
