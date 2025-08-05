@@ -1119,22 +1119,7 @@ const plugins = [
 _PrQa1nMjyI8aW7twHOgrKJdAvlKKDoWyBB4SMVdF94
 ];
 
-const assets = {
-  "/index.mjs": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"2b7c1-KJat4g2+bGrj/Kf8PaWrBhsbIU4\"",
-    "mtime": "2025-08-05T10:29:25.216Z",
-    "size": 178113,
-    "path": "index.mjs"
-  },
-  "/index.mjs.map": {
-    "type": "application/json",
-    "etag": "\"9c23f-5COvtquE6JLVZIrc9QM2as8tV9Q\"",
-    "mtime": "2025-08-05T10:29:25.219Z",
-    "size": 639551,
-    "path": "index.mjs.map"
-  }
-};
+const assets = {};
 
 function readAsset (id) {
   const serverDir = dirname$1(fileURLToPath(globalThis._importMeta_.url));
@@ -1541,7 +1526,7 @@ async function getIslandContext(event) {
   return ctx;
 }
 
-const _lazy_UUPDNC = () => Promise.resolve().then(function () { return addUserToGroup_post$1; });
+const _lazy__Govh_ = () => Promise.resolve().then(function () { return addUserToTeam_post$1; });
 const _lazy_yFfWmo = () => Promise.resolve().then(function () { return create_post$3; });
 const _lazy_vCTr7m = () => Promise.resolve().then(function () { return index_get$5; });
 const _lazy_PrS3ov = () => Promise.resolve().then(function () { return restore_post$1; });
@@ -1581,7 +1566,7 @@ const _lazy_dR2Hf1 = () => Promise.resolve().then(function () { return renderer$
 
 const handlers = [
   { route: '', handler: _GChHOJ, lazy: false, middleware: true, method: undefined },
-  { route: '/api/admin/add-user-to-group', handler: _lazy_UUPDNC, lazy: true, middleware: false, method: "post" },
+  { route: '/api/admin/add-user-to-team', handler: _lazy__Govh_, lazy: true, middleware: false, method: "post" },
   { route: '/api/admin/backup/create', handler: _lazy_yFfWmo, lazy: true, middleware: false, method: "post" },
   { route: '/api/admin/backup', handler: _lazy_vCTr7m, lazy: true, middleware: false, method: "get" },
   { route: '/api/admin/backup/restore', handler: _lazy_PrS3ov, lazy: true, middleware: false, method: "post" },
@@ -2305,7 +2290,7 @@ const supabase$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty
   supabaseAdmin: supabaseAdmin
 }, Symbol.toStringTag, { value: 'Module' }));
 
-const addUserToGroup_post = defineEventHandler(async (event) => {
+const addUserToTeam_post = defineEventHandler(async (event) => {
   if (getMethod(event) !== "POST") {
     throw createError({
       statusCode: 405,
@@ -2453,9 +2438,9 @@ const addUserToGroup_post = defineEventHandler(async (event) => {
   }
 });
 
-const addUserToGroup_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const addUserToTeam_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
-  default: addUserToGroup_post
+  default: addUserToTeam_post
 }, Symbol.toStringTag, { value: 'Module' }));
 
 const create_post$2 = defineEventHandler(async (event) => {
