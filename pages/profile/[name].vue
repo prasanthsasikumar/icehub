@@ -191,40 +191,10 @@
           </div>
 
           <!-- Skills Section -->
-          <div class="bg-white border border-gray-200 rounded-xl card-padding shadow-sm">
-            <h2 class="text-xl sm:text-2xl font-bold text-gray-700 mb-4 sm:mb-6 flex items-center gap-2 sm:gap-3">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" class="text-primary sm:w-6 sm:h-6">
-                <path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0L19.2 12l-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/>
-              </svg>
-              Technical Skills
-            </h2>
-            
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-              <div 
-                v-for="skill in getSkillsArray(data.skills)" 
-                :key="getSkillName(skill)"
-                class="skill-card"
-              >
-                <div class="flex items-center justify-between">
-                  <span class="font-medium text-sm sm:text-base">{{ getSkillName(skill) }}</span>
-                  <div class="flex items-center gap-1">
-                    <svg v-for="i in getSkillLevel(getSkillName(skill))" :key="i" width="10" height="10" viewBox="0 0 24 24" fill="currentColor" class="text-yellow-400 sm:w-3 sm:h-3">
-                      <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-                    </svg>
-                    <svg v-for="i in (5 - getSkillLevel(getSkillName(skill)))" :key="`empty-${i}`" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="text-gray-300 sm:w-3 sm:h-3">
-                      <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-                    </svg>
-                  </div>
-                </div>
-                <div class="mt-2 text-sm text-gray-500">
-                  {{ getSkillDescription(getSkillName(skill)) }}
-                </div>
-              </div>
-            </div>
-          </div>
+          <!-- Removed - moved to Profile Stats section -->
 
           <!-- Experience & Achievements -->
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div class="space-y-8">
             <!-- About Section -->
             <div class="bg-white border border-gray-200 rounded-xl p-8 shadow-sm">
               <h2 class="text-2xl font-bold text-gray-700 mb-6 flex items-center gap-3">
@@ -333,6 +303,39 @@
                 <div class="flex justify-between items-center">
                   <span class="text-gray-600">Technology Stack</span>
                   <span class="font-medium">{{ getTechStack(data.skills) }}</span>
+                </div>
+
+                <!-- Technical Skills Section -->
+                <div class="border-t border-gray-100 pt-6">
+                  <h3 class="text-xl font-bold text-gray-700 mb-4 flex items-center gap-2">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" class="text-primary">
+                      <path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0L19.2 12l-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/>
+                    </svg>
+                    Technical Skills
+                  </h3>
+                  
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div 
+                      v-for="skill in getSkillsArray(data.skills)" 
+                      :key="getSkillName(skill)"
+                      class="skill-card"
+                    >
+                      <div class="flex items-center justify-between">
+                        <span class="font-medium text-sm">{{ getSkillName(skill) }}</span>
+                        <div class="flex items-center gap-1">
+                          <svg v-for="i in getSkillLevel(getSkillName(skill))" :key="i" width="10" height="10" viewBox="0 0 24 24" fill="currentColor" class="text-yellow-400">
+                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                          </svg>
+                          <svg v-for="i in (5 - getSkillLevel(getSkillName(skill)))" :key="`empty-${i}`" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="text-gray-300">
+                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                          </svg>
+                        </div>
+                      </div>
+                      <div class="mt-2 text-sm text-gray-500">
+                        {{ getSkillDescription(getSkillName(skill)) }}
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 
               </div>
