@@ -20,7 +20,7 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const { name, bio, skills, image, userRole, affiliation, expertise, gender, video } = await readBody(event)
+  const { name, bio, skills, image, userRole, affiliation, expertise, gender, video, user_links } = await readBody(event)
 
   if (!name) {
     throw createError({
@@ -90,6 +90,32 @@ export default defineEventHandler(async (event) => {
       }
     }
 
+    // Process user links - validate and limit to 5
+    let processedLinks: string = ''
+    
+    if (Array.isArray(user_links)) {
+      const validLinks = user_links
+        .filter((link: any) => 
+          link && 
+          typeof link === 'object' &&
+          link.label && 
+          typeof link.label === 'string' && 
+          link.label.trim().length > 0 &&
+          link.url && 
+          typeof link.url === 'string' && 
+          link.url.trim().length > 0
+        )
+        .slice(0, 5) // Limit to 5 links
+        .map((link: any) => ({
+          label: link.label.trim(),
+          url: link.url.trim()
+        }))
+      
+      if (validLinks.length > 0) {
+        processedLinks = JSON.stringify(validLinks)
+      }
+    }
+
     // Update user in database
     const updatedUser = await Database.updateUser(currentUser.id, {
       name: name,
@@ -100,7 +126,8 @@ export default defineEventHandler(async (event) => {
       expertise: expertise || '',
       gender: gender || '',
       video: video || '',
-      skills: processedSkills
+      skills: processedSkills,
+      user_links: processedLinks
     })
 
     // Return updated user data (without password)

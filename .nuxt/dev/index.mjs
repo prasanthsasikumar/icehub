@@ -4483,7 +4483,7 @@ const update_post = defineEventHandler(async (event) => {
       statusMessage: "Authentication required"
     });
   }
-  const { name, bio, skills, image, userRole, affiliation, expertise, gender, video } = await readBody(event);
+  const { name, bio, skills, image, userRole, affiliation, expertise, gender, video, user_links } = await readBody(event);
   if (!name) {
     throw createError({
       statusCode: 400,
@@ -4530,6 +4530,18 @@ const update_post = defineEventHandler(async (event) => {
         }
       }
     }
+    let processedLinks = "";
+    if (Array.isArray(user_links)) {
+      const validLinks = user_links.filter(
+        (link) => link && typeof link === "object" && link.label && typeof link.label === "string" && link.label.trim().length > 0 && link.url && typeof link.url === "string" && link.url.trim().length > 0
+      ).slice(0, 5).map((link) => ({
+        label: link.label.trim(),
+        url: link.url.trim()
+      }));
+      if (validLinks.length > 0) {
+        processedLinks = JSON.stringify(validLinks);
+      }
+    }
     const updatedUser = await Database.updateUser(currentUser.id, {
       name,
       bio: bio || "",
@@ -4539,7 +4551,8 @@ const update_post = defineEventHandler(async (event) => {
       expertise: expertise || "",
       gender: gender || "",
       video: video || "",
-      skills: processedSkills
+      skills: processedSkills,
+      user_links: processedLinks
     });
     return {
       message: "Profile updated successfully",

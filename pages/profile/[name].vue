@@ -9,6 +9,9 @@
           </NuxtLink>
         </div>
         <div class="nav-right">
+          <button @click="refresh" class="nav-button nav-button-secondary mr-2">
+            Refresh
+          </button>
           <NuxtLink to="/" class="nav-button nav-button-secondary">
             <span class="hidden sm:inline">Back to Home</span>
             <span class="sm:hidden">← Home</span>
@@ -252,6 +255,25 @@
                   </p>
                 </div>
                 
+                <div v-if="getUserLinks(data.user_links).length > 0">
+                  <h3 class="font-semibold text-gray-700 mb-2">Links</h3>
+                  <div class="space-y-2">
+                    <a 
+                      v-for="(link, index) in getUserLinks(data.user_links)" 
+                      :key="index"
+                      :href="link.url" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      class="text-primary hover:underline flex items-center gap-2"
+                    >
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="text-gray-400">
+                        <path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/>
+                      </svg>
+                      {{ link.label }}
+                    </a>
+                  </div>
+                </div>
+                
                 <div>
                   <h3 class="font-semibold text-gray-700 mb-2">Specialization</h3>
                   <p class="text-gray-600">{{ getPrimarySpecialization(data.skills) }}</p>
@@ -382,8 +404,10 @@ const shareLoading = ref(false)
 const shareSuccess = ref(false)
 
 // Fetch user data
-const { data, pending, error } = await useFetch('/api/user', {
-  query: { name: userName }
+const { data, pending, error, refresh } = await useFetch('/api/user', {
+  query: { name: userName },
+  key: `user-${userName}`,
+  server: false // Disable server-side rendering for this fetch to ensure fresh data
 })
 
 // Helper functions
@@ -553,9 +577,10 @@ const getProfileScore = (user) => {
   if (user.name) score += 15
   if (user.email) score += 15
   if (user.image) score += 15
-  if (user.bio && user.bio.length > 10) score += 20
+  if (user.bio && user.bio.length > 10) score += 15
   if (getSkillsStringArray(user.skills).length > 0) score += 20
-  if (user.expertise && user.expertise.length > 0) score += 15
+  if (user.expertise && user.expertise.length > 0) score += 10
+  if (getUserLinks(user.user_links).length > 0) score += 10
   return score
 }
 
@@ -625,6 +650,28 @@ const getTechStack = (skills) => {
   
   if (hasWeb) return 'Web Technologies'
   return 'Mixed Technologies'
+}
+
+const getUserLinks = (userLinks) => {
+  console.log('getUserLinks called with:', userLinks)
+  if (!userLinks) return []
+  
+  try {
+    // Parse JSON string or use array directly
+    const links = typeof userLinks === 'string' ? JSON.parse(userLinks) : userLinks
+    console.log('Parsed links:', links)
+    
+    if (Array.isArray(links)) {
+      const filteredLinks = links.filter(link => link && link.label && link.url)
+      console.log('Filtered links:', filteredLinks)
+      return filteredLinks
+    }
+    
+    return []
+  } catch (error) {
+    console.error('Error parsing user links:', error)
+    return []
+  }
 }
 
 // Video URL helper function

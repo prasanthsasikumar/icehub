@@ -137,6 +137,57 @@
                 </p>
               </div>
 
+              <!-- User Links Section -->
+              <div class="flex flex-col gap-2">
+                <label class="font-semibold text-gray-700 text-sm mb-1">Personal Links (Optional)</label>
+                
+                <!-- Links List -->
+                <div v-if="linksList.length > 0" class="space-y-3 mb-4">
+                  <div 
+                    v-for="(link, index) in linksList" 
+                    :key="index"
+                    class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200"
+                  >
+                    <input 
+                      v-model="link.label"
+                      type="text"
+                      placeholder="Link label (e.g., Portfolio, LinkedIn, GitHub)"
+                      class="flex-1 px-3 py-2 border border-gray-200 rounded-md text-sm focus:outline-none focus:border-primary"
+                    />
+                    <input 
+                      v-model="link.url"
+                      type="url"
+                      placeholder="https://..."
+                      class="flex-1 px-3 py-2 border border-gray-200 rounded-md text-sm focus:outline-none focus:border-primary"
+                    />
+                    <button
+                      type="button"
+                      @click="removeLink(index)"
+                      class="text-red-500 hover:text-red-700 p-1"
+                    >
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Add New Link -->
+                <button
+                  type="button"
+                  @click="addLink"
+                  :disabled="linksList.length >= 5"
+                  class="px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg text-gray-500 hover:border-primary hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+                >
+                  <span v-if="linksList.length >= 5">Maximum 5 links allowed</span>
+                  <span v-else>+ Add Link ({{ linksList.length }}/5)</span>
+                </button>
+                
+                <p class="text-xs text-gray-500">
+                  Add up to 5 personal links (portfolio, social media, projects, etc.)
+                </p>
+              </div>
+
               <!-- User Role Input -->
               <div class="flex flex-col gap-2">
                 <label for="userRole" class="font-semibold text-gray-700 text-sm mb-1">Community Role</label>
@@ -353,6 +404,9 @@ const skillsList = ref([])
 const newSkillName = ref('')
 const legacySkillsInput = ref('')
 
+// Links management
+const linksList = ref([])
+
 const submitting = ref(false)
 const error = ref('')
 const success = ref('')
@@ -440,6 +494,20 @@ const importLegacySkills = () => {
   legacySkillsInput.value = ''
 }
 
+// Links management functions
+const addLink = () => {
+  if (linksList.value.length >= 5) return
+  
+  linksList.value.push({
+    label: '',
+    url: ''
+  })
+}
+
+const removeLink = (index) => {
+  linksList.value.splice(index, 1)
+}
+
 // Initialize form with current user data
 const initializeForm = () => {
   if (user.value) {
@@ -475,6 +543,25 @@ const initializeForm = () => {
         }
       }
     }
+    
+    // Handle user links
+    if (user.value.user_links) {
+      try {
+        // Parse JSON string or use array directly
+        const links = typeof user.value.user_links === 'string' 
+          ? JSON.parse(user.value.user_links) 
+          : user.value.user_links
+        
+        if (Array.isArray(links)) {
+          linksList.value = links.filter(link => link && link.label && link.url).slice(0, 5)
+        }
+      } catch (error) {
+        console.error('Error parsing user links:', error)
+        linksList.value = []
+      }
+    } else {
+      linksList.value = []
+    }
   }
 }
 
@@ -501,6 +588,12 @@ const updateProfile = async () => {
   success.value = ''
 
   try {
+    // Filter out empty links before sending
+    const validLinks = linksList.value.filter(link => 
+      link.label && link.label.trim() && 
+      link.url && link.url.trim()
+    )
+    
     await $fetch('/api/user/update', {
       method: 'POST',
       body: {
@@ -512,7 +605,8 @@ const updateProfile = async () => {
         expertise: form.expertise,
         gender: form.gender,
         video: form.video,
-        skills: skillsList.value // Send skills with levels
+        skills: skillsList.value, // Send skills with levels
+        user_links: validLinks // Send filtered links
       }
     })
 

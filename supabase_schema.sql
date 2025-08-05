@@ -15,6 +15,7 @@ CREATE TABLE users (
     expertise TEXT,
     gender TEXT,
     video TEXT,
+    user_links TEXT DEFAULT '',
     "createdAt" TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
