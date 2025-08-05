@@ -1029,7 +1029,7 @@ const _lGPwgk_1tWcSz96bDwvTewtBNKdX6lAcUru2zxNV9VQ = (function(nitro) {
 
 const rootDir = "/Users/prasanthsasikumar/Documents/GitHub/icehub";
 
-const appHead = {"meta":[{"charset":"utf-8"},{"name":"viewport","content":"width=device-width, initial-scale=1.0, viewport-fit=cover"},{"name":"format-detection","content":"telephone=no"}],"link":[],"style":[],"script":[],"noscript":[]};
+const appHead = {"meta":[{"charset":"utf-8"},{"name":"viewport","content":"width=device-width, initial-scale=1.0, viewport-fit=cover"},{"name":"format-detection","content":"telephone=no"}],"link":[{"rel":"icon","type":"image/svg+xml","href":"/favicon.svg"},{"rel":"alternate icon","href":"/favicon.ico"},{"rel":"apple-touch-icon","sizes":"180x180","href":"/favicon.svg"}],"style":[],"script":[],"noscript":[]};
 
 const appRootTag = "div";
 
@@ -1124,22 +1124,7 @@ const plugins = [
 _imlJlEtcYUErFKlIoV3o40RwAHyYMj1YM8ArfD1nFG0
 ];
 
-const assets = {
-  "/index.mjs": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"2c962-Ep7i4J19L2wGD5G0bFoB6evD+Dk\"",
-    "mtime": "2025-08-05T14:45:17.199Z",
-    "size": 182626,
-    "path": "index.mjs"
-  },
-  "/index.mjs.map": {
-    "type": "application/json",
-    "etag": "\"a04c6-8xcoeeLlybdikPNrecUfda5SLcY\"",
-    "mtime": "2025-08-05T14:45:17.200Z",
-    "size": 656582,
-    "path": "index.mjs.map"
-  }
-};
+const assets = {};
 
 function readAsset (id) {
   const serverDir = dirname$1(fileURLToPath(globalThis._importMeta_.url));
