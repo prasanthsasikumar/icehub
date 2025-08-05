@@ -1,18 +1,19 @@
 <template>
-  <div class="min-h-screen font-sans text-gray-700 bg-gray-50 flex items-center justify-center container-padding py-8">
-    <div class="w-full max-w-md">
-      <!-- Logo and Header -->
-      <div class="text-center mb-6 sm:mb-8">
-        <NuxtLink to="/" class="text-2xl sm:text-3xl font-bold text-gray-700 hover:text-primary transition-colors">
-          ICE2025
-        </NuxtLink>
-        <h1 class="text-xl sm:text-2xl font-semibold text-gray-700 mt-3 sm:mt-4 mb-2">Create your account</h1>
-        <p class="text-sm sm:text-base text-gray-500">Join the community</p>
-      </div>
+  <div class="min-h-screen font-sans text-gray-700 bg-gray-50 flex flex-col">
+    <div class="flex-1 flex items-center justify-center container-padding py-8">
+      <div class="w-full max-w-md">
+        <!-- Logo and Header -->
+        <div class="text-center mb-6 sm:mb-8">
+          <NuxtLink to="/" class="text-2xl sm:text-3xl font-bold text-gray-700 hover:text-primary transition-colors">
+            ICE2025
+          </NuxtLink>
+          <h1 class="text-xl sm:text-2xl font-semibold text-gray-700 mt-3 sm:mt-4 mb-2">Create your account</h1>
+          <p class="text-sm sm:text-base text-gray-500">Join the community</p>
+        </div>
 
-      <!-- Registration Form -->
-      <div class="bg-white rounded-lg shadow-sm border border-gray-200 card-padding">
-        <form @submit.prevent="handleRegister" class="space-y-5 sm:space-y-6">
+        <!-- Registration Form -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 card-padding">
+          <form @submit.prevent="handleRegister" class="space-y-5 sm:space-y-6">
           <!-- Name Field -->
           <div>
             <label for="name" class="block text-sm font-medium text-gray-700 mb-2">
@@ -223,6 +224,7 @@
         </div>
       </div>
     </div>
+    </div>
     <Footer />
   </div>
 </template>
@@ -327,6 +329,7 @@ useHead({
 </script>
 
 <style scoped>
+/* Primary color utilities */
 .text-primary {
   color: #0d7ae4;
 }
@@ -343,6 +346,10 @@ useHead({
   background-color: #0969da;
 }
 
+.border-primary {
+  border-color: #0d7ae4;
+}
+
 .focus\:border-primary:focus {
   border-color: #0d7ae4;
 }
@@ -353,5 +360,65 @@ useHead({
 
 .hover\:text-primary-dark:hover {
   color: #0969da;
+}
+
+/* Additional form enhancements */
+.form-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  transition: border-color 0.2s ease-in-out;
+  font-size: 1rem;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #0d7ae4;
+  box-shadow: 0 0 0 3px rgba(13, 122, 228, 0.1);
+}
+
+.form-button {
+  width: 100%;
+  background-color: #0d7ae4;
+  color: white;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: background-color 0.2s ease-in-out;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.form-button:hover:not(:disabled) {
+  background-color: #0969da;
+}
+
+.form-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.card-padding {
+  padding: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .card-padding {
+    padding: 2rem;
+  }
+}
+
+.container-padding {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .container-padding {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
 }
 </style>

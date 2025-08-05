@@ -62,7 +62,7 @@
         </form>
 
         <!-- Demo Credentials -->
-        <div class="mt-5 sm:mt-6 p-3 sm:p-4 bg-blue-50 border border-blue-200 rounded-lg">
+        <!-- <div class="mt-5 sm:mt-6 p-3 sm:p-4 bg-blue-50 border border-blue-200 rounded-lg">
           <h3 class="text-sm font-medium text-blue-800 mb-2">Demo Credentials</h3>
           <div class="text-xs sm:text-sm text-blue-700 space-y-1">
             <p><strong>Regular User:</strong></p>
@@ -72,7 +72,7 @@
             <p>Email: admin@ice2025.com</p>
             <p>Password: admin123</p>
           </div>
-        </div>
+        </div> -->
 
         <!-- Register Link -->
         <div class="mt-5 sm:mt-6 text-center">

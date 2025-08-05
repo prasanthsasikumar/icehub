@@ -9,9 +9,6 @@
           </NuxtLink>
         </div>
         <div class="nav-right">
-          <button @click="refresh" class="nav-button nav-button-secondary mr-2">
-            Refresh
-          </button>
           <NuxtLink to="/" class="nav-button nav-button-secondary">
             <span class="hidden sm:inline">Back to Home</span>
             <span class="sm:hidden">← Home</span>
@@ -100,7 +97,7 @@
                     Mentor
                   </div>
                 </div>
-                <p class="text-base sm:text-lg text-gray-600 mb-3 sm:mb-4 leading-relaxed">{{ data.bio }}</p>
+                <!-- <p class="text-base sm:text-lg text-gray-600 mb-3 sm:mb-4 leading-relaxed">{{ data.bio }}</p> -->
                 
                 <!-- Email -->
                 <div v-if="data.email" class="mb-3 sm:mb-4">

@@ -1,46 +1,46 @@
 import process from 'node:process';globalThis._importMeta_={url:import.meta.url,env:process.env};import { tmpdir } from 'node:os';
+import { defineEventHandler, handleCacheHeaders, splitCookiesString, createEvent, fetchWithEvent, isEvent, eventHandler, setHeaders, sendRedirect, proxyRequest, getRequestHeader, setResponseHeaders, setResponseStatus, send, getRequestHeaders, setResponseHeader, appendResponseHeader, getRequestURL, getResponseHeader, removeResponseHeader, createError, getQuery as getQuery$1, readBody, createApp, createRouter as createRouter$1, toNodeListener, lazyEventHandler, getResponseStatus, getRouterParam, getCookie, getHeader, getMethod, setCookie, deleteCookie, setHeader, readMultipartFormData, getResponseStatusText } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/h3/dist/index.mjs';
 import { Server } from 'node:http';
 import path, { resolve, dirname, join } from 'node:path';
 import nodeCrypto from 'node:crypto';
 import { parentPort, threadId } from 'node:worker_threads';
-import { defineEventHandler, handleCacheHeaders, splitCookiesString, createEvent, fetchWithEvent, isEvent, eventHandler, setHeaders, sendRedirect, proxyRequest, getRequestHeader, setResponseHeaders, setResponseStatus, send, getRequestHeaders, setResponseHeader, appendResponseHeader, getRequestURL, getResponseHeader, removeResponseHeader, createError, getQuery as getQuery$1, readBody, createApp, createRouter as createRouter$1, toNodeListener, lazyEventHandler, getResponseStatus, getRouterParam, getCookie, getHeader, getMethod, setCookie, deleteCookie, setHeader, readMultipartFormData, getResponseStatusText } from 'file://C:/Users/prasa/OneDrive/Documents/GitHub/icehub/node_modules/h3/dist/index.mjs';
-import { escapeHtml } from 'file://C:/Users/prasa/OneDrive/Documents/GitHub/icehub/node_modules/@vue/shared/dist/shared.cjs.js';
-import bcrypt from 'file://C:/Users/prasa/OneDrive/Documents/GitHub/icehub/node_modules/bcrypt/bcrypt.js';
-import { v4 } from 'file://C:/Users/prasa/OneDrive/Documents/GitHub/icehub/node_modules/uuid/dist/esm/index.js';
-import jwt from 'file://C:/Users/prasa/OneDrive/Documents/GitHub/icehub/node_modules/jsonwebtoken/index.js';
-import { put } from 'file://C:/Users/prasa/OneDrive/Documents/GitHub/icehub/node_modules/@vercel/blob/dist/index.js';
+import { escapeHtml } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/@vue/shared/dist/shared.cjs.js';
+import bcrypt from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/bcrypt/bcrypt.js';
+import { v4 } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/uuid/dist/esm/index.js';
+import jwt from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/jsonwebtoken/index.js';
+import { put } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/@vercel/blob/dist/index.js';
 import { promises } from 'node:fs';
-import { createClient } from 'file://C:/Users/prasa/OneDrive/Documents/GitHub/icehub/node_modules/@supabase/supabase-js/dist/main/index.js';
-import { createRenderer, getRequestDependencies, getPreloadLinks, getPrefetchLinks } from 'file://C:/Users/prasa/OneDrive/Documents/GitHub/icehub/node_modules/vue-bundle-renderer/dist/runtime.mjs';
-import { parseURL, withoutBase, joinURL, getQuery, withQuery, withTrailingSlash, decodePath, withLeadingSlash, withoutTrailingSlash, joinRelativeURL } from 'file://C:/Users/prasa/OneDrive/Documents/GitHub/icehub/node_modules/ufo/dist/index.mjs';
-import destr, { destr as destr$1 } from 'file://C:/Users/prasa/OneDrive/Documents/GitHub/icehub/node_modules/destr/dist/index.mjs';
-import { renderToString } from 'file://C:/Users/prasa/OneDrive/Documents/GitHub/icehub/node_modules/vue/server-renderer/index.mjs';
-import { klona } from 'file://C:/Users/prasa/OneDrive/Documents/GitHub/icehub/node_modules/klona/dist/index.mjs';
-import defu, { defuFn } from 'file://C:/Users/prasa/OneDrive/Documents/GitHub/icehub/node_modules/defu/dist/defu.mjs';
-import { snakeCase } from 'file://C:/Users/prasa/OneDrive/Documents/GitHub/icehub/node_modules/scule/dist/index.mjs';
-import { createHead as createHead$1, propsToString, renderSSRHead } from 'file://C:/Users/prasa/OneDrive/Documents/GitHub/icehub/node_modules/unhead/dist/server.mjs';
-import { stringify, uneval } from 'file://C:/Users/prasa/OneDrive/Documents/GitHub/icehub/node_modules/devalue/index.js';
-import { isVNode, toValue, isRef } from 'file://C:/Users/prasa/OneDrive/Documents/GitHub/icehub/node_modules/vue/index.mjs';
-import { createHooks } from 'file://C:/Users/prasa/OneDrive/Documents/GitHub/icehub/node_modules/hookable/dist/index.mjs';
-import { createFetch, Headers as Headers$1 } from 'file://C:/Users/prasa/OneDrive/Documents/GitHub/icehub/node_modules/ofetch/dist/node.mjs';
-import { fetchNodeRequestHandler, callNodeRequestHandler } from 'file://C:/Users/prasa/OneDrive/Documents/GitHub/icehub/node_modules/node-mock-http/dist/index.mjs';
-import { createStorage, prefixStorage } from 'file://C:/Users/prasa/OneDrive/Documents/GitHub/icehub/node_modules/unstorage/dist/index.mjs';
-import unstorage_47drivers_47fs from 'file://C:/Users/prasa/OneDrive/Documents/GitHub/icehub/node_modules/unstorage/drivers/fs.mjs';
-import { digest } from 'file://C:/Users/prasa/OneDrive/Documents/GitHub/icehub/node_modules/ohash/dist/index.mjs';
-import { toRouteMatcher, createRouter } from 'file://C:/Users/prasa/OneDrive/Documents/GitHub/icehub/node_modules/radix3/dist/index.mjs';
+import { createClient } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/@supabase/supabase-js/dist/main/index.js';
+import { createRenderer, getRequestDependencies, getPreloadLinks, getPrefetchLinks } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/vue-bundle-renderer/dist/runtime.mjs';
+import { parseURL, withoutBase, joinURL, getQuery, withQuery, withTrailingSlash, decodePath, withLeadingSlash, withoutTrailingSlash, joinRelativeURL } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/ufo/dist/index.mjs';
+import destr, { destr as destr$1 } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/destr/dist/index.mjs';
+import { createHooks } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/hookable/dist/index.mjs';
+import { createFetch, Headers as Headers$1 } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/ofetch/dist/node.mjs';
+import { fetchNodeRequestHandler, callNodeRequestHandler } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/node-mock-http/dist/index.mjs';
+import { createStorage, prefixStorage } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/unstorage/dist/index.mjs';
+import unstorage_47drivers_47fs from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/unstorage/drivers/fs.mjs';
+import { digest } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/ohash/dist/index.mjs';
+import { klona } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/klona/dist/index.mjs';
+import defu, { defuFn } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/defu/dist/defu.mjs';
+import { snakeCase } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/scule/dist/index.mjs';
+import { getContext } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/unctx/dist/index.mjs';
+import { toRouteMatcher, createRouter } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/radix3/dist/index.mjs';
 import { readFile } from 'node:fs/promises';
-import consola, { consola as consola$1 } from 'file://C:/Users/prasa/OneDrive/Documents/GitHub/icehub/node_modules/consola/dist/index.mjs';
-import { ErrorParser } from 'file://C:/Users/prasa/OneDrive/Documents/GitHub/icehub/node_modules/youch-core/build/index.js';
-import { Youch } from 'file://C:/Users/prasa/OneDrive/Documents/GitHub/icehub/node_modules/nitropack/node_modules/youch/build/index.js';
-import { SourceMapConsumer } from 'file://C:/Users/prasa/OneDrive/Documents/GitHub/icehub/node_modules/source-map/source-map.js';
+import consola, { consola as consola$1 } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/consola/dist/index.mjs';
+import { ErrorParser } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/youch-core/build/index.js';
+import { Youch } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/nitropack/node_modules/youch/build/index.js';
+import { SourceMapConsumer } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/source-map/source-map.js';
 import { AsyncLocalStorage } from 'node:async_hooks';
-import { getContext } from 'file://C:/Users/prasa/OneDrive/Documents/GitHub/icehub/node_modules/unctx/dist/index.mjs';
-import { captureRawStackTrace, parseRawStackTrace } from 'file://C:/Users/prasa/OneDrive/Documents/GitHub/icehub/node_modules/errx/dist/index.js';
+import { stringify, uneval } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/devalue/index.js';
+import { captureRawStackTrace, parseRawStackTrace } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/errx/dist/index.js';
+import { isVNode, toValue, isRef } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/vue/index.mjs';
 import { fileURLToPath } from 'node:url';
-import { dirname as dirname$1, resolve as resolve$1 } from 'file://C:/Users/prasa/OneDrive/Documents/GitHub/icehub/node_modules/pathe/dist/index.mjs';
-import { walkResolver } from 'file://C:/Users/prasa/OneDrive/Documents/GitHub/icehub/node_modules/unhead/dist/utils.mjs';
+import { dirname as dirname$1, resolve as resolve$1 } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/pathe/dist/index.mjs';
+import { createHead as createHead$1, propsToString, renderSSRHead } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/unhead/dist/server.mjs';
+import { renderToString } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/vue/server-renderer/index.mjs';
+import { walkResolver } from 'file:///Users/prasanthsasikumar/Documents/GitHub/icehub/node_modules/unhead/dist/utils.mjs';
 
-const serverAssets = [{"baseName":"server","dir":"C:/Users/prasa/OneDrive/Documents/GitHub/icehub/server/assets"}];
+const serverAssets = [{"baseName":"server","dir":"/Users/prasanthsasikumar/Documents/GitHub/icehub/server/assets"}];
 
 const assets$1 = createStorage();
 
@@ -52,11 +52,11 @@ const storage = createStorage({});
 
 storage.mount('/assets', assets$1);
 
-storage.mount('root', unstorage_47drivers_47fs({"driver":"fs","readOnly":true,"base":"C:/Users/prasa/OneDrive/Documents/GitHub/icehub","watchOptions":{"ignored":[null]}}));
-storage.mount('src', unstorage_47drivers_47fs({"driver":"fs","readOnly":true,"base":"C:/Users/prasa/OneDrive/Documents/GitHub/icehub/server","watchOptions":{"ignored":[null]}}));
-storage.mount('build', unstorage_47drivers_47fs({"driver":"fs","readOnly":false,"base":"C:/Users/prasa/OneDrive/Documents/GitHub/icehub/.nuxt"}));
-storage.mount('cache', unstorage_47drivers_47fs({"driver":"fs","readOnly":false,"base":"C:/Users/prasa/OneDrive/Documents/GitHub/icehub/.nuxt/cache"}));
-storage.mount('data', unstorage_47drivers_47fs({"driver":"fs","base":"C:/Users/prasa/OneDrive/Documents/GitHub/icehub/.data/kv"}));
+storage.mount('root', unstorage_47drivers_47fs({"driver":"fs","readOnly":true,"base":"/Users/prasanthsasikumar/Documents/GitHub/icehub","watchOptions":{"ignored":[null]}}));
+storage.mount('src', unstorage_47drivers_47fs({"driver":"fs","readOnly":true,"base":"/Users/prasanthsasikumar/Documents/GitHub/icehub/server","watchOptions":{"ignored":[null]}}));
+storage.mount('build', unstorage_47drivers_47fs({"driver":"fs","readOnly":false,"base":"/Users/prasanthsasikumar/Documents/GitHub/icehub/.nuxt"}));
+storage.mount('cache', unstorage_47drivers_47fs({"driver":"fs","readOnly":false,"base":"/Users/prasanthsasikumar/Documents/GitHub/icehub/.nuxt/cache"}));
+storage.mount('data', unstorage_47drivers_47fs({"driver":"fs","base":"/Users/prasanthsasikumar/Documents/GitHub/icehub/.data/kv"}));
 
 function useStorage(base = "") {
   return base ? prefixStorage(storage, base) : storage;
@@ -697,6 +697,11 @@ new Proxy(/* @__PURE__ */ Object.create(null), {
   }
 });
 
+getContext("nitro-app", {
+  asyncContext: false,
+  AsyncLocalStorage: void 0
+});
+
 const config = useRuntimeConfig();
 const _routeRulesMatcher = toRouteMatcher(
   createRouter({ routes: config.nitro.routeRules })
@@ -1016,13 +1021,13 @@ if (!window.__NUXT_DEVTOOLS_TIME_METRIC__) {
 window.__NUXT_DEVTOOLS_TIME_METRIC__.appInit = Date.now()
 `;
 
-const _aXpSbDnTVKpG8okk_zHNSbWEtwlitI4gWGpEXaN_A = (function(nitro) {
+const _lGPwgk_1tWcSz96bDwvTewtBNKdX6lAcUru2zxNV9VQ = (function(nitro) {
   nitro.hooks.hook("render:html", (htmlContext) => {
     htmlContext.head.push(`<script>${script}<\/script>`);
   });
 });
 
-const rootDir = "C:/Users/prasa/OneDrive/Documents/GitHub/icehub";
+const rootDir = "/Users/prasanthsasikumar/Documents/GitHub/icehub";
 
 const appHead = {"meta":[{"charset":"utf-8"},{"name":"viewport","content":"width=device-width, initial-scale=1.0, viewport-fit=cover"},{"name":"format-detection","content":"telephone=no"}],"link":[],"style":[],"script":[],"noscript":[]};
 
@@ -1045,7 +1050,7 @@ const devReducers = {
   URL: (data) => data instanceof URL ? data.toString() : void 0
 };
 const asyncContext = getContext("nuxt-dev", { asyncContext: true, AsyncLocalStorage });
-const _PrQa1nMjyI8aW7twHOgrKJdAvlKKDoWyBB4SMVdF94 = (nitroApp) => {
+const _imlJlEtcYUErFKlIoV3o40RwAHyYMj1YM8ArfD1nFG0 = (nitroApp) => {
   const handler = nitroApp.h3App.handler;
   nitroApp.h3App.handler = (event) => {
     return asyncContext.callAsync({ logs: [], event }, () => handler(event));
@@ -1115,8 +1120,8 @@ function onConsoleLog(callback) {
 }
 
 const plugins = [
-  _aXpSbDnTVKpG8okk_zHNSbWEtwlitI4gWGpEXaN_A,
-_PrQa1nMjyI8aW7twHOgrKJdAvlKKDoWyBB4SMVdF94
+  _lGPwgk_1tWcSz96bDwvTewtBNKdX6lAcUru2zxNV9VQ,
+_imlJlEtcYUErFKlIoV3o40RwAHyYMj1YM8ArfD1nFG0
 ];
 
 const assets = {};
@@ -1144,7 +1149,7 @@ function getAsset (id) {
 
 const METHODS = /* @__PURE__ */ new Set(["HEAD", "GET"]);
 const EncodingMap = { gzip: ".gz", br: ".br" };
-const _GChHOJ = eventHandler((event) => {
+const _8dfJm_ = eventHandler((event) => {
   if (event.method && !METHODS.has(event.method)) {
     return;
   }
@@ -1277,8 +1282,8 @@ function publicAssetsURL(...path) {
 
 const APP_ROOT_OPEN_TAG = `<${appRootTag}${propsToString(appRootAttrs)}>`;
 const APP_ROOT_CLOSE_TAG = `</${appRootTag}>`;
-const getServerEntry = () => import('file://C:/Users/prasa/OneDrive/Documents/GitHub/icehub/.nuxt//dist/server/server.mjs').then((r) => r.default || r);
-const getClientManifest = () => import('file://C:/Users/prasa/OneDrive/Documents/GitHub/icehub/.nuxt//dist/server/client.manifest.mjs').then((r) => r.default || r).then((r) => typeof r === "function" ? r() : r);
+const getServerEntry = () => import('file:///Users/prasanthsasikumar/Documents/GitHub/icehub/.nuxt//dist/server/server.mjs').then((r) => r.default || r);
+const getClientManifest = () => import('file:///Users/prasanthsasikumar/Documents/GitHub/icehub/.nuxt//dist/server/client.manifest.mjs').then((r) => r.default || r).then((r) => typeof r === "function" ? r() : r);
 const getSSRRenderer = lazyCachedFunction(async () => {
   const manifest = await getClientManifest();
   if (!manifest) {
@@ -1526,85 +1531,85 @@ async function getIslandContext(event) {
   return ctx;
 }
 
-const _lazy__Govh_ = () => Promise.resolve().then(function () { return addUserToTeam_post$1; });
-const _lazy_yFfWmo = () => Promise.resolve().then(function () { return create_post$3; });
-const _lazy_vCTr7m = () => Promise.resolve().then(function () { return index_get$5; });
-const _lazy_PrS3ov = () => Promise.resolve().then(function () { return restore_post$1; });
-const _lazy_5VJoT8 = () => Promise.resolve().then(function () { return bulkCreateUsers_post$1; });
-const _lazy_DSN8NA = () => Promise.resolve().then(function () { return deleteUser_delete$1; });
-const _lazy_e0GXy1 = () => Promise.resolve().then(function () { return toggleRole_post$1; });
-const _lazy_xNcNbf = () => Promise.resolve().then(function () { return login_post$1; });
-const _lazy_7WIef3 = () => Promise.resolve().then(function () { return logout_post$1; });
-const _lazy_hs26W4 = () => Promise.resolve().then(function () { return me_get$1; });
-const _lazy_5B4C7e = () => Promise.resolve().then(function () { return register_post$1; });
-const _lazy_czs798 = () => Promise.resolve().then(function () { return conversations_get$1; });
-const _lazy_JlvD9o = () => Promise.resolve().then(function () { return messages_get$1; });
-const _lazy_ANhgb1 = () => Promise.resolve().then(function () { return send_post$1; });
-const _lazy_uIGDLQ = () => Promise.resolve().then(function () { return status_get$1; });
-const _lazy_uZ1WNJ = () => Promise.resolve().then(function () { return testUpload_post$1; });
-const _lazy_iiZPnM = () => Promise.resolve().then(function () { return proxyImage_get$1; });
-const _lazy_TAOxgK = () => Promise.resolve().then(function () { return skills$1; });
-const _lazy_AM2WzJ = () => Promise.resolve().then(function () { return delete_delete$1; });
-const _lazy_Gh5pnx = () => Promise.resolve().then(function () { return images_get$1; });
-const _lazy_USHlHV = () => Promise.resolve().then(function () { return images_post$1; });
-const _lazy_9yrlM5 = () => Promise.resolve().then(function () { return _imageId__delete$1; });
-const _lazy_qPpFas = () => Promise.resolve().then(function () { return index_get$3; });
-const _lazy_FbMXkD = () => Promise.resolve().then(function () { return join_post$1; });
-const _lazy_OOipVc = () => Promise.resolve().then(function () { return leave_post$1; });
-const _lazy_HZgu0_ = () => Promise.resolve().then(function () { return links_get$1; });
-const _lazy_VLZTa7 = () => Promise.resolve().then(function () { return links_post$1; });
-const _lazy_uIhQfG = () => Promise.resolve().then(function () { return _linkId__delete$1; });
-const _lazy_9QbP3f = () => Promise.resolve().then(function () { return update_put$1; });
-const _lazy_siP8VF = () => Promise.resolve().then(function () { return create_post$1; });
-const _lazy_NRwVz0 = () => Promise.resolve().then(function () { return index_get$1; });
-const _lazy_tf6qb9 = () => Promise.resolve().then(function () { return upload_post$1; });
-const _lazy_NGO5j7 = () => Promise.resolve().then(function () { return user_get$1; });
-const _lazy_fwUlnN = () => Promise.resolve().then(function () { return updatePassword_post$1; });
-const _lazy_CYeLwK = () => Promise.resolve().then(function () { return update_post$1; });
-const _lazy_4i9fLP = () => Promise.resolve().then(function () { return users$1; });
-const _lazy_dR2Hf1 = () => Promise.resolve().then(function () { return renderer$1; });
+const _lazy_3VIfLL = () => Promise.resolve().then(function () { return addUserToTeam_post$1; });
+const _lazy_BHpmOL = () => Promise.resolve().then(function () { return create_post$3; });
+const _lazy_j59clI = () => Promise.resolve().then(function () { return index_get$5; });
+const _lazy_TcjyYq = () => Promise.resolve().then(function () { return restore_post$1; });
+const _lazy_hiK3Zm = () => Promise.resolve().then(function () { return bulkCreateUsers_post$1; });
+const _lazy_6ilHbl = () => Promise.resolve().then(function () { return deleteUser_delete$1; });
+const _lazy_X46lLS = () => Promise.resolve().then(function () { return toggleRole_post$1; });
+const _lazy_XYs2hc = () => Promise.resolve().then(function () { return login_post$1; });
+const _lazy_sfy6lD = () => Promise.resolve().then(function () { return logout_post$1; });
+const _lazy_QtDuhZ = () => Promise.resolve().then(function () { return me_get$1; });
+const _lazy_Z_k7UE = () => Promise.resolve().then(function () { return register_post$1; });
+const _lazy_HItsH8 = () => Promise.resolve().then(function () { return conversations_get$1; });
+const _lazy_ttNtBU = () => Promise.resolve().then(function () { return messages_get$1; });
+const _lazy_nCeQW7 = () => Promise.resolve().then(function () { return send_post$1; });
+const _lazy_0X8xDp = () => Promise.resolve().then(function () { return status_get$1; });
+const _lazy_Cn2ye5 = () => Promise.resolve().then(function () { return testUpload_post$1; });
+const _lazy_srlr7l = () => Promise.resolve().then(function () { return proxyImage_get$1; });
+const _lazy_HejCb8 = () => Promise.resolve().then(function () { return skills$1; });
+const _lazy_xNBtKJ = () => Promise.resolve().then(function () { return delete_delete$1; });
+const _lazy_J70_p5 = () => Promise.resolve().then(function () { return images_get$1; });
+const _lazy_Case9e = () => Promise.resolve().then(function () { return images_post$1; });
+const _lazy_TOpMPX = () => Promise.resolve().then(function () { return _imageId__delete$1; });
+const _lazy_X7rScc = () => Promise.resolve().then(function () { return index_get$3; });
+const _lazy_Bc46BS = () => Promise.resolve().then(function () { return join_post$1; });
+const _lazy_4W2Kfz = () => Promise.resolve().then(function () { return leave_post$1; });
+const _lazy_N0wkGH = () => Promise.resolve().then(function () { return links_get$1; });
+const _lazy_0xoTJ6 = () => Promise.resolve().then(function () { return links_post$1; });
+const _lazy_QdJ6da = () => Promise.resolve().then(function () { return _linkId__delete$1; });
+const _lazy_PlLZQY = () => Promise.resolve().then(function () { return update_put$1; });
+const _lazy_WcKr2s = () => Promise.resolve().then(function () { return create_post$1; });
+const _lazy_dYTeGo = () => Promise.resolve().then(function () { return index_get$1; });
+const _lazy_oEw_c6 = () => Promise.resolve().then(function () { return upload_post$1; });
+const _lazy_GGJj8N = () => Promise.resolve().then(function () { return user_get$1; });
+const _lazy_YqJ3kE = () => Promise.resolve().then(function () { return updatePassword_post$1; });
+const _lazy_oxtIvS = () => Promise.resolve().then(function () { return update_post$1; });
+const _lazy_VljHyK = () => Promise.resolve().then(function () { return users$1; });
+const _lazy_mqZ_dN = () => Promise.resolve().then(function () { return renderer$1; });
 
 const handlers = [
-  { route: '', handler: _GChHOJ, lazy: false, middleware: true, method: undefined },
-  { route: '/api/admin/add-user-to-team', handler: _lazy__Govh_, lazy: true, middleware: false, method: "post" },
-  { route: '/api/admin/backup/create', handler: _lazy_yFfWmo, lazy: true, middleware: false, method: "post" },
-  { route: '/api/admin/backup', handler: _lazy_vCTr7m, lazy: true, middleware: false, method: "get" },
-  { route: '/api/admin/backup/restore', handler: _lazy_PrS3ov, lazy: true, middleware: false, method: "post" },
-  { route: '/api/admin/bulk-create-users', handler: _lazy_5VJoT8, lazy: true, middleware: false, method: "post" },
-  { route: '/api/admin/delete-user', handler: _lazy_DSN8NA, lazy: true, middleware: false, method: "delete" },
-  { route: '/api/admin/toggle-role', handler: _lazy_e0GXy1, lazy: true, middleware: false, method: "post" },
-  { route: '/api/auth/login', handler: _lazy_xNcNbf, lazy: true, middleware: false, method: "post" },
-  { route: '/api/auth/logout', handler: _lazy_7WIef3, lazy: true, middleware: false, method: "post" },
-  { route: '/api/auth/me', handler: _lazy_hs26W4, lazy: true, middleware: false, method: "get" },
-  { route: '/api/auth/register', handler: _lazy_5B4C7e, lazy: true, middleware: false, method: "post" },
-  { route: '/api/chat/conversations', handler: _lazy_czs798, lazy: true, middleware: false, method: "get" },
-  { route: '/api/chat/messages', handler: _lazy_JlvD9o, lazy: true, middleware: false, method: "get" },
-  { route: '/api/chat/send', handler: _lazy_ANhgb1, lazy: true, middleware: false, method: "post" },
-  { route: '/api/debug/status', handler: _lazy_uIGDLQ, lazy: true, middleware: false, method: "get" },
-  { route: '/api/debug/test-upload', handler: _lazy_uZ1WNJ, lazy: true, middleware: false, method: "post" },
-  { route: '/api/proxy-image', handler: _lazy_iiZPnM, lazy: true, middleware: false, method: "get" },
-  { route: '/api/skills', handler: _lazy_TAOxgK, lazy: true, middleware: false, method: undefined },
-  { route: '/api/teams/:id/delete', handler: _lazy_AM2WzJ, lazy: true, middleware: false, method: "delete" },
-  { route: '/api/teams/:id/images', handler: _lazy_Gh5pnx, lazy: true, middleware: false, method: "get" },
-  { route: '/api/teams/:id/images', handler: _lazy_USHlHV, lazy: true, middleware: false, method: "post" },
-  { route: '/api/teams/:id/images/:imageId', handler: _lazy_9yrlM5, lazy: true, middleware: false, method: "delete" },
-  { route: '/api/teams/:id', handler: _lazy_qPpFas, lazy: true, middleware: false, method: "get" },
-  { route: '/api/teams/:id/join', handler: _lazy_FbMXkD, lazy: true, middleware: false, method: "post" },
-  { route: '/api/teams/:id/leave', handler: _lazy_OOipVc, lazy: true, middleware: false, method: "post" },
-  { route: '/api/teams/:id/links', handler: _lazy_HZgu0_, lazy: true, middleware: false, method: "get" },
-  { route: '/api/teams/:id/links', handler: _lazy_VLZTa7, lazy: true, middleware: false, method: "post" },
-  { route: '/api/teams/:id/links/:linkId', handler: _lazy_uIhQfG, lazy: true, middleware: false, method: "delete" },
-  { route: '/api/teams/:id/update', handler: _lazy_9QbP3f, lazy: true, middleware: false, method: "put" },
-  { route: '/api/teams/create', handler: _lazy_siP8VF, lazy: true, middleware: false, method: "post" },
-  { route: '/api/teams', handler: _lazy_NRwVz0, lazy: true, middleware: false, method: "get" },
-  { route: '/api/upload', handler: _lazy_tf6qb9, lazy: true, middleware: false, method: "post" },
-  { route: '/api/user', handler: _lazy_NGO5j7, lazy: true, middleware: false, method: "get" },
-  { route: '/api/user/update-password', handler: _lazy_fwUlnN, lazy: true, middleware: false, method: "post" },
-  { route: '/api/user/update', handler: _lazy_CYeLwK, lazy: true, middleware: false, method: "post" },
-  { route: '/api/users', handler: _lazy_4i9fLP, lazy: true, middleware: false, method: undefined },
-  { route: '/__nuxt_error', handler: _lazy_dR2Hf1, lazy: true, middleware: false, method: undefined },
+  { route: '', handler: _8dfJm_, lazy: false, middleware: true, method: undefined },
+  { route: '/api/admin/add-user-to-team', handler: _lazy_3VIfLL, lazy: true, middleware: false, method: "post" },
+  { route: '/api/admin/backup/create', handler: _lazy_BHpmOL, lazy: true, middleware: false, method: "post" },
+  { route: '/api/admin/backup', handler: _lazy_j59clI, lazy: true, middleware: false, method: "get" },
+  { route: '/api/admin/backup/restore', handler: _lazy_TcjyYq, lazy: true, middleware: false, method: "post" },
+  { route: '/api/admin/bulk-create-users', handler: _lazy_hiK3Zm, lazy: true, middleware: false, method: "post" },
+  { route: '/api/admin/delete-user', handler: _lazy_6ilHbl, lazy: true, middleware: false, method: "delete" },
+  { route: '/api/admin/toggle-role', handler: _lazy_X46lLS, lazy: true, middleware: false, method: "post" },
+  { route: '/api/auth/login', handler: _lazy_XYs2hc, lazy: true, middleware: false, method: "post" },
+  { route: '/api/auth/logout', handler: _lazy_sfy6lD, lazy: true, middleware: false, method: "post" },
+  { route: '/api/auth/me', handler: _lazy_QtDuhZ, lazy: true, middleware: false, method: "get" },
+  { route: '/api/auth/register', handler: _lazy_Z_k7UE, lazy: true, middleware: false, method: "post" },
+  { route: '/api/chat/conversations', handler: _lazy_HItsH8, lazy: true, middleware: false, method: "get" },
+  { route: '/api/chat/messages', handler: _lazy_ttNtBU, lazy: true, middleware: false, method: "get" },
+  { route: '/api/chat/send', handler: _lazy_nCeQW7, lazy: true, middleware: false, method: "post" },
+  { route: '/api/debug/status', handler: _lazy_0X8xDp, lazy: true, middleware: false, method: "get" },
+  { route: '/api/debug/test-upload', handler: _lazy_Cn2ye5, lazy: true, middleware: false, method: "post" },
+  { route: '/api/proxy-image', handler: _lazy_srlr7l, lazy: true, middleware: false, method: "get" },
+  { route: '/api/skills', handler: _lazy_HejCb8, lazy: true, middleware: false, method: undefined },
+  { route: '/api/teams/:id/delete', handler: _lazy_xNBtKJ, lazy: true, middleware: false, method: "delete" },
+  { route: '/api/teams/:id/images', handler: _lazy_J70_p5, lazy: true, middleware: false, method: "get" },
+  { route: '/api/teams/:id/images', handler: _lazy_Case9e, lazy: true, middleware: false, method: "post" },
+  { route: '/api/teams/:id/images/:imageId', handler: _lazy_TOpMPX, lazy: true, middleware: false, method: "delete" },
+  { route: '/api/teams/:id', handler: _lazy_X7rScc, lazy: true, middleware: false, method: "get" },
+  { route: '/api/teams/:id/join', handler: _lazy_Bc46BS, lazy: true, middleware: false, method: "post" },
+  { route: '/api/teams/:id/leave', handler: _lazy_4W2Kfz, lazy: true, middleware: false, method: "post" },
+  { route: '/api/teams/:id/links', handler: _lazy_N0wkGH, lazy: true, middleware: false, method: "get" },
+  { route: '/api/teams/:id/links', handler: _lazy_0xoTJ6, lazy: true, middleware: false, method: "post" },
+  { route: '/api/teams/:id/links/:linkId', handler: _lazy_QdJ6da, lazy: true, middleware: false, method: "delete" },
+  { route: '/api/teams/:id/update', handler: _lazy_PlLZQY, lazy: true, middleware: false, method: "put" },
+  { route: '/api/teams/create', handler: _lazy_WcKr2s, lazy: true, middleware: false, method: "post" },
+  { route: '/api/teams', handler: _lazy_dYTeGo, lazy: true, middleware: false, method: "get" },
+  { route: '/api/upload', handler: _lazy_oEw_c6, lazy: true, middleware: false, method: "post" },
+  { route: '/api/user', handler: _lazy_GGJj8N, lazy: true, middleware: false, method: "get" },
+  { route: '/api/user/update-password', handler: _lazy_YqJ3kE, lazy: true, middleware: false, method: "post" },
+  { route: '/api/user/update', handler: _lazy_oxtIvS, lazy: true, middleware: false, method: "post" },
+  { route: '/api/users', handler: _lazy_VljHyK, lazy: true, middleware: false, method: undefined },
+  { route: '/__nuxt_error', handler: _lazy_mqZ_dN, lazy: true, middleware: false, method: undefined },
   { route: '/__nuxt_island/**', handler: _SxA8c9, lazy: false, middleware: false, method: undefined },
-  { route: '/**', handler: _lazy_dR2Hf1, lazy: true, middleware: false, method: undefined }
+  { route: '/**', handler: _lazy_mqZ_dN, lazy: true, middleware: false, method: undefined }
 ];
 
 function createNitroApp() {

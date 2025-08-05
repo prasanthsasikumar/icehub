@@ -257,7 +257,7 @@
                 @click="showAllParticipants = true"
                 class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-b from-gray-50 to-gray-100 border border-gray-200 rounded-lg text-gray-600 font-medium transition-all duration-200 hover:from-gray-100 hover:to-gray-200 hover:border-gray-300 hover:text-gray-700 active:scale-95"
               >
-                <span>Show {{ displayedParticipants.length > 10 ? users.filter(user => { const role = user.role || ''; const userRole = user.userRole || ''; return role !== 'admin' && userRole !== 'mentor' }).length - 10 : 0 }} more participants</span>
+                <span>Show {{ remainingParticipantsCount }} more participants</span>
                 <svg class="w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                 </svg>
@@ -265,7 +265,7 @@
             </div>
 
             <!-- Mobile Collapse Button -->
-            <div v-if="showAllParticipants && users && users.filter(user => { const role = user.role || ''; const userRole = user.userRole || ''; return role !== 'admin' && userRole !== 'mentor' }).length > 10" class="mt-6 text-center sm:hidden">
+            <div v-if="showAllParticipants && users && users.filter(user => { const role = user.role || ''; const userRole = user.userRole || ''; return (userRole === 'participant') || (role !== 'admin' && userRole !== 'mentor' && !userRole); }).length > 10" class="mt-6 text-center sm:hidden">
               <button 
                 @click="showAllParticipants = false"
                 class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-b from-gray-50 to-gray-100 border border-gray-200 rounded-lg text-gray-600 font-medium transition-all duration-200 hover:from-gray-100 hover:to-gray-200 hover:border-gray-300 hover:text-gray-700 active:scale-95"
@@ -520,7 +520,7 @@ const getImageUrl = (url) => {
       }
       
       if (fileId) {
-        console.log('Converting Google Drive URL to proxy:', url, '-> fileId:', fileId)
+        // console.log('Converting Google Drive URL to proxy:', url, '-> fileId:', fileId)
         // Use our server-side proxy to serve the image
         return `/api/proxy-image?id=${fileId}`
       }
@@ -545,11 +545,12 @@ const totalSkills = computed(() => {
 const displayedParticipants = computed(() => {
   if (!users.value) return []
   
-  // Filter out mentors and admins from workshop participants
+  // Filter to show only regular participants (exclude admins and mentors)
   const regularParticipants = users.value.filter(user => {
     const role = user.role || ''
     const userRole = user.userRole || ''
-    return role !== 'admin' && userRole !== 'mentor'
+    // Include users who are explicitly participants, or users without specific roles (default participants)
+    return (userRole === 'participant') || (role !== 'admin' && userRole !== 'mentor' && !userRole)
   })
   
   // On mobile, show only first 10 unless expanded
@@ -565,7 +566,8 @@ const shouldShowExpandButton = computed(() => {
   const regularParticipants = users.value.filter(user => {
     const role = user.role || ''
     const userRole = user.userRole || ''
-    return role !== 'admin' && userRole !== 'mentor'
+    // Include users who are explicitly participants, or users without specific roles (default participants)
+    return (userRole === 'participant') || (role !== 'admin' && userRole !== 'mentor' && !userRole)
   })
   return isMobile.value && regularParticipants.length > 10 && !showAllParticipants.value
 })
@@ -584,12 +586,18 @@ const participantCount = computed(() => {
   return users.value.filter(user => {
     const role = user.role || ''
     const userRole = user.userRole || ''
-    return role !== 'admin' && userRole !== 'mentor'
+    // Include users who are explicitly participants, or users without specific roles (default participants)
+    return (userRole === 'participant') || (role !== 'admin' && userRole !== 'mentor' && !userRole)
   }).length
 })
 
 const mentorCount = computed(() => {
   return mentors.value.length
+})
+
+const remainingParticipantsCount = computed(() => {
+  if (!users.value || participantCount.value <= 10) return 0
+  return participantCount.value - 10
 })
 
 const topSkills = computed(() => {
