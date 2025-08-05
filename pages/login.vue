@@ -1,90 +1,95 @@
 <template>
-  <div class="min-h-screen font-sans text-gray-700 bg-gray-50 flex items-center justify-center container-padding py-8">
-    <div class="w-full max-w-md">
-      <!-- Logo and Header -->
-      <div class="text-center mb-6 sm:mb-8">
-        <NuxtLink to="/" class="text-2xl sm:text-3xl font-bold text-gray-700 hover:text-primary transition-colors">
-          ICE2025
-        </NuxtLink>
-        <h1 class="text-xl sm:text-2xl font-semibold text-gray-700 mt-3 sm:mt-4 mb-2">Welcome back</h1>
-        <p class="text-sm sm:text-base text-gray-500">Sign in to your account</p>
-      </div>
+  <div class="min-h-screen font-sans text-gray-700 bg-gray-50 flex flex-col">
+    <!-- Main Content Area -->
+    <div class="flex-1 flex items-center justify-center container-padding py-8">
+      <div class="w-full max-w-md">
+        <!-- Logo and Header -->
+        <div class="text-center mb-6 sm:mb-8">
+          <NuxtLink to="/" class="text-2xl sm:text-3xl font-bold text-gray-700 hover:text-primary transition-colors">
+            ICE2025
+          </NuxtLink>
+          <h1 class="text-xl sm:text-2xl font-semibold text-gray-700 mt-3 sm:mt-4 mb-2">Welcome back</h1>
+          <p class="text-sm sm:text-base text-gray-500">Sign in to your account</p>
+        </div>
 
-      <!-- Login Form -->
-      <div class="bg-white rounded-lg shadow-sm border border-gray-200 card-padding">
-        <form @submit.prevent="handleLogin" class="space-y-5 sm:space-y-6">
-          <!-- Email Field -->
-          <div>
-            <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
-              Email address
-            </label>
-            <input
-              id="email"
-              v-model="form.email"
-              type="email"
-              required
-              class="form-input"
-              placeholder="Enter your email"
+        <!-- Login Form -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 card-padding">
+          <form @submit.prevent="handleLogin" class="space-y-5 sm:space-y-6">
+            <!-- Email Field -->
+            <div>
+              <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+                Email address
+              </label>
+              <input
+                id="email"
+                v-model="form.email"
+                type="email"
+                required
+                class="form-input"
+                placeholder="Enter your email"
+                :disabled="loading"
+              />
+            </div>
+
+            <!-- Password Field -->
+            <div>
+              <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
+                Password
+              </label>
+              <input
+                id="password"
+                v-model="form.password"
+                type="password"
+                required
+                class="form-input"
+                placeholder="Enter your password"
+                :disabled="loading"
+              />
+            </div>
+
+            <!-- Error Message -->
+            <div v-if="error" class="p-3 bg-red-50 border border-red-200 rounded-lg">
+              <p class="text-red-600 text-sm">{{ error }}</p>
+            </div>
+
+            <!-- Submit Button -->
+            <button
+              type="submit"
               :disabled="loading"
-            />
+              class="form-button"
+            >
+              <span v-if="loading">Signing in...</span>
+              <span v-else>Sign in</span>
+            </button>
+          </form>
+
+          <!-- Demo Credentials -->
+          <!-- <div class="mt-5 sm:mt-6 p-3 sm:p-4 bg-blue-50 border border-blue-200 rounded-lg">
+            <h3 class="text-sm font-medium text-blue-800 mb-2">Demo Credentials</h3>
+            <div class="text-xs sm:text-sm text-blue-700 space-y-1">
+              <p><strong>Regular User:</strong></p>
+              <p>Email: test@email.com</p>
+              <p>Password: password</p>
+              <p class="mt-2"><strong>Admin User:</strong></p>
+              <p>Email: admin@ice2025.com</p>
+              <p>Password: admin123</p>
+            </div>
+          </div> -->
+
+          <!-- Register Link -->
+          <div class="mt-5 sm:mt-6 text-center">
+            <p class="text-sm sm:text-base text-gray-600">
+              Don't have an account?
+              <NuxtLink to="/register" class="text-primary hover:text-primary-dark font-medium block sm:inline mt-1 sm:mt-0">
+                Sign up
+              </NuxtLink>
+            </p>
           </div>
-
-          <!-- Password Field -->
-          <div>
-            <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
-              Password
-            </label>
-            <input
-              id="password"
-              v-model="form.password"
-              type="password"
-              required
-              class="form-input"
-              placeholder="Enter your password"
-              :disabled="loading"
-            />
-          </div>
-
-          <!-- Error Message -->
-          <div v-if="error" class="p-3 bg-red-50 border border-red-200 rounded-lg">
-            <p class="text-red-600 text-sm">{{ error }}</p>
-          </div>
-
-          <!-- Submit Button -->
-          <button
-            type="submit"
-            :disabled="loading"
-            class="form-button"
-          >
-            <span v-if="loading">Signing in...</span>
-            <span v-else>Sign in</span>
-          </button>
-        </form>
-
-        <!-- Demo Credentials -->
-        <!-- <div class="mt-5 sm:mt-6 p-3 sm:p-4 bg-blue-50 border border-blue-200 rounded-lg">
-          <h3 class="text-sm font-medium text-blue-800 mb-2">Demo Credentials</h3>
-          <div class="text-xs sm:text-sm text-blue-700 space-y-1">
-            <p><strong>Regular User:</strong></p>
-            <p>Email: test@email.com</p>
-            <p>Password: password</p>
-            <p class="mt-2"><strong>Admin User:</strong></p>
-            <p>Email: admin@ice2025.com</p>
-            <p>Password: admin123</p>
-          </div>
-        </div> -->
-
-        <!-- Register Link -->
-        <div class="mt-5 sm:mt-6 text-center">
-          <p class="text-sm sm:text-base text-gray-600">
-            Don't have an account?
-            <NuxtLink to="/register" class="text-primary hover:text-primary-dark font-medium block sm:inline mt-1 sm:mt-0">
-              Sign up
-            </NuxtLink>
-          </p>
         </div>
       </div>
     </div>
+    
+    <!-- Footer -->
     <Footer />
   </div>
 </template>
