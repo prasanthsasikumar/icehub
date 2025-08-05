@@ -11,6 +11,7 @@
         <p>User: {{ user?.email || 'Not logged in' }}</p>
       </div>
     </div>
+    <Footer />
   </div>
 </template>
 

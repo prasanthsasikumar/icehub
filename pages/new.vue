@@ -30,6 +30,7 @@
         </NuxtLink>
       </div>
     </div>
+    <Footer />
   </div>
 </template>
 

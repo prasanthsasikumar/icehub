@@ -378,6 +378,7 @@
         </div>
       </div>
     </main>
+    <Footer />
   </div>
 </template>
 

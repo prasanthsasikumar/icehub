@@ -403,6 +403,7 @@
       </div>
     </div>
     </div> <!-- End conditional div -->
+    <Footer />
   </div>
 </template>
 
