@@ -1147,16 +1147,16 @@ _imlJlEtcYUErFKlIoV3o40RwAHyYMj1YM8ArfD1nFG0
 const assets = {
   "/index.mjs": {
     "type": "text/javascript; charset=utf-8",
-    "etag": "\"2da9a-jIZBWVdZ+s+DdCJ8FynM+2FYS1w\"",
-    "mtime": "2025-08-06T08:02:57.477Z",
-    "size": 187034,
+    "etag": "\"2db38-taUI2FvT865msmxGEYP2o419oDo\"",
+    "mtime": "2025-08-06T08:08:33.712Z",
+    "size": 187192,
     "path": "index.mjs"
   },
   "/index.mjs.map": {
     "type": "application/json",
-    "etag": "\"a41ef-RCQvlJ1XaDUF3eRx8HiQlpzYBQM\"",
-    "mtime": "2025-08-06T08:02:57.483Z",
-    "size": 672239,
+    "etag": "\"a44f1-3cu6WljpMtnR5ueT8gBWULE5988\"",
+    "mtime": "2025-08-06T08:08:33.713Z",
+    "size": 673009,
     "path": "index.mjs.map"
   }
 };
@@ -5220,9 +5220,15 @@ const update_post = defineEventHandler(async (event) => {
         if (typeof skills[0] === "object" && "name" in skills[0] && "level" in skills[0]) {
           processedSkills = skills.filter(
             (skill) => skill.name && typeof skill.name === "string" && skill.level && typeof skill.level === "number" && skill.level >= 1 && skill.level <= 5
-          ).map((skill) => skill.name);
+          ).map((skill) => ({
+            name: skill.name.trim(),
+            level: skill.level
+          }));
         } else {
-          processedSkills = skills.filter((skill) => typeof skill === "string" && skill.trim().length > 0);
+          processedSkills = skills.filter((skill) => typeof skill === "string" && skill.trim().length > 0).map((skill) => ({
+            name: skill.trim(),
+            level: 3
+          }));
         }
       }
     }

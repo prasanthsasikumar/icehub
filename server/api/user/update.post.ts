@@ -66,13 +66,13 @@ export default defineEventHandler(async (event) => {
     }
 
     // Process skills - support both old format (string[]) and new format (SkillWithLevel[])
-    let processedSkills: string[] = []
+    let processedSkills: any = []
     
     if (Array.isArray(skills)) {
       if (skills.length > 0) {
         // Check if it's the new format with levels
         if (typeof skills[0] === 'object' && 'name' in skills[0] && 'level' in skills[0]) {
-          // For now, just extract skill names (can be enhanced later for levels)
+          // New format - store full skill objects with levels
           processedSkills = skills
             .filter((skill: any) => 
               skill.name && 
@@ -82,10 +82,18 @@ export default defineEventHandler(async (event) => {
               skill.level >= 1 && 
               skill.level <= 5
             )
-            .map((skill: any) => skill.name)
+            .map((skill: any) => ({
+              name: skill.name.trim(),
+              level: skill.level
+            }))
         } else {
-          // Old format - just string array
-          processedSkills = skills.filter((skill: any) => typeof skill === 'string' && skill.trim().length > 0)
+          // Old format - convert string array to objects with default level 3
+          processedSkills = skills
+            .filter((skill: any) => typeof skill === 'string' && skill.trim().length > 0)
+            .map((skill: any) => ({
+              name: skill.trim(),
+              level: 3
+            }))
         }
       }
     }
