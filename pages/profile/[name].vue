@@ -634,7 +634,7 @@ const getSkillDescription = (skill) => {
 const getPrimarySpecialization = (skills) => {
   const skillsArray = getSkillsStringArray(skills)
   const frontend = ['React', 'Vue', 'Angular', 'JavaScript', 'TypeScript']
-  const backend = ['Node.js', 'Python', 'PHP', 'Java', 'C#', 'Rust']
+  const backend = ['Node.js', 'Python', 'Machine Learning', 'Java', 'C#', 'Computer Vision']
   const mobile = ['React Native', 'Flutter', 'Swift', 'Kotlin']
   
   const frontendCount = skillsArray.filter(s => frontend.includes(s)).length
@@ -644,6 +644,8 @@ const getPrimarySpecialization = (skills) => {
   if (frontendCount > backendCount && frontendCount > mobileCount) return 'Frontend Development'
   if (backendCount > frontendCount && backendCount > mobileCount) return 'Backend Development'
   if (mobileCount > 0) return 'Mobile Development'
+  // return the first skill as a fallback
+  if (skillsArray.length > 0) return skillsArray[0]
   return 'Full Stack Development'
 }
 
