@@ -449,7 +449,7 @@ const bulkMakeAdmin = async () => {
     
     await refreshUsers()
     selectedUsers.value = []
-    alert(`Successfully made ${selectedUsers.value.length} users admin`)
+    alert(`Successfully made selected users admin`)
   } catch (error) {
     alert('Failed to update some users')
   }

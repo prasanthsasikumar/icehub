@@ -126,7 +126,7 @@
             <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
               <div class="flex-1">
                 <h1 class="text-3xl font-bold text-gray-700 mb-3">{{ data.name }}</h1>
-                <p class="text-gray-600 mb-4 leading-relaxed">{{ data.description }}</p>
+                <p class="text-gray-600 mb-4 leading-relaxed">{{ data.description.split('.')[0] }}</p>
                 
                 <!-- team Stats -->
                 <div class="flex flex-wrap gap-6">
