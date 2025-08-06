@@ -146,29 +146,81 @@
                   <div 
                     v-for="(link, index) in linksList" 
                     :key="index"
-                    class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200"
+                    class="flex items-center gap-3 p-3 rounded-lg border transition-all duration-200"
+                    :class="{
+                      'bg-gray-50 border-gray-200': isLinkComplete(link),
+                      'bg-yellow-50 border-yellow-200': !isLinkComplete(link) && (link.label || link.url),
+                      'bg-red-50 border-red-200': !isLinkComplete(link) && !link.label && !link.url
+                    }"
                   >
-                    <input 
-                      v-model="link.label"
-                      type="text"
-                      placeholder="Link label (e.g., Portfolio, LinkedIn, GitHub)"
-                      class="flex-1 px-3 py-2 border border-gray-200 rounded-md text-sm focus:outline-none focus:border-primary"
-                    />
-                    <input 
-                      v-model="link.url"
-                      type="url"
-                      placeholder="https://..."
-                      class="flex-1 px-3 py-2 border border-gray-200 rounded-md text-sm focus:outline-none focus:border-primary"
-                    />
+                    <div class="flex-1 space-y-2">
+                      <div class="flex gap-2">
+                        <input 
+                          v-model="link.label"
+                          type="text"
+                          placeholder="Link label (e.g., Portfolio, LinkedIn, GitHub)"
+                          class="flex-1 px-3 py-2 border border-gray-200 rounded-md text-sm focus:outline-none focus:border-primary"
+                          :class="{
+                            'border-green-300 bg-green-50': link.label && link.label.trim(),
+                            'border-red-300 bg-red-50': !link.label && link.url
+                          }"
+                        />
+                        <input 
+                          v-model="link.url"
+                          type="url"
+                          placeholder="https://..."
+                          class="flex-1 px-3 py-2 border border-gray-200 rounded-md text-sm focus:outline-none focus:border-primary"
+                          :class="{
+                            'border-green-300 bg-green-50': link.url && link.url.trim(),
+                            'border-red-300 bg-red-50': !link.url && link.label
+                          }"
+                        />
+                      </div>
+                      
+                      <!-- Validation feedback -->
+                      <div v-if="!isLinkComplete(link) && (link.label || link.url)" class="text-xs text-yellow-600 flex items-center gap-1">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                        </svg>
+                        Incomplete - {{ !link.label ? 'add label' : 'add URL' }}
+                      </div>
+                      
+                      <div v-if="isLinkComplete(link)" class="text-xs text-green-600 flex items-center gap-1">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                        </svg>
+                        Complete - will be saved
+                      </div>
+                    </div>
+                    
                     <button
                       type="button"
                       @click="removeLink(index)"
-                      class="text-red-500 hover:text-red-700 p-1"
+                      class="text-red-500 hover:text-red-700 p-1 rounded transition-colors"
+                      title="Remove this link"
                     >
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
                       </svg>
                     </button>
+                  </div>
+                  
+                  <!-- Summary of valid links -->
+                  <div v-if="linksList.length > 0" class="text-sm text-gray-600 bg-blue-50 p-3 rounded-lg border border-blue-200">
+                    <div class="flex items-center gap-2 mb-1">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="text-blue-500">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                      </svg>
+                      <strong>Links Summary:</strong>
+                    </div>
+                    <div>
+                      Total entries: {{ linksList.length }} | 
+                      Complete links: {{ getCompleteLinksCount() }} | 
+                      Will be saved: {{ getCompleteLinksCount() }}
+                    </div>
+                    <div v-if="getIncompleteLinksCount() > 0" class="text-yellow-600 mt-1">
+                      {{ getIncompleteLinksCount() }} incomplete link(s) will not be saved
+                    </div>
                   </div>
                 </div>
 
@@ -184,7 +236,7 @@
                 </button>
                 
                 <p class="text-xs text-gray-500">
-                  Add up to 5 personal links (portfolio, social media, projects, etc.)
+                  Add up to 5 personal links (portfolio, social media, projects, etc.). Both label and URL are required for each link to be saved.
                 </p>
               </div>
 
@@ -509,6 +561,19 @@ const removeLink = (index) => {
   linksList.value.splice(index, 1)
 }
 
+// Link validation helpers
+const isLinkComplete = (link) => {
+  return link.label && link.label.trim() && link.url && link.url.trim()
+}
+
+const getCompleteLinksCount = () => {
+  return linksList.value.filter(isLinkComplete).length
+}
+
+const getIncompleteLinksCount = () => {
+  return linksList.value.length - getCompleteLinksCount()
+}
+
 // Initialize form with current user data
 const initializeForm = () => {
   if (user.value) {
@@ -611,7 +676,11 @@ const updateProfile = async () => {
       }
     })
 
-    success.value = 'Profile updated successfully!'
+    // More detailed success message
+    const linkMessage = validLinks.length > 0 
+      ? ` (${validLinks.length} link${validLinks.length === 1 ? '' : 's'} saved)`
+      : ''
+    success.value = `Profile updated successfully!${linkMessage}`
     
     // Update local user state
     const { checkAuth } = useAuth()

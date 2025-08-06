@@ -395,6 +395,23 @@
                 </div>
               </div>
             </div>
+
+            <!-- Team Skills -->
+            <div v-if="teamSkills.length > 0" class="bg-white rounded-xl border border-gray-200 p-6">
+              <h3 class="text-lg font-semibold text-gray-700 mb-4 flex items-center gap-2">
+                <span>🛠️</span>
+                Team Skills ({{ teamSkills.length }})
+              </h3>
+              <div class="flex flex-wrap gap-2">
+                <span 
+                  v-for="skill in teamSkills" 
+                  :key="skill"
+                  class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-800"
+                >
+                  {{ skill }}
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -437,6 +454,34 @@ watch([linksData, imagesData], ([links, images]) => {
   if (links) sharedLinks.value = links
   if (images) teamImages.value = images
 }, { immediate: true })
+
+// Computed property for unique team skills
+const teamSkills = computed(() => {
+  if (!data.value) return []
+  
+  const allSkills = new Set()
+  
+  // Add skills from regular members
+  if (data.value.members) {
+    data.value.members.forEach(member => {
+      if (member.skills && Array.isArray(member.skills)) {
+        member.skills.forEach(skill => allSkills.add(skill))
+      }
+    })
+  }
+  
+  // Add skills from mentors
+  if (data.value.mentors) {
+    data.value.mentors.forEach(mentor => {
+      if (mentor.skills && Array.isArray(mentor.skills)) {
+        mentor.skills.forEach(skill => allSkills.add(skill))
+      }
+    })
+  }
+  
+  // Convert Set to Array and sort alphabetically
+  return Array.from(allSkills).sort()
+})
 
 // Check authentication on mount
 onMounted(async () => {

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Links Functionality Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; }
+        .links-container { margin: 10px 0; }
+        .link-item { display: flex; gap: 10px; margin: 5px 0; align-items: center; }
+        input { padding: 5px; flex: 1; }
+        button { padding: 5px 10px; }
+        .output { background: #f5f5f5; padding: 10px; margin: 10px 0; }
+        .error { background: #ffe6e6; color: red; }
+        .success { background: #e6ffe6; color: green; }
+    </style>
+</head>
+<body>
+    <h1>User Links Functionality Test</h1>
+    
+    <div class="test-section">
+        <h2>Step 1: Frontend Link Management Test</h2>
+        <p>This tests if the frontend can properly manage multiple links in memory.</p>
+        
+        <div class="links-container" id="linksContainer">
+            <!-- Links will be added here -->
+        </div>
+        
+        <button onclick="addLink()">Add Link</button>
+        <button onclick="removeLink(0)" id="removeBtn" disabled>Remove First Link</button>
+        <button onclick="testSerialization()">Test JSON Serialization</button>
+        
+        <div class="output" id="frontendOutput"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Step 2: Server Processing Simulation</h2>
+        <p>This simulates how the server would process the links data.</p>
+        
+        <button onclick="simulateServerProcessing()">Simulate Server Processing</button>
+        
+        <div class="output" id="serverOutput"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Step 3: Display Logic Test</h2>
+        <p>This tests the getUserLinks function used to display links.</p>
+        
+        <button onclick="testDisplayLogic()">Test Display Logic</button>
+        
+        <div class="output" id="displayOutput"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Step 4: Real API Test</h2>
+        <p>This would test the actual API endpoints (needs authentication).</p>
+        
+        <button onclick="testRealAPI()" disabled>Test Real API (Login Required)</button>
+        
+        <div class="output" id="apiOutput">
+            <em>Note: This requires being logged in to work. You can manually test this through the profile edit page.</em>
+        </div>
+    </div>
+
+    <script>
+        // Simulate the frontend linksList array
+        let linksList = [];
+        
+        function addLink() {
+            const index = linksList.length;
+            linksList.push({
+                label: `Link ${index + 1}`,
+                url: `https://example${index + 1}.com`
+            });
+            
+            renderLinks();
+            updateOutput();
+        }
+        
+        function removeLink(index) {
+            linksList.splice(index, 1);
+            renderLinks();
+            updateOutput();
+        }
+        
+        function renderLinks() {
+            const container = document.getElementById('linksContainer');
+            container.innerHTML = '';
+            
+            linksList.forEach((link, index) => {
+                const div = document.createElement('div');
+                div.className = 'link-item';
+                div.innerHTML = `
+                    <input type="text" value="${link.label}" onchange="updateLinkLabel(${index}, this.value)" placeholder="Label">
+                    <input type="text" value="${link.url}" onchange="updateLinkUrl(${index}, this.value)" placeholder="URL">
+                    <button onclick="removeLink(${index})">Remove</button>
+                `;
+                container.appendChild(div);
+            });
+            
+            document.getElementById('removeBtn').disabled = linksList.length === 0;
+        }
+        
+        function updateLinkLabel(index, value) {
+            linksList[index].label = value;
+            updateOutput();
+        }
+        
+        function updateLinkUrl(index, value) {
+            linksList[index].url = value;
+            updateOutput();
+        }
+        
+        function updateOutput() {
+            const output = document.getElementById('frontendOutput');
+            output.innerHTML = `
+                <strong>Current linksList:</strong><br>
+                Count: ${linksList.length}<br>
+                Data: <pre>${JSON.stringify(linksList, null, 2)}</pre>
+            `;
+        }
+        
+        function testSerialization() {
+            const output = document.getElementById('frontendOutput');
+            try {
+                const jsonString = JSON.stringify(linksList);
+                const parsed = JSON.parse(jsonString);
+                
+                output.innerHTML += `
+                    <div class="success">
+                        <strong>Serialization Test: PASSED</strong><br>
+                        JSON String: ${jsonString}<br>
+                        Parsed Count: ${parsed.length}<br>
+                        Original Count: ${linksList.length}<br>
+                        Match: ${parsed.length === linksList.length ? 'YES' : 'NO'}
+                    </div>
+                `;
+            } catch (error) {
+                output.innerHTML += `
+                    <div class="error">
+                        <strong>Serialization Test: FAILED</strong><br>
+                        Error: ${error.message}
+                    </div>
+                `;
+            }
+        }
+        
+        function simulateServerProcessing() {
+            const output = document.getElementById('serverOutput');
+            
+            // Simulate the server-side processing logic
+            const user_links = linksList; // This is what the frontend would send
+            
+            let processedLinks = '';
+            
+            if (Array.isArray(user_links)) {
+                const validLinks = user_links
+                    .filter((link) => 
+                        link && 
+                        typeof link === 'object' &&
+                        link.label && 
+                        typeof link.label === 'string' && 
+                        link.label.trim().length > 0 &&
+                        link.url && 
+                        typeof link.url === 'string' && 
+                        link.url.trim().length > 0
+                    )
+                    .slice(0, 5) // Limit to 5 links
+                    .map((link) => ({
+                        label: link.label.trim(),
+                        url: link.url.trim()
+                    }));
+                
+                if (validLinks.length > 0) {
+                    processedLinks = JSON.stringify(validLinks);
+                }
+            }
+            
+            output.innerHTML = `
+                <strong>Server Processing Result:</strong><br>
+                Input: ${user_links.length} links<br>
+                Output: ${processedLinks ? JSON.parse(processedLinks).length : 0} links<br>
+                Processed JSON: <pre>${processedLinks || '(empty)'}</pre>
+            `;
+        }
+        
+        function testDisplayLogic() {
+            const output = document.getElementById('displayOutput');
+            
+            // Simulate the getUserLinks function
+            const getUserLinks = (userLinks) => {
+                if (!userLinks) return [];
+                
+                try {
+                    const links = typeof userLinks === 'string' ? JSON.parse(userLinks) : userLinks;
+                    
+                    if (Array.isArray(links)) {
+                        const filteredLinks = links.filter(link => link && link.label && link.url);
+                        return filteredLinks;
+                    }
+                    
+                    return [];
+                } catch (error) {
+                    console.error('Error parsing user links:', error);
+                    return [];
+                }
+            };
+            
+            // Test with current data as JSON string (simulating DB storage)
+            const jsonString = JSON.stringify(linksList);
+            const displayResult = getUserLinks(jsonString);
+            
+            // Test with array (simulating fresh data)
+            const arrayResult = getUserLinks(linksList);
+            
+            output.innerHTML = `
+                <strong>Display Logic Test:</strong><br>
+                
+                <strong>Test 1 - JSON String Input (simulating DB data):</strong><br>
+                Input: ${jsonString}<br>
+                Output Count: ${displayResult.length}<br>
+                Output: <pre>${JSON.stringify(displayResult, null, 2)}</pre>
+                
+                <strong>Test 2 - Array Input (simulating fresh data):</strong><br>
+                Input Count: ${linksList.length}<br>
+                Output Count: ${arrayResult.length}<br>
+                Output: <pre>${JSON.stringify(arrayResult, null, 2)}</pre>
+                
+                <div class="${displayResult.length === linksList.length ? 'success' : 'error'}">
+                    Result: ${displayResult.length === linksList.length ? 'PASSED' : 'FAILED'} - All links preserved
+                </div>
+            `;
+        }
+        
+        // Initialize with a few test links
+        addLink();
+        addLink();
+        
+        // Update the second link to have different values
+        setTimeout(() => {
+            linksList[1] = { label: 'GitHub', url: 'https://github.com/user' };
+            renderLinks();
+            updateOutput();
+        }, 100);
+    </script>
+</body>
+</html>

@@ -63,7 +63,8 @@ export default defineEventHandler(async (event) => {
         if (userDetail) {
           const memberWithRole = {
             ...member,
-            userRole: userDetail.userRole || 'participant'
+            userRole: userDetail.userRole || 'participant',
+            skills: userDetail.skills || []
           }
           
           if (userDetail.userRole === 'mentor') {

@@ -1147,16 +1147,16 @@ _imlJlEtcYUErFKlIoV3o40RwAHyYMj1YM8ArfD1nFG0
 const assets = {
   "/index.mjs": {
     "type": "text/javascript; charset=utf-8",
-    "etag": "\"2d87f-2hDvPWViY5BpemyEQ122Y0XzM64\"",
-    "mtime": "2025-08-06T00:34:14.962Z",
-    "size": 186495,
+    "etag": "\"2da9a-jIZBWVdZ+s+DdCJ8FynM+2FYS1w\"",
+    "mtime": "2025-08-06T08:02:57.477Z",
+    "size": 187034,
     "path": "index.mjs"
   },
   "/index.mjs.map": {
     "type": "application/json",
-    "etag": "\"a3fba-qHAtzaLKiAj5iVKb9341lXbTfOI\"",
-    "mtime": "2025-08-06T00:34:14.963Z",
-    "size": 671674,
+    "etag": "\"a41ef-RCQvlJ1XaDUF3eRx8HiQlpzYBQM\"",
+    "mtime": "2025-08-06T08:02:57.483Z",
+    "size": 672239,
     "path": "index.mjs.map"
   }
 };
@@ -3345,6 +3345,7 @@ const me_get = defineEventHandler(async (event) => {
         expertise: fullUser.expertise,
         gender: fullUser.gender,
         video: fullUser.video,
+        user_links: fullUser.user_links,
         createdAt: fullUser.createdAt
       }
     };
@@ -3902,7 +3903,8 @@ const complete_get = defineEventHandler(async (event) => {
         if (userDetail) {
           const memberWithRole = {
             ...member,
-            userRole: userDetail.userRole || "participant"
+            userRole: userDetail.userRole || "participant",
+            skills: userDetail.skills || []
           };
           if (userDetail.userRole === "mentor") {
             mentors.push(memberWithRole);
@@ -4253,7 +4255,8 @@ const index_get$2 = defineEventHandler(async (event) => {
         if (userDetail) {
           const memberWithRole = {
             ...member,
-            userRole: userDetail.userRole || "participant"
+            userRole: userDetail.userRole || "participant",
+            skills: userDetail.skills || []
           };
           if (userDetail.userRole === "mentor") {
             mentors.push(memberWithRole);
