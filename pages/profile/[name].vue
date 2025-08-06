@@ -644,7 +644,7 @@ const getPrimarySpecialization = (skills) => {
   if (frontendCount > backendCount && frontendCount > mobileCount) return 'Frontend Development'
   if (backendCount > frontendCount && backendCount > mobileCount) return 'Backend Development'
   if (mobileCount > 0) return 'Mobile Development'
-  // return the first skill as a fallback
+  if (frontendCount > 0 && backendCount > 0) return 'Full Stack Development'
   if (skillsArray.length > 0) return skillsArray[0]
   return 'Full Stack Development'
 }
