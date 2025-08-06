@@ -6,9 +6,44 @@
         <div class="nav-left">
           <NuxtLink to="/" class="nav-logo">ICE2025</NuxtLink>
         </div>
-        <div class="nav-right flex items-center gap-4">
+        
+        <!-- Desktop Navigation -->
+        <div class="nav-right hidden md:flex items-center gap-4">
           <span v-if="user" class="text-sm text-gray-600">{{ user.name }}</span>
           <NuxtLink :to="`/teams/${teamId}`" class="nav-button nav-button-secondary">
+            Back to team
+          </NuxtLink>
+        </div>
+
+        <!-- Mobile Navigation -->
+        <div class="md:hidden flex items-center">
+          <button 
+            @click="showMobileMenu = !showMobileMenu"
+            class="p-2 text-gray-600 hover:text-gray-900 focus:outline-none"
+          >
+            <svg 
+              :class="{'rotate-90': showMobileMenu}" 
+              class="w-6 h-6 transition-transform duration-200" 
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24"
+            >
+              <path v-if="!showMobileMenu" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+              <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile Menu Dropdown -->
+      <div v-if="showMobileMenu" class="md:hidden bg-white border-t border-gray-200">
+        <div class="px-5 py-3 space-y-3">
+          <div v-if="user" class="text-sm text-gray-600 font-medium">{{ user.name }}</div>
+          <NuxtLink 
+            :to="`/teams/${teamId}`" 
+            class="block py-2 text-gray-700 hover:text-primary"
+            @click="showMobileMenu = false"
+          >
             Back to team
           </NuxtLink>
         </div>
@@ -280,6 +315,7 @@ const teamId = route.params.id
 // Authentication
 const { user, isLoggedIn, checkAuth } = useAuth()
 const loading = ref(true)
+const showMobileMenu = ref(false)
 
 // Form state
 const form = reactive({
@@ -444,5 +480,9 @@ useHead({
 
 .focus\:ring-primary:focus {
   --tw-ring-color: #0d7ae4;
+}
+
+.hover\:text-primary:hover {
+  color: #0d7ae4;
 }
 </style>

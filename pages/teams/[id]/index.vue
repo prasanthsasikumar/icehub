@@ -6,7 +6,9 @@
         <div class="nav-left">
           <NuxtLink to="/" class="nav-logo">ICE2025</NuxtLink>
         </div>
-        <div class="nav-right flex items-center gap-4">
+        
+        <!-- Desktop Navigation -->
+        <div class="nav-right hidden md:flex items-center gap-4">
           <template v-if="isLoggedIn">
             <span class="text-sm text-gray-600">{{ user?.name }}</span>
             <NuxtLink to="/chat" class="nav-button nav-button-secondary">
@@ -14,6 +16,48 @@
             </NuxtLink>
           </template>
           <NuxtLink to="/teams" class="nav-button nav-button-secondary">
+            Back to teams
+          </NuxtLink>
+        </div>
+
+        <!-- Mobile Navigation -->
+        <div class="md:hidden flex items-center">
+          <button 
+            @click="showMobileMenu = !showMobileMenu"
+            class="p-2 text-gray-600 hover:text-gray-900 focus:outline-none"
+          >
+            <svg 
+              :class="{'rotate-90': showMobileMenu}" 
+              class="w-6 h-6 transition-transform duration-200" 
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24"
+            >
+              <path v-if="!showMobileMenu" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+              <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile Menu Dropdown -->
+      <div v-if="showMobileMenu" class="md:hidden bg-white border-t border-gray-200">
+        <div class="px-5 py-3 space-y-3">
+          <template v-if="isLoggedIn">
+            <div class="text-sm text-gray-600 font-medium">{{ user?.name }}</div>
+            <NuxtLink 
+              to="/chat" 
+              class="block py-2 text-gray-700 hover:text-primary"
+              @click="showMobileMenu = false"
+            >
+              Messages
+            </NuxtLink>
+          </template>
+          <NuxtLink 
+            to="/teams" 
+            class="block py-2 text-gray-700 hover:text-primary"
+            @click="showMobileMenu = false"
+          >
             Back to teams
           </NuxtLink>
         </div>
@@ -184,8 +228,8 @@
               <div v-else-if="sharedLinks.length > 0" class="space-y-4">
                 <div v-for="link in sharedLinks" :key="link.id" class="p-4 border border-gray-200 rounded-lg">
                   <div class="flex items-start justify-between">
-                    <div class="flex-1">
-                      <p class="text-sm text-gray-700 whitespace-pre-wrap">{{ link.content }}</p>
+                    <div class="flex-1 min-w-0">
+                      <div class="text-sm text-gray-700 break-words overflow-wrap-anywhere" v-html="formatLinkContent(link.content)"></div>
                       <div class="flex items-center gap-2 mt-2 text-xs text-gray-500">
                         <span>{{ link.userName }}</span>
                       </div>
@@ -369,6 +413,7 @@ const { user, isLoggedIn, checkAuth } = useAuth()
 
 // State
 const joiningteam = ref(false)
+const showMobileMenu = ref(false)
 
 // Shared links state
 const newLinkText = ref('')
@@ -517,6 +562,26 @@ const formatDate = (dateString) => {
   })
 }
 
+// Helper function to format link content and make URLs clickable
+const formatLinkContent = (content) => {
+  if (!content) return ''
+  
+  // Regular expression to match URLs
+  const urlRegex = /(https?:\/\/[^\s]+)/g
+  
+  // Replace URLs with clickable links
+  const formattedContent = content.replace(urlRegex, (url) => {
+    // Remove trailing punctuation that might not be part of the URL
+    const cleanUrl = url.replace(/[.,;:!?)]+$/, '')
+    const trailingPunc = url.slice(cleanUrl.length)
+    
+    return `<a href="${cleanUrl}" target="_blank" rel="noopener noreferrer" class="text-primary hover:text-primary-dark underline break-all">${cleanUrl}</a>${trailingPunc}`
+  })
+  
+  // Preserve line breaks
+  return formattedContent.replace(/\n/g, '<br>')
+}
+
 // Page meta
 useHead({
   title: computed(() => data.value ? `${data.value.name} - ICE2025` : 'team - ICE2025'),
@@ -540,5 +605,30 @@ useHead({
 
 .hover\:bg-primary-dark:hover {
   background-color: #0969da;
+}
+
+.text-primary {
+  color: #0d7ae4;
+}
+
+.text-primary-dark {
+  color: #0969da;
+}
+
+.hover\:text-primary-dark:hover {
+  color: #0969da;
+}
+
+/* Text wrapping utilities for long URLs and content */
+.break-words {
+  word-break: break-word;
+}
+
+.overflow-wrap-anywhere {
+  overflow-wrap: anywhere;
+}
+
+.break-all {
+  word-break: break-all;
 }
 </style>

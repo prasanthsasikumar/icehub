@@ -56,8 +56,40 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    // Check if user is the creator or has admin rights
-    if (team.createdBy !== currentUser.id && currentUser.role !== 'admin') {
+    // Check if user is a team member, creator, or has admin rights
+    let isMember = false
+    
+    // Parse members array to check membership
+    if (team.members) {
+      let members: any[] = []
+      
+      try {
+        if (typeof team.members === 'string') {
+          members = JSON.parse(team.members)
+        } else if (Array.isArray(team.members)) {
+          members = team.members
+        }
+      } catch (e) {
+        members = []
+      }
+
+      // Ensure all members have the expected structure and check membership
+      members = members.map((member: any) => {
+        if (typeof member === 'string') {
+          try {
+            return JSON.parse(member)
+          } catch {
+            return null
+          }
+        }
+        return member
+      }).filter(Boolean)
+
+      isMember = members.some((member: any) => member.userId === currentUser.id)
+    }
+
+    // Allow team members, creator, or admin to update
+    if (!isMember && team.createdBy !== currentUser.id && currentUser.role !== 'admin') {
       throw createError({
         statusCode: 403,
         statusMessage: 'You do not have permission to update this team'

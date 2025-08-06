@@ -56,48 +56,48 @@
             <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
           </svg>
         </button>
-        
-        <!-- Mobile menu -->
-        <div v-show="mobileMenuOpen" class="mobile-nav-menu">
-          <template v-if="isLoggedIn">
-            <NuxtLink @click="mobileMenuOpen = false" to="/teams" class="mobile-nav-item">
-              👥 Teams
-            </NuxtLink>
-            <NuxtLink @click="mobileMenuOpen = false" to="/chat" class="mobile-nav-item">
-              💬 Messages
-            </NuxtLink>
-            <NuxtLink 
-              v-if="user"
-              @click="mobileMenuOpen = false" 
-              :to="`/profile/${encodeURIComponent(user.name)}`" 
-              class="mobile-nav-item"
-            >
-              👤 My Profile
-            </NuxtLink>
-            <NuxtLink 
-              v-if="isAdmin"
-              @click="mobileMenuOpen = false" 
-              to="/admin" 
-              class="mobile-nav-item"
-            >
-              ⚙️ Admin
-            </NuxtLink>
-            <button @click="handleLogout; mobileMenuOpen = false" class="mobile-nav-item">
-              🚪 Logout
-            </button>
-          </template>
-          <template v-else>
-            <NuxtLink @click="mobileMenuOpen = false" to="/teams" class="mobile-nav-item">
-              👥 Teams
-            </NuxtLink>
-            <NuxtLink @click="mobileMenuOpen = false" to="/login" class="mobile-nav-item">
-              🔑 Sign In
-            </NuxtLink>
-            <NuxtLink @click="mobileMenuOpen = false" to="/register" class="mobile-nav-item">
-              ✨ Join Workshop
-            </NuxtLink>
-          </template>
-        </div>
+      </div>
+
+      <!-- Mobile menu -->
+      <div v-if="mobileMenuOpen" class="mobile-nav-menu">
+        <template v-if="isLoggedIn">
+          <NuxtLink @click="mobileMenuOpen = false" to="/teams" class="mobile-nav-item">
+            👥 Teams
+          </NuxtLink>
+          <NuxtLink @click="mobileMenuOpen = false" to="/chat" class="mobile-nav-item">
+            💬 Messages
+          </NuxtLink>
+          <NuxtLink 
+            v-if="user"
+            @click="mobileMenuOpen = false" 
+            :to="`/profile/${encodeURIComponent(user.name)}`" 
+            class="mobile-nav-item"
+          >
+            👤 My Profile
+          </NuxtLink>
+          <NuxtLink 
+            v-if="isAdmin"
+            @click="mobileMenuOpen = false" 
+            to="/admin" 
+            class="mobile-nav-item"
+          >
+            ⚙️ Admin
+          </NuxtLink>
+          <button @click="handleLogout; mobileMenuOpen = false" class="mobile-nav-item">
+            🚪 Logout
+          </button>
+        </template>
+        <template v-else>
+          <NuxtLink @click="mobileMenuOpen = false" to="/teams" class="mobile-nav-item">
+            👥 Teams
+          </NuxtLink>
+          <NuxtLink @click="mobileMenuOpen = false" to="/login" class="mobile-nav-item">
+            🔑 Sign In
+          </NuxtLink>
+          <NuxtLink @click="mobileMenuOpen = false" to="/register" class="mobile-nav-item">
+            ✨ Join Workshop
+          </NuxtLink>
+        </template>
       </div>
     </nav>
 

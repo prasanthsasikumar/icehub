@@ -1144,7 +1144,22 @@ const plugins = [
 _imlJlEtcYUErFKlIoV3o40RwAHyYMj1YM8ArfD1nFG0
 ];
 
-const assets = {};
+const assets = {
+  "/index.mjs": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"2d87f-2hDvPWViY5BpemyEQ122Y0XzM64\"",
+    "mtime": "2025-08-06T00:34:14.962Z",
+    "size": 186495,
+    "path": "index.mjs"
+  },
+  "/index.mjs.map": {
+    "type": "application/json",
+    "etag": "\"a3fba-qHAtzaLKiAj5iVKb9341lXbTfOI\"",
+    "mtime": "2025-08-06T00:34:14.963Z",
+    "size": 671674,
+    "path": "index.mjs.map"
+  }
+};
 
 function readAsset (id) {
   const serverDir = dirname$1(fileURLToPath(globalThis._importMeta_.url));
@@ -4699,7 +4714,31 @@ const update_put = defineEventHandler(async (event) => {
         statusMessage: "Team not found"
       });
     }
-    if (team.createdBy !== currentUser.id && currentUser.role !== "admin") {
+    let isMember = false;
+    if (team.members) {
+      let members = [];
+      try {
+        if (typeof team.members === "string") {
+          members = JSON.parse(team.members);
+        } else if (Array.isArray(team.members)) {
+          members = team.members;
+        }
+      } catch (e) {
+        members = [];
+      }
+      members = members.map((member) => {
+        if (typeof member === "string") {
+          try {
+            return JSON.parse(member);
+          } catch {
+            return null;
+          }
+        }
+        return member;
+      }).filter(Boolean);
+      isMember = members.some((member) => member.userId === currentUser.id);
+    }
+    if (!isMember && team.createdBy !== currentUser.id && currentUser.role !== "admin") {
       throw createError({
         statusCode: 403,
         statusMessage: "You do not have permission to update this team"
