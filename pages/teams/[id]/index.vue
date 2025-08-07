@@ -194,8 +194,8 @@
             <div class="bg-white rounded-xl border border-gray-200 p-6">
               <h2 class="text-xl font-semibold text-gray-700 mb-4">Shared Links & Resources</h2>
               
-              <!-- Add Link Form (for members only) -->
-              <div v-if="data.isMember" class="mb-6 p-4 bg-gray-50 rounded-lg">
+              <!-- Add Link Form (for members and admins) -->
+              <div v-if="data.isMember || user?.role === 'admin'" class="mb-6 p-4 bg-gray-50 rounded-lg">
                 <div class="flex flex-col gap-3">
                   <textarea
                     v-model="newLinkText"
@@ -235,7 +235,7 @@
                       </div>
                     </div>
                     <button
-                      v-if="data.isMember && (link.userId === user?.id || user?.role === 'admin')"
+                      v-if="data.isMember || user?.role === 'admin' && (link.userId === user?.id || user?.role === 'admin')"
                       @click="deleteSharedLink(link.id)"
                       class="text-gray-400 hover:text-red-500 ml-2"
                     >
@@ -253,7 +253,7 @@
                   <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
                 </svg>
                 <p>No shared links yet</p>
-                <p v-if="data.isMember" class="text-xs mt-1">Be the first to share something useful!</p>
+                <p v-if="data.isMember || user?.role === 'admin'" class="text-xs mt-1">Be the first to share something useful!</p>
               </div>
             </div>
 
@@ -261,8 +261,8 @@
             <div class="bg-white rounded-xl border border-gray-200 p-6">
               <h2 class="text-xl font-semibold text-gray-700 mb-4">Image Gallery</h2>
               
-              <!-- Upload Image Form (for members only) -->
-              <div v-if="data.isMember" class="mb-6">
+              <!-- Upload Image Form (for members and admins) -->
+              <div v-if="data.isMember || user?.role === 'admin'" class="mb-6">
                 <div class="flex items-center gap-3">
                   <input
                     type="file"
@@ -308,7 +308,7 @@
                     <p class="truncate">{{ image.filename }}</p>
                   </div>
                   <button
-                    v-if="data.isMember && (image.created_by === user?.id || user?.role === 'admin')"
+                    v-if="data.isMember || user?.role === 'admin' && (image.created_by === user?.id || user?.role === 'admin')"
                     @click="deleteImage(image.id)"
                     class="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 team-hover:opacity-100 transition-opacity"
                   >
@@ -326,7 +326,7 @@
                   <polyline points="21,15 16,10 5,21"/>
                 </svg>
                 <p>No images shared yet</p>
-                <p v-if="data.isMember" class="text-xs mt-1">Share your first image with the team!</p>
+                <p v-if="data.isMember || user?.role === 'admin'" class="text-xs mt-1">Share your first image with the team!</p>
               </div>
             </div>
           </div>
