@@ -108,7 +108,7 @@
             <div>
               <h1 class="text-3xl font-bold text-gray-800 mb-2">ICE2025 Community</h1>
               <p class="text-gray-600">
-                {{ filteredUsers.length }} participant{{ filteredUsers.length !== 1 ? 's' : '' }} 
+                {{ filteredUsers.length }} member{{ filteredUsers.length !== 1 ? 's' : '' }} 
                 {{ filteredUsers.length === 1 ? 'is' : 'are' }} in our community
               </p>
             </div>
