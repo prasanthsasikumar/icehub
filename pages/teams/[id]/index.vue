@@ -461,11 +461,24 @@ const teamSkills = computed(() => {
   
   const allSkills = new Set()
   
+  // Helper function to extract skill names from both formats
+  const extractSkillName = (skill) => {
+    if (typeof skill === 'string') {
+      return skill
+    } else if (typeof skill === 'object' && skill.name) {
+      return skill.name
+    }
+    return null
+  }
+  
   // Add skills from regular members
   if (data.value.members) {
     data.value.members.forEach(member => {
       if (member.skills && Array.isArray(member.skills)) {
-        member.skills.forEach(skill => allSkills.add(skill))
+        member.skills.forEach(skill => {
+          const skillName = extractSkillName(skill)
+          if (skillName) allSkills.add(skillName)
+        })
       }
     })
   }
@@ -474,7 +487,10 @@ const teamSkills = computed(() => {
   if (data.value.mentors) {
     data.value.mentors.forEach(mentor => {
       if (mentor.skills && Array.isArray(mentor.skills)) {
-        mentor.skills.forEach(skill => allSkills.add(skill))
+        mentor.skills.forEach(skill => {
+          const skillName = extractSkillName(skill)
+          if (skillName) allSkills.add(skillName)
+        })
       }
     })
   }
