@@ -110,28 +110,58 @@
         <!-- Countdown Timer -->
         <div class="mb-8 sm:mb-10">
           <div class="bg-white rounded-xl shadow-lg p-4 sm:p-6 max-w-md mx-auto border border-gray-200">
-            <p class="text-xs sm:text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Workshop Starts In</p>
-            <div v-if="!eventStarted" class="grid grid-cols-4 gap-2 sm:gap-4 text-center">
-              <div class="bg-gray-50 rounded-lg p-2 sm:p-3">
-                <div class="text-lg sm:text-2xl font-bold text-primary">{{ countdown.days }}</div>
-                <div class="text-xs text-gray-500 uppercase tracking-wide">Days</div>
-              </div>
-              <div class="bg-gray-50 rounded-lg p-2 sm:p-3">
-                <div class="text-lg sm:text-2xl font-bold text-primary">{{ countdown.hours }}</div>
-                <div class="text-xs text-gray-500 uppercase tracking-wide">Hours</div>
-              </div>
-              <div class="bg-gray-50 rounded-lg p-2 sm:p-3">
-                <div class="text-lg sm:text-2xl font-bold text-primary">{{ countdown.minutes }}</div>
-                <div class="text-xs text-gray-500 uppercase tracking-wide">Min</div>
-              </div>
-              <div class="bg-gray-50 rounded-lg p-2 sm:p-3">
-                <div class="text-lg sm:text-2xl font-bold text-primary">{{ countdown.seconds }}</div>
-                <div class="text-xs text-gray-500 uppercase tracking-wide">Sec</div>
+            <!-- Workshop hasn't started yet -->
+            <div v-if="!eventStarted">
+              <p class="text-xs sm:text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Workshop Starts In</p>
+              <div class="grid grid-cols-4 gap-2 sm:gap-4 text-center">
+                <div class="bg-gray-50 rounded-lg p-2 sm:p-3">
+                  <div class="text-lg sm:text-2xl font-bold text-primary">{{ countdown.days }}</div>
+                  <div class="text-xs text-gray-500 uppercase tracking-wide">Days</div>
+                </div>
+                <div class="bg-gray-50 rounded-lg p-2 sm:p-3">
+                  <div class="text-lg sm:text-2xl font-bold text-primary">{{ countdown.hours }}</div>
+                  <div class="text-xs text-gray-500 uppercase tracking-wide">Hours</div>
+                </div>
+                <div class="bg-gray-50 rounded-lg p-2 sm:p-3">
+                  <div class="text-lg sm:text-2xl font-bold text-primary">{{ countdown.minutes }}</div>
+                  <div class="text-xs text-gray-500 uppercase tracking-wide">Min</div>
+                </div>
+                <div class="bg-gray-50 rounded-lg p-2 sm:p-3">
+                  <div class="text-lg sm:text-2xl font-bold text-primary">{{ countdown.seconds }}</div>
+                  <div class="text-xs text-gray-500 uppercase tracking-wide">Sec</div>
+                </div>
               </div>
             </div>
+            
+            <!-- Workshop started, showing submission countdown -->
+            <div v-else-if="!submissionDeadlineReached">
+              <p class="text-xs sm:text-sm font-semibold text-green-600 uppercase tracking-wide mb-2">🎉 Workshop In Progress!</p>
+              <p class="text-xs sm:text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Final Submissions Due In</p>
+              <p class="text-xs text-blue-600 font-medium mb-3">Good luck with your prototypes! 🚀</p>
+              <div class="grid grid-cols-4 gap-2 sm:gap-4 text-center">
+                <div class="bg-blue-50 rounded-lg p-2 sm:p-3">
+                  <div class="text-lg sm:text-2xl font-bold text-blue-600">{{ countdown.days }}</div>
+                  <div class="text-xs text-gray-500 uppercase tracking-wide">Days</div>
+                </div>
+                <div class="bg-blue-50 rounded-lg p-2 sm:p-3">
+                  <div class="text-lg sm:text-2xl font-bold text-blue-600">{{ countdown.hours }}</div>
+                  <div class="text-xs text-gray-500 uppercase tracking-wide">Hours</div>
+                </div>
+                <div class="bg-blue-50 rounded-lg p-2 sm:p-3">
+                  <div class="text-lg sm:text-2xl font-bold text-blue-600">{{ countdown.minutes }}</div>
+                  <div class="text-xs text-gray-500 uppercase tracking-wide">Min</div>
+                </div>
+                <div class="bg-blue-50 rounded-lg p-2 sm:p-3">
+                  <div class="text-lg sm:text-2xl font-bold text-blue-600">{{ countdown.seconds }}</div>
+                  <div class="text-xs text-gray-500 uppercase tracking-wide">Sec</div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Submission deadline passed -->
             <div v-else class="text-center">
-              <div class="text-2xl sm:text-3xl font-bold text-green-600 mb-2">🎉 Workshop Started!</div>
-              <p class="text-sm text-gray-600">The ICE2025 Workshop is now in progress</p>
+              <div class="text-2xl sm:text-3xl font-bold text-purple-600 mb-2">🏆 Submissions Closed!</div>
+              <p class="text-sm text-gray-600">Thank you for participating in ICE2025</p>
             </div>
           </div>
         </div>
@@ -399,24 +429,46 @@ const countdown = ref({
   seconds: 0
 })
 const eventStarted = ref(false)
+const submissionDeadlineReached = ref(false)
 
 // Target date: August 8th, 2025 at 8:00 AM Sri Lanka Time (UTC+5:30)
-const targetDate = new Date('2025-08-08T08:00:00+05:30')
+const targetDate = new Date('2025-08-09T08:00:00+05:30')
+// Final submission deadline: August 12th, 2025 at 5:00 PM Sri Lanka Time (UTC+5:30)
+const submissionDeadline = new Date('2025-08-12T17:00:00+05:30')
 
 const updateCountdown = () => {
   const now = new Date()
-  const distance = targetDate.getTime() - now.getTime()
+  const workshopDistance = targetDate.getTime() - now.getTime()
+  const submissionDistance = submissionDeadline.getTime() - now.getTime()
   
-  if (distance < 0) {
+  // Check if workshop has started but submission deadline hasn't passed
+  if (workshopDistance < 0 && submissionDistance > 0) {
     eventStarted.value = true
-    return
-  }
-  
-  countdown.value = {
-    days: Math.floor(distance / (1000 * 60 * 60 * 24)),
-    hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-    minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
-    seconds: Math.floor((distance % (1000 * 60)) / 1000)
+    submissionDeadlineReached.value = false
+    
+    // Calculate countdown to submission deadline
+    countdown.value = {
+      days: Math.floor(submissionDistance / (1000 * 60 * 60 * 24)),
+      hours: Math.floor((submissionDistance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+      minutes: Math.floor((submissionDistance % (1000 * 60 * 60)) / (1000 * 60)),
+      seconds: Math.floor((submissionDistance % (1000 * 60)) / 1000)
+    }
+  } else if (submissionDistance < 0) {
+    // Both workshop started and submission deadline passed
+    eventStarted.value = true
+    submissionDeadlineReached.value = true
+  } else {
+    // Workshop hasn't started yet
+    eventStarted.value = false
+    submissionDeadlineReached.value = false
+    
+    // Calculate countdown to workshop start
+    countdown.value = {
+      days: Math.floor(workshopDistance / (1000 * 60 * 60 * 24)),
+      hours: Math.floor((workshopDistance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+      minutes: Math.floor((workshopDistance % (1000 * 60 * 60)) / (1000 * 60)),
+      seconds: Math.floor((workshopDistance % (1000 * 60)) / 1000)
+    }
   }
 }
 
