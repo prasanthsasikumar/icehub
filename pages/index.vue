@@ -168,7 +168,7 @@
         
         <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mb-8 sm:mb-15 max-w-md sm:max-w-none mx-auto">
           <template v-if="isLoggedIn">
-            <NuxtLink to="/participants" class="hero-btn hero-btn-primary">Meet Participants</NuxtLink>
+            <NuxtLink to="/participants" class="hero-btn hero-btn-primary">Explore Community</NuxtLink>
             <NuxtLink 
               to="/teams" 
               class="hero-btn hero-btn-secondary"
@@ -179,7 +179,7 @@
           <template v-else>
             <NuxtLink to="/register" class="hero-btn hero-btn-primary">Join Workshop</NuxtLink>
             <NuxtLink to="/teams" class="hero-btn hero-btn-secondary">Teams</NuxtLink>
-            <NuxtLink to="/participants" class="hero-btn hero-btn-secondary">Meet Participants</NuxtLink>
+            <NuxtLink to="/participants" class="hero-btn hero-btn-secondary">Explore Community</NuxtLink>
           </template>
         </div>
 
