@@ -4,7 +4,9 @@
     <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
       <div class="max-w-container mx-auto container-padding flex justify-between items-center h-14 sm:h-16">
         <div class="nav-left">
-          <h1 class="nav-logo">ICE2025</h1>
+          <NuxtLink to="/">
+            <h1 class="nav-logo">ICE2025</h1>
+          </NuxtLink>
         </div>
         <div class="nav-right hidden sm:flex items-center gap-2 sm:gap-4">
           <template v-if="currentUser">
@@ -104,7 +106,7 @@
               </svg>
             </div>
             <div>
-              <h1 class="text-3xl font-bold text-gray-800 mb-2">ICE2025 Participants</h1>
+              <h1 class="text-3xl font-bold text-gray-800 mb-2">ICE2025 Community</h1>
               <p class="text-gray-600">
                 {{ filteredUsers.length }} participant{{ filteredUsers.length !== 1 ? 's' : '' }} 
                 {{ filteredUsers.length === 1 ? 'is' : 'are' }} in our community
