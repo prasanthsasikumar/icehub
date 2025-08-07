@@ -101,11 +101,19 @@
                 @change="handleCSVUpload"
                 class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-primary file:text-white hover:file:bg-primary-dark"
               />
-              <p class="text-xs text-gray-500 mt-1">
-                CSV format: name,email,bio,password,userRole,affiliation,expertise,gender,skills (header row required). 
-                Skills should be comma-separated within quotes. Default password will be "workshop123" if not provided.
-                UserRole can be "participant" or "mentor". Gender options: male, female, non-binary, other.
-              </p>
+              <div class="text-xs text-gray-500 mt-2 space-y-1">
+                <div class="font-medium text-gray-600 mb-2">CSV Format Requirements:</div>
+                <div class="bg-gray-50 p-3 rounded-md">
+                  <div class="mb-2"><strong>Required columns:</strong> name, email (header row required)</div>
+                  <div class="mb-2"><strong>Optional columns:</strong> bio, password, userRole, affiliation, expertise, gender, skills</div>
+                  <div class="space-y-1 text-xs">
+                    <div>• Skills: comma-separated within quotes</div>
+                    <div>• Default password: "workshop123" if not provided</div>
+                    <div>• UserRole: "participant" or "mentor"</div>
+                    <div>• Gender: male, female, non-binary, other</div>
+                  </div>
+                </div>
+              </div>
             </div>
             <div v-if="csvProcessing" class="text-sm text-blue-600">
               Processing CSV file...
@@ -186,10 +194,6 @@
                   <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
                   <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
                   <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Affiliation</th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Expertise</th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Gender</th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Skills</th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Joined</th>
                   <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                 </tr>
               </thead>
@@ -234,47 +238,6 @@
                     <span v-if="user.affiliation" class="text-gray-700 font-medium">{{ user.affiliation }}</span>
                     <span v-else class="text-gray-400 italic">No affiliation</span>
                   </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    <span v-if="user.expertise" class="text-gray-700 font-medium">{{ user.expertise }}</span>
-                    <span v-else class="text-gray-400 italic">No expertise</span>
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    <div class="flex items-center gap-2">
-                      <div v-if="user.gender" class="w-4 h-4 rounded-full flex items-center justify-center text-white text-xs font-bold" 
-                           :class="{
-                             'bg-blue-500': user.gender === 'male',
-                             'bg-pink-500': user.gender === 'female', 
-                             'bg-purple-500': user.gender === 'non-binary' || user.gender === 'other',
-                             'bg-gray-500': !user.gender
-                           }">
-                        <span v-if="user.gender === 'male'">♂</span>
-                        <span v-else-if="user.gender === 'female'">♀</span>
-                        <span v-else-if="user.gender === 'non-binary' || user.gender === 'other'">⚧</span>
-                      </div>
-                      <span v-if="user.gender" class="capitalize">{{ user.gender }}</span>
-                      <span v-else class="text-gray-400 italic">Not specified</span>
-                    </div>
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    <div class="flex flex-wrap gap-1 max-w-xs">
-                      <span 
-                        v-for="skill in user.skills.slice(0, 3)" 
-                        :key="typeof skill === 'string' ? skill : skill.name"
-                        class="inline-block bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded"
-                      >
-                        {{ typeof skill === 'string' ? skill : skill.name }}
-                        <span v-if="typeof skill === 'object' && skill.level" class="ml-1 text-xs opacity-75">
-                          ({{ skill.level }})
-                        </span>
-                      </span>
-                      <span v-if="user.skills.length > 3" class="text-xs text-gray-400">
-                        +{{ user.skills.length - 3 }}
-                      </span>
-                    </div>
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {{ formatDate(user.createdAt) }}
-                  </td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
                     <NuxtLink 
                       :to="`/profile/${encodeURIComponent(user.name)}`"
@@ -282,12 +245,6 @@
                     >
                       View
                     </NuxtLink>
-                    <button 
-                      @click="editUser(user)"
-                      class="text-blue-600 hover:text-blue-900"
-                    >
-                      Edit
-                    </button>
                     <span v-if="user.video" class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-green-100 text-green-800" title="Has profile video">
                       📹 Video
                     </span>
@@ -297,6 +254,13 @@
                       class="text-purple-600 hover:text-purple-900"
                     >
                       {{ getRoleToggleText(user.role) }}
+                    </button>
+                    <button 
+                      v-if="user.id !== currentUser?.id"
+                      @click="resetPassword(user)"
+                      class="text-orange-600 hover:text-orange-900"
+                    >
+                      Reset Password
                     </button>
                     <button 
                       v-if="user.id !== currentUser?.id"
@@ -315,7 +279,7 @@
         <!-- team Management Section -->
         <div class="bg-white rounded-lg border border-gray-200 overflow-hidden mt-8">
           <div class="p-6 border-b border-gray-200">
-            <h2 class="text-xl font-semibold text-gray-700 mb-4">team Management</h2>
+            <h2 class="text-xl font-semibold text-gray-700 mb-4">Team Management</h2>
             <p class="text-sm text-gray-500 mb-6">Add users to teams directly without requiring them to join manually.</p>
             
             <!-- Add User to team Form -->
@@ -687,6 +651,25 @@ const deleteUser = async (user) => {
     alert(`User ${user.name} has been deleted successfully`)
   } catch (error) {
     alert(`Failed to delete user: ${error.data?.message || 'Unknown error'}`)
+  }
+}
+
+const resetPassword = async (user) => {
+  if (!confirm(`Are you sure you want to reset ${user.name}'s password to "workshop123"?`)) {
+    return
+  }
+
+  try {
+    await $fetch('/api/admin/reset-password', {
+      method: 'POST',
+      body: {
+        userId: user.id
+      }
+    })
+    
+    alert(`Password for ${user.name} has been reset to "workshop123"`)
+  } catch (error) {
+    alert(`Failed to reset password: ${error.data?.message || 'Unknown error'}`)
   }
 }
 

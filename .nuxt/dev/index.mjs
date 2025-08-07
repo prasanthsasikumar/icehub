@@ -1557,6 +1557,7 @@ const _lazy_j59clI = () => Promise.resolve().then(function () { return index_get
 const _lazy_TcjyYq = () => Promise.resolve().then(function () { return restore_post$1; });
 const _lazy_hiK3Zm = () => Promise.resolve().then(function () { return bulkCreateUsers_post$1; });
 const _lazy_6ilHbl = () => Promise.resolve().then(function () { return deleteUser_delete$1; });
+const _lazy_9qII0L = () => Promise.resolve().then(function () { return resetPassword_post$1; });
 const _lazy_X46lLS = () => Promise.resolve().then(function () { return toggleRole_post$1; });
 const _lazy_XYs2hc = () => Promise.resolve().then(function () { return login_post$1; });
 const _lazy_sfy6lD = () => Promise.resolve().then(function () { return logout_post$1; });
@@ -1599,6 +1600,7 @@ const handlers = [
   { route: '/api/admin/backup/restore', handler: _lazy_TcjyYq, lazy: true, middleware: false, method: "post" },
   { route: '/api/admin/bulk-create-users', handler: _lazy_hiK3Zm, lazy: true, middleware: false, method: "post" },
   { route: '/api/admin/delete-user', handler: _lazy_6ilHbl, lazy: true, middleware: false, method: "delete" },
+  { route: '/api/admin/reset-password', handler: _lazy_9qII0L, lazy: true, middleware: false, method: "post" },
   { route: '/api/admin/toggle-role', handler: _lazy_X46lLS, lazy: true, middleware: false, method: "post" },
   { route: '/api/auth/login', handler: _lazy_XYs2hc, lazy: true, middleware: false, method: "post" },
   { route: '/api/auth/logout', handler: _lazy_sfy6lD, lazy: true, middleware: false, method: "post" },
@@ -3051,6 +3053,63 @@ const deleteUser_delete = defineEventHandler(async (event) => {
 const deleteUser_delete$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: deleteUser_delete
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const resetPassword_post = defineEventHandler(async (event) => {
+  if (getMethod(event) !== "POST") {
+    throw createError({
+      statusCode: 405,
+      statusMessage: "Method not allowed"
+    });
+  }
+  const currentUser = getUserFromRequest(event);
+  if (!currentUser || currentUser.role !== "admin") {
+    throw createError({
+      statusCode: 403,
+      statusMessage: "Admin access required"
+    });
+  }
+  const { userId } = await readBody(event);
+  if (!userId) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "userId is required"
+    });
+  }
+  try {
+    const user = await Database.getUserById(userId);
+    if (!user) {
+      throw createError({
+        statusCode: 404,
+        statusMessage: "User not found"
+      });
+    }
+    const defaultPassword = "workshop123";
+    const hashedPassword = await bcrypt.hash(defaultPassword, 12);
+    await Database.updateUser(userId, {
+      password: hashedPassword,
+      updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+    });
+    return {
+      message: `Password reset successfully for ${user.name}`,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email
+      }
+    };
+  } catch (error) {
+    console.error("Error resetting user password:", error);
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Failed to reset user password"
+    });
+  }
+});
+
+const resetPassword_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: resetPassword_post
 }, Symbol.toStringTag, { value: 'Module' }));
 
 const toggleRole_post = defineEventHandler(async (event) => {

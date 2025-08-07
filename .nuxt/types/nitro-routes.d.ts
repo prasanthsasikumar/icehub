@@ -21,6 +21,9 @@ declare module "nitropack/types" {
     '/api/admin/delete-user': {
       'delete': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/admin/delete-user.delete').default>>>>
     }
+    '/api/admin/reset-password': {
+      'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/admin/reset-password.post').default>>>>
+    }
     '/api/admin/toggle-role': {
       'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/admin/toggle-role.post').default>>>>
     }
