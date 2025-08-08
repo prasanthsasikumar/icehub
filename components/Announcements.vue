@@ -50,7 +50,7 @@
                   <span>{{ announcement.author_name }}</span>
                   <span>{{ formatDate(announcement.created_at) }}</span>
                   <span v-if="announcement.expires_at" class="text-orange-600">
-                    Expires {{ formatDate(announcement.expires_at) }}
+                    {{ formatExpirationDate(announcement.expires_at) }}
                   </span>
                 </div>
               </div>
@@ -296,6 +296,27 @@ const formatDate = (dateString) => {
       hour: '2-digit',
       minute: '2-digit'
     })
+  }
+}
+
+const formatExpirationDate = (dateString) => {
+  const date = new Date(dateString)
+  const now = new Date()
+  const diffInMs = date.getTime() - now.getTime()
+  const diffInHours = diffInMs / (1000 * 60 * 60)
+  
+  if (diffInMs <= 0) {
+    // Already expired
+    return 'Expired'
+  } else if (diffInHours < 1) {
+    const diffInMinutes = Math.floor(diffInMs / (1000 * 60))
+    return `Expires in ${diffInMinutes} minute${diffInMinutes !== 1 ? 's' : ''}`
+  } else if (diffInHours < 24) {
+    const hours = Math.floor(diffInHours)
+    return `Expires in ${hours} hour${hours !== 1 ? 's' : ''}`
+  } else {
+    const days = Math.floor(diffInHours / 24)
+    return `Expires in ${days} day${days !== 1 ? 's' : ''}`
   }
 }
 </script>
