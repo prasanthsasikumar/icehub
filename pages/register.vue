@@ -1,5 +1,27 @@
 <template>
   <div class="min-h-screen font-sans text-gray-700 bg-gray-50">
+    <!-- Registration Closed Message -->
+    <div v-if="!registrationOpen" class="min-h-screen flex items-center justify-center px-4">
+      <div class="text-center max-w-md mx-auto">
+        <div class="text-6xl mb-6">⛔</div>
+        <h1 class="text-3xl font-bold text-gray-700 mb-4">Registration Closed</h1>
+        <p class="text-gray-600 mb-6 leading-relaxed">
+          Registration for the ICE2025 Workshop closed on <strong>August 9th, 2025 at 12:00 PM</strong>. 
+          Thank you for your interest in the workshop.
+        </p>
+        <div class="space-y-3">
+          <NuxtLink to="/" class="block bg-primary text-white px-6 py-3 rounded-lg font-semibold transition-colors hover:bg-primary-hover">
+            Return to Home
+          </NuxtLink>
+          <NuxtLink to="/participants" class="block bg-gray-200 text-gray-700 px-6 py-3 rounded-lg font-semibold transition-colors hover:bg-gray-300">
+            View Participants
+          </NuxtLink>
+        </div>
+      </div>
+    </div>
+
+    <!-- Normal Registration Form (only shown if registration is open) -->
+    <div v-else>
     <!-- Top Navigation -->
     <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
       <div class="max-w-container mx-auto container-padding flex justify-between items-center h-14 sm:h-16">
@@ -256,16 +278,33 @@
               Sign in
             </NuxtLink>
           </p>
-          </div>
         </div>
       </div>
     </div>
     
+  </div>
     <Footer />
   </div>
+</div>
 </template>
 
 <script setup>
+// Registration cutoff logic
+// Registration closes August 9th, 2025 at 12:00 PM Sri Lanka Time (UTC+5:30)
+const registrationCutoff = new Date('2025-08-09T12:00:00+05:30')
+const registrationOpen = ref(true)
+
+const updateRegistrationStatus = () => {
+  const now = new Date()
+  registrationOpen.value = now.getTime() < registrationCutoff.getTime()
+}
+
+// Update registration status on mount and every minute
+onMounted(() => {
+  updateRegistrationStatus()
+  setInterval(updateRegistrationStatus, 60000)
+})
+
 // Mobile menu state
 const mobileMenuOpen = ref(false)
 // Form state

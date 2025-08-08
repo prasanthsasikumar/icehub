@@ -40,9 +40,20 @@
             <NuxtLink to="/login" class="nav-button nav-button-secondary">
               Sign In
             </NuxtLink>
-            <NuxtLink to="/register" class="nav-button">
+            <NuxtLink 
+              v-if="registrationOpen"
+              to="/register" 
+              class="nav-button"
+            >
               Join Workshop
             </NuxtLink>
+            <div 
+              v-else 
+              class="nav-button bg-gray-400 text-white cursor-not-allowed opacity-75" 
+              title="Registration closed on August 9th at 12:00 PM"
+            >
+              Registration Closed
+            </div>
           </template>
         </div>
         
@@ -94,9 +105,20 @@
           <NuxtLink @click="mobileMenuOpen = false" to="/login" class="mobile-nav-item">
             🔑 Sign In
           </NuxtLink>
-          <NuxtLink @click="mobileMenuOpen = false" to="/register" class="mobile-nav-item">
+          <NuxtLink 
+            v-if="registrationOpen"
+            @click="mobileMenuOpen = false" 
+            to="/register" 
+            class="mobile-nav-item"
+          >
             ✨ Join Workshop
           </NuxtLink>
+          <div 
+            v-else 
+            class="mobile-nav-item text-gray-500 cursor-not-allowed opacity-75"
+          >
+            ⛔ Registration Closed
+          </div>
         </template>
       </div>
     </nav>
@@ -174,7 +196,20 @@
               <NuxtLink to="/teams" class="hero-btn hero-btn-secondary">View Teams</NuxtLink>
             </template>
             <template v-else>
-              <NuxtLink to="/register" class="hero-btn hero-btn-primary">Join Workshop</NuxtLink>
+              <NuxtLink 
+                v-if="registrationOpen" 
+                to="/register" 
+                class="hero-btn hero-btn-primary"
+              >
+                Join Workshop
+              </NuxtLink>
+              <div 
+                v-else 
+                class="hero-btn bg-gray-400 text-white cursor-not-allowed opacity-75"
+                title="Registration closed on August 9th at 12:00 PM"
+              >
+                Registration Closed
+              </div>
               <NuxtLink to="/teams" class="hero-btn hero-btn-secondary">Teams</NuxtLink>
               <NuxtLink to="/participants" class="hero-btn hero-btn-secondary">Community</NuxtLink>
             </template>
@@ -228,7 +263,20 @@
           </div>
           <h2 class="text-xl sm:text-2xl font-semibold text-gray-700 mb-2">No participants yet</h2>
           <p class="text-sm sm:text-base text-gray-500 mb-4 sm:mb-6 max-w-md mx-auto">Be the first to join the ICE Workshop and showcase your AI skills!</p>
-          <NuxtLink to="/new" class="bg-primary text-white px-6 py-3 rounded-lg no-underline font-semibold inline-block transition-colors hover:bg-primary-hover">Get Started</NuxtLink>
+          <NuxtLink 
+            v-if="registrationOpen"
+            to="/new" 
+            class="bg-primary text-white px-6 py-3 rounded-lg no-underline font-semibold inline-block transition-colors hover:bg-primary-hover"
+          >
+            Get Started
+          </NuxtLink>
+          <div 
+            v-else 
+            class="bg-gray-400 text-white px-6 py-3 rounded-lg font-semibold inline-block cursor-not-allowed opacity-75"
+            title="Registration closed on August 9th at 12:00 PM"
+          >
+            Registration Closed
+          </div>
         </div>
 
         <!-- Participants Section -->
@@ -431,16 +479,23 @@ const countdown = ref({
 })
 const eventStarted = ref(false)
 const submissionDeadlineReached = ref(false)
+const registrationOpen = ref(true)
 
 // Target date: August 8th, 2025 at 8:00 AM Sri Lanka Time (UTC+5:30)
 const targetDate = new Date('2025-08-09T08:00:00+05:30')
 // Final submission deadline: August 12th, 2025 at 5:00 PM Sri Lanka Time (UTC+5:30)
 const submissionDeadline = new Date('2025-08-12T17:00:00+05:30')
+// Registration cutoff: August 9th, 2025 at 12:00 PM Sri Lanka Time (UTC+5:30)
+const registrationCutoff = new Date('2025-08-09T14:00:00+05:30')
 
 const updateCountdown = () => {
   const now = new Date()
   const workshopDistance = targetDate.getTime() - now.getTime()
   const submissionDistance = submissionDeadline.getTime() - now.getTime()
+  const registrationDistance = registrationCutoff.getTime() - now.getTime()
+  
+  // Check registration status
+  registrationOpen.value = registrationDistance > 0
   
   // Check if workshop has started but submission deadline hasn't passed
   if (workshopDistance < 0 && submissionDistance > 0) {
