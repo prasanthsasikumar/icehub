@@ -2,15 +2,15 @@
   <footer class="bg-gray-100 border-t border-gray-200 py-6 mt-auto">
     <div class="max-w-container mx-auto container-padding">
       <div class="text-center text-sm text-gray-600">
-        Made with vibe coding by 
-        <a 
+        Made with vibe coding :) 
+        <!-- <a 
           href="https://flowsxr.com" 
           target="_blank" 
           rel="noopener noreferrer"
           class="text-primary hover:text-primary-dark transition-colors duration-200 font-medium"
         >
           flowsxr
-        </a>
+        </a> -->
       </div>
     </div>
   </footer>
