@@ -601,4 +601,85 @@ export class Database {
     if (error) throw error
     return data || []
   }
+
+  // Announcements
+  static async getAnnouncements() {
+    const { data, error } = await supabase
+      .from('announcements')
+      .select('*')
+      .eq('is_published', true)
+      .order('is_pinned', { ascending: false })
+      .order('created_at', { ascending: false })
+    
+    if (error) throw error
+    return data || []
+  }
+
+  static async getAnnouncementById(id: string) {
+    const { data, error } = await supabase
+      .from('announcements')
+      .select('*')
+      .eq('id', id)
+      .single()
+    
+    if (error) throw error
+    return data
+  }
+
+  static async createAnnouncement(announcement: any) {
+    // Generate a unique ID if not provided
+    const announcementWithId = {
+      id: announcement.id || crypto.randomUUID(),
+      ...announcement,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    }
+    
+    const { data, error } = await supabase
+      .from('announcements')
+      .insert([announcementWithId])
+      .select()
+      .single()
+    
+    if (error) throw error
+    return data
+  }
+
+  static async updateAnnouncement(id: string, updates: any) {
+    const updatesWithTimestamp = {
+      ...updates,
+      updated_at: new Date().toISOString()
+    }
+    
+    const { data, error } = await supabase
+      .from('announcements')
+      .update(updatesWithTimestamp)
+      .eq('id', id)
+      .select()
+      .single()
+    
+    if (error) throw error
+    return data
+  }
+
+  static async deleteAnnouncement(id: string) {
+    const { data, error } = await supabaseAdmin
+      .from('announcements')
+      .delete()
+      .eq('id', id)
+      .select()
+    
+    if (error) throw error
+    return data
+  }
+
+  static async getAllAnnouncements() {
+    const { data, error } = await supabaseAdmin
+      .from('announcements')
+      .select('*')
+      .order('created_at', { ascending: false })
+    
+    if (error) throw error
+    return data || []
+  }
 }

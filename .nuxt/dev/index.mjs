@@ -1144,7 +1144,22 @@ const plugins = [
 _imlJlEtcYUErFKlIoV3o40RwAHyYMj1YM8ArfD1nFG0
 ];
 
-const assets = {};
+const assets = {
+  "/index.mjs": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"308a6-jv+ZuqraGtnozGJWwbFol3gyM0E\"",
+    "mtime": "2025-08-08T05:28:57.808Z",
+    "size": 198822,
+    "path": "index.mjs"
+  },
+  "/index.mjs.map": {
+    "type": "application/json",
+    "etag": "\"ad2bf-WaLJo8qYSikiEYGAgAQ3DEOcs2w\"",
+    "mtime": "2025-08-08T05:28:57.813Z",
+    "size": 709311,
+    "path": "index.mjs.map"
+  }
+};
 
 function readAsset (id) {
   const serverDir = dirname$1(fileURLToPath(globalThis._importMeta_.url));
@@ -1553,12 +1568,18 @@ async function getIslandContext(event) {
 
 const _lazy_3VIfLL = () => Promise.resolve().then(function () { return addUserToTeam_post$1; });
 const _lazy_BHpmOL = () => Promise.resolve().then(function () { return create_post$3; });
-const _lazy_j59clI = () => Promise.resolve().then(function () { return index_get$5; });
+const _lazy_j59clI = () => Promise.resolve().then(function () { return index_get$7; });
 const _lazy_TcjyYq = () => Promise.resolve().then(function () { return restore_post$1; });
 const _lazy_hiK3Zm = () => Promise.resolve().then(function () { return bulkCreateUsers_post$1; });
 const _lazy_6ilHbl = () => Promise.resolve().then(function () { return deleteUser_delete$1; });
 const _lazy_9qII0L = () => Promise.resolve().then(function () { return resetPassword_post$1; });
 const _lazy_X46lLS = () => Promise.resolve().then(function () { return toggleRole_post$1; });
+const _lazy_jFB6u3 = () => Promise.resolve().then(function () { return _id__delete$1; });
+const _lazy_HLNQ5j = () => Promise.resolve().then(function () { return _id__get$1; });
+const _lazy_TpPcI3 = () => Promise.resolve().then(function () { return _id__put$1; });
+const _lazy_Mse3dG = () => Promise.resolve().then(function () { return admin_get$1; });
+const _lazy_Us_3zY = () => Promise.resolve().then(function () { return index_get$5; });
+const _lazy_G6ZFJ3 = () => Promise.resolve().then(function () { return index_post$1; });
 const _lazy_XYs2hc = () => Promise.resolve().then(function () { return login_post$1; });
 const _lazy_sfy6lD = () => Promise.resolve().then(function () { return logout_post$1; });
 const _lazy_QtDuhZ = () => Promise.resolve().then(function () { return me_get$1; });
@@ -1602,6 +1623,12 @@ const handlers = [
   { route: '/api/admin/delete-user', handler: _lazy_6ilHbl, lazy: true, middleware: false, method: "delete" },
   { route: '/api/admin/reset-password', handler: _lazy_9qII0L, lazy: true, middleware: false, method: "post" },
   { route: '/api/admin/toggle-role', handler: _lazy_X46lLS, lazy: true, middleware: false, method: "post" },
+  { route: '/api/announcements/:id', handler: _lazy_jFB6u3, lazy: true, middleware: false, method: "delete" },
+  { route: '/api/announcements/:id', handler: _lazy_HLNQ5j, lazy: true, middleware: false, method: "get" },
+  { route: '/api/announcements/:id', handler: _lazy_TpPcI3, lazy: true, middleware: false, method: "put" },
+  { route: '/api/announcements/admin', handler: _lazy_Mse3dG, lazy: true, middleware: false, method: "get" },
+  { route: '/api/announcements', handler: _lazy_Us_3zY, lazy: true, middleware: false, method: "get" },
+  { route: '/api/announcements', handler: _lazy_G6ZFJ3, lazy: true, middleware: false, method: "post" },
   { route: '/api/auth/login', handler: _lazy_XYs2hc, lazy: true, middleware: false, method: "post" },
   { route: '/api/auth/logout', handler: _lazy_sfy6lD, lazy: true, middleware: false, method: "post" },
   { route: '/api/auth/me', handler: _lazy_QtDuhZ, lazy: true, middleware: false, method: "get" },
@@ -2338,6 +2365,47 @@ class Database {
     if (error) throw error;
     return data || [];
   }
+  // Announcements
+  static async getAnnouncements() {
+    const { data, error } = await supabase.from("announcements").select("*").eq("is_published", true).order("is_pinned", { ascending: false }).order("created_at", { ascending: false });
+    if (error) throw error;
+    return data || [];
+  }
+  static async getAnnouncementById(id) {
+    const { data, error } = await supabase.from("announcements").select("*").eq("id", id).single();
+    if (error) throw error;
+    return data;
+  }
+  static async createAnnouncement(announcement) {
+    const announcementWithId = {
+      id: announcement.id || crypto.randomUUID(),
+      ...announcement,
+      created_at: (/* @__PURE__ */ new Date()).toISOString(),
+      updated_at: (/* @__PURE__ */ new Date()).toISOString()
+    };
+    const { data, error } = await supabase.from("announcements").insert([announcementWithId]).select().single();
+    if (error) throw error;
+    return data;
+  }
+  static async updateAnnouncement(id, updates) {
+    const updatesWithTimestamp = {
+      ...updates,
+      updated_at: (/* @__PURE__ */ new Date()).toISOString()
+    };
+    const { data, error } = await supabase.from("announcements").update(updatesWithTimestamp).eq("id", id).select().single();
+    if (error) throw error;
+    return data;
+  }
+  static async deleteAnnouncement(id) {
+    const { data, error } = await supabaseAdmin.from("announcements").delete().eq("id", id).select();
+    if (error) throw error;
+    return data;
+  }
+  static async getAllAnnouncements() {
+    const { data, error } = await supabaseAdmin.from("announcements").select("*").order("created_at", { ascending: false });
+    if (error) throw error;
+    return data || [];
+  }
 }
 
 const supabase$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
@@ -2682,7 +2750,7 @@ const create_post$3 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.definePrope
   default: create_post$2
 }, Symbol.toStringTag, { value: 'Module' }));
 
-const index_get$4 = defineEventHandler(async (event) => {
+const index_get$6 = defineEventHandler(async (event) => {
   if (getMethod(event) !== "GET") {
     throw createError({
       statusCode: 405,
@@ -2729,9 +2797,9 @@ const index_get$4 = defineEventHandler(async (event) => {
   }
 });
 
-const index_get$5 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const index_get$7 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
-  default: index_get$4
+  default: index_get$6
 }, Symbol.toStringTag, { value: 'Module' }));
 
 const restore_post = defineEventHandler(async (event) => {
@@ -3169,6 +3237,248 @@ const toggleRole_post = defineEventHandler(async (event) => {
 const toggleRole_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: toggleRole_post
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const _id__delete = defineEventHandler(async (event) => {
+  const user = await requireAuth(event);
+  try {
+    const id = getRouterParam(event, "id");
+    if (!id) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: "Announcement ID is required"
+      });
+    }
+    const announcement = await Database.getAnnouncementById(id);
+    if (!announcement) {
+      throw createError({
+        statusCode: 404,
+        statusMessage: "Announcement not found"
+      });
+    }
+    if (user.role !== "admin" && user.id !== announcement.author_id) {
+      throw createError({
+        statusCode: 403,
+        statusMessage: "You can only delete your own announcements or be an admin"
+      });
+    }
+    const deletedAnnouncement = await Database.deleteAnnouncement(id);
+    return {
+      success: true,
+      data: deletedAnnouncement,
+      message: "Announcement deleted successfully"
+    };
+  } catch (error) {
+    console.error("Error deleting announcement:", error);
+    if (error.statusCode) {
+      throw error;
+    }
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Failed to delete announcement"
+    });
+  }
+});
+
+const _id__delete$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: _id__delete
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const _id__get = defineEventHandler(async (event) => {
+  const id = getRouterParam(event, "id");
+  if (!id) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Announcement ID is required"
+    });
+  }
+  try {
+    const announcement = await Database.getAnnouncementById(id);
+    return {
+      success: true,
+      data: announcement
+    };
+  } catch (error) {
+    console.error("Error fetching announcement:", error);
+    throw createError({
+      statusCode: 404,
+      statusMessage: "Announcement not found"
+    });
+  }
+});
+
+const _id__get$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: _id__get
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const _id__put = defineEventHandler(async (event) => {
+  const user = await requireAuth(event);
+  const id = getRouterParam(event, "id");
+  if (!id) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Announcement ID is required"
+    });
+  }
+  try {
+    const body = await readBody(event);
+    const existingAnnouncement = await Database.getAnnouncementById(id);
+    if (existingAnnouncement.author_id !== user.id && user.role !== "admin") {
+      throw createError({
+        statusCode: 403,
+        statusMessage: "You can only update your own announcements"
+      });
+    }
+    const updates = {};
+    if (body.title !== void 0) {
+      updates.title = body.title.trim();
+    }
+    if (body.content !== void 0) {
+      updates.content = body.content.trim();
+    }
+    if (body.type !== void 0) {
+      if (["important", "urgent"].includes(body.type) && user.role !== "admin") {
+        throw createError({
+          statusCode: 403,
+          statusMessage: "Only admins can create important or urgent announcements"
+        });
+      }
+      updates.type = body.type;
+    }
+    if (body.is_pinned !== void 0 && user.role === "admin") {
+      updates.is_pinned = body.is_pinned;
+    }
+    if (body.is_published !== void 0) {
+      updates.is_published = body.is_published;
+    }
+    if (body.expires_at !== void 0) {
+      updates.expires_at = body.expires_at;
+    }
+    const updatedAnnouncement = await Database.updateAnnouncement(id, updates);
+    return {
+      success: true,
+      data: updatedAnnouncement,
+      message: "Announcement updated successfully"
+    };
+  } catch (error) {
+    console.error("Error updating announcement:", error);
+    if (error.statusCode) {
+      throw error;
+    }
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Failed to update announcement"
+    });
+  }
+});
+
+const _id__put$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: _id__put
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const admin_get = defineEventHandler(async (event) => {
+  const user = await requireAuth(event);
+  try {
+    if (user.role !== "admin") {
+      throw createError({
+        statusCode: 403,
+        statusMessage: "Admin access required"
+      });
+    }
+    const announcements = await Database.getAllAnnouncements();
+    return {
+      success: true,
+      data: announcements
+    };
+  } catch (error) {
+    console.error("Error fetching all announcements for admin:", error);
+    if (error.statusCode) {
+      throw error;
+    }
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Failed to fetch announcements"
+    });
+  }
+});
+
+const admin_get$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: admin_get
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const index_get$4 = defineEventHandler(async (event) => {
+  try {
+    const announcements = await Database.getAnnouncements();
+    return {
+      success: true,
+      data: announcements
+    };
+  } catch (error) {
+    console.error("Error fetching announcements:", error);
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Failed to fetch announcements"
+    });
+  }
+});
+
+const index_get$5 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: index_get$4
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const index_post = defineEventHandler(async (event) => {
+  const user = await requireAuth(event);
+  try {
+    const body = await readBody(event);
+    if (!body.title || !body.content) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: "Title and content are required"
+      });
+    }
+    if (["important", "urgent"].includes(body.type) && user.role !== "admin") {
+      throw createError({
+        statusCode: 403,
+        statusMessage: "Only admins can create important or urgent announcements"
+      });
+    }
+    const announcement = {
+      title: body.title.trim(),
+      content: body.content.trim(),
+      type: body.type || "general",
+      author_id: user.id,
+      author_name: user.name,
+      is_pinned: user.role === "admin" ? body.is_pinned || false : false,
+      is_published: body.is_published !== false,
+      // Default to true
+      expires_at: body.expires_at || null
+    };
+    const createdAnnouncement = await Database.createAnnouncement(announcement);
+    return {
+      success: true,
+      data: createdAnnouncement,
+      message: "Announcement created successfully"
+    };
+  } catch (error) {
+    console.error("Error creating announcement:", error);
+    if (error.statusCode) {
+      throw error;
+    }
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Failed to create announcement"
+    });
+  }
+});
+
+const index_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: index_post
 }, Symbol.toStringTag, { value: 'Module' }));
 
 const JWT_SECRET$1 = process.env.JWT_SECRET || "your-secret-key";

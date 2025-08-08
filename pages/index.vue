@@ -102,138 +102,139 @@
     </nav>
 
     <!-- Hero Section -->
-    <section class="bg-gradient-to-br from-gray-50 to-gray-200 section-padding text-center">
+    <section class="bg-gradient-to-br from-gray-50 to-gray-200 py-8 sm:py-12 text-center">
       <div class="max-w-container mx-auto container-padding">
-        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-700 mb-4 sm:mb-6 leading-tight">ICE2025 Workshop</h1>
-        <p class="text-lg sm:text-xl text-gray-500 mb-6 sm:mb-8 max-w-2xl mx-auto">Join 30 selected participants in Sri Lanka's premier AI innovation workshop. Connect with international mentors and build breakthrough prototypes in 3 days.</p>
+        <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-700 mb-3 sm:mb-4 leading-tight">ICE2025 Workshop</h1>
+        <p class="text-base sm:text-lg text-gray-600 mb-4 sm:mb-6 max-w-2xl mx-auto">Join 30 selected participants in Sri Lanka's premier AI innovation workshop. Connect with international mentors and build breakthrough prototypes in 3 days.</p>
         
         <!-- Countdown Timer -->
-        <div class="mb-8 sm:mb-10">
-          <div class="bg-white rounded-xl shadow-lg p-4 sm:p-6 max-w-md mx-auto border border-gray-200">
+        <div class="mb-6 sm:mb-8">
+          <div class="bg-white rounded-lg shadow-md p-3 sm:p-4 max-w-md mx-auto border border-gray-200">
             <!-- Workshop hasn't started yet -->
             <div v-if="!eventStarted">
-              <p class="text-xs sm:text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Workshop Starts In</p>
-              <div class="grid grid-cols-4 gap-2 sm:gap-4 text-center">
-                <div class="bg-gray-50 rounded-lg p-2 sm:p-3">
-                  <div class="text-lg sm:text-2xl font-bold text-primary">{{ countdown.days }}</div>
-                  <div class="text-xs text-gray-500 uppercase tracking-wide">Days</div>
+              <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Workshop Starts In</p>
+              <div class="grid grid-cols-4 gap-2 text-center">
+                <div class="bg-gray-50 rounded p-2">
+                  <div class="text-lg sm:text-xl font-bold text-primary">{{ countdown.days }}</div>
+                  <div class="text-xs text-gray-500 uppercase">Days</div>
                 </div>
-                <div class="bg-gray-50 rounded-lg p-2 sm:p-3">
-                  <div class="text-lg sm:text-2xl font-bold text-primary">{{ countdown.hours }}</div>
-                  <div class="text-xs text-gray-500 uppercase tracking-wide">Hours</div>
+                <div class="bg-gray-50 rounded p-2">
+                  <div class="text-lg sm:text-xl font-bold text-primary">{{ countdown.hours }}</div>
+                  <div class="text-xs text-gray-500 uppercase">Hours</div>
                 </div>
-                <div class="bg-gray-50 rounded-lg p-2 sm:p-3">
-                  <div class="text-lg sm:text-2xl font-bold text-primary">{{ countdown.minutes }}</div>
-                  <div class="text-xs text-gray-500 uppercase tracking-wide">Min</div>
+                <div class="bg-gray-50 rounded p-2">
+                  <div class="text-lg sm:text-xl font-bold text-primary">{{ countdown.minutes }}</div>
+                  <div class="text-xs text-gray-500 uppercase">Min</div>
                 </div>
-                <div class="bg-gray-50 rounded-lg p-2 sm:p-3">
-                  <div class="text-lg sm:text-2xl font-bold text-primary">{{ countdown.seconds }}</div>
-                  <div class="text-xs text-gray-500 uppercase tracking-wide">Sec</div>
+                <div class="bg-gray-50 rounded p-2">
+                  <div class="text-lg sm:text-xl font-bold text-primary">{{ countdown.seconds }}</div>
+                  <div class="text-xs text-gray-500 uppercase">Sec</div>
                 </div>
               </div>
             </div>
             
             <!-- Workshop started, showing submission countdown -->
             <div v-else-if="!submissionDeadlineReached">
-              <p class="text-xs sm:text-sm font-semibold text-green-600 uppercase tracking-wide mb-2">🎉 Workshop In Progress!</p>
-              <p class="text-xs sm:text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Final Submissions Due In</p>
-              <p class="text-xs text-blue-600 font-medium mb-3">Good luck with your prototypes! 🚀</p>
-              <div class="grid grid-cols-4 gap-2 sm:gap-4 text-center">
-                <div class="bg-blue-50 rounded-lg p-2 sm:p-3">
-                  <div class="text-lg sm:text-2xl font-bold text-blue-600">{{ countdown.days }}</div>
-                  <div class="text-xs text-gray-500 uppercase tracking-wide">Days</div>
+              <p class="text-xs font-semibold text-green-600 uppercase tracking-wide mb-1">🎉 Workshop In Progress!</p>
+              <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Final Submissions Due In</p>
+              <div class="grid grid-cols-4 gap-2 text-center">
+                <div class="bg-blue-50 rounded p-2">
+                  <div class="text-lg sm:text-xl font-bold text-blue-600">{{ countdown.days }}</div>
+                  <div class="text-xs text-gray-500 uppercase">Days</div>
                 </div>
-                <div class="bg-blue-50 rounded-lg p-2 sm:p-3">
-                  <div class="text-lg sm:text-2xl font-bold text-blue-600">{{ countdown.hours }}</div>
-                  <div class="text-xs text-gray-500 uppercase tracking-wide">Hours</div>
+                <div class="bg-blue-50 rounded p-2">
+                  <div class="text-lg sm:text-xl font-bold text-blue-600">{{ countdown.hours }}</div>
+                  <div class="text-xs text-gray-500 uppercase">Hours</div>
                 </div>
-                <div class="bg-blue-50 rounded-lg p-2 sm:p-3">
-                  <div class="text-lg sm:text-2xl font-bold text-blue-600">{{ countdown.minutes }}</div>
-                  <div class="text-xs text-gray-500 uppercase tracking-wide">Min</div>
+                <div class="bg-blue-50 rounded p-2">
+                  <div class="text-lg sm:text-xl font-bold text-blue-600">{{ countdown.minutes }}</div>
+                  <div class="text-xs text-gray-500 uppercase">Min</div>
                 </div>
-                <div class="bg-blue-50 rounded-lg p-2 sm:p-3">
-                  <div class="text-lg sm:text-2xl font-bold text-blue-600">{{ countdown.seconds }}</div>
-                  <div class="text-xs text-gray-500 uppercase tracking-wide">Sec</div>
+                <div class="bg-blue-50 rounded p-2">
+                  <div class="text-lg sm:text-xl font-bold text-blue-600">{{ countdown.seconds }}</div>
+                  <div class="text-xs text-gray-500 uppercase">Sec</div>
                 </div>
               </div>
             </div>
             
             <!-- Submission deadline passed -->
             <div v-else class="text-center">
-              <div class="text-2xl sm:text-3xl font-bold text-purple-600 mb-2">🏆 Submissions Closed!</div>
+              <div class="text-xl sm:text-2xl font-bold text-purple-600 mb-1">🏆 Submissions Closed!</div>
               <p class="text-sm text-gray-600">Thank you for participating in ICE2025</p>
             </div>
           </div>
         </div>
         
-        <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mb-8 sm:mb-15 max-w-md sm:max-w-none mx-auto">
-          <template v-if="isLoggedIn">
-            <NuxtLink to="/participants" class="hero-btn hero-btn-primary">Explore Community</NuxtLink>
-            <NuxtLink 
-              to="/teams" 
-              class="hero-btn hero-btn-secondary"
-            >
-              View Teams
-            </NuxtLink>
-          </template>
-          <template v-else>
-            <NuxtLink to="/register" class="hero-btn hero-btn-primary">Join Workshop</NuxtLink>
-            <NuxtLink to="/teams" class="hero-btn hero-btn-secondary">Teams</NuxtLink>
-            <NuxtLink to="/participants" class="hero-btn hero-btn-secondary">Explore Community</NuxtLink>
-          </template>
-        </div>
+        <!-- Action Buttons & Stats Combined -->
+        <div class="flex flex-col items-center">
+          <!-- Action Buttons -->
+          <div class="flex flex-col sm:flex-row gap-2 sm:gap-3 justify-center mb-4 sm:mb-6 max-w-md sm:max-w-none mx-auto">
+            <template v-if="isLoggedIn">
+              <NuxtLink to="/participants" class="hero-btn hero-btn-primary">Explore Community</NuxtLink>
+              <NuxtLink to="/teams" class="hero-btn hero-btn-secondary">View Teams</NuxtLink>
+            </template>
+            <template v-else>
+              <NuxtLink to="/register" class="hero-btn hero-btn-primary">Join Workshop</NuxtLink>
+              <NuxtLink to="/teams" class="hero-btn hero-btn-secondary">Teams</NuxtLink>
+              <NuxtLink to="/participants" class="hero-btn hero-btn-secondary">Community</NuxtLink>
+            </template>
+          </div>
 
-        <!-- Stats Section -->
-        <div v-if="users && users.length > 0" class="mt-8 sm:mt-15">
-          <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-4 sm:mb-6">
-            ICE2025 WORKSHOP BY 
-            <a 
-              href="https://www.linkedin.com/in/prof-suranga/" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              class="text-primary hover:text-primary-dark transition-colors duration-200 underline"
-            >
-              SURANGA NANAYAKKARA
-            </a>
-          </p>
-          <div class="flex justify-center gap-8 sm:gap-15 flex-wrap">
-            <div class="text-center cursor-pointer transition-transform hover:scale-105" @click="scrollToSection('participants')">
-              <span class="block text-2xl sm:text-3xl font-bold text-primary mb-1">{{ participantCount }}</span>
-              <span class="text-xs sm:text-sm text-gray-500 uppercase tracking-wider">Participants</span>
-            </div>
-            <div class="text-center cursor-pointer transition-transform hover:scale-105" @click="scrollToSection('mentors')">
-              <span class="block text-2xl sm:text-3xl font-bold text-primary mb-1">{{ mentorCount }}</span>
-              <span class="text-xs sm:text-sm text-gray-500 uppercase tracking-wider">Mentors</span>
-            </div>
-            <div class="text-center cursor-pointer transition-transform hover:scale-105" @click="scrollToSection('skills')">
-              <span class="block text-2xl sm:text-3xl font-bold text-primary mb-1">{{ totalSkills }}</span>
-              <span class="text-xs sm:text-sm text-gray-500 uppercase tracking-wider">Skills</span>
+          <!-- Stats Section -->
+          <div v-if="users && users.length > 0" class="text-center">
+            <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">
+              Workshop by 
+              <a 
+                href="https://www.linkedin.com/in/prof-suranga/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                class="text-primary hover:text-primary-dark transition-colors duration-200 underline"
+              >
+                Prof. Suranga Nanayakkara
+              </a>
+            </p>
+            <div class="flex justify-center gap-6 sm:gap-8 flex-wrap">
+              <div class="text-center cursor-pointer transition-transform hover:scale-105" @click="scrollToSection('participants')">
+                <span class="block text-xl sm:text-2xl font-bold text-primary mb-1">{{ participantCount }}</span>
+                <span class="text-xs text-gray-500 uppercase tracking-wider">Participants</span>
+              </div>
+              <div class="text-center cursor-pointer transition-transform hover:scale-105" @click="scrollToSection('mentors')">
+                <span class="block text-xl sm:text-2xl font-bold text-primary mb-1">{{ mentorCount }}</span>
+                <span class="text-xs text-gray-500 uppercase tracking-wider">Mentors</span>
+              </div>
+              <div class="text-center cursor-pointer transition-transform hover:scale-105" @click="scrollToSection('skills')">
+                <span class="block text-xl sm:text-2xl font-bold text-primary mb-1">{{ totalSkills }}</span>
+                <span class="text-xs text-gray-500 uppercase tracking-wider">Skills</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </section>
 
+    <!-- Announcements Section -->
+    <Announcements :limit="2" />
+
     <!-- Main Content -->
-    <main class="section-padding">
+    <main class="py-6 sm:py-8">
       <div class="max-w-container mx-auto container-padding">
         <!-- Empty State -->
-        <div v-if="!users || users.length === 0" class="text-center py-12 sm:py-20">
-          <div class="mb-6 text-gray-400">
+        <div v-if="!users || users.length === 0" class="text-center py-8 sm:py-12">
+          <div class="mb-4 text-gray-400">
             <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" class="mx-auto sm:w-16 sm:h-16">
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
               <circle cx="12" cy="7" r="4"/>
             </svg>
           </div>
-          <h2 class="text-xl sm:text-2xl font-semibold text-gray-700 mb-3">No participants yet</h2>
-          <p class="text-sm sm:text-base text-gray-500 mb-6 sm:mb-8 max-w-md mx-auto">Be the first to join the ICE Workshop and showcase your AI skills!</p>
+          <h2 class="text-xl sm:text-2xl font-semibold text-gray-700 mb-2">No participants yet</h2>
+          <p class="text-sm sm:text-base text-gray-500 mb-4 sm:mb-6 max-w-md mx-auto">Be the first to join the ICE Workshop and showcase your AI skills!</p>
           <NuxtLink to="/new" class="bg-primary text-white px-6 py-3 rounded-lg no-underline font-semibold inline-block transition-colors hover:bg-primary-hover">Get Started</NuxtLink>
         </div>
 
         <!-- Participants Section -->
         <div v-else>
-          <section id="participants" class="mb-12 sm:mb-20">
-            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 sm:mb-8 gap-4">
+          <section id="participants" class="mb-8 sm:mb-12">
+            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 sm:mb-6 gap-4">
               <h2 class="text-2xl sm:text-3xl font-bold text-gray-700 m-0">Workshop Participants</h2>
               <NuxtLink to="/participants" class="text-primary no-underline font-medium text-sm hover:underline self-start sm:self-auto">View all participants</NuxtLink>
             </div>
@@ -282,10 +283,10 @@
             </div>
 
             <!-- Mobile Expand Button -->
-            <div v-if="shouldShowExpandButton" class="mt-6 text-center sm:hidden">
+            <div v-if="shouldShowExpandButton" class="mt-4 text-center sm:hidden">
               <button 
                 @click="showAllParticipants = true"
-                class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-b from-gray-50 to-gray-100 border border-gray-200 rounded-lg text-gray-600 font-medium transition-all duration-200 hover:from-gray-100 hover:to-gray-200 hover:border-gray-300 hover:text-gray-700 active:scale-95"
+                class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-b from-gray-50 to-gray-100 border border-gray-200 rounded-lg text-gray-600 font-medium transition-all duration-200 hover:from-gray-100 hover:to-gray-200 hover:border-gray-300 hover:text-gray-700 active:scale-95"
               >
                 <span>Show {{ remainingParticipantsCount }} more participants</span>
                 <svg class="w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -295,10 +296,10 @@
             </div>
 
             <!-- Mobile Collapse Button -->
-            <div v-if="showAllParticipants && users && users.filter(user => { const role = user.role || ''; const userRole = user.userRole || ''; return (userRole === 'participant') || (role !== 'admin' && userRole !== 'mentor' && !userRole); }).length > 10" class="mt-6 text-center sm:hidden">
+            <div v-if="showAllParticipants && users && users.filter(user => { const role = user.role || ''; const userRole = user.userRole || ''; return (userRole === 'participant') || (role !== 'admin' && userRole !== 'mentor' && !userRole); }).length > 10" class="mt-4 text-center sm:hidden">
               <button 
                 @click="showAllParticipants = false"
-                class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-b from-gray-50 to-gray-100 border border-gray-200 rounded-lg text-gray-600 font-medium transition-all duration-200 hover:from-gray-100 hover:to-gray-200 hover:border-gray-300 hover:text-gray-700 active:scale-95"
+                class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-b from-gray-50 to-gray-100 border border-gray-200 rounded-lg text-gray-600 font-medium transition-all duration-200 hover:from-gray-100 hover:to-gray-200 hover:border-gray-300 hover:text-gray-700 active:scale-95"
               >
                 <span>Show less</span>
                 <svg class="w-4 h-4 transition-transform duration-200 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -309,8 +310,8 @@
           </section>
 
           <!-- Mentors Section -->
-          <section id="mentors" v-if="mentors && mentors.length > 0" class="mb-12 sm:mb-20">
-            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 sm:mb-8 gap-4">
+          <section id="mentors" v-if="mentors && mentors.length > 0" class="mb-8 sm:mb-12">
+            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 sm:mb-6 gap-4">
               <h2 class="text-2xl sm:text-3xl font-bold text-gray-700 m-0">Workshop Mentors</h2>
               <div class="text-sm text-gray-500 self-start sm:self-auto">International experts guiding the workshop</div>
             </div>
@@ -368,8 +369,8 @@
           </section>
 
           <!-- Popular Skills Section -->
-          <section id="skills" class="mb-12 sm:mb-20">
-            <div class="flex justify-between items-center mb-6 sm:mb-8">
+          <section id="skills" class="mb-8 sm:mb-12">
+            <div class="flex justify-between items-center mb-4 sm:mb-6">
               <div>
                 <h2 class="text-2xl sm:text-3xl font-bold text-gray-700 m-0 mb-2">Top skills in the workshop</h2>
                 <p class="text-sm text-gray-500">Click on any skill to discover participants with that expertise</p>

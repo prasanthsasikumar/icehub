@@ -27,6 +27,18 @@ declare module "nitropack/types" {
     '/api/admin/toggle-role': {
       'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/admin/toggle-role.post').default>>>>
     }
+    '/api/announcements/:id': {
+      'delete': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/announcements/[id].delete').default>>>>
+      'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/announcements/[id].get').default>>>>
+      'put': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/announcements/[id].put').default>>>>
+    }
+    '/api/announcements/admin': {
+      'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/announcements/admin.get').default>>>>
+    }
+    '/api/announcements': {
+      'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/announcements/index.get').default>>>>
+      'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/announcements/index.post').default>>>>
+    }
     '/api/auth/login': {
       'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/auth/login.post').default>>>>
     }
