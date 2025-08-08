@@ -12,9 +12,6 @@
             <NuxtLink to="/teams" class="nav-button nav-button-secondary">
               Teams
             </NuxtLink>
-            <NuxtLink to="/media" class="nav-button nav-button-secondary">
-              Gallery
-            </NuxtLink>
             <NuxtLink to="/chat" class="nav-button nav-button-secondary">
               Messages
             </NuxtLink>
@@ -39,9 +36,6 @@
           <template v-else>
             <NuxtLink to="/teams" class="nav-button nav-button-secondary">
               Teams
-            </NuxtLink>
-            <NuxtLink to="/media" class="nav-button nav-button-secondary">
-              Gallery
             </NuxtLink>
             <NuxtLink to="/login" class="nav-button nav-button-secondary">
               Sign In
@@ -70,9 +64,6 @@
           <NuxtLink @click="mobileMenuOpen = false" to="/teams" class="mobile-nav-item">
             👥 Teams
           </NuxtLink>
-          <NuxtLink @click="mobileMenuOpen = false" to="/media" class="mobile-nav-item">
-            📸 Gallery
-          </NuxtLink>
           <NuxtLink @click="mobileMenuOpen = false" to="/chat" class="mobile-nav-item">
             💬 Messages
           </NuxtLink>
@@ -99,9 +90,6 @@
         <template v-else>
           <NuxtLink @click="mobileMenuOpen = false" to="/teams" class="mobile-nav-item">
             👥 Teams
-          </NuxtLink>
-          <NuxtLink @click="mobileMenuOpen = false" to="/media" class="mobile-nav-item">
-            📸 Gallery
           </NuxtLink>
           <NuxtLink @click="mobileMenuOpen = false" to="/login" class="mobile-nav-item">
             🔑 Sign In
