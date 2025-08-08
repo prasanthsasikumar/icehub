@@ -11,15 +11,15 @@ const supabase = createClient(supabaseUrl, supabaseServiceKey)
 async function createMoreAnnouncements() {
   console.log('Creating additional test announcements...')
   
-  // Get the existing test admin user
+  // Get the existing admin user
   const { data: existingUser } = await supabase
     .from('users')
     .select('*')
-    .eq('name', 'Test Admin')
+    .eq('name', 'Prasanth Sasikumar')
     .limit(1)
   
   if (!existingUser || existingUser.length === 0) {
-    console.error('Test Admin user not found')
+    console.error('Admin user not found')
     return
   }
   
