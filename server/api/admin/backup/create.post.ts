@@ -98,6 +98,13 @@ export default defineEventHandler(async (event) => {
           console.warn('Could not export team images:', error)
           backupData.database.team_images = []
         }
+
+        try {
+          backupData.database.announcements = await Database.getAllAnnouncements()
+        } catch (error) {
+          console.warn('Could not export announcements:', error)
+          backupData.database.announcements = []
+        }
       }
 
       // Create external resources catalog
@@ -192,6 +199,7 @@ Import data from:
 - database.team_chats
 - database.team_links
 - database.team_images
+- database.announcements
 
 ### 2. External Resources
 

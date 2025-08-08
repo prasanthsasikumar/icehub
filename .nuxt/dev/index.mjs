@@ -1144,7 +1144,22 @@ const plugins = [
 _imlJlEtcYUErFKlIoV3o40RwAHyYMj1YM8ArfD1nFG0
 ];
 
-const assets = {};
+const assets = {
+  "/index.mjs": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"319c1-8h6FF/0M9Akpv9zWvtob89blgNM\"",
+    "mtime": "2025-08-08T17:39:55.740Z",
+    "size": 203201,
+    "path": "index.mjs"
+  },
+  "/index.mjs.map": {
+    "type": "application/json",
+    "etag": "\"b187a-RcFKEOm3pbFin/rO2Oje1JHFgKY\"",
+    "mtime": "2025-08-08T17:39:55.741Z",
+    "size": 727162,
+    "path": "index.mjs.map"
+  }
+};
 
 function readAsset (id) {
   const serverDir = dirname$1(fileURLToPath(globalThis._importMeta_.url));
@@ -2635,6 +2650,12 @@ const create_post$2 = defineEventHandler(async (event) => {
           console.warn("Could not export team images:", error);
           backupData.database.team_images = [];
         }
+        try {
+          backupData.database.announcements = await Database.getAllAnnouncements();
+        } catch (error) {
+          console.warn("Could not export announcements:", error);
+          backupData.database.announcements = [];
+        }
       }
       backupData.externalResources = createExternalResourcesCatalog(processedUsers);
     }
@@ -2710,6 +2731,7 @@ Import data from:
 - database.team_chats
 - database.team_links
 - database.team_images
+- database.announcements
 
 ### 2. External Resources
 
