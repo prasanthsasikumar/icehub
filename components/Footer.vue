@@ -2,7 +2,7 @@
   <footer class="bg-gray-100 border-t border-gray-200 py-6 mt-auto">
     <div class="max-w-container mx-auto container-padding">
       <div class="text-center text-sm text-gray-600">
-        Made with vibe coding :) 
+        Made with vibe coding by ICE 2025 Team 
         <!-- <a 
           href="https://flowsxr.com" 
           target="_blank" 
