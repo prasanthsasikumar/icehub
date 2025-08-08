@@ -1147,16 +1147,16 @@ _imlJlEtcYUErFKlIoV3o40RwAHyYMj1YM8ArfD1nFG0
 const assets = {
   "/index.mjs": {
     "type": "text/javascript; charset=utf-8",
-    "etag": "\"308a6-jv+ZuqraGtnozGJWwbFol3gyM0E\"",
-    "mtime": "2025-08-08T05:28:57.808Z",
-    "size": 198822,
+    "etag": "\"318ae-lBXQ1Fl0mJmIHZ2yZUUzwSTpKco\"",
+    "mtime": "2025-08-08T05:41:31.731Z",
+    "size": 202926,
     "path": "index.mjs"
   },
   "/index.mjs.map": {
     "type": "application/json",
-    "etag": "\"ad2bf-WaLJo8qYSikiEYGAgAQ3DEOcs2w\"",
-    "mtime": "2025-08-08T05:28:57.813Z",
-    "size": 709311,
+    "etag": "\"b13e8-lwFHenCVcBKuSQ9Qpvm95BhcToQ\"",
+    "mtime": "2025-08-08T05:41:31.731Z",
+    "size": 725992,
     "path": "index.mjs.map"
   }
 };
@@ -1589,6 +1589,7 @@ const _lazy_ttNtBU = () => Promise.resolve().then(function () { return messages_
 const _lazy_nCeQW7 = () => Promise.resolve().then(function () { return send_post$1; });
 const _lazy_0X8xDp = () => Promise.resolve().then(function () { return status_get$1; });
 const _lazy_Cn2ye5 = () => Promise.resolve().then(function () { return testUpload_post$1; });
+const _lazy_nvt3qp = () => Promise.resolve().then(function () { return gallery_get$1; });
 const _lazy_srlr7l = () => Promise.resolve().then(function () { return proxyImage_get$1; });
 const _lazy_HejCb8 = () => Promise.resolve().then(function () { return skills$1; });
 const _lazy_w7ePJD = () => Promise.resolve().then(function () { return complete_get$1; });
@@ -1638,6 +1639,7 @@ const handlers = [
   { route: '/api/chat/send', handler: _lazy_nCeQW7, lazy: true, middleware: false, method: "post" },
   { route: '/api/debug/status', handler: _lazy_0X8xDp, lazy: true, middleware: false, method: "get" },
   { route: '/api/debug/test-upload', handler: _lazy_Cn2ye5, lazy: true, middleware: false, method: "post" },
+  { route: '/api/media/gallery', handler: _lazy_nvt3qp, lazy: true, middleware: false, method: "get" },
   { route: '/api/proxy-image', handler: _lazy_srlr7l, lazy: true, middleware: false, method: "get" },
   { route: '/api/skills', handler: _lazy_HejCb8, lazy: true, middleware: false, method: undefined },
   { route: '/api/teams/:id/complete', handler: _lazy_w7ePJD, lazy: true, middleware: false, method: "get" },
@@ -4068,6 +4070,137 @@ const testUpload_post = defineEventHandler(async (event) => {
 const testUpload_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: testUpload_post
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const gallery_get = defineEventHandler(async (event) => {
+  try {
+    const images = [
+      // Replace these examples with your actual Google Drive file IDs:
+      // {
+      //   id: 'YOUR_ACTUAL_FILE_ID_1',
+      //   title: 'Workshop Setup',
+      //   description: 'ICE2025 Workshop venue preparation',
+      //   type: 'image'
+      // },
+      // {
+      //   id: 'YOUR_ACTUAL_FILE_ID_2', 
+      //   title: 'Opening Ceremony',
+      //   description: 'Prof. Suranga Nanayakkara opening the workshop',
+      //   type: 'image'
+      // },
+      // {
+      //   id: 'YOUR_ACTUAL_FILE_ID_3',
+      //   title: 'Team Brainstorming',
+      //   description: 'Participants working on AI innovation ideas',
+      //   type: 'image'
+      // },
+      // Add more images here...
+    ];
+    const placeholderImages = [
+      {
+        id: "placeholder_1",
+        title: "Workshop Opening",
+        description: "Prof. Suranga Nanayakkara welcoming participants to ICE2025",
+        type: "image",
+        isPlaceholder: true
+      },
+      {
+        id: "placeholder_2",
+        title: "Team Formation",
+        description: "Participants forming teams and discussing project ideas",
+        type: "image",
+        isPlaceholder: true
+      },
+      {
+        id: "placeholder_3",
+        title: "Mentoring Session",
+        description: "International mentors guiding teams on AI development",
+        type: "image",
+        isPlaceholder: true
+      },
+      {
+        id: "placeholder_4",
+        title: "Prototype Development",
+        description: "Teams building their AI innovation prototypes",
+        type: "image",
+        isPlaceholder: true
+      },
+      {
+        id: "placeholder_5",
+        title: "Technical Discussion",
+        description: "Deep dive into machine learning algorithms and applications",
+        type: "image",
+        isPlaceholder: true
+      },
+      {
+        id: "placeholder_6",
+        title: "Networking Break",
+        description: "Participants networking and sharing experiences",
+        type: "image",
+        isPlaceholder: true
+      },
+      {
+        id: "placeholder_7",
+        title: "Demo Preparation",
+        description: "Teams preparing for their final presentations",
+        type: "image",
+        isPlaceholder: true
+      },
+      {
+        id: "placeholder_8",
+        title: "Final Presentations",
+        description: "Teams showcasing their AI prototypes to judges",
+        type: "image",
+        isPlaceholder: true
+      },
+      {
+        id: "placeholder_9",
+        title: "Awards Ceremony",
+        description: "Recognizing outstanding innovations and achievements",
+        type: "image",
+        isPlaceholder: true
+      },
+      {
+        id: "placeholder_10",
+        title: "Group Photo",
+        description: "All ICE2025 participants, mentors, and organizers together",
+        type: "image",
+        isPlaceholder: true
+      },
+      {
+        id: "placeholder_11",
+        title: "Workshop Venue",
+        description: "The beautiful venue hosting the ICE2025 workshop",
+        type: "image",
+        isPlaceholder: true
+      },
+      {
+        id: "placeholder_12",
+        title: "Innovation Showcase",
+        description: "Display of all the amazing AI prototypes created",
+        type: "image",
+        isPlaceholder: true
+      }
+    ];
+    return {
+      success: true,
+      data: {
+        images: images.length > 0 ? images : placeholderImages,
+        totalCount: images.length > 0 ? images.length : placeholderImages.length
+      }
+    };
+  } catch (error) {
+    console.error("Error fetching media gallery:", error);
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Failed to fetch media gallery"
+    });
+  }
+});
+
+const gallery_get$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: gallery_get
 }, Symbol.toStringTag, { value: 'Module' }));
 
 const proxyImage_get = defineEventHandler(async (event) => {

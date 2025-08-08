@@ -143,7 +143,7 @@
                     </span>
                   </div>
                   
-                  <p class="text-gray-600 mb-3 line-clamp-2">{{ announcement.content }}</p>
+                  <div class="text-gray-600 mb-3 line-clamp-2 whitespace-pre-line">{{ announcement.content }}</div>
                   
                   <div class="flex items-center text-sm text-gray-500 gap-4">
                     <span>By {{ announcement.author_name }}</span>
