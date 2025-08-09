@@ -484,7 +484,7 @@ const registrationOpen = ref(true)
 // Target date: August 8th, 2025 at 8:00 AM Sri Lanka Time (UTC+5:30)
 const targetDate = new Date('2025-08-09T08:00:00+05:30')
 // Final submission deadline: August 12th, 2025 at 5:00 PM Sri Lanka Time (UTC+5:30)
-const submissionDeadline = new Date('2025-08-12T17:00:00+05:30')
+const submissionDeadline = new Date('2025-08-11T17:00:00+05:30')
 // Registration cutoff: August 9th, 2025 at 12:00 PM Sri Lanka Time (UTC+5:30)
 const registrationCutoff = new Date('2025-08-09T12:00:00+05:30')
 
