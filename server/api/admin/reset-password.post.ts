@@ -46,8 +46,7 @@ export default defineEventHandler(async (event) => {
 
     // Update user password in Supabase
     await Database.updateUser(userId, { 
-      password: hashedPassword,
-      updatedAt: new Date().toISOString()
+      password: hashedPassword
     })
 
     return {

@@ -1147,16 +1147,16 @@ _imlJlEtcYUErFKlIoV3o40RwAHyYMj1YM8ArfD1nFG0
 const assets = {
   "/index.mjs": {
     "type": "text/javascript; charset=utf-8",
-    "etag": "\"319c1-8h6FF/0M9Akpv9zWvtob89blgNM\"",
-    "mtime": "2025-08-08T17:39:55.740Z",
-    "size": 203201,
+    "etag": "\"31829-1IRSLNUALukhMXnraKD0q7EieRM\"",
+    "mtime": "2025-08-09T05:30:53.088Z",
+    "size": 202793,
     "path": "index.mjs"
   },
   "/index.mjs.map": {
     "type": "application/json",
-    "etag": "\"b187a-RcFKEOm3pbFin/rO2Oje1JHFgKY\"",
-    "mtime": "2025-08-08T17:39:55.741Z",
-    "size": 727162,
+    "etag": "\"b186b-iPt5ZryBCUPo438h4upYPiXKZN4\"",
+    "mtime": "2025-08-09T05:30:53.089Z",
+    "size": 727147,
     "path": "index.mjs.map"
   }
 };
@@ -3164,8 +3164,7 @@ const resetPassword_post = defineEventHandler(async (event) => {
     const defaultPassword = "workshop123";
     const hashedPassword = await bcrypt.hash(defaultPassword, 12);
     await Database.updateUser(userId, {
-      password: hashedPassword,
-      updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+      password: hashedPassword
     });
     return {
       message: `Password reset successfully for ${user.name}`,
