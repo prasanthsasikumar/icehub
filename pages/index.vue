@@ -123,11 +123,81 @@
       </div>
     </nav>
 
-    <!-- Hero Section -->
+    <!-- Teams Hero Section -->
+    <section class="bg-gradient-to-br from-gray-50 to-gray-200 py-3 sm:py-4 text-gray-700">
+      <div class="max-w-container mx-auto container-padding">
+        <div class="text-center mb-4 sm:mb-6">
+          <div class="flex items-center justify-center gap-3 mb-2">
+            <div class="h-px bg-gradient-to-r from-transparent via-gray-400 to-transparent flex-1 max-w-24"></div>
+            <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+            </svg>
+            <div class="h-px bg-gradient-to-r from-transparent via-gray-400 to-transparent flex-1 max-w-24"></div>
+          </div>
+          <h2 class="text-lg sm:text-xl lg:text-2xl font-bold text-primary mb-1">Our Active Teams</h2>
+          <p class="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto">Discover innovative projects and connect with teams building the future</p>
+        </div>
+
+        <div v-if="featuredTeams && featuredTeams.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3">
+          <NuxtLink 
+            v-for="team in featuredTeams" 
+            :key="team.id" 
+            :to="`/teams/${team.id}`"
+            class="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-md transition-all duration-300 hover:border-gray-300 cursor-pointer group"
+          >
+            <div class="aspect-w-16 relative overflow-hidden">
+              <img 
+                :src="team.coverImage || '/uploads/teamCoverSamples/cover1.svg'" 
+                :alt="`${team.name} cover image`" 
+                class="absolute inset-0 w-full h-24 object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+            </div>
+            <div class="p-2 sm:p-3">
+              <h3 class="text-base font-semibold mb-1 text-gray-700 group-hover:text-gray-900 transition-colors">{{ team.name }}</h3>
+              <p class="text-gray-600 text-xs mb-2 line-clamp-2">{{ team.description || 'Building innovative AI solutions for the future.' }}</p>
+              
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-gray-500 text-xs">{{ team.memberCount }} members</span>
+                <div class="text-primary group-hover:text-primary-dark text-xs font-medium transition-colors flex items-center gap-1">
+                  Explore
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                  </svg>
+                </div>
+              </div>
+
+              <!-- Team Links (up to 2) -->
+              <div v-if="teamLinks.get(team.id) && teamLinks.get(team.id).length > 0" class="space-y-1">
+                <div v-for="link in teamLinks.get(team.id)" :key="link.id" class="flex items-center gap-1">
+                  <a 
+                    :href="link.url" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    class="text-primary hover:text-primary-dark text-xs truncate flex-1 hover:underline transition-colors"
+                    @click.stop
+                  >
+                    {{ link.title }}
+                  </a>
+                  <svg class="w-3 h-3 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002 2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </NuxtLink>
+        </div>
+
+        <div v-else class="text-center py-2">
+          <div class="text-gray-500 text-sm">Teams are forming soon...</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Workshop Information Hero Section -->
     <section class="bg-gradient-to-br from-gray-50 to-gray-200 py-8 sm:py-12 text-center">
       <div class="max-w-container mx-auto container-padding">
         <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-700 mb-3 sm:mb-4 leading-tight">ICE2025 Workshop</h1>
-        <p class="text-base sm:text-lg text-gray-600 mb-4 sm:mb-6 max-w-2xl mx-auto">Join 30 selected participants in Sri Lanka's premier AI innovation workshop. Connect with international mentors and build breakthrough prototypes in 3 days.</p>
+        <p class="text-base sm:text-lg text-gray-600 mb-4 sm:mb-6 max-w-2xl mx-auto">30 selected participants in Sri Lanka's premier AI innovation workshop. Connect with international mentors and build breakthrough prototypes in 3 days.</p>
         
         <!-- Countdown Timer -->
         <div class="mb-6 sm:mb-8">
@@ -459,6 +529,7 @@
 
 <script setup>
 const { data: users } = await useFetch('/api/users')
+const { data: allTeams } = await useFetch('/api/teams')
 
 // Authentication
 const { user, isLoggedIn, isAdmin, logout, checkAuth } = useAuth()
@@ -469,6 +540,9 @@ const mobileMenuOpen = ref(false)
 // Mobile participants expansion state
 const showAllParticipants = ref(false)
 const isMobile = ref(false)
+
+// Team links storage
+const teamLinks = ref(new Map())
 
 // Countdown functionality
 const countdown = ref({
@@ -551,6 +625,9 @@ onMounted(async () => {
   
   // Update countdown every second
   const countdownInterval = setInterval(updateCountdown, 1000)
+  
+  // Load team links for featured teams
+  await loadFeaturedTeamLinks()
   
   // Set initial mobile state
   isMobile.value = window.innerWidth < 640
@@ -642,12 +719,57 @@ const getImageUrl = (url) => {
   }
 }
 
+// Helper function to fetch team links
+const getTeamLinks = async (teamId) => {
+  try {
+    const links = await $fetch(`/api/teams/${teamId}/links`)
+    return links || []
+  } catch (error) {
+    console.error('Error fetching team links:', error)
+    return []
+  }
+}
+
+// Load team links for featured teams
+const loadFeaturedTeamLinks = async () => {
+  if (!featuredTeams.value || featuredTeams.value.length === 0) return
+  
+  console.log('Loading links for featured teams:', featuredTeams.value.length)
+  const linksMap = new Map()
+  for (const team of featuredTeams.value) {
+    try {
+      console.log('Fetching links for team:', team.id)
+      const links = await getTeamLinks(team.id)
+      console.log('Got links for team', team.id, ':', links)
+      linksMap.set(team.id, links.slice(0, 2)) // Store only first 2 links
+    } catch (error) {
+      console.error('Error loading links for team', team.id, ':', error)
+      linksMap.set(team.id, [])
+    }
+  }
+  teamLinks.value = linksMap
+  console.log('Final team links map:', teamLinks.value)
+}
+
 // Computed properties
 const totalSkills = computed(() => {
   if (!users.value) return 0
   const allSkills = users.value.flatMap(user => getDisplaySkills(user.skills))
   return new Set(allSkills).size
 })
+
+// Featured teams (first 6 teams)
+const featuredTeams = computed(() => {
+  if (!allTeams.value) return []
+  return allTeams.value.slice(0, 6)
+})
+
+// Watch for changes in featured teams and reload links
+watch(featuredTeams, async (newTeams) => {
+  if (newTeams && newTeams.length > 0) {
+    await loadFeaturedTeamLinks()
+  }
+}, { immediate: true })
 
 // Mobile-specific computed property for displayed participants
 const displayedParticipants = computed(() => {
@@ -730,7 +852,7 @@ useHead({
   meta: [
     {
       name: 'description',
-      content: 'Join 30 selected participants in Sri Lanka\'s premier AI innovation workshop led by Professor Suranga Nannayakara from NUS. Connect with mentors and build breakthrough prototypes in 3 days.'
+      content: 'Explore innovative teams at ICE2025, Sri Lanka\'s premier AI innovation workshop. 30 selected participants building breakthrough prototypes with international mentors in 3 days.'
     },
     {
       name: 'viewport',
@@ -798,6 +920,30 @@ useHead({
   line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Aspect ratio utilities */
+.aspect-w-16 {
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+}
+
+.aspect-w-16 > * {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
 }
 
 /* Ensure mobile menu appears above other content */
