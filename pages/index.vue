@@ -197,7 +197,7 @@
     <section class="bg-gradient-to-br from-gray-50 to-gray-200 py-8 sm:py-12 text-center">
       <div class="max-w-container mx-auto container-padding">
         <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-700 mb-3 sm:mb-4 leading-tight">ICE2025 Workshop</h1>
-        <p class="text-base sm:text-lg text-gray-600 mb-4 sm:mb-6 max-w-2xl mx-auto">30 selected participants in Sri Lanka's premier AI innovation workshop. Connect with international mentors and build breakthrough prototypes in 3 days.</p>
+        <p class="text-base sm:text-lg text-gray-600 mb-4 sm:mb-6 max-w-2xl mx-auto">30 participants in Sri Lanka's premier AI innovation workshop are working with international mentors to build breakthrough prototypes within three days.</p>
         
         <!-- Countdown Timer -->
         <div class="mb-6 sm:mb-8">
@@ -852,7 +852,7 @@ useHead({
   meta: [
     {
       name: 'description',
-      content: 'Explore innovative teams at ICE2025, Sri Lanka\'s premier AI innovation workshop. 30 selected participants building breakthrough prototypes with international mentors in 3 days.'
+      content: 'Explore innovative teams at ICE2025, Sri Lanka\'s premier AI innovation workshop. 30 participants in Sri Lanka\'s premier AI innovation workshop are working with international mentors to build breakthrough prototypes within three days.'
     },
     {
       name: 'viewport',
