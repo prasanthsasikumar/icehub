@@ -264,6 +264,7 @@
             <template v-if="isLoggedIn">
               <NuxtLink to="/participants" class="hero-btn hero-btn-primary">Explore Community</NuxtLink>
               <NuxtLink to="/teams" class="hero-btn hero-btn-secondary">View Teams</NuxtLink>
+              <NuxtLink to="/venue" class="hero-btn hero-btn-secondary">3D Venue</NuxtLink>
             </template>
             <template v-else>
               <NuxtLink 
@@ -282,6 +283,7 @@
               </div>
               <NuxtLink to="/teams" class="hero-btn hero-btn-secondary">Teams</NuxtLink>
               <NuxtLink to="/participants" class="hero-btn hero-btn-secondary">Community</NuxtLink>
+              <NuxtLink to="/venue" class="hero-btn hero-btn-secondary">3D Venue</NuxtLink>
             </template>
           </div>
 

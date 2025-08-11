@@ -19,6 +19,7 @@
     "nuxt": "latest",
     "socket.io": "^4.8.1",
     "socket.io-client": "^4.8.1",
+    "three": "^0.179.1",
     "uuid": "^11.1.0",
     "ws": "^8.18.3",
     "zod": "^4.0.14"
