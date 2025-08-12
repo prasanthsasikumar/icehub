@@ -124,16 +124,24 @@
     </nav>
 
     <!-- Video Hero Section -->
-    <section class="bg-gradient-to-br from-gray-50 to-gray-200 py-6 sm:py-10">
+    <section class="bg-gradient-to-br from-gray-50 to-gray-200 py-4 sm:py-6">
       <div class="max-w-container mx-auto container-padding">
         <!-- Hero Content -->
-        <div class="text-center mb-6 sm:mb-8">
-          <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-700 mb-3 sm:mb-4 leading-tight">ICE2025 Workshop</h1>
-          <p class="text-base sm:text-lg text-gray-600 mb-6 sm:mb-8 max-w-2xl mx-auto">30 participants in Sri Lanka's premier AI innovation workshop are working with international mentors to build breakthrough prototypes within three days.</p>
+        <div class="text-center mb-4 sm:mb-6">
+          <div class="flex items-center justify-center gap-3 mb-2">
+            <div class="h-px bg-gradient-to-r from-transparent via-gray-400 to-transparent flex-1 max-w-24"></div>
+            <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+            <div class="h-px bg-gradient-to-r from-transparent via-gray-400 to-transparent flex-1 max-w-24"></div>
+          </div>
+          <h1 class="text-lg sm:text-xl lg:text-2xl font-bold text-primary mb-1">ICE2025 Workshop</h1>
+          <p class="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6 max-w-2xl mx-auto">30 participants in Sri Lanka's premier AI innovation workshop worked with mentors to build breakthrough prototypes within three days.</p>
         </div>
 
         <!-- Video Container -->
-        <div class="relative mb-6 sm:mb-8">
+        <div class="relative mb-4 sm:mb-6">
           <div class="bg-white rounded-lg shadow-lg p-3 sm:p-4 border border-gray-200">
             <div class="relative w-full" style="padding-bottom: 56.25%; /* 16:9 aspect ratio */">
               <iframe
@@ -149,7 +157,7 @@
         </div>
 
         <!-- Countdown Timer -->
-        <div class="mb-6 sm:mb-8">
+        <div class="mb-4 sm:mb-6">
           <div class="bg-white rounded-lg shadow-md p-3 sm:p-4 max-w-md mx-auto border border-gray-200">
             <!-- Workshop hasn't started yet -->
             <div v-if="!eventStarted">
@@ -873,7 +881,7 @@ useHead({
   meta: [
     {
       name: 'description',
-      content: 'Explore innovative teams at ICE2025, Sri Lanka\'s premier AI innovation workshop. 30 participants in Sri Lanka\'s premier AI innovation workshop are working with international mentors to build breakthrough prototypes within three days.'
+      content: 'Explore innovative teams at ICE2025, Sri Lanka\'s premier AI innovation workshop. Thirty participants in Sri Lanka\'s premier AI innovation workshop worked with mentors to build breakthrough prototypes within three days.'
     },
     {
       name: 'viewport',
