@@ -123,82 +123,31 @@
       </div>
     </nav>
 
-    <!-- Teams Hero Section -->
-    <section class="bg-gradient-to-br from-gray-50 to-gray-200 py-3 sm:py-4 text-gray-700">
+    <!-- Video Hero Section -->
+    <section class="bg-gradient-to-br from-gray-50 to-gray-200 py-6 sm:py-10">
       <div class="max-w-container mx-auto container-padding">
-        <div class="text-center mb-4 sm:mb-6">
-          <div class="flex items-center justify-center gap-3 mb-2">
-            <div class="h-px bg-gradient-to-r from-transparent via-gray-400 to-transparent flex-1 max-w-24"></div>
-            <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
-            </svg>
-            <div class="h-px bg-gradient-to-r from-transparent via-gray-400 to-transparent flex-1 max-w-24"></div>
+        <!-- Hero Content -->
+        <div class="text-center mb-6 sm:mb-8">
+          <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-700 mb-3 sm:mb-4 leading-tight">ICE2025 Workshop</h1>
+          <p class="text-base sm:text-lg text-gray-600 mb-6 sm:mb-8 max-w-2xl mx-auto">30 participants in Sri Lanka's premier AI innovation workshop are working with international mentors to build breakthrough prototypes within three days.</p>
+        </div>
+
+        <!-- Video Container -->
+        <div class="relative mb-6 sm:mb-8">
+          <div class="bg-white rounded-lg shadow-lg p-3 sm:p-4 border border-gray-200">
+            <div class="relative w-full" style="padding-bottom: 56.25%; /* 16:9 aspect ratio */">
+              <iframe
+                class="absolute top-0 left-0 w-full h-full rounded-lg"
+                src="https://www.youtube.com/embed/x8rehfnwRv4?autoplay=1&mute=1&rel=0&modestbranding=1&playsinline=1"
+                title="ICE2025 Workshop Video"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen
+              ></iframe>
+            </div>
           </div>
-          <h2 class="text-lg sm:text-xl lg:text-2xl font-bold text-primary mb-1">Our Active Teams</h2>
-          <p class="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto">Discover innovative projects and connect with teams building the future</p>
         </div>
 
-        <div v-if="featuredTeams && featuredTeams.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3">
-          <NuxtLink 
-            v-for="team in featuredTeams" 
-            :key="team.id" 
-            :to="`/teams/${team.id}`"
-            class="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-md transition-all duration-300 hover:border-gray-300 cursor-pointer group"
-          >
-            <div class="aspect-w-16 relative overflow-hidden">
-              <img 
-                :src="team.coverImage || '/uploads/teamCoverSamples/cover1.svg'" 
-                :alt="`${team.name} cover image`" 
-                class="absolute inset-0 w-full h-24 object-cover group-hover:scale-105 transition-transform duration-300"
-              />
-            </div>
-            <div class="p-2 sm:p-3">
-              <h3 class="text-base font-semibold mb-1 text-gray-700 group-hover:text-gray-900 transition-colors">{{ team.name }}</h3>
-              <p class="text-gray-600 text-xs mb-2 line-clamp-2">{{ team.description || 'Building innovative AI solutions for the future.' }}</p>
-              
-              <div class="flex items-center justify-between mb-2">
-                <span class="text-gray-500 text-xs">{{ team.memberCount }} members</span>
-                <div class="text-primary group-hover:text-primary-dark text-xs font-medium transition-colors flex items-center gap-1">
-                  Explore
-                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                  </svg>
-                </div>
-              </div>
-
-              <!-- Team Links (up to 2) -->
-              <div v-if="teamLinks.get(team.id) && teamLinks.get(team.id).length > 0" class="space-y-1">
-                <div v-for="link in teamLinks.get(team.id)" :key="link.id" class="flex items-center gap-1">
-                  <a 
-                    :href="link.url" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    class="text-primary hover:text-primary-dark text-xs truncate flex-1 hover:underline transition-colors"
-                    @click.stop
-                  >
-                    {{ link.title }}
-                  </a>
-                  <svg class="w-3 h-3 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002 2v-4M14 4h6m0 0v6m0-6L10 14"/>
-                  </svg>
-                </div>
-              </div>
-            </div>
-          </NuxtLink>
-        </div>
-
-        <div v-else class="text-center py-2">
-          <div class="text-gray-500 text-sm">Teams are forming soon...</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Workshop Information Hero Section -->
-    <section class="bg-gradient-to-br from-gray-50 to-gray-200 py-8 sm:py-12 text-center">
-      <div class="max-w-container mx-auto container-padding">
-        <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-700 mb-3 sm:mb-4 leading-tight">ICE2025 Workshop</h1>
-        <p class="text-base sm:text-lg text-gray-600 mb-4 sm:mb-6 max-w-2xl mx-auto">30 participants in Sri Lanka's premier AI innovation workshop are working with international mentors to build breakthrough prototypes within three days.</p>
-        
         <!-- Countdown Timer -->
         <div class="mb-6 sm:mb-8">
           <div class="bg-white rounded-lg shadow-md p-3 sm:p-4 max-w-md mx-auto border border-gray-200">
@@ -251,7 +200,7 @@
             
             <!-- Submission deadline passed -->
             <div v-else class="text-center">
-              <div class="text-xl sm:text-2xl font-bold text-purple-600 mb-1">🏆 Submissions Closed!</div>
+              <div class="text-xl sm:text-2xl font-bold text-purple-600 mb-1">🏆 Workshop Concluded!</div>
               <p class="text-sm text-gray-600">Thank you for participating in ICE2025</p>
             </div>
           </div>
@@ -315,6 +264,76 @@
               </div>
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Teams Hero Section -->
+    <section class="bg-gradient-to-br from-gray-50 to-gray-200 py-3 sm:py-4 text-gray-700">
+      <div class="max-w-container mx-auto container-padding">
+        <div class="text-center mb-4 sm:mb-6">
+          <div class="flex items-center justify-center gap-3 mb-2">
+            <div class="h-px bg-gradient-to-r from-transparent via-gray-400 to-transparent flex-1 max-w-24"></div>
+            <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+            </svg>
+            <div class="h-px bg-gradient-to-r from-transparent via-gray-400 to-transparent flex-1 max-w-24"></div>
+          </div>
+          <h2 class="text-lg sm:text-xl lg:text-2xl font-bold text-primary mb-1">Teams</h2>
+          <p class="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto">Discover innovative projects and connect with teams building them</p>
+        </div>
+
+        <div v-if="featuredTeams && featuredTeams.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3">
+          <NuxtLink 
+            v-for="team in featuredTeams" 
+            :key="team.id" 
+            :to="`/teams/${team.id}`"
+            class="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-md transition-all duration-300 hover:border-gray-300 cursor-pointer group"
+          >
+            <div class="aspect-w-16 relative overflow-hidden">
+              <img 
+                :src="team.coverImage || '/uploads/teamCoverSamples/cover1.svg'" 
+                :alt="`${team.name} cover image`" 
+                class="absolute inset-0 w-full h-24 object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+            </div>
+            <div class="p-2 sm:p-3">
+              <h3 class="text-base font-semibold mb-1 text-gray-700 group-hover:text-gray-900 transition-colors">{{ team.name }}</h3>
+              <p class="text-gray-600 text-xs mb-2 line-clamp-2">{{ team.description || 'Building innovative AI solutions for the future.' }}</p>
+              
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-gray-500 text-xs">{{ team.memberCount }} members</span>
+                <div class="text-primary group-hover:text-primary-dark text-xs font-medium transition-colors flex items-center gap-1">
+                  Explore
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                  </svg>
+                </div>
+              </div>
+
+              <!-- Team Links (up to 2) -->
+              <div v-if="teamLinks.get(team.id) && teamLinks.get(team.id).length > 0" class="space-y-1">
+                <div v-for="link in teamLinks.get(team.id)" :key="link.id" class="flex items-center gap-1">
+                  <a 
+                    :href="link.url" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    class="text-primary hover:text-primary-dark text-xs truncate flex-1 hover:underline transition-colors"
+                    @click.stop
+                  >
+                    {{ link.title }}
+                  </a>
+                  <svg class="w-3 h-3 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002 2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </NuxtLink>
+        </div>
+
+        <div v-else class="text-center py-2">
+          <div class="text-gray-500 text-sm">Teams are forming soon...</div>
         </div>
       </div>
     </section>

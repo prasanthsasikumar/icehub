@@ -131,7 +131,7 @@ const isLoading = ref(true)
 const loadingProgress = ref(0)
 const error = ref(null)
 const wireframe = ref(false)
-const autoRotate = ref(false)
+const autoRotate = ref(true)
 const modelInfo = ref(null)
 
 // Three.js objects
@@ -169,7 +169,7 @@ const initScene = () => {
   controls.dampingFactor = 0.05
   controls.minDistance = 1
   controls.maxDistance = 100
-  controls.autoRotate = false
+  controls.autoRotate = true
   controls.autoRotateSpeed = 2
 
   // Lighting - softer lighting for better integration
