@@ -339,7 +339,7 @@
     </section>
 
     <!-- Announcements Section -->
-    <Announcements :limit="5" />
+    <Announcements v-if="isLoggedIn" :limit="5" />
 
     <!-- Main Content -->
     <main class="py-6 sm:py-8">
