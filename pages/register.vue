@@ -339,19 +339,6 @@ const handleRegister = async () => {
       .map(skill => skill.trim())
       .filter(skill => skill.length > 0)
 
-    console.log('Registration data being sent:', {
-      name: form.name,
-      email: form.email,
-      bio: form.bio,
-      hasImage: !!form.image,
-      imageUrl: form.image,
-      userRole: form.userRole,
-      affiliation: form.affiliation,
-      expertise: form.expertise,
-      gender: form.gender,
-      skillsCount: skills.length
-    })
-
     const response = await $fetch('/api/auth/register', {
       method: 'POST',
       body: {

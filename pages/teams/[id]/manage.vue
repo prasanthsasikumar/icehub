@@ -433,7 +433,7 @@ const deleteTeam = async () => {
 // Remove member (placeholder for future implementation)
 const removeMember = (userId, userName) => {
   // This would be implemented with a remove member API
-  console.log('Remove member:', userId, userName)
+  // TODO: Implement remove member functionality
 }
 
 // Helper functions

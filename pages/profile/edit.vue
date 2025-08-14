@@ -577,7 +577,6 @@ const getIncompleteLinksCount = () => {
 // Initialize form with current user data
 const initializeForm = () => {
   if (user.value) {
-    console.log('Initializing form with user data:', user.value)
     form.name = user.value.name || ''
     form.bio = user.value.bio || ''
     form.image = user.value.image || ''
@@ -586,13 +585,6 @@ const initializeForm = () => {
     form.expertise = user.value.expertise || ''
     form.gender = user.value.gender || ''
     form.video = user.value.video || ''
-    
-    console.log('Form after initialization:', {
-      affiliation: form.affiliation,
-      expertise: form.expertise,
-      gender: form.gender,
-      video: form.video
-    })
     
     // Handle skills - support both old and new formats
     if (user.value.skills) {

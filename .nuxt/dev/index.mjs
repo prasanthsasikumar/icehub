@@ -1572,8 +1572,6 @@ const _lazy_Z_k7UE = () => Promise.resolve().then(function () { return register_
 const _lazy_HItsH8 = () => Promise.resolve().then(function () { return conversations_get$1; });
 const _lazy_ttNtBU = () => Promise.resolve().then(function () { return messages_get$1; });
 const _lazy_nCeQW7 = () => Promise.resolve().then(function () { return send_post$1; });
-const _lazy_0X8xDp = () => Promise.resolve().then(function () { return status_get$1; });
-const _lazy_Cn2ye5 = () => Promise.resolve().then(function () { return testUpload_post$1; });
 const _lazy_nvt3qp = () => Promise.resolve().then(function () { return gallery_get$1; });
 const _lazy_srlr7l = () => Promise.resolve().then(function () { return proxyImage_get$1; });
 const _lazy_HejCb8 = () => Promise.resolve().then(function () { return skills$1; });
@@ -1622,8 +1620,6 @@ const handlers = [
   { route: '/api/chat/conversations', handler: _lazy_HItsH8, lazy: true, middleware: false, method: "get" },
   { route: '/api/chat/messages', handler: _lazy_ttNtBU, lazy: true, middleware: false, method: "get" },
   { route: '/api/chat/send', handler: _lazy_nCeQW7, lazy: true, middleware: false, method: "post" },
-  { route: '/api/debug/status', handler: _lazy_0X8xDp, lazy: true, middleware: false, method: "get" },
-  { route: '/api/debug/test-upload', handler: _lazy_Cn2ye5, lazy: true, middleware: false, method: "post" },
   { route: '/api/media/gallery', handler: _lazy_nvt3qp, lazy: true, middleware: false, method: "get" },
   { route: '/api/proxy-image', handler: _lazy_srlr7l, lazy: true, middleware: false, method: "get" },
   { route: '/api/skills', handler: _lazy_HejCb8, lazy: true, middleware: false, method: undefined },
@@ -2394,13 +2390,6 @@ class Database {
     return data || [];
   }
 }
-
-const supabase$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
-  __proto__: null,
-  Database: Database,
-  supabase: supabase,
-  supabaseAdmin: supabaseAdmin
-}, Symbol.toStringTag, { value: 'Module' }));
 
 const addUserToTeam_post = defineEventHandler(async (event) => {
   if (getMethod(event) !== "POST") {
@@ -4001,66 +3990,6 @@ const send_post = defineEventHandler(async (event) => {
 const send_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: send_post
-}, Symbol.toStringTag, { value: 'Module' }));
-
-const status_get = defineEventHandler(async (event) => {
-  try {
-    const envStatus = {
-      SUPABASE_URL: !!process.env.SUPABASE_URL,
-      SUPABASE_ANON_KEY: !!process.env.SUPABASE_ANON_KEY,
-      SUPABASE_SERVICE_ROLE_KEY: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
-      JWT_SECRET: !!process.env.JWT_SECRET,
-      BLOB_READ_WRITE_TOKEN: !!process.env.BLOB_READ_WRITE_TOKEN,
-      NODE_ENV: "development",
-      VERCEL: !!process.env.VERCEL
-    };
-    let supabaseStatus = "unknown";
-    try {
-      const { Database } = await Promise.resolve().then(function () { return supabase$1; });
-      const users = await Database.getUsers();
-      supabaseStatus = `connected (${users.length} users)`;
-    } catch (error) {
-      supabaseStatus = `error: ${error.message}`;
-    }
-    return {
-      status: "ok",
-      timestamp: (/* @__PURE__ */ new Date()).toISOString(),
-      environment: envStatus,
-      supabase: supabaseStatus
-    };
-  } catch (error) {
-    throw createError({
-      statusCode: 500,
-      statusMessage: `Debug error: ${error.message}`
-    });
-  }
-});
-
-const status_get$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
-  __proto__: null,
-  default: status_get
-}, Symbol.toStringTag, { value: 'Module' }));
-
-const testUpload_post = defineEventHandler(async (event) => {
-  const body = await readBody(event);
-  console.log("Test upload request received:", {
-    hasImage: !!body.image,
-    imageFormat: body.image ? body.image.substring(0, 50) + "..." : "none",
-    imageLength: body.image ? body.image.length : 0
-  });
-  return {
-    success: true,
-    received: {
-      hasImage: !!body.image,
-      imageLength: body.image ? body.image.length : 0,
-      imageStart: body.image ? body.image.substring(0, 50) : null
-    }
-  };
-});
-
-const testUpload_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
-  __proto__: null,
-  default: testUpload_post
 }, Symbol.toStringTag, { value: 'Module' }));
 
 const gallery_get = defineEventHandler(async (event) => {

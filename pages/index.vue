@@ -734,7 +734,6 @@ const getImageUrl = (url) => {
       }
       
       if (fileId) {
-        // console.log('Converting Google Drive URL to proxy:', url, '-> fileId:', fileId)
         // Use our server-side proxy to serve the image
         return `/api/proxy-image?id=${fileId}`
       }
@@ -763,13 +762,10 @@ const getTeamLinks = async (teamId) => {
 const loadFeaturedTeamLinks = async () => {
   if (!featuredTeams.value || featuredTeams.value.length === 0) return
   
-  console.log('Loading links for featured teams:', featuredTeams.value.length)
   const linksMap = new Map()
   for (const team of featuredTeams.value) {
     try {
-      console.log('Fetching links for team:', team.id)
       const links = await getTeamLinks(team.id)
-      console.log('Got links for team', team.id, ':', links)
       linksMap.set(team.id, links.slice(0, 2)) // Store only first 2 links
     } catch (error) {
       console.error('Error loading links for team', team.id, ':', error)
@@ -777,7 +773,6 @@ const loadFeaturedTeamLinks = async () => {
     }
   }
   teamLinks.value = linksMap
-  console.log('Final team links map:', teamLinks.value)
 }
 
 // Computed properties

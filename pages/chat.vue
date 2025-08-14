@@ -303,7 +303,7 @@ const showNewMessageAlert = ref(false)
 const initializeWebSocket = () => {
   if (process.client && isLoggedIn.value) {
     // For now, skip WebSocket and use polling since server setup is complex
-    console.log('WebSocket temporarily disabled, using polling for real-time updates')
+    // WebSocket temporarily disabled, using polling for real-time updates
     startPolling()
     return
     
@@ -351,7 +351,7 @@ const setupSocketListeners = () => {
   if (!socket.value) return
 
   socket.value.on('connect', () => {
-    console.log('Connected to WebSocket server')
+    // WebSocket connected
     // Stop polling since WebSocket is active
     stopPolling()
   })
@@ -365,7 +365,7 @@ const setupSocketListeners = () => {
   })
 
   socket.value.on('disconnect', () => {
-    console.log('Disconnected from WebSocket server')
+    // WebSocket disconnected
     // Fallback to polling if WebSocket disconnects
     if (isLoggedIn.value) {
       startPolling()

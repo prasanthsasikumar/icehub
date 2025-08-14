@@ -60,12 +60,6 @@ declare module "nitropack/types" {
     '/api/chat/send': {
       'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/chat/send.post').default>>>>
     }
-    '/api/debug/status': {
-      'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/debug/status.get').default>>>>
-    }
-    '/api/debug/test-upload': {
-      'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/debug/test-upload.post').default>>>>
-    }
     '/api/media/gallery': {
       'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/media/gallery.get').default>>>>
     }
