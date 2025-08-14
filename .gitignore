@@ -5,3 +5,13 @@ node_modules
 .nuxt
 .output
 .env
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Editor directories and files
+.vscode/
+.idea/
+*.swp
+*.swo
