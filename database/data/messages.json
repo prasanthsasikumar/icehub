@@ -1,0 +1,82 @@
+[
+  {
+    "id": "5230b9cb-7c1f-427c-805b-7622af9b15f5",
+    "senderId": "8c5951c9-0900-4061-b272-87ab92a2d5d1",
+    "senderName": "Prasanth Sasikumar",
+    "receiverId": "ebe91750-90f2-4e72-8102-58e6a3ab4209",
+    "receiverName": "Moritz Messerschmidt",
+    "content": "moshi mosh to you to brotha :D",
+    "timestamp": "2025-08-06T08:19:42.743+00:00",
+    "read": false
+  },
+  {
+    "id": "224d8625-4f60-4891-84d0-2b4ed1e4c16b",
+    "senderId": "ebe91750-90f2-4e72-8102-58e6a3ab4209",
+    "senderName": "Moritz Messerschmidt",
+    "receiverId": "8c5951c9-0900-4061-b272-87ab92a2d5d1",
+    "receiverName": "Prasanth Sasikumar",
+    "content": "whaat uyuuupp",
+    "timestamp": "2025-08-07T06:46:18.486+00:00",
+    "read": false
+  },
+  {
+    "id": "1ba91834-b9f7-4e9f-adac-33ce8bc61b6b",
+    "senderId": "8c5951c9-0900-4061-b272-87ab92a2d5d1",
+    "senderName": "Prasanth Sasikumar",
+    "receiverId": "340b7752-6a00-4da6-a8a6-0996ac0e5b84",
+    "receiverName": "Hussel Suriyaarachchi",
+    "content": "Welcome!!! :D",
+    "timestamp": "2025-08-07T06:52:41.036+00:00",
+    "read": false
+  },
+  {
+    "id": "94f0fea7-1f65-4ad3-a05d-b225465f532c",
+    "senderId": "ebe91750-90f2-4e72-8102-58e6a3ab4209",
+    "senderName": "Moritz Messerschmidt",
+    "receiverId": "8c5951c9-0900-4061-b272-87ab92a2d5d1",
+    "receiverName": "Prasanth Sasikumar",
+    "content": "yooooooooo",
+    "timestamp": "2025-11-20T07:20:58.923+00:00",
+    "read": false
+  },
+  {
+    "id": "d42fdfac-8b67-4164-a12c-814a29eee530",
+    "senderId": "8c5951c9-0900-4061-b272-87ab92a2d5d1",
+    "senderName": "Prasanth Sasikumar",
+    "receiverId": "ebe91750-90f2-4e72-8102-58e6a3ab4209",
+    "receiverName": "Moritz Messerschmidt",
+    "content": "sexy as bro :D",
+    "timestamp": "2025-11-20T08:31:31.546+00:00",
+    "read": false
+  },
+  {
+    "id": "5064fce1-3b30-43b6-9ccb-7ca4644cba5c",
+    "senderId": "72da9505-3ac6-42f4-aac7-f5d53a717307",
+    "senderName": "Ryo Hajika",
+    "receiverId": "8c5951c9-0900-4061-b272-87ab92a2d5d1",
+    "receiverName": "Prasanth Sasikumar",
+    "content": "yo",
+    "timestamp": "2025-08-05T05:56:40.161+00:00",
+    "read": false
+  },
+  {
+    "id": "02370031-e445-44be-aaaa-be8ad56c0a61",
+    "senderId": "8c5951c9-0900-4061-b272-87ab92a2d5d1",
+    "senderName": "Prasanth Sasikumar",
+    "receiverId": "72da9505-3ac6-42f4-aac7-f5d53a717307",
+    "receiverName": "Ryo Hajika",
+    "content": "Heyo!",
+    "timestamp": "2025-08-05T05:57:42.978+00:00",
+    "read": false
+  },
+  {
+    "id": "3989c7b8-7852-4492-9d9e-1a684f576b40",
+    "senderId": "ebe91750-90f2-4e72-8102-58e6a3ab4209",
+    "senderName": "Moritz Messerschmidt",
+    "receiverId": "8c5951c9-0900-4061-b272-87ab92a2d5d1",
+    "receiverName": "Prasanth Sasikumar",
+    "content": "moshi moshi brotha",
+    "timestamp": "2025-08-06T05:37:17.448+00:00",
+    "read": false
+  }
+]

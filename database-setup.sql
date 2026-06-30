@@ -1,4 +1,5 @@
--- ICEHub Database Setup Script
+-- ICEHub Database Setup Script (legacy entry point)
+-- Prefer database/schema.sql — it includes all tables (team_chats, team_images, etc.)
 -- Run this script in your Supabase SQL Editor to set up the complete database
 
 CREATE TABLE users (

@@ -76,9 +76,12 @@ BLOB_READ_WRITE_TOKEN=your_vercel_blob_token
 
 4. **Database setup:**
 ```bash
-# In your Supabase SQL Editor, run the complete setup:
-# Copy and paste the entire contents of database-setup.sql
+# In your Supabase SQL Editor, run:
+#   database/schema.sql   (tables + policies)
+#   database/seed-data.sql (data, after running npm run db:export)
 ```
+
+To export live Supabase data into the repo for sharing, see `database/README.md`.
 
 5. **Start development server:**
 ```bash

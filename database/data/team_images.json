@@ -1,0 +1,90 @@
+[
+  {
+    "id": "03efbbfb-3788-409c-8959-3533b4e34333",
+    "team_id": "group_e3wvkjtf3",
+    "image_url": "https://plfsm7exhtuj3efj.public.blob.vercel-storage.com/1754295561425-1d9cacc1-edeb-4690-add2-433b795320c5.png",
+    "filename": "1754295561425-1d9cacc1-edeb-4690-add2-433b795320c5.png",
+    "created_by": "admin-user-001",
+    "created_at": "2025-08-04T08:19:21.810226+00:00"
+  },
+  {
+    "id": "2168c898-0002-4c15-9b7a-82d6d2963d38",
+    "team_id": "group_e3wvkjtf3",
+    "image_url": "https://plfsm7exhtuj3efj.public.blob.vercel-storage.com/1754295834461-278d1659-fcda-412d-8d8f-354aa97df56c.png",
+    "filename": "1754295834461-278d1659-fcda-412d-8d8f-354aa97df56c.png",
+    "created_by": "199f7885-0da7-421e-9253-59591ba3f04e",
+    "created_at": "2025-08-04T08:23:55.312838+00:00"
+  },
+  {
+    "id": "f9e502e7-ed52-4c14-894f-c8b8e21921e8",
+    "team_id": "23f431d4-08c6-44ff-bad2-c6e4ef39dcf1",
+    "image_url": "/uploads/1754377552402-15d27114-d78d-4f2b-a83f-2d908cf561a6.png",
+    "filename": "1754377552402-15d27114-d78d-4f2b-a83f-2d908cf561a6.png",
+    "created_by": "8c5951c9-0900-4061-b272-87ab92a2d5d1",
+    "created_at": "2025-08-05T07:05:54.435138+00:00"
+  },
+  {
+    "id": "deba01b3-3c6d-4839-b06e-6879122803f5",
+    "team_id": "921bd9e9-11e4-494c-b121-0f363eb0ddb6",
+    "image_url": "https://plfsm7exhtuj3efj.public.blob.vercel-storage.com/1754712672624-55693122-bb14-4739-b775-75b89dae5856.jpeg",
+    "filename": "1754712672624-55693122-bb14-4739-b775-75b89dae5856.jpeg",
+    "created_by": "9b594a31-cb83-49b5-855a-cea31d359e92",
+    "created_at": "2025-08-09T04:11:12.969617+00:00"
+  },
+  {
+    "id": "bc0a1f19-6dd0-4ccb-9a1b-dba3063c90d9",
+    "team_id": "e8fe8852-9381-4048-a05c-4c26b20c61b6",
+    "image_url": "https://plfsm7exhtuj3efj.public.blob.vercel-storage.com/1754713052644-5f29c285-d0c6-45a2-b7bf-ff7416a6f5d8.jpeg",
+    "filename": "1754713052644-5f29c285-d0c6-45a2-b7bf-ff7416a6f5d8.jpeg",
+    "created_by": "39084a1a-2022-4629-a38c-97318cc57160",
+    "created_at": "2025-08-09T04:17:33.064922+00:00"
+  },
+  {
+    "id": "e12862b6-99bb-4cc9-9d0a-dd2aea908278",
+    "team_id": "23f431d4-08c6-44ff-bad2-c6e4ef39dcf1",
+    "image_url": "https://plfsm7exhtuj3efj.public.blob.vercel-storage.com/1754891956342-18fbce3d-8934-4a20-b943-c81236a8aa44.jpeg",
+    "filename": "1754891956342-18fbce3d-8934-4a20-b943-c81236a8aa44.jpeg",
+    "created_by": "8c5951c9-0900-4061-b272-87ab92a2d5d1",
+    "created_at": "2025-08-11T05:59:17.1749+00:00"
+  },
+  {
+    "id": "4f779901-f5ed-4994-8adb-360873d09712",
+    "team_id": "23f431d4-08c6-44ff-bad2-c6e4ef39dcf1",
+    "image_url": "https://plfsm7exhtuj3efj.public.blob.vercel-storage.com/1754892110469-191cefc3-d644-4827-b086-8a8eb0544995.jpeg",
+    "filename": "1754892110469-191cefc3-d644-4827-b086-8a8eb0544995.jpeg",
+    "created_by": "8c5951c9-0900-4061-b272-87ab92a2d5d1",
+    "created_at": "2025-08-11T06:01:50.769357+00:00"
+  },
+  {
+    "id": "f83778e4-2dda-4d91-bca4-173ea6133b6c",
+    "team_id": "c156cc88-9a8b-4a4e-b61a-c799df683140",
+    "image_url": "https://plfsm7exhtuj3efj.public.blob.vercel-storage.com/1754892271937-3eabf0cb-7328-4af2-be20-416102db6887.jpeg",
+    "filename": "1754892271937-3eabf0cb-7328-4af2-be20-416102db6887.jpeg",
+    "created_by": "8c5951c9-0900-4061-b272-87ab92a2d5d1",
+    "created_at": "2025-08-11T06:04:32.76267+00:00"
+  },
+  {
+    "id": "a3bc71cd-bd97-47f2-aaeb-fe921ab11567",
+    "team_id": "c156cc88-9a8b-4a4e-b61a-c799df683140",
+    "image_url": "https://plfsm7exhtuj3efj.public.blob.vercel-storage.com/1754892288009-fa850189-c401-4b17-87ba-08ee49977144.jpeg",
+    "filename": "1754892288009-fa850189-c401-4b17-87ba-08ee49977144.jpeg",
+    "created_by": "8c5951c9-0900-4061-b272-87ab92a2d5d1",
+    "created_at": "2025-08-11T06:04:48.842791+00:00"
+  },
+  {
+    "id": "15933d26-84f9-46a1-ac92-80b5feee18dc",
+    "team_id": "c156cc88-9a8b-4a4e-b61a-c799df683140",
+    "image_url": "https://plfsm7exhtuj3efj.public.blob.vercel-storage.com/1754892318168-6e7e2eaf-526d-4fcd-9a04-698c9d15f222.jpeg",
+    "filename": "1754892318168-6e7e2eaf-526d-4fcd-9a04-698c9d15f222.jpeg",
+    "created_by": "8c5951c9-0900-4061-b272-87ab92a2d5d1",
+    "created_at": "2025-08-11T06:05:19.397472+00:00"
+  },
+  {
+    "id": "87c3849f-5dc2-4696-9490-91f3a4acb06f",
+    "team_id": "72e71681-9340-49f5-972a-6d3d043c159c",
+    "image_url": "https://plfsm7exhtuj3efj.public.blob.vercel-storage.com/1754892355413-3df0126e-8305-4376-84bb-cd93d4c46c29.jpeg",
+    "filename": "1754892355413-3df0126e-8305-4376-84bb-cd93d4c46c29.jpeg",
+    "created_by": "8c5951c9-0900-4061-b272-87ab92a2d5d1",
+    "created_at": "2025-08-11T06:05:55.843493+00:00"
+  }
+]

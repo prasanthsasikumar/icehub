@@ -1,0 +1,28 @@
+{
+  "exportedAt": "2026-06-30T14:32:11.917Z",
+  "supabaseUrl": "https://riidfopyyahcqneguhzl.supabase.co",
+  "stripPasswords": true,
+  "tables": {
+    "users": {
+      "rowCount": 44
+    },
+    "teams": {
+      "rowCount": 6
+    },
+    "messages": {
+      "rowCount": 8
+    },
+    "team_links": {
+      "rowCount": 13
+    },
+    "team_chats": {
+      "rowCount": 0
+    },
+    "team_images": {
+      "rowCount": 11
+    },
+    "announcements": {
+      "rowCount": 1
+    }
+  }
+}
